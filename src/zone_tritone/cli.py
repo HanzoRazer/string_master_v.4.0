@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from io import StringIO
 from pathlib import Path
 from typing import List
 
@@ -185,19 +186,23 @@ def _explain_transition(a: PitchClass, b: PitchClass) -> str:
 
 # -------- TEXT RENDERING --------
 
-def _print_explain_text(chords: List[str], roots: List[PitchClass]) -> None:
+def _render_explain_text(chords: List[str], roots: List[PitchClass]) -> str:
     """
     Original plain-text explain output.
+    Returns the formatted text as a string.
     """
-    print("# Zone–Tritone EXPLAIN")
-    print("# Chord progression:")
-    print("  " + " ".join(chords))
-    print()
+    buf = StringIO()
+    w = buf.write
+    
+    w("# Zone–Tritone EXPLAIN\n")
+    w("# Chord progression:\n")
+    w("  " + " ".join(chords) + "\n")
+    w("\n")
 
     # Per-chord: root, zone, implied tritone axis (3rd & 7th).
-    print("# Per-chord gravity anchors:")
-    print("(index)  chord   root  pc  zone      tritone axis (3,7)")
-    print("---------------------------------------------------------")
+    w("# Per-chord gravity anchors:\n")
+    w("(index)  chord   root  pc  zone      tritone axis (3,7)\n")
+    w("---------------------------------------------------------\n")
 
     for idx, (ch, r) in enumerate(zip(chords, roots)):
         root_name = name_from_pc(r)
@@ -207,17 +212,17 @@ def _print_explain_text(chords: List[str], roots: List[PitchClass]) -> None:
         axis = tritone_axis(third_pc)
         a, b = axis
         axis_str = f"{name_from_pc(a)}–{name_from_pc(b)}"
-        print(f"{idx:3d}:  {ch:6s} {root_name:4s} {r:2d}  {zname:7s}  {axis_str}")
+        w(f"{idx:3d}:  {ch:6s} {root_name:4s} {r:2d}  {zname:7s}  {axis_str}\n")
 
-    print()
+    w("\n")
     if len(roots) < 2:
-        print("# (Only one chord provided; no transitions to explain.)")
-        return
+        w("# (Only one chord provided; no transitions to explain.)\n")
+        return buf.getvalue()
 
     # Step-by-step explanation of transitions.
-    print("# Step-by-step transitions:")
-    print("(from -> to)   interval  zone-relation                     explanation")
-    print("--------------------------------------------------------------------------")
+    w("# Step-by-step transitions:\n")
+    w("(from -> to)   interval  zone-relation                     explanation\n")
+    w("--------------------------------------------------------------------------\n")
 
     prev_root = roots[0]
     prev_name = name_from_pc(prev_root)
@@ -257,9 +262,9 @@ def _print_explain_text(chords: List[str], roots: List[PitchClass]) -> None:
 
         explanation = _explain_transition(prev_root, cur_root)
 
-        print(
+        w(
             f"{prev_name:3s} -> {cur_name:3s}   {motion_str:10s}  "
-            f"{zone_relation:32s}  {explanation}"
+            f"{zone_relation:32s}  {explanation}\n"
         )
 
         prev_root = cur_root
@@ -267,52 +272,57 @@ def _print_explain_text(chords: List[str], roots: List[PitchClass]) -> None:
         prev_zone = cur_zone
 
     # Show the ideal gravity chain vs actual progression
-    print()
-    print("# Gravity comparison:")
+    w("\n")
+    w("# Gravity comparison:\n")
     start_root = roots[0]
     chain = gravity_chain(start_root, len(roots) - 1)
     chain_names = [name_from_pc(r) for r in chain]
     actual_names = [name_from_pc(r) for r in roots]
 
-    print("  Theoretical gravity chain (descending 4ths):")
-    print("   " + " -> ".join(chain_names))
-    print("  Actual progression:")
-    print("   " + " -> ".join(actual_names))
+    w("  Theoretical gravity chain (descending 4ths):\n")
+    w("   " + " -> ".join(chain_names) + "\n")
+    w("  Actual progression:\n")
+    w("   " + " -> ".join(actual_names) + "\n")
 
-    print()
-    print("# Reading guide:")
-    print("  • Descending 4th (↓4) steps align with pure functional gravity.")
-    print("  • Semitone (±1) steps are chromatic zone-crossings (strong direction).")
-    print("  • Whole-step (±2) in-zone steps are modal / color motion.")
-    print("  • Everything else is a deliberate tension against the gravity grid.")
-    print()
-    print("  Use this to see how the tune rides, follows, or fights the gravity field.")
+    w("\n")
+    w("# Reading guide:\n")
+    w("  • Descending 4th (↓4) steps align with pure functional gravity.\n")
+    w("  • Semitone (±1) steps are chromatic zone-crossings (strong direction).\n")
+    w("  • Whole-step (±2) in-zone steps are modal / color motion.\n")
+    w("  • Everything else is a deliberate tension against the gravity grid.\n")
+    w("\n")
+    w("  Use this to see how the tune rides, follows, or fights the gravity field.\n")
+    
+    return buf.getvalue()
 
 
 # -------- HTML / MARKDOWN RENDERING --------
 
-def _print_explain_html(chords: List[str], roots: List[PitchClass]) -> None:
+def _render_explain_html(chords: List[str], roots: List[PitchClass]) -> str:
     """
-    HTML/Markdown-style explain output suitable for SaaS/docs.
-
-    This is valid HTML but also mostly Markdown-friendly if pasted as-is.
+    HTML-style explain output suitable for SaaS/docs.
+    
+    Returns the formatted HTML as a string.
     """
+    buf = StringIO()
+    w = buf.write
+    
     # Header
-    print("<article class='zt-explain'>")
-    print("  <h1>Zone&ndash;Tritone EXPLAIN</h1>")
-    print("  <h2>Chord progression</h2>")
+    w("<article class='zt-explain'>\n")
+    w("  <h1>Zone&ndash;Tritone EXPLAIN</h1>\n")
+    w("  <h2>Chord progression</h2>\n")
     prog = " ".join(chords)
-    print(f"  <p><code>{prog}</code></p>")
+    w(f"  <p><code>{prog}</code></p>\n")
 
     # Per-chord anchors table
-    print("  <h2>Per-chord gravity anchors</h2>")
-    print("  <table>")
-    print("    <thead>")
-    print("      <tr>")
-    print("        <th>#</th><th>Chord</th><th>Root</th><th>pc</th><th>Zone</th><th>Tritone axis (3,7)</th>")
-    print("      </tr>")
-    print("    </thead>")
-    print("    <tbody>")
+    w("  <h2>Per-chord gravity anchors</h2>\n")
+    w("  <table>\n")
+    w("    <thead>\n")
+    w("      <tr>\n")
+    w("        <th>#</th><th>Chord</th><th>Root</th><th>pc</th><th>Zone</th><th>Tritone axis (3,7)</th>\n")
+    w("      </tr>\n")
+    w("    </thead>\n")
+    w("    <tbody>\n")
 
     for idx, (ch, r) in enumerate(zip(chords, roots)):
         root_name = name_from_pc(r)
@@ -321,28 +331,28 @@ def _print_explain_html(chords: List[str], roots: List[PitchClass]) -> None:
         axis = tritone_axis(third_pc)
         a, b = axis
         axis_str = f"{name_from_pc(a)}&ndash;{name_from_pc(b)}"
-        print("      <tr>")
-        print(f"        <td>{idx}</td><td><code>{ch}</code></td>"
-              f"<td>{root_name}</td><td>{r}</td><td>{zname}</td><td>{axis_str}</td>")
-        print("      </tr>")
+        w("      <tr>\n")
+        w(f"        <td>{idx}</td><td><code>{ch}</code></td>"
+          f"<td>{root_name}</td><td>{r}</td><td>{zname}</td><td>{axis_str}</td>\n")
+        w("      </tr>\n")
 
-    print("    </tbody>")
-    print("  </table>")
+    w("    </tbody>\n")
+    w("  </table>\n")
 
     if len(roots) < 2:
-        print("  <p><em>Only one chord provided; no transitions to explain.</em></p>")
-        print("</article>")
-        return
+        w("  <p><em>Only one chord provided; no transitions to explain.</em></p>\n")
+        w("</article>\n")
+        return buf.getvalue()
 
     # Step-by-step transitions table
-    print("  <h2>Step-by-step transitions</h2>")
-    print("  <table>")
-    print("    <thead>")
-    print("      <tr>")
-    print("        <th>From</th><th>To</th><th>Interval</th><th>Zone relation</th><th>Explanation</th>")
-    print("      </tr>")
-    print("    </thead>")
-    print("    <tbody>")
+    w("  <h2>Step-by-step transitions</h2>\n")
+    w("  <table>\n")
+    w("    <thead>\n")
+    w("      <tr>\n")
+    w("        <th>From</th><th>To</th><th>Interval</th><th>Zone relation</th><th>Explanation</th>\n")
+    w("      </tr>\n")
+    w("    </thead>\n")
+    w("    <tbody>\n")
 
     prev_root = roots[0]
     prev_name = name_from_pc(prev_root)
@@ -382,20 +392,20 @@ def _print_explain_html(chords: List[str], roots: List[PitchClass]) -> None:
 
         explanation = _explain_transition(prev_root, cur_root)
 
-        print("      <tr>")
-        print(f"        <td>{prev_name}</td>"
-              f"<td>{cur_name}</td>"
-              f"<td>{motion_str}</td>"
-              f"<td>{zone_relation}</td>"
-              f"<td>{explanation}</td>")
-        print("      </tr>")
+        w("      <tr>\n")
+        w(f"        <td>{prev_name}</td>"
+          f"<td>{cur_name}</td>"
+          f"<td>{motion_str}</td>"
+          f"<td>{zone_relation}</td>"
+          f"<td>{explanation}</td>\n")
+        w("      </tr>\n")
 
         prev_root = cur_root
         prev_name = cur_name
         prev_zone = cur_zone
 
-    print("    </tbody>")
-    print("  </table>")
+    w("    </tbody>\n")
+    w("  </table>\n")
 
     # Gravity comparison
     start_root = roots[0]
@@ -406,43 +416,50 @@ def _print_explain_html(chords: List[str], roots: List[PitchClass]) -> None:
     grav_chain_html = " &rarr; ".join(chain_names)
     actual_html = " &rarr; ".join(actual_names)
 
-    print("  <h2>Gravity comparison</h2>")
-    print("  <p><strong>Theoretical gravity chain (descending 4ths):</strong><br>")
-    print(f"     <code>{grav_chain_html}</code></p>")
-    print("  <p><strong>Actual progression:</strong><br>")
-    print(f"     <code>{actual_html}</code></p>")
+    w("  <h2>Gravity comparison</h2>\n")
+    w("  <p><strong>Theoretical gravity chain (descending 4ths):</strong><br>\n")
+    w(f"     <code>{grav_chain_html}</code></p>\n")
+    w("  <p><strong>Actual progression:</strong><br>\n")
+    w(f"     <code>{actual_html}</code></p>\n")
 
     # Reading guide
-    print("  <h2>Reading guide</h2>")
-    print("  <ul>")
-    print("    <li><strong>Descending 4th (↓4)</strong> steps align with pure functional gravity.</li>")
-    print("    <li><strong>Semitone (±1)</strong> steps are chromatic zone-crossings (strong directional pull).</li>")
-    print("    <li><strong>Whole-step (±2)</strong> in-zone steps are modal / color motion.</li>")
-    print("    <li>Other moves are deliberate tension against the gravity grid.</li>")
-    print("  </ul>")
-    print("  <p>Use this to see how the tune rides, follows, or pushes against the gravity field.</p>")
-    print("</article>")
+    w("  <h2>Reading guide</h2>\n")
+    w("  <ul>\n")
+    w("    <li><strong>Descending 4th (↓4)</strong> steps align with pure functional gravity.</li>\n")
+    w("    <li><strong>Semitone (±1)</strong> steps are chromatic zone-crossings (strong directional pull).</li>\n")
+    w("    <li><strong>Whole-step (±2)</strong> in-zone steps are modal / color motion.</li>\n")
+    w("    <li>Other moves are deliberate tension against the gravity grid.</li>\n")
+    w("  </ul>\n")
+    w("  <p>Use this to see how the tune rides, follows, or pushes against the gravity field.</p>\n")
+    w("</article>\n")
+    
+    return buf.getvalue()
 
 
 # -------- MARKDOWN RENDERING --------
 
-def _print_explain_markdown(chords: List[str], roots: List[PitchClass]) -> None:
+def _render_explain_markdown(chords: List[str], roots: List[PitchClass]) -> str:
     """
     Markdown-style explain output (no raw HTML wrapper).
+    
+    Returns the formatted Markdown as a string.
     """
+    buf = StringIO()
+    w = buf.write
+    
     prog = " ".join(chords)
-    print("# Zone–Tritone EXPLAIN")
-    print()
-    print("## Chord progression")
-    print()
-    print(f"`{prog}`")
-    print()
+    w("# Zone–Tritone EXPLAIN\n")
+    w("\n")
+    w("## Chord progression\n")
+    w("\n")
+    w(f"`{prog}`\n")
+    w("\n")
 
     # Per-chord anchors table
-    print("## Per-chord gravity anchors")
-    print()
-    print("| # | Chord | Root | pc | Zone   | Tritone axis (3,7) |")
-    print("|---|-------|------|----|--------|---------------------|")
+    w("## Per-chord gravity anchors\n")
+    w("\n")
+    w("| # | Chord | Root | pc | Zone   | Tritone axis (3,7) |\n")
+    w("|---|-------|------|----|--------|---------------------|\n")
 
     for idx, (ch, r) in enumerate(zip(chords, roots)):
         root_name = name_from_pc(r)
@@ -451,18 +468,18 @@ def _print_explain_markdown(chords: List[str], roots: List[PitchClass]) -> None:
         axis = tritone_axis(third_pc)
         a, b = axis
         axis_str = f"{name_from_pc(a)}–{name_from_pc(b)}"
-        print(f"| {idx} | `{ch}` | {root_name} | {r} | {zname} | {axis_str} |")
+        w(f"| {idx} | `{ch}` | {root_name} | {r} | {zname} | {axis_str} |\n")
 
-    print()
+    w("\n")
     if len(roots) < 2:
-        print("_Only one chord provided; no transitions to explain._")
-        return
+        w("_Only one chord provided; no transitions to explain._\n")
+        return buf.getvalue()
 
     # Step-by-step transitions
-    print("## Step-by-step transitions")
-    print()
-    print("| From | To | Interval | Zone relation | Explanation |")
-    print("|------|----|----------|---------------|-------------|")
+    w("## Step-by-step transitions\n")
+    w("\n")
+    w("| From | To | Interval | Zone relation | Explanation |\n")
+    w("|------|----|----------|---------------|-------------|\n")
 
     prev_root = roots[0]
     prev_name = name_from_pc(prev_root)
@@ -502,7 +519,7 @@ def _print_explain_markdown(chords: List[str], roots: List[PitchClass]) -> None:
 
         explanation = _explain_transition(prev_root, cur_root)
 
-        print(f"| {prev_name} | {cur_name} | {motion_str} | {zone_relation} | {explanation} |")
+        w(f"| {prev_name} | {cur_name} | {motion_str} | {zone_relation} | {explanation} |\n")
 
         prev_root = cur_root
         prev_name = cur_name
@@ -517,25 +534,27 @@ def _print_explain_markdown(chords: List[str], roots: List[PitchClass]) -> None:
     grav_chain_md = " → ".join(chain_names)
     actual_md = " → ".join(actual_names)
 
-    print()
-    print("## Gravity comparison")
-    print()
-    print("**Theoretical gravity chain (descending 4ths):**")
-    print()
-    print(f"`{grav_chain_md}`")
-    print()
-    print("**Actual progression:**")
-    print()
-    print(f"`{actual_md}`")
-    print()
-    print("## Reading guide")
-    print()
-    print("- **Descending 4th (↓4)** steps align with pure functional gravity.")
-    print("- **Semitone (±1)** steps are chromatic zone-crossings (strong directional pull).")
-    print("- **Whole-step (±2)** in-zone steps are modal / color motion.")
-    print("- Other moves are deliberate tension against the gravity grid.")
-    print()
-    print("Use this to see how the tune rides, follows, or pushes against the gravity field.")
+    w("\n")
+    w("## Gravity comparison\n")
+    w("\n")
+    w("**Theoretical gravity chain (descending 4ths):**\n")
+    w("\n")
+    w(f"`{grav_chain_md}`\n")
+    w("\n")
+    w("**Actual progression:**\n")
+    w("\n")
+    w(f"`{actual_md}`\n")
+    w("\n")
+    w("## Reading guide\n")
+    w("\n")
+    w("- **Descending 4th (↓4)** steps align with pure functional gravity.\n")
+    w("- **Semitone (±1)** steps are chromatic zone-crossings (strong directional pull).\n")
+    w("- **Whole-step (±2)** in-zone steps are modal / color motion.\n")
+    w("- Other moves are deliberate tension against the gravity grid.\n")
+    w("\n")
+    w("Use this to see how the tune rides, follows, or pushes against the gravity field.\n")
+    
+    return buf.getvalue()
 
 
 # -------- EXPLAIN COMMAND DISPATCH --------
@@ -550,6 +569,7 @@ def cmd_explain(args: argparse.Namespace) -> int:
 
     --format controls output style: text, html, or markdown.
     --html is kept as a shorthand for --format html.
+    --save writes output to a file instead of stdout.
     """
     if not args.chords and not args.file:
         print("error: either --chords or --file must be provided", file=sys.stderr)
@@ -576,12 +596,21 @@ def cmd_explain(args: argparse.Namespace) -> int:
     if getattr(args, "html", False):
         fmt = "html"
 
+    # Render output to string
     if fmt == "html":
-        _print_explain_html(chords, roots)
+        content = _render_explain_html(chords, roots)
     elif fmt == "markdown":
-        _print_explain_markdown(chords, roots)
+        content = _render_explain_markdown(chords, roots)
     else:
-        _print_explain_text(chords, roots)
+        content = _render_explain_text(chords, roots)
+
+    # Write to file if --save provided, otherwise print to stdout
+    if args.save:
+        out_path = Path(args.save)
+        out_path.write_text(content, encoding="utf-8")
+        print(f"[zt-gravity] wrote {fmt} output to {out_path}")
+    else:
+        print(content, end="")
 
     return 0
 
@@ -666,6 +695,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--html",
         action="store_true",
         help="Shortcut for --format html (kept for convenience).",
+    )
+    p_ex.add_argument(
+        "--save",
+        type=str,
+        help="Write formatted output to this file instead of stdout.",
     )
     p_ex.set_defaults(func=cmd_explain)
 
