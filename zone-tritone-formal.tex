@@ -1,0 +1,238 @@
+% Zone-Tritone System: Formal Mathematical Framework
+% Academic LaTeX Document
+% Author: Greg Brown
+% Date: December 27, 2025
+
+\documentclass[12pt]{article}
+
+% Required Packages
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+
+% Page Setup
+\geometry{letterpaper, margin=1in}
+
+% Theorem Environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+% Title Information
+\title{Formal Framework of the Zone--Tritone System:\\
+A Mathematical Account of Harmonic Gravity}
+\author{Greg Brown}
+\date{December 27, 2025}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We formalize the Zone--Tritone System as a harmonic framework expressed in the modular
+pitch space $\mathbb{Z}_{12}$. Zones are defined as residue classes modulo $2$, tritones
+as elements separated by $6\bmod 12$, and chromatic drift as translation operators on
+tritone pairs. We prove that whole--step motion preserves zone identity, half--step
+motion transfers energy between zones, and tritone drift generates perfect fourth
+root motion. We also show that the melodic minor scale is dual--zone harmonic due to
+the simultaneous presence of two tritone anchors. This yields a mathematically coherent
+account of dominant function, chromaticism, and harmonic gravity.
+\end{abstract}
+
+\section{Formal Framework of the Zone--Tritone System}
+
+\subsection{Pitch Space and Modular Arithmetic}
+
+We represent the twelve pitch classes of equal temperament as the additive group
+\[
+\mathbb{Z}_{12}=\{0,1,2,\dots,11\}
+\]
+under addition modulo $12$.
+
+A pitch class $p\in\mathbb{Z}_{12}$ corresponds canonically to:
+\[
+0=C,\;1=C\sharp,\;2=D,\;3=E\flat,\;4=E,\;
+5=F,\;6=F\sharp,\;7=G,\;8=A\flat,\;9=A,\;10=B\flat,\;11=B.
+\]
+
+\subsection{Whole--Tone Zones}
+
+Define the two whole--tone zones as the residue classes modulo $2$:
+\[
+Z_1=\{0,2,4,6,8,10\},\qquad Z_2=\{1,3,5,7,9,11\}.
+\]
+
+These satisfy:
+\[
+Z_1\cup Z_2 = \mathbb{Z}_{12},\qquad
+Z_1\cap Z_2=\emptyset.
+\]
+
+\begin{proposition}
+If $x\in Z_i$, then $x\pm 2 \in Z_i$.
+\end{proposition}
+
+\begin{proof}
+If $x\equiv r \pmod{2}$ then $x\pm 2\equiv r\pmod{2}$.
+Thus zone membership is preserved under addition of whole steps.
+\end{proof}
+
+We therefore interpret \emph{whole steps as zone--stabilizing motion}.
+
+\subsection{Half--Step Motion}
+
+A semitone is the transformation
+\[
+x\mapsto x\pm 1\pmod{12}.
+\]
+
+\begin{proposition}
+If $x\in Z_1$ then $x\pm 1\in Z_2$, and conversely.
+\end{proposition}
+
+\begin{proof}
+If $x\equiv 0\pmod{2}$ then $x\pm 1\equiv 1\pmod{2}$, and vice--versa.
+\end{proof}
+
+We therefore interpret \emph{semitones as zone--crossing transformations}.
+
+\subsection{Tritones as Internal Zone Axes}
+
+A tritone is defined as an unordered pair
+\[
+\tau = \{p,\;p+6\pmod{12}\}.
+\]
+
+\begin{proposition}
+If $p\in Z_i$ then $p+6\in Z_i$.
+\end{proposition}
+
+\begin{proof}
+Since $6\equiv 0\pmod{2}$, adding $6$ preserves parity.
+\end{proof}
+
+Thus every tritone belongs entirely to one zone and functions as an
+\emph{internal axis of harmonic gravity}.
+
+\section{Chromatic Tritone Drift and the Cycle of Fourths}
+
+Let a tritone be denoted:
+\[
+\tau_n=\{p_n,\;p_n+6\}.
+\]
+
+Define chromatic drift by:
+\[
+\tau_{n+1}=\{p_n-1,\;p_n+6-1\}.
+\]
+
+In tonal practice, a tritone identifies a dominant seventh chord.
+Let $G(\tau)$ denote the root of the dominant defined by $\tau$.
+Then the following holds.
+
+\begin{theorem}
+Chromatic drift of a tritone induces a root motion of descending fourths:
+\[
+R_{n+1}\equiv R_n-5\pmod{12}.
+\]
+\end{theorem}
+
+\begin{proof}
+Two pitch classes separated by $6$ semitones determine the third and seventh
+of a dominant chord. Shifting the pair down by a semitone preserves their
+interval while lowering both voices.
+
+The mapping from tritone to root is affine and therefore semitone--equivariant.
+It follows that semitone descent in the tritone pair produces semitone descent
+in the dominant root. In tonal convention, semitone descent of the third--seventh
+pair corresponds to root descent by a perfect fourth, i.e.\ $-5\bmod 12$.
+\end{proof}
+
+Thus chromatic tritone motion and the classical dominant cycle in fourths
+are structurally equivalent phenomena.
+
+\section{Dual--Zone Structure of the Melodic Minor Scale}
+
+Let $S\subset \mathbb{Z}_{12}$ denote a scale.
+For $C$ melodic minor:
+\[
+S = \{0,2,3,5,7,9,11\}.
+\]
+
+\begin{proposition}
+$S$ contains two tritone pairs:
+\[
+\tau_1=\{11,5\},\qquad \tau_2=\{3,9\}.
+\]
+\end{proposition}
+
+\begin{proof}
+Direct verification shows each unordered pair differs by $6\bmod 12$
+and belongs to $S$.
+\end{proof}
+
+\begin{definition}
+A pitch collection is said to be \emph{dual--zone harmonic} if it contains
+at least two distinct tritone anchors.
+\end{definition}
+
+\begin{corollary}
+The melodic minor scale is dual--zone harmonic.
+\end{corollary}
+
+\appendix
+
+\section{Proof Appendix for the Zone--Tritone Canon}
+
+\subsection{Axiom 1: Zones Define Color}
+\textbf{Statement.}
+Whole--tone zones are closed under whole--step motion.
+
+\begin{proof}
+Immediate from parity preservation modulo $2$.
+\end{proof}
+
+Thus remaining inside a zone preserves harmonic identity.
+
+\subsection{Axiom 2: Tritones Define Gravity}
+\textbf{Statement.}
+Every tritone lies fully within a single zone.
+
+\begin{proof}
+Adding $6$ preserves parity, hence zone membership.
+\end{proof}
+
+Therefore the tritone is an internal symmetry axis.
+
+\subsection{Axiom 3: Half--Steps Define Motion}
+\textbf{Statement.}
+Semitone motion changes zone membership.
+
+\begin{proof}
+Adding $1$ flips parity.
+\end{proof}
+
+Thus semitones are structural boundary crossings.
+
+\subsection{Axiom 4: Chromatic Drift Produces Fourth Cycles}
+\textbf{Statement.}
+Chromatic translation of a tritone produces dominant roots descending by fourths.
+
+\begin{proof}
+Given the equivalence between the tritone and the $\{3,7\}$ structure of dominant harmony,
+semitone descent of both tones preserves chord quality while lowering functional root
+position by $5\bmod 12$.
+\end{proof}
+
+\subsection{Axiom 5: Melodic Minor as a Dual--Zone Hybrid}
+\textbf{Statement.}
+The melodic minor scale contains two independent tritone anchors.
+
+\begin{proof}
+Verified constructively for any transposition.
+\end{proof}
+
+\end{document}

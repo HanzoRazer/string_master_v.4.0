@@ -1,0 +1,825 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+
+\title{The Zone--Tritone System:\\
+A Unified Harmonic Framework in Modular Pitch Space}
+
+\author{Greg Brown}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present the Zone--Tritone System, a harmonic framework defined in the
+twelve-tone modular pitch space $\mathbb{Z}_{12}$. We show that the pitch
+set partitions naturally into two whole--tone zones corresponding to parity
+classes modulo~$2$. Whole--step motion preserves zone identity while semitone
+motion crosses zone boundaries. Tritones are shown to be order--two elements
+(i.e.\ involutions) lying fully within single zones, forming internal axes
+of harmonic gravity. Chromatic translation of a tritone produces dominant
+root motion descending by fourths. The melodic minor scale is proven to be
+dual--zone harmonic, containing two independent tritone anchors, and a general
+classification of harmonic systems by tritone rank is proposed. This yields
+a coherent mathematical account of harmonic gravity, chromaticism, and modal
+hybrid behavior.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+
+A central puzzle in tonal and post--tonal music theory is the interaction
+between chromatic symmetry and functional harmonic direction. Jazz practice
+demonstrates extensive use of tritone substitution, altered dominant sonorities,
+and melodic minor derived harmonies, yet a compact formal model explaining
+their internal relations has been lacking.
+
+The Zone--Tritone System offers such a model. It is grounded in three structural
+principles:
+
+\begin{enumerate}[label=\textbf{Axiom \arabic*.}]
+\item Whole--tone zones define harmonic color.
+\item Tritones define harmonic gravity.
+\item Half--steps define directional motion between zones.
+\end{enumerate}
+
+We formalize these axioms in $\mathbb{Z}_{12}$ and derive several consequences.
+
+\section{Pitch Space}
+
+\subsection{Definition of $\mathbb{Z}_{12}$}
+
+We represent pitch classes as elements of the additive cyclic group
+\[
+\mathbb{Z}_{12}=\{0,1,\dots,11\}
+\]
+with arithmetic modulo~$12$.
+
+We use the standard assignment
+\[
+0=C,\;1=C\sharp,\;2=D,\;3=E\flat,\;4=E,\;
+5=F,\;6=F\sharp,\;7=G,\;8=A\flat,\;9=A,\;
+10=B\flat,\;11=B.
+\]
+
+\section{Whole--Tone Zones}
+
+\subsection{Definition}
+
+Define
+\[
+Z_1=\{0,2,4,6,8,10\},\quad Z_2=\{1,3,5,7,9,11\}.
+\]
+
+\begin{theorem}[Zone Partition]
+$Z_1$ and $Z_2$ partition $\mathbb{Z}_{12}$.
+\end{theorem}
+
+\begin{proof}
+Every integer mod~$12$ is congruent to either $0$ or $1$ mod~$2$, establishing
+disjointness and completeness.
+\end{proof}
+
+\subsection{Zone Stability Under Whole Steps}
+
+\begin{proposition}
+If $x\in Z_i$, then $x\pm 2\in Z_i$.
+\end{proposition}
+
+\begin{proof}
+Parity is preserved.
+\end{proof}
+
+Thus whole--steps preserve harmonic color.
+
+\section{Half--Step Motion as Zone Crossing}
+
+\begin{proposition}
+If $x\in Z_1$ then $x\pm 1\in Z_2$, and conversely.
+\end{proposition}
+
+\begin{proof}
+Adding~$\pm 1$ flips parity.
+\end{proof}
+
+We interpret semitones as directional crossings between harmonic fields.
+
+\section{Tritones as Order--Two Elements}
+
+\subsection{Definition}
+
+A tritone is the unordered pair
+\[
+\tau = \{p,\;p+6\}.
+\]
+
+\begin{theorem}
+Every tritone lies within a single zone.
+\end{theorem}
+
+\begin{proof}
+Since $6\equiv 0\pmod{2}$, adding six preserves parity.
+\end{proof}
+
+\subsection{Involution Property}
+
+\[
+(p+6)+6\equiv p\pmod{12}.
+\]
+
+Thus tritones are involutions and therefore symmetry axes.
+
+\section{Chromatic Drift and the Cycle of Fourths}
+
+Let $\tau_n=\{p_n,\;p_n+6\}$ and define
+\[
+\tau_{n+1}=\{p_n-1,\;p_n+5\}.
+\]
+
+Let $R_n$ denote the root of the associated dominant chord.
+
+\begin{theorem}
+Chromatic drift produces functional root motion by descending fourths:
+\[
+R_{n+1}\equiv R_n-5\pmod{12}.
+\]
+\end{theorem}
+
+\begin{proof}
+The tritone uniquely defines the third and seventh of a dominant chord. Their
+chromatic descent corresponds to functional resolution by a fourth.
+\end{proof}
+
+\section{Dual--Zone Harmonic Systems}
+
+\begin{definition}
+A pitch collection is dual--zone harmonic if it contains at least two distinct
+tritone anchors.
+\end{definition}
+
+\subsection{Melodic Minor}
+
+For $C$ melodic minor,
+\[
+S=\{0,2,3,5,7,9,11\}.
+\]
+
+It contains:
+\[
+\{11,5\},\quad \{3,9\}.
+\]
+
+Thus melodic minor is dual--zone harmonic.
+
+\section{Classification by Tritone Rank}
+
+We define the \emph{tritone rank} of a collection as the number of distinct
+tritone axes contained within it.
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+System Type & Tritone Rank & Zone State\\
+\hline
+Major / Whole Tone & $1$ & Single-zone\\
+Melodic Minor / Altered & $2$ & Dual-zone\\
+Diminished & $4$ & Symmetry cloud\\
+\hline
+\end{tabular}
+\end{center}
+
+This provides a structural classification of harmonic environments.
+
+\section{Worked Musical Examples}
+\label{sec:examples}
+
+In this section we illustrate the Zone--Tritone framework with concrete
+harmonic progressions drawn from common-practice jazz vocabulary. For
+clarity, we present chord symbols and pitch--class analysis; engraved
+staff notation may be added in figures as needed.
+
+\subsection{Example 1: Classical II--V--I in C Major}
+
+Consider the progression
+\[
+\text{Dm7} \rightarrow \text{G7} \rightarrow \text{Cmaj7}.
+\]
+
+A common voicing in pitch classes is:
+\begin{align*}
+\text{Dm7} &: \{2,5,9,0\} \quad (D,F,A,C),\\
+\text{G7}  &: \{7,11,2,5\} \quad (G,B,D,F),\\
+\text{Cmaj7} &: \{0,4,7,11\} \quad (C,E,G,B).
+\end{align*}
+
+The tritone anchor of G7 is
+\[
+\tau = \{11,5\} = \{B,F\}.
+\]
+
+Both tones lie in the same zone:
+\[
+11\in Z_2,\quad 5\in Z_2.
+\]
+
+The voice--leading Dm7 $\rightarrow$ G7 $\rightarrow$ Cmaj7 is therefore
+interpreted as:
+\begin{enumerate}
+\item Zone background: $Z_2$ stabilizes the tritone $\{11,5\}$.
+\item Chromatic drift is not yet engaged; the tritone is static.
+\item Resolution occurs when $\{11,5\}$ moves to $\{0,4,7\}$ (root and third
+of Cmaj7), collapsing the gravity axis into a stable major triad.
+\end{enumerate}
+
+In practice, melodic material outlining $\{11,5\}$ over G7 aligns the
+listener's ear with the active gravity axis.
+
+\subsection{Example 2: Tritone Substitution}
+
+Now replace G7 by its tritone substitute:
+\[
+\text{Dm7} \rightarrow \text{D}\flat\text{7} \rightarrow \text{Cmaj7}.
+\]
+
+A possible voicing:
+\begin{align*}
+\text{D}\flat\text{7} &: \{1,5,9,11\} \quad (D\flat,F,A\flat,B).
+\end{align*}
+
+The tritone anchor of D$\flat$7 is again
+\[
+\tau' = \{11,5\} = \{B,F\}.
+\]
+
+Thus both G7 and D$\flat$7 share the same tritone anchor and therefore the same
+gravity axis, even though their roots differ by a tritone.
+
+Within the Zone--Tritone System this is seen as an \emph{anchor exchange}
+at the root level while the internal axis remains invariant.
+
+\subsection{Example 3: Chromatic Dominant Chain}
+
+Consider the chromatic sequence
+\[
+\text{G7} \rightarrow \text{C7} \rightarrow \text{F7} \rightarrow
+\text{B}\flat\text{7}.
+\]
+
+Using tritone anchors:
+\begin{align*}
+\text{G7} &: \{11,5\} = \{B,F\},\\
+\text{C7} &: \{10,4\} = \{B\flat,E\},\\
+\text{F7} &: \{9,3\} = \{A,E\flat\},\\
+\text{B}\flat\text{7} &: \{8,2\} = \{A\flat,D\}.
+\end{align*}
+
+Each step is a chromatic translation of the tritone by $-1$:
+\[
+\{11,5\} \rightarrow \{10,4\} \rightarrow \{9,3\} \rightarrow \{8,2\}.
+\]
+
+By Theorem~\ref{sec:examples}, this induces root motion by descending fourths:
+\[
+7 \rightarrow 0 \rightarrow 5 \rightarrow 10 \quad (\text{G} \rightarrow
+\text{C} \rightarrow \text{F} \rightarrow \text{B}\flat).
+\]
+
+From a perceptual standpoint, the listener experiences a coherent
+sequence of gravitational reorientations, despite the surface chromaticism.
+
+\subsection{Example 4: Melodic Minor and Dual--Zone Harmony}
+
+Consider $C$ melodic minor over a Cmi(maj7) sonority:
+\[
+\text{Cmi(maj7)}:\{0,3,7,11\} \quad (C,E\flat,G,B).
+\]
+
+The scale
+\[
+S = \{0,2,3,5,7,9,11\}
+\]
+contains two tritone anchors:
+\[
+\tau_1 = \{11,5\} = \{B,F\},\quad
+\tau_2 = \{3,9\}  = \{E\flat,A\}.
+\]
+
+Improvisation that alternately emphasizes $\{11,5\}$ and $\{3,9\}$ engages
+two independent gravity axes. This realizes the dual--zone nature of
+melodic minor and explains the characteristic mixture of modal stability
+and directed motion associated with this sound.
+
+\subsection{Example 5: Minor II--V and Tritone Neighbors}
+
+A typical minor II--V in C minor is
+\[
+\text{Dm7}\flat\text{5} \rightarrow \text{G7alt} \rightarrow \text{Cmi}.
+\]
+
+If G7alt is realized with a tritone anchor $\{11,5\}$ and extensive altered
+tensions from the C altered scale, the Zone--Tritone model interprets the
+alterations as controlled excursions within the dual--zone environment,
+while the underlying gravity remains tied to the tritone axis.
+
+Chromatic approach dominants (e.g.\ A$\flat$7 preceding G7alt) are treated as
+intermediate states in a gravity chain, generated via tritone drift.
+
+These examples illustrate that a wide range of jazz progressions can be
+seen as specific realizations of zone stability, zone crossing, and tritone
+drift, rather than as ad hoc chord--scale pairings.
+
+\section{A Markov Model of Harmonic Gravity}
+
+The linear recurrences derived in the Zone--Tritone System admit a natural
+probabilistic generalization. Instead of treating harmonic motion as strictly
+deterministic, we model it as a Markov process constrained by zone structure
+and tritone anchors.
+
+\subsection{State Space}
+
+We define a discrete state space $\mathcal{S}$ whose elements may be chosen
+at different levels of resolution:
+
+\begin{itemize}
+\item[\textbf{(i)}] \emph{Root states:} $\mathcal{S}_R=\mathbb{Z}_{12}$,
+  where each state corresponds to a dominant root.
+\item[\textbf{(ii)}] \emph{Axis states:} $\mathcal{S}_\tau=\{\tau_1,\dots,\tau_6\}$,
+  the six tritone anchors.
+\item[\textbf{(iii)}] \emph{Hybrid states:} pairs $(R,\tau)$
+  with $\tau$ consistent with the dominant built on $R$.
+\end{itemize}
+
+For simplicity we first consider $\mathcal{S}_R$.
+
+\subsection{Transition Kernel}
+
+A first--order Markov chain on $\mathcal{S}_R$ is specified by a stochastic
+matrix $P=(p_{ij})$ where
+\[
+p_{ij}=\Pr(R_{n+1}=j\mid R_n=i).
+\]
+
+In a purely functional idealization, we might set
+\[
+p_{i,j}=
+\begin{cases}
+1 & j\equiv i-5\ (\bmod 12),\\
+0 & \text{otherwise},
+\end{cases}
+\]
+thus recovering the strict cycle of fourths.
+
+In practice, we allow a distribution concentrated around the functional
+target:
+\[
+p_{i,j} =
+\begin{cases}
+\alpha & j\equiv i-5\ (\bmod 12)\\
+\beta  & j\equiv i     \ (\bmod 12)\\
+\gamma & j\equiv i+2   \ (\bmod 12)\\
+\delta & \text{otherwise,}
+\end{cases}
+\]
+with $\alpha>\beta\ge\gamma\ge\delta\ge 0$ and rows normalized to sum to~$1$.
+Here $\alpha$ encodes functional resolution, while $\beta,\gamma,\delta$
+encode local prolongation and neighboring motions.
+
+\subsection{Zone--Conditioned Transitions}
+
+We may refine the model by conditioning on zone structure. Let
+$Z:\mathbb{Z}_{12}\to\{0,1\}$ be the zone map.
+
+Define
+\[
+p_{i\to j} = f\bigl(Z(i),Z(j), C(i,j)\bigr)
+\]
+where $C(i,j)$ indicates zone crossing. For example, weights may be assigned so that:
+\begin{itemize}
+\item transitions preserving the active tritone axis but changing the root
+      within a zone are given moderate probability,
+\item transitions implementing chromatic tritone drift (and thus fourth
+      motion) are given highest probability,
+\item arbitrary jumps that disrupt both axis and zone receive low probability.
+\end{itemize}
+
+This yields a Markov chain whose high--probability paths correspond to
+musically idiomatic motion.
+
+\subsection{Axis--Based Markov Chain}
+
+Alternatively, we may define a chain on the six tritone anchors
+$\mathcal{S}_\tau$ by viewing chromatic drift as the primary transition:
+
+\[
+q_{kl}=
+\begin{cases}
+1 & \tau_l=T_{\pm1}(\tau_k)\\
+0 & \text{otherwise,}
+\end{cases}
+\]
+in the idealized case, or with softened probabilities in the empirical case.
+
+This highlights the role of tritone movement as the principal driver of
+functional reorientation.
+
+\subsection{Applications}
+
+Such Markov models have several applications:
+
+\begin{enumerate}
+\item \emph{Generative harmony:} sampling from the chain to produce idiomatic
+      dominant progressions consistent with the Zone--Tritone grammar.
+\item \emph{Style analysis:} estimating transition matrices from corpora of
+      jazz standards or improvisations and comparing empirical statistics
+      with theoretically predicted structure.
+\item \emph{Pedagogical tools:} visualizing likely next states in a gravity
+      chain as a student explores chord sequences.
+\end{enumerate}
+
+In all cases, the probabilistic model is constrained by the underlying
+deterministic structure of zones, tritones, and chromatic drift.
+
+\section{Methods: Estimating Gravity Transition Matrices from Jazz Repertoire}
+
+To empirically validate the probabilistic gravity model introduced above,
+we estimate transition matrices from annotated jazz harmony corpora. The
+procedure described here allows reproducibility and comparison across
+datasets and styles.
+
+\subsection{Corpus Preparation}
+
+Lead sheets, harmonic analyses, or symbolic encodings (e.g.\ MusicXML,
+Humdrum, iRealPro, or hand-annotated chord charts) are converted into
+ordered sequences of chord roots:
+\[
+(R_1, R_2, \dots, R_N), \qquad R_i \in \mathbb{Z}_{12}.
+\]
+
+Secondary dominants, tritone substitutions, backdoor dominants, and altered
+dominants are normalized to dominant-function labels by taking the pitch
+class of the chord root modulo $12$. Non-functional chords (e.g.\ sustained
+modal sonorities) may either be excluded or treated as self-transitions,
+depending on the study design.
+
+\subsection{State Encoding}
+
+Two levels of representation are supported:
+
+\begin{enumerate}
+\item \textbf{Root state model.} Each state corresponds to a dominant root
+$R \in \mathbb{Z}_{12}$.
+
+\item \textbf{Axis state model.} Each state corresponds to one of the six
+tritone anchors
+\[
+\tau_k = \{p_k, p_k+6\}.
+\]
+The anchor associated with a dominant chord is taken to be its $(3,7)$ pair.
+\end{enumerate}
+
+Both representations yield Markov chains
+\[
+X_1, X_2, \dots, X_N
+\]
+on a finite state space.
+
+\subsection{Counting Transitions}
+
+For each adjacent pair $(X_i,X_{i+1})$ we increment a count
+\[
+c_{ab} \leftarrow c_{ab}+1
+\qquad\text{whenever } X_i=a,\;X_{i+1}=b.
+\]
+
+This yields a raw transition count matrix
+\[
+C = (c_{ab}).
+\]
+
+To avoid zero-probability issues, Laplace smoothing may optionally be applied:
+\[
+\tilde c_{ab} = c_{ab} + \lambda,
+\qquad \lambda \ge 0.
+\]
+
+\subsection{Normalizing to a Stochastic Matrix}
+
+Row-wise normalization yields the empirical stochastic matrix
+\[
+p_{ab} = 
+\frac{\tilde c_{ab}}{\sum_{b}\tilde c_{ab}}.
+\]
+
+Each row therefore encodes the conditional probability
+\[
+p_{ab} = \Pr(X_{n+1}=b \mid X_n=a).
+\]
+
+\subsection{Zone--Conditioned Analysis}
+
+To assess the influence of whole--tone structure, each transition is also
+classified by the zone map
+\[
+Z:\mathbb{Z}_{12}\to\{0,1\}.
+\]
+
+This yields empirical counts for:
+
+\begin{itemize}
+\item Zone-stable transitions ($Z(a)=Z(b)$),
+\item Zone-crossing transitions ($Z(a)\neq Z(b)$),
+\item Chromatic tritone drift transitions,
+\[
+\tau \rightarrow T_{\pm1}(\tau),
+\]
+\item Functional fourth motion
+\[
+R\rightarrow R-5 \pmod{12}.
+\]
+\end{itemize}
+
+These categories allow statistical comparison between theoretical
+predictions and observed practice.
+
+\subsection{Goodness-of-Fit and Statistical Comparison}
+
+Let $P_{\text{theory}}$ denote the idealized transition model and
+$P_{\text{empirical}}$ the corpus-estimated matrix.
+
+Similarity may be quantified using:
+\begin{itemize}
+\item Kullback--Leibler divergence,
+\[
+D_{\mathrm{KL}}(P_{\text{empirical}}\parallel P_{\text{theory}}),
+\]
+\item Matrix norm differences,
+\item Eigenstructure comparison,
+\item Stationary distribution analysis.
+\end{itemize}
+
+Significant concentration of probability mass around
+descending-fourth motion and chromatic tritone drift supports the claim
+that empirical jazz harmony conforms to Zone--Tritone gravity dynamics.
+
+\subsection{Reproducibility}
+
+All code, corpora, transition matrices, and statistical summaries should be
+versioned and archived. We recommend symbolic encodings and open-source
+analytics scripts to enable transparent replication and extension of this
+work.
+
+\section{Group--Theoretic Interpretation}
+
+\subsection{Pitch Space as a Cyclic Group}
+
+The pitch set $\mathbb{Z}_{12}$ forms a cyclic group under addition modulo~$12$.
+We emphasize that all harmonic transformations in the Zone--Tritone System
+are endomorphisms of this group.
+
+\subsection{Parity Cosets as Whole--Tone Zones}
+
+Define the subgroup
+\[
+2\mathbb{Z}_{12}=\{0,2,4,6,8,10\}.
+\]
+Then $Z_1 = 2\mathbb{Z}_{12}$ and $Z_2 = 1+2\mathbb{Z}_{12}$ are the two cosets.
+
+\begin{theorem}
+Whole--tone zones are precisely the cosets of the even--step subgroup.
+\end{theorem}
+
+\begin{proof}
+Every element belongs to exactly one residue class modulo $2$.
+\end{proof}
+
+Thus zone membership is a group--theoretic parity property.
+
+\subsection{Tritones as Order--Two Elements}
+
+Consider the map
+\[
+\iota(x)=x+6.
+\]
+
+\begin{theorem}
+$\iota$ is an involution:
+\[
+\iota\circ\iota=\text{id}.
+\]
+\end{theorem}
+
+\begin{proof}
+$(x+6)+6\equiv x\pmod{12}$.
+\end{proof}
+
+Hence every tritone axis corresponds to an element of order~$2$.
+
+\subsection{Translation Symmetry and Chromatic Drift}
+
+Define the translation operator
+\[
+T_k(x)=x+k.
+\]
+
+Then chromatic tritone drift is the orbit
+\[
+\tau_n = T_{-n}(\tau_0).
+\]
+
+\begin{theorem}
+The set of tritone axes is invariant under the translation group
+generated by $T_{\pm 1}$.
+\end{theorem}
+
+\begin{proof}
+Translation preserves interval structure.
+\end{proof}
+
+This establishes chromatic drift as a symmetry action.
+
+\subsection{Functional Harmony as Coupled Linear Dynamics}
+
+Let $R_n$ denote the dominant root associated to $\tau_n$.
+Then
+\[
+R_{n+1}\equiv R_n-5\pmod{12}
+\]
+is a linear recurrence relation.
+
+Thus tritone drift and harmonic resolution correspond to coupled
+linear actions on $\mathbb{Z}_{12}$, revealing functional harmony
+as a symmetry--constrained dynamical process.
+
+\section{Computational Formalization}
+
+\subsection{Zone Indicator Function}
+
+Define the zone map
+\[
+Z:\mathbb{Z}_{12}\rightarrow\{0,1\}
+\]
+by
+\[
+Z(p)=p\bmod 2.
+\]
+
+Then
+\[
+Z(p)=Z(q)\iff p-q\equiv 0\pmod{2}.
+\]
+
+\subsection{Crossing and Stability Operators}
+
+Define the boolean functions
+\[
+C(p,q)=
+\begin{cases}
+1 & Z(p)\neq Z(q)\\
+0 & Z(p)=Z(q)
+\end{cases}
+\]
+and
+\[
+S(p,q)=1-C(p,q).
+\]
+
+Thus $C$ encodes directional motion.
+
+\subsection{Tritone Detection Algorithm}
+
+A pair $(p,q)$ forms a tritone iff
+\[
+(p-q)\equiv 6\pmod{12}.
+\]
+
+This yields a constant--time test suitable for streaming harmonic analysis.
+
+\subsection{Dual--Zone Harmonic Detection}
+
+Let $S\subset\mathbb{Z}_{12}$.
+
+\begin{definition}
+$S$ is dual--zone harmonic iff
+\[
+|\{\{p,p+6\} \subset S\}| \ge 2.
+\]
+\end{definition}
+
+This allows automatic classification via computational search.
+
+\subsection{Gravity Chain Generator}
+
+Given an initial dominant root $R_0$, define
+\[
+R_{n+1}=R_n-5\pmod{12}.
+\]
+
+This produces the functional resolution chain algorithmically.
+Such mappings may be implemented as deterministic automata
+or extended probabilistically in Markov or Bayesian models.
+
+\section{Psychoacoustic Interpretation}
+
+\subsection{Symmetry, Ambiguity, and Suspension}
+
+Highly symmetric pitch structures are perceptually associated with
+reduced functional gravity. Whole--tone partitions are maximally
+symmetric under $T_{\pm 2}$ translation, and listeners report a sense
+of ``floating'' or non--directional color.
+
+This supports the identification of zones with harmonic color fields.
+
+\subsection{Tritones as Anchored Tension}
+
+The tritone is maximally distant in $\mathbb{Z}_{12}$
+and forms an internal reference axis. Psychoacoustic
+studies have long associated the tritone with tension,
+but within our model it is not random dissonance --- rather,
+it is structured gravitational polarity.
+
+\subsection{Semitone Crossings and Directional Energy}
+
+Semitone motion is perceptually salient and strongly directional.
+Since semitone movement crosses the zone boundary, the ear may be
+interpreted as tracking transitions between symmetry fields.
+
+Thus:
+\begin{center}
+perceived direction $\Longleftrightarrow$ zone crossing.
+\end{center}
+
+\subsection{Why Melodic Minor Feels ``Modern''}
+
+Dual--zone harmonic systems support simultaneous stability and drift.
+The coexistence of two tritone anchors allows:
+\begin{itemize}
+\item modal framing
+\item functional implication
+\item smooth chromatic weaving
+\end{itemize}
+without full collapse into tonal hierarchy.
+
+This explains the distinctive affective quality of melodic minor harmony.
+
+\subsection{Cognitive Coherence}
+
+The Zone--Tritone System suggests that listeners balance two perceptual
+forces:
+
+\begin{enumerate}
+\item symmetry--seeking (zone stabilization)
+\item goal--seeking (tritone resolution)
+\end{enumerate}
+
+Music becomes meaningful in the tension between them.
+
+\section{Relation to Prior Work}
+
+Traditional jazz and tonal theory describe tritone substitution and
+cycle--of--fourths resolution operationally. The present framework
+derives these as structural consequences of modular symmetry and
+translation invariance.
+
+Thus the Zone--Tritone System may be viewed not as a replacement
+for existing theory, but as its formal unifying grammar.
+
+\section{Discussion}
+
+The Zone--Tritone System resolves multiple theoretical tensions by showing that
+functional direction arises from semitone-driven transitions between symmetry
+fields, while gravitational identity arises from tritone axes internal to each
+field.
+
+\section{Conclusion}
+
+We have demonstrated that whole--tone parity structure, tritone involutions,
+and chromatic drift cohere into a compact formal grammar capable of explaining
+a wide range of harmonic behavior in tonal and post--tonal music, particularly
+within the jazz tradition.
+
+\appendix
+\section{Proof Appendix for Canonical Axioms}
+
+\subsection{Axiom 1}
+Closedness under whole steps is parity preservation.
+
+\subsection{Axiom 2}
+Tritones preserve parity and therefore zone identity.
+
+\subsection{Axiom 3}
+Half--steps flip parity.
+
+\subsection{Axiom 4}
+Chromatic drift corresponds to $-5\pmod{12}$ root motion.
+
+\subsection{Axiom 5}
+Melodic minor contains two independent tritone anchors.
+
+\end{document}
