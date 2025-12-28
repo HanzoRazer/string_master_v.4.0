@@ -1,4 +1,4 @@
-from zone_tritone import build_transition_counts, normalize_transition_matrix, sample_next_root
+from shared.zone_tritone import build_transition_counts, normalize_transition_matrix, sample_next_root
 
 
 def test_markov_counts_and_normalization():

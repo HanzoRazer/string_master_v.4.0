@@ -6,7 +6,7 @@ def test_cli_gravity_smoke():
     """Smoke test: ensure gravity command runs without error."""
     # Test using the installed zt-gravity command or python -m
     result = subprocess.run(
-        [sys.executable, "-m", "zone_tritone.cli", "gravity", "--root", "C", "--steps", "3"],
+        [sys.executable, "-m", "shared.zone_tritone.cli", "gravity", "--root", "C", "--steps", "3"],
         capture_output=True,
         text=True,
         timeout=5,
@@ -21,7 +21,7 @@ def test_cli_gravity_smoke():
 def test_cli_analyze_smoke():
     """Smoke test: ensure analyze command runs without error."""
     result = subprocess.run(
-        [sys.executable, "-m", "zone_tritone.cli", "analyze", "--chords", "Dm7 G7 Cmaj7"],
+        [sys.executable, "-m", "shared.zone_tritone.cli", "analyze", "--chords", "Dm7 G7 Cmaj7"],
         capture_output=True,
         text=True,
         timeout=5,
@@ -36,7 +36,7 @@ def test_cli_analyze_smoke():
 def test_cli_explain_smoke():
     """Smoke test: ensure explain command runs without error."""
     result = subprocess.run(
-        [sys.executable, "-m", "zone_tritone.cli", "explain", "--chords", "Dm7 G7 Cmaj7"],
+        [sys.executable, "-m", "shared.zone_tritone.cli", "explain", "--chords", "Dm7 G7 Cmaj7"],
         capture_output=True,
         text=True,
         timeout=5,
@@ -55,7 +55,7 @@ def test_cli_explain_smoke():
 def test_cli_explain_html_smoke():
     """Smoke test: ensure explain --html command runs without error."""
     result = subprocess.run(
-        [sys.executable, "-m", "zone_tritone.cli", "explain", "--chords", "Dm7 G7 Cmaj7", "--html"],
+        [sys.executable, "-m", "shared.zone_tritone.cli", "explain", "--chords", "Dm7 G7 Cmaj7", "--html"],
         capture_output=True,
         text=True,
         timeout=5,
@@ -74,7 +74,7 @@ def test_cli_explain_html_smoke():
 def test_cli_explain_markdown_smoke():
     """Smoke test: ensure explain --format markdown command runs without error."""
     result = subprocess.run(
-        [sys.executable, "-m", "zone_tritone.cli", "explain", "--chords", "Dm7 G7 Cmaj7", "--format", "markdown"],
+        [sys.executable, "-m", "shared.zone_tritone.cli", "explain", "--chords", "Dm7 G7 Cmaj7", "--format", "markdown"],
         capture_output=True,
         text=True,
         timeout=5,

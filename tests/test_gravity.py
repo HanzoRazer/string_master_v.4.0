@@ -1,4 +1,4 @@
-from zone_tritone import dominant_roots_from_tritone, gravity_chain
+from shared.zone_tritone import dominant_roots_from_tritone, gravity_chain
 
 
 def test_dominant_roots_from_tritone():

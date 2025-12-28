@@ -1,4 +1,4 @@
-from zone_tritone import tritone_partner, tritone_axis, is_tritone_pair, all_tritone_axes
+from shared.zone_tritone import tritone_partner, tritone_axis, is_tritone_pair, all_tritone_axes
 
 
 def test_tritone_partner_basic():

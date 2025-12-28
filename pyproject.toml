@@ -3,9 +3,9 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "zone-tritone"
+name = "smart-guitar"
 version = "0.1.0"
-description = "Zone–Tritone System: harmonic zones, tritone gravity, and probabilistic gravity chains in Python."
+description = "Smart Guitar Platform: Zone-Tritone theory engine, accompaniment tools, and practice utilities for guitarists."
 authors = [
   { name = "Greg Brown" }
 ]
@@ -23,10 +23,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-user/zone-tritone"
+Homepage = "https://github.com/HanzoRazer/string_master_v.4.0"
 
 [project.scripts]
-zt-gravity = "zone_tritone.cli:main"
+zt-gravity = "shared.zone_tritone.cli:main"
+zt-band = "zt_band.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
