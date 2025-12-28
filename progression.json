@@ -1,0 +1,107 @@
+{
+  "chords": [
+    {
+      "index": 0,
+      "symbol": "Dm7",
+      "root_pc": 2,
+      "root_name": "D",
+      "zone": "Zone 1",
+      "tritone_axis": [
+        "F",
+        "B"
+      ],
+      "gravity_target_pc": 2,
+      "gravity_target_name": "D",
+      "is_on_chain": true
+    },
+    {
+      "index": 1,
+      "symbol": "G7",
+      "root_pc": 7,
+      "root_name": "G",
+      "zone": "Zone 2",
+      "tritone_axis": [
+        "F",
+        "B"
+      ],
+      "gravity_target_pc": 7,
+      "gravity_target_name": "G",
+      "is_on_chain": false
+    },
+    {
+      "index": 2,
+      "symbol": "Cmaj7",
+      "root_pc": 0,
+      "root_name": "C",
+      "zone": "Zone 1",
+      "tritone_axis": [
+        "E",
+        "Bb"
+      ],
+      "gravity_target_pc": 0,
+      "gravity_target_name": "C",
+      "is_on_chain": false
+    },
+    {
+      "index": 3,
+      "symbol": "A7",
+      "root_pc": 9,
+      "root_name": "A",
+      "zone": "Zone 2",
+      "tritone_axis": [
+        "C#",
+        "G"
+      ],
+      "gravity_target_pc": 5,
+      "gravity_target_name": "F",
+      "is_on_chain": false
+    }
+  ],
+  "transitions": [
+    {
+      "from_index": 0,
+      "to_index": 1,
+      "from_root_pc": 2,
+      "from_root_name": "D",
+      "to_root_pc": 7,
+      "to_root_name": "G",
+      "interval_semitones": 5,
+      "from_zone": "Zone 1",
+      "to_zone": "Zone 2",
+      "is_desc_fourth": false,
+      "is_asc_fourth": true,
+      "is_half_step": false,
+      "is_whole_step": false
+    },
+    {
+      "from_index": 1,
+      "to_index": 2,
+      "from_root_pc": 7,
+      "from_root_name": "G",
+      "to_root_pc": 0,
+      "to_root_name": "C",
+      "interval_semitones": 5,
+      "from_zone": "Zone 2",
+      "to_zone": "Zone 1",
+      "is_desc_fourth": false,
+      "is_asc_fourth": true,
+      "is_half_step": false,
+      "is_whole_step": false
+    },
+    {
+      "from_index": 2,
+      "to_index": 3,
+      "from_root_pc": 0,
+      "from_root_name": "C",
+      "to_root_pc": 9,
+      "to_root_name": "A",
+      "interval_semitones": 9,
+      "from_zone": "Zone 1",
+      "to_zone": "Zone 2",
+      "is_desc_fourth": false,
+      "is_asc_fourth": false,
+      "is_half_step": false,
+      "is_whole_step": false
+    }
+  ]
+}

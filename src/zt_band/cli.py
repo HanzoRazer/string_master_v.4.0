@@ -1,25 +1,21 @@
-"""
-zt_band CLI - Command-line interface for the accompaniment engine.
-
-Usage:
-    zt-band create --chords "Dm7 G7 Cmaj7" --tempo 120 --outfile backing.mid
-    zt-band create --chords "Dm7 G7 Cmaj7" --tritone-mode all_doms
-"""
-
 from __future__ import annotations
 
 import argparse
 import sys
+import json
 from pathlib import Path
-from typing import List
+from typing import List, Literal
 
 from .engine import generate_accompaniment
 from .gravity_bridge import annotate_progression, compute_transitions
+from .patterns import STYLE_REGISTRY
 from shared.zone_tritone.pc import name_from_pc
 
 
+OutputFormat = Literal["text", "markdown", "json"]
+
+
 def _parse_chord_string(chord_str: str) -> List[str]:
-    """Parse a space-separated chord string into a list."""
     return [tok for tok in chord_str.strip().split() if tok]
 
 
@@ -50,7 +46,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--style",
         type=str,
         default="swing_basic",
-        help="Accompaniment style (default: swing_basic).",
+        help="Accompaniment style name (see: zt-band styles).",
     )
     p_create.add_argument(
         "--tempo",
@@ -111,13 +107,31 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=str,
         help="Path to a text file containing chord symbols.",
     )
+    p_annot.add_argument(
+        "--format",
+        choices=["text", "markdown", "json"],
+        default="text",
+        help="Output format: text (default), markdown, or json.",
+    )
+    p_annot.add_argument(
+        "--save",
+        type=str,
+        default=None,
+        help="Optional path to save the annotation output (instead of or in addition to printing).",
+    )
     p_annot.set_defaults(func=cmd_annotate)
+
+    # ---- styles subcommand ----
+    p_styles = subparsers.add_parser(
+        "styles",
+        help="List available accompaniment styles.",
+    )
+    p_styles.set_defaults(func=cmd_styles)
 
     return parser
 
 
 def _load_chords_from_args(args: argparse.Namespace) -> List[str]:
-    """Load chord symbols from --chords or --file argument."""
     if not args.chords and not args.file:
         print("error: either --chords or --file must be provided", file=sys.stderr)
         sys.exit(1)
@@ -139,42 +153,47 @@ def _load_chords_from_args(args: argparse.Namespace) -> List[str]:
     return chords
 
 
+# ------------------------
+# create command
+# ------------------------
+
+
 def cmd_create(args: argparse.Namespace) -> int:
-    """Generate a backing track."""
     chords = _load_chords_from_args(args)
 
-    try:
-        generate_accompaniment(
-            chord_symbols=chords,
-            style_name=args.style,
-            tempo_bpm=args.tempo,
-            bars_per_chord=args.bars_per_chord,
-            outfile=args.outfile,
-            tritone_mode=args.tritone_mode,
-            tritone_strength=args.tritone_strength,
-            tritone_seed=args.tritone_seed,
+    if args.style not in STYLE_REGISTRY:
+        print(
+            f"error: unknown style '{args.style}'. "
+            "Use 'zt-band styles' to list available styles.",
+            file=sys.stderr,
         )
-        print(f"✅ Created backing track: {args.outfile}")
-        return 0
-    except Exception as e:
-        print(f"error: {e}", file=sys.stderr)
         return 1
 
+    generate_accompaniment(
+        chord_symbols=chords,
+        style_name=args.style,
+        tempo_bpm=args.tempo,
+        bars_per_chord=args.bars_per_chord,
+        outfile=args.outfile,
+        tritone_mode=args.tritone_mode,
+        tritone_strength=args.tritone_strength,
+        tritone_seed=args.tritone_seed,
+    )
 
-def cmd_annotate(args: argparse.Namespace) -> int:
-    """Print Zone–Tritone annotations and gravity diagnostics."""
-    chords = _load_chords_from_args(args)
+    print(f"Created backing track: {args.outfile}")
+    return 0
 
-    annotated = annotate_progression(chords)
-    transitions = compute_transitions(annotated)
 
-    if not annotated:
-        print("No chords to annotate.")
-        return 0
+# ------------------------
+# annotate command
+# ------------------------
 
-    print("Chord annotations:")
-    print("idx | chord    | root | pc | zone     | tritone axis | gravity→ | on_chain")
-    print("----+----------+------+----+----------+--------------+----------+---------")
+
+def _format_annotations_text(annotated, transitions) -> str:
+    lines: List[str] = []
+    lines.append("Chord annotations:")
+    lines.append("idx | chord    | root | pc | zone     | tritone axis | gravity→ | on_chain")
+    lines.append("----+----------+------+----+----------+-------------+----------+---------")
 
     for idx, ac in enumerate(annotated):
         root_name = name_from_pc(ac.root_pc)
@@ -183,15 +202,16 @@ def cmd_annotate(args: argparse.Namespace) -> int:
         grav_str = "-"
         if ac.gravity_target is not None:
             grav_str = name_from_pc(ac.gravity_target)
-        print(
+        lines.append(
             f"{idx:>3} | {ac.chord.symbol:<8} | {root_name:<4} | {ac.root_pc:>2} "
-            f"| {ac.zone:<8} | {axis_str:<12} | {grav_str:<8} | {str(ac.is_on_chain):<7}"
+            f"| {ac.zone:<8} | {axis_str:<11} | {grav_str:<8} | {str(ac.is_on_chain):<7}"
         )
 
     if transitions:
-        print("\nStepwise transitions:")
-        print("from→to | int(st) | zones                 | tags")
-        print("--------+---------+-----------------------+--------------------------")
+        lines.append("")
+        lines.append("Stepwise transitions:")
+        lines.append("from→to | int(st) | zones                 | tags")
+        lines.append("--------+---------+-----------------------+--------------------------")
         for tr in transitions:
             from_name = name_from_pc(tr.from_root)
             to_name = name_from_pc(tr.to_root)
@@ -208,11 +228,162 @@ def cmd_annotate(args: argparse.Namespace) -> int:
                 tags.append("±2")
 
             tag_str = ", ".join(tags) if tags else "-"
-            print(
+            lines.append(
                 f"{from_name:>3}→{to_name:<3} | {tr.interval_semitones:>3}     "
                 f"| {zone_pair:<21} | {tag_str}"
             )
 
+    return "\n".join(lines)
+
+
+def _format_annotations_markdown(annotated, transitions) -> str:
+    lines: List[str] = []
+
+    # Chord table
+    lines.append("### Chord Annotations")
+    lines.append("")
+    lines.append("| # | Chord | Root | PC | Zone | Tritone Axis | Gravity → | On Chain |")
+    lines.append("|---|-------|------|----|------|--------------|-----------|----------|")
+
+    for idx, ac in enumerate(annotated):
+        root_name = name_from_pc(ac.root_pc)
+        axis_a, axis_b = ac.axis
+        axis_str = f"{name_from_pc(axis_a)}–{name_from_pc(axis_b)}"
+        grav_str = "-"
+        if ac.gravity_target is not None:
+            grav_str = name_from_pc(ac.gravity_target)
+        lines.append(
+            f"| {idx} | {ac.chord.symbol} | {root_name} | {ac.root_pc} | "
+            f"{ac.zone} | {axis_str} | {grav_str} | {ac.is_on_chain} |"
+        )
+
+    # Transition table
+    if transitions:
+        lines.append("")
+        lines.append("### Stepwise Transitions")
+        lines.append("")
+        lines.append("| From → To | Interval (semitones) | Zones | Tags |")
+        lines.append("|-----------|----------------------|-------|------|")
+        for tr in transitions:
+            from_name = name_from_pc(tr.from_root)
+            to_name = name_from_pc(tr.to_root)
+            zone_pair = f"{tr.from_zone} → {tr.to_zone}"
+
+            tags: List[str] = []
+            if tr.is_desc_fourth:
+                tags.append("↓4")
+            if tr.is_asc_fourth:
+                tags.append("↑4")
+            if tr.is_half_step:
+                tags.append("±1")
+            if tr.is_whole_step:
+                tags.append("±2")
+
+            tag_str = ", ".join(tags) if tags else "-"
+            lines.append(
+                f"| {from_name} → {to_name} | {tr.interval_semitones} | "
+                f"{zone_pair} | {tag_str} |"
+            )
+
+    return "\n".join(lines)
+
+
+def _format_annotations_json(annotated, transitions) -> str:
+    chord_blob = []
+    for idx, ac in enumerate(annotated):
+        axis_a, axis_b = ac.axis
+        gravity_target_pc = ac.gravity_target
+        chord_blob.append(
+            {
+                "index": idx,
+                "symbol": ac.chord.symbol,
+                "root_pc": ac.root_pc,
+                "root_name": name_from_pc(ac.root_pc),
+                "zone": ac.zone,
+                "tritone_axis": [
+                    name_from_pc(axis_a),
+                    name_from_pc(axis_b),
+                ],
+                "gravity_target_pc": gravity_target_pc,
+                "gravity_target_name": (
+                    name_from_pc(gravity_target_pc)
+                    if gravity_target_pc is not None
+                    else None
+                ),
+                "is_on_chain": ac.is_on_chain,
+            }
+        )
+
+    trans_blob = []
+    for tr in transitions:
+        trans_blob.append(
+            {
+                "from_index": tr.index_from,
+                "to_index": tr.index_from + 1,
+                "from_root_pc": tr.from_root,
+                "from_root_name": name_from_pc(tr.from_root),
+                "to_root_pc": tr.to_root,
+                "to_root_name": name_from_pc(tr.to_root),
+                "interval_semitones": tr.interval_semitones,
+                "from_zone": tr.from_zone,
+                "to_zone": tr.to_zone,
+                "is_desc_fourth": tr.is_desc_fourth,
+                "is_asc_fourth": tr.is_asc_fourth,
+                "is_half_step": tr.is_half_step,
+                "is_whole_step": tr.is_whole_step,
+            }
+        )
+
+    payload = {
+        "chords": chord_blob,
+        "transitions": trans_blob,
+    }
+    return json.dumps(payload, indent=2, sort_keys=False)
+
+
+def cmd_annotate(args: argparse.Namespace) -> int:
+    chords = _load_chords_from_args(args)
+    fmt: OutputFormat = args.format
+
+    annotated = annotate_progression(chords)
+    transitions = compute_transitions(annotated)
+
+    if not annotated:
+        print("No chords to annotate.")
+        return 0
+
+    if fmt == "text":
+        out = _format_annotations_text(annotated, transitions)
+    elif fmt == "markdown":
+        out = _format_annotations_markdown(annotated, transitions)
+    elif fmt == "json":
+        out = _format_annotations_json(annotated, transitions)
+    else:
+        out = _format_annotations_text(annotated, transitions)
+
+    # print to stdout
+    print(out)
+
+    # optional save-to-file
+    if args.save:
+        path = Path(args.save)
+        path.write_text(out, encoding="utf-8")
+        print(f"\nSaved annotation to: {path}")
+
+    return 0
+
+
+# ------------------------
+# styles command
+# ------------------------
+
+
+def cmd_styles(args: argparse.Namespace) -> int:
+    print("Available accompaniment styles:\n")
+    print("name          | description")
+    print("--------------+---------------------------------------------")
+    for key, style in STYLE_REGISTRY.items():
+        print(f"{key:<12} | {style.description}")
     return 0
 
 
