@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import List
 
 from .engine import generate_accompaniment
+from .gravity_bridge import annotate_progression, compute_transitions
+from shared.zone_tritone.pc import name_from_pc
 
 
 def _parse_chord_string(chord_str: str) -> List[str]:
@@ -94,14 +96,31 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     p_create.set_defaults(func=cmd_create)
 
+    # ---- annotate subcommand ----
+    p_annot = subparsers.add_parser(
+        "annotate",
+        help="Print Zone–Tritone annotations and gravity diagnostics for a progression.",
+    )
+    p_annot.add_argument(
+        "--chords",
+        type=str,
+        help='Inline chord string, e.g. "Cmaj7 Dm7 G7 Cmaj7".',
+    )
+    p_annot.add_argument(
+        "--file",
+        type=str,
+        help="Path to a text file containing chord symbols.",
+    )
+    p_annot.set_defaults(func=cmd_annotate)
+
     return parser
 
 
-def cmd_create(args: argparse.Namespace) -> int:
-    """Generate a backing track."""
+def _load_chords_from_args(args: argparse.Namespace) -> List[str]:
+    """Load chord symbols from --chords or --file argument."""
     if not args.chords and not args.file:
         print("error: either --chords or --file must be provided", file=sys.stderr)
-        return 1
+        sys.exit(1)
 
     if args.chords:
         chords = _parse_chord_string(args.chords)
@@ -109,13 +128,20 @@ def cmd_create(args: argparse.Namespace) -> int:
         path = Path(args.file)
         if not path.exists():
             print(f"error: file not found: {path}", file=sys.stderr)
-            return 1
+            sys.exit(1)
         text = path.read_text(encoding="utf-8")
         chords = _parse_chord_string(text)
 
     if not chords:
         print("error: no chords found", file=sys.stderr)
-        return 1
+        sys.exit(1)
+
+    return chords
+
+
+def cmd_create(args: argparse.Namespace) -> int:
+    """Generate a backing track."""
+    chords = _load_chords_from_args(args)
 
     try:
         generate_accompaniment(
@@ -133,6 +159,61 @@ def cmd_create(args: argparse.Namespace) -> int:
     except Exception as e:
         print(f"error: {e}", file=sys.stderr)
         return 1
+
+
+def cmd_annotate(args: argparse.Namespace) -> int:
+    """Print Zone–Tritone annotations and gravity diagnostics."""
+    chords = _load_chords_from_args(args)
+
+    annotated = annotate_progression(chords)
+    transitions = compute_transitions(annotated)
+
+    if not annotated:
+        print("No chords to annotate.")
+        return 0
+
+    print("Chord annotations:")
+    print("idx | chord    | root | pc | zone     | tritone axis | gravity→ | on_chain")
+    print("----+----------+------+----+----------+--------------+----------+---------")
+
+    for idx, ac in enumerate(annotated):
+        root_name = name_from_pc(ac.root_pc)
+        axis_a, axis_b = ac.axis
+        axis_str = f"{name_from_pc(axis_a)}–{name_from_pc(axis_b)}"
+        grav_str = "-"
+        if ac.gravity_target is not None:
+            grav_str = name_from_pc(ac.gravity_target)
+        print(
+            f"{idx:>3} | {ac.chord.symbol:<8} | {root_name:<4} | {ac.root_pc:>2} "
+            f"| {ac.zone:<8} | {axis_str:<12} | {grav_str:<8} | {str(ac.is_on_chain):<7}"
+        )
+
+    if transitions:
+        print("\nStepwise transitions:")
+        print("from→to | int(st) | zones                 | tags")
+        print("--------+---------+-----------------------+--------------------------")
+        for tr in transitions:
+            from_name = name_from_pc(tr.from_root)
+            to_name = name_from_pc(tr.to_root)
+            zone_pair = f"{tr.from_zone} → {tr.to_zone}"
+
+            tags: List[str] = []
+            if tr.is_desc_fourth:
+                tags.append("↓4")
+            if tr.is_asc_fourth:
+                tags.append("↑4")
+            if tr.is_half_step:
+                tags.append("±1")
+            if tr.is_whole_step:
+                tags.append("±2")
+
+            tag_str = ", ".join(tags) if tags else "-"
+            print(
+                f"{from_name:>3}→{to_name:<3} | {tr.interval_semitones:>3}     "
+                f"| {zone_pair:<21} | {tag_str}"
+            )
+
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:

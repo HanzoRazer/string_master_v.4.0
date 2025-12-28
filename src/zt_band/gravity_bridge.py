@@ -39,6 +39,23 @@ class GravityAnnotatedChord:
     is_on_chain: bool
 
 
+@dataclass
+class GravityTransition:
+    """
+    A transition between two adjacent chords, with gravity + zone diagnostics.
+    """
+    index_from: int
+    from_root: PitchClass
+    to_root: PitchClass
+    interval_semitones: int
+    from_zone: str
+    to_zone: str
+    is_desc_fourth: bool
+    is_asc_fourth: bool
+    is_half_step: bool
+    is_whole_step: bool
+
+
 def annotate_progression(chord_symbols: List[str]) -> List[GravityAnnotatedChord]:
     """
     Annotate a chord progression with Zone–Tritone information.
@@ -96,6 +113,50 @@ def annotate_progression(chord_symbols: List[str]) -> List[GravityAnnotatedChord
         )
 
     return annotated
+
+
+def compute_transitions(
+    annotated: List[GravityAnnotatedChord],
+) -> List[GravityTransition]:
+    """
+    Compute stepwise motion diagnostics between annotated chords.
+
+    Returns one GravityTransition for each pair (i -> i+1).
+    """
+    transitions: List[GravityTransition] = []
+    if len(annotated) < 2:
+        return transitions
+
+    for idx in range(len(annotated) - 1):
+        a = annotated[idx]
+        b = annotated[idx + 1]
+
+        # Calculate interval between roots
+        d = interval(a.root_pc, b.root_pc)
+        abs_d = abs(d)
+
+        # Detect descending/ascending fourths (5 semitones)
+        is_desc_fourth = abs_d == 5 and d < 0
+        is_asc_fourth = abs_d == 5 and d > 0
+        is_half_step = abs_d == 1
+        is_whole_step = abs_d == 2
+
+        transitions.append(
+            GravityTransition(
+                index_from=idx,
+                from_root=a.root_pc,
+                to_root=b.root_pc,
+                interval_semitones=abs_d,
+                from_zone=a.zone,
+                to_zone=b.zone,
+                is_desc_fourth=is_desc_fourth,
+                is_asc_fourth=is_asc_fourth,
+                is_half_step=is_half_step,
+                is_whole_step=is_whole_step,
+            )
+        )
+
+    return transitions
 
 
 def tritone_sub_root(root_pc: PitchClass) -> PitchClass:
