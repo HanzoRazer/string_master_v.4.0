@@ -9,6 +9,7 @@ from typing import List, Literal
 from .engine import generate_accompaniment
 from .gravity_bridge import annotate_progression, compute_transitions
 from .patterns import STYLE_REGISTRY
+from .config import load_program_config
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -22,7 +23,10 @@ def _parse_chord_string(chord_str: str) -> List[str]:
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="zt-band",
-        description="Smart Guitar / Zone–Tritone backing band prototype.",
+        description=(
+            "Smart Guitar / Zone–Tritone backing band prototype.\n"
+            "Can operate on inline chords, files, or .ztprog program configs."
+        ),
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -30,7 +34,15 @@ def build_arg_parser() -> argparse.ArgumentParser:
     # ---- create subcommand ----
     p_create = subparsers.add_parser(
         "create",
-        help="Generate a backing track from a chord progression.",
+        help="Generate a backing track from a chord progression or .ztprog config.",
+    )
+    p_create.add_argument(
+        "--config",
+        type=str,
+        help=(
+            "Path to a .ztprog JSON/YAML config file defining chords, style, tempo, etc. "
+            "When provided, --chords/--file/--style/--tempo/... are ignored."
+        ),
     )
     p_create.add_argument(
         "--chords",
@@ -52,19 +64,19 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--tempo",
         type=int,
         default=120,
-        help="Tempo in BPM (default: 120).",
+        help="Tempo in BPM (default: 120). Ignored if --config is used.",
     )
     p_create.add_argument(
         "--bars-per-chord",
         type=int,
         default=1,
-        help="Number of 4/4 bars each chord lasts (default: 1).",
+        help="Number of 4/4 bars each chord lasts (default: 1). Ignored if --config is used.",
     )
     p_create.add_argument(
         "--outfile",
         type=str,
         default="backing.mid",
-        help="Output MIDI filename (default: backing.mid).",
+        help="Output MIDI filename (default: backing.mid). Ignored if --config is used.",
     )
     p_create.add_argument(
         "--tritone-mode",
@@ -72,7 +84,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default="none",
         help=(
             "Tritone substitution behavior for dominant chords: "
-            "'none' (default), 'all_doms' (always sub), or 'probabilistic'."
+            "'none' (default), 'all_doms' (always sub), or 'probabilistic'. "
+            "Ignored if --config is used."
         ),
     )
     p_create.add_argument(
@@ -81,21 +94,32 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=1.0,
         help=(
             "Probability [0.0, 1.0] for applying tritone subs when "
-            "tritone-mode=probabilistic (default: 1.0 → always)."
+            "tritone-mode=probabilistic (default: 1.0 → always). "
+            "Ignored if --config is used."
         ),
     )
     p_create.add_argument(
         "--tritone-seed",
         type=int,
         default=None,
-        help="Optional random seed for reproducible tritone-sub patterns.",
+        help="Optional random seed for reproducible tritone-sub patterns. Ignored if --config is used.",
     )
     p_create.set_defaults(func=cmd_create)
 
     # ---- annotate subcommand ----
     p_annot = subparsers.add_parser(
         "annotate",
-        help="Print Zone–Tritone annotations and gravity diagnostics for a progression.",
+        help=("Print Zone–Tritone annotations and gravity diagnostics "
+              "for a progression or for a .ztprog config's chords."),
+    )
+    p_annot.add_argument(
+        "--config",
+        type=str,
+        help=(
+            "Path to a .ztprog JSON/YAML program file. "
+            "When provided, chords are taken from the config and "
+            "--chords/--file are ignored."
+        ),
     )
     p_annot.add_argument(
         "--chords",
@@ -117,7 +141,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--save",
         type=str,
         default=None,
-        help="Optional path to save the annotation output (instead of or in addition to printing).",
+        help="Optional path to save the annotation output.",
     )
     p_annot.set_defaults(func=cmd_annotate)
 
@@ -159,6 +183,34 @@ def _load_chords_from_args(args: argparse.Namespace) -> List[str]:
 
 
 def cmd_create(args: argparse.Namespace) -> int:
+    # Prefer config if provided
+    if args.config:
+        cfg = load_program_config(args.config)
+
+        if cfg.style not in STYLE_REGISTRY:
+            print(
+                f"error: style '{cfg.style}' from config is not a known style. "
+                "Use 'zt-band styles' to list available styles.",
+                file=sys.stderr,
+            )
+            return 1
+
+        generate_accompaniment(
+            chord_symbols=cfg.chords,
+            style_name=cfg.style,
+            tempo_bpm=cfg.tempo,
+            bars_per_chord=cfg.bars_per_chord,
+            outfile=cfg.outfile,
+            tritone_mode=cfg.tritone_mode,
+            tritone_strength=cfg.tritone_strength,
+            tritone_seed=cfg.tritone_seed,
+        )
+
+        label = cfg.name or args.config
+        print(f"Created backing track from config '{label}': {cfg.outfile}")
+        return 0
+
+    # Fallback: inline/file chords + CLI flags
     chords = _load_chords_from_args(args)
 
     if args.style not in STYLE_REGISTRY:
@@ -192,8 +244,8 @@ def cmd_create(args: argparse.Namespace) -> int:
 def _format_annotations_text(annotated, transitions) -> str:
     lines: List[str] = []
     lines.append("Chord annotations:")
-    lines.append("idx | chord    | root | pc | zone     | tritone axis | gravity→ | on_chain")
-    lines.append("----+----------+------+----+----------+-------------+----------+---------")
+    lines.append("idx | chord    | root | pc | zone     | tritone axis | gravity-> | on_chain")
+    lines.append("----+----------+------+----+----------+--------------+-----------+---------")
 
     for idx, ac in enumerate(annotated):
         root_name = name_from_pc(ac.root_pc)
@@ -204,18 +256,18 @@ def _format_annotations_text(annotated, transitions) -> str:
             grav_str = name_from_pc(ac.gravity_target)
         lines.append(
             f"{idx:>3} | {ac.chord.symbol:<8} | {root_name:<4} | {ac.root_pc:>2} "
-            f"| {ac.zone:<8} | {axis_str:<11} | {grav_str:<8} | {str(ac.is_on_chain):<7}"
+            f"| {ac.zone:<8} | {axis_str:<12} | {grav_str:<9} | {str(ac.is_on_chain):<7}"
         )
 
     if transitions:
         lines.append("")
         lines.append("Stepwise transitions:")
-        lines.append("from→to | int(st) | zones                 | tags")
-        lines.append("--------+---------+-----------------------+--------------------------")
+        lines.append("from->to | int(st) | zones                 | tags")
+        lines.append("---------+---------+-----------------------+--------------------------")
         for tr in transitions:
             from_name = name_from_pc(tr.from_root)
             to_name = name_from_pc(tr.to_root)
-            zone_pair = f"{tr.from_zone} → {tr.to_zone}"
+            zone_pair = f"{tr.from_zone} -> {tr.to_zone}"
 
             tags: List[str] = []
             if tr.is_desc_fourth:
@@ -229,7 +281,7 @@ def _format_annotations_text(annotated, transitions) -> str:
 
             tag_str = ", ".join(tags) if tags else "-"
             lines.append(
-                f"{from_name:>3}→{to_name:<3} | {tr.interval_semitones:>3}     "
+                f"{from_name:>4}->{to_name:<3} | {tr.interval_semitones:>3}     "
                 f"| {zone_pair:<21} | {tag_str}"
             )
 
@@ -267,7 +319,7 @@ def _format_annotations_markdown(annotated, transitions) -> str:
         for tr in transitions:
             from_name = name_from_pc(tr.from_root)
             to_name = name_from_pc(tr.to_root)
-            zone_pair = f"{tr.from_zone} → {tr.to_zone}"
+            zone_pair = f"{tr.from_zone} -> {tr.to_zone}"
 
             tags: List[str] = []
             if tr.is_desc_fourth:
@@ -342,7 +394,13 @@ def _format_annotations_json(annotated, transitions) -> str:
 
 
 def cmd_annotate(args: argparse.Namespace) -> int:
-    chords = _load_chords_from_args(args)
+    # Prefer config if provided
+    if args.config:
+        cfg = load_program_config(args.config)
+        chords = cfg.chords
+    else:
+        chords = _load_chords_from_args(args)
+
     fmt: OutputFormat = args.format
 
     annotated = annotate_progression(chords)
@@ -361,10 +419,8 @@ def cmd_annotate(args: argparse.Namespace) -> int:
     else:
         out = _format_annotations_text(annotated, transitions)
 
-    # print to stdout
     print(out)
 
-    # optional save-to-file
     if args.save:
         path = Path(args.save)
         path.write_text(out, encoding="utf-8")

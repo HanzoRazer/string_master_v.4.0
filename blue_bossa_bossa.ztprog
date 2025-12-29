@@ -1,0 +1,14 @@
+name: "Blue Bossa bossa demo"
+chords:
+  - Cm7
+  - Fm7
+  - Dm7b5
+  - G7
+  - Cm7
+style: "bossa_basic"
+tempo: 132
+bars_per_chord: 1
+tritone_mode: "probabilistic"
+tritone_strength: 0.5
+tritone_seed: 42
+outfile: "blue_bossa_bossa.mid"

@@ -1,0 +1,11 @@
+{
+  "name": "C major swing demo",
+  "chords": "Cmaj7 Dm7 G7 Cmaj7",
+  "style": "swing_basic",
+  "tempo": 120,
+  "bars_per_chord": 1,
+  "tritone_mode": "none",
+  "tritone_strength": 1.0,
+  "tritone_seed": null,
+  "outfile": "c_major_swing.mid"
+}

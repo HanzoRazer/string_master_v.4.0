@@ -21,6 +21,10 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Mathematics",
   "Topic :: Artistic Software",
 ]
+dependencies = [
+  "mido>=1.2.10",
+  "pyyaml>=6.0"
+]
 
 [project.urls]
 Homepage = "https://github.com/HanzoRazer/string_master_v.4.0"
