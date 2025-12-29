@@ -1,120 +1,140 @@
-# Seed Sources Quickstart
+# Seed Sources — Quickstart
 
-**3-minute guide to storing and tracking seed material.**
+This guide shows how to add seed material to the repository without thinking too hard.
 
-Full policy: [SEED_SOURCES.md](./SEED_SOURCES.md)
+If you follow this document, your seeds will always remain usable,
+traceable, and safe to build on later.
 
 ---
 
-## Where Files Go
+## 1) Where Seeds Live
+
+All raw seed material goes under:
 
 ```
 seeds/
-  handcrafted/              # stuff you/we create directly
-  public_domain_or_open/    # CC0, public domain, open licensed
-  licensed_third_party/     # paid packs, vendor libraries
-  ai_generated_external/    # Suno, etc.
-    suno/
-      raw/                  # original audio downloads
-      stems/                # stem-separated tracks
-      midi/                 # MIDI extracted from stems
-      meta/                 # .seed.json metadata files
+  handcrafted/
+  public_domain_or_open/
+  licensed_third_party/
+  ai_generated_external/
 ```
+
+Each seed **must** have:
+- the raw asset(s) (audio, MIDI, stems)
+- a matching `*.seed.json` metadata file
 
 ---
 
-## 3 Examples
+## 2) Minimal Workflow
 
-### 1) Handcrafted Pattern
+1. Decide which category the seed belongs to
+2. Place the asset(s) under that folder
+3. Create a metadata file using `_TEMPLATE.seed.json`
+4. Adjust fields honestly and briefly
+5. Done
 
-**File:** `seeds/handcrafted/swing_comping_01.mid`  
-**Metadata:** `seeds/handcrafted/swing_comping_01.seed.json`
+No analysis or processing is required at this stage.
+
+---
+
+## 3) Example A — Handcrafted Seed
+
+```
+seeds/handcrafted/
+  cycle_fifths_basic.mid
+  cycle_fifths_basic.seed.json
+```
 
 ```json
 {
   "source_category": "handcrafted",
-  "creator": "greg_brown",
+  "provider": "String Master",
   "created_at": "2025-12-29",
+  "license_notes": "Original material created in-house",
+  "source_reference": "Manual composition",
   "assets": {
-    "midi": ["seeds/handcrafted/swing_comping_01.mid"]
+    "midi": ["cycle_fifths_basic.mid"]
   },
-  "tags": ["swing", "comping", "medium_tempo"],
-  "notes": "Basic Charleston rhythm for teaching swing feel."
+  "tags": ["cycle", "fifths", "practice"],
+  "notes": "Root-motion cycle for early harmonic training"
 }
 ```
 
 ---
 
-### 2) Licensed Third-Party Pack
+## 4) Example B — Licensed Third-Party MIDI
 
-**File:** `seeds/licensed_third_party/vendor_jazz_pack/groove_12.mid`  
-**Metadata:** `seeds/licensed_third_party/vendor_jazz_pack/groove_12.seed.json`
+```
+seeds/licensed_third_party/
+  vendor_pack_01/
+    groove_12.mid
+    groove_12.seed.json
+```
 
 ```json
 {
   "source_category": "licensed_third_party",
-  "vendor_name": "JazzGrooves Inc",
-  "product_name": "Pro Jazz MIDI Pack Vol 1",
-  "license_notes": "Licensed for use in productions; no raw redistribution.",
-  "created_at": "2025-11-15",
+  "provider": "Example MIDI Vendor",
+  "created_at": "2025-10-12",
+  "license_notes": "Purchased MIDI pack; use allowed in productions, not for redistribution",
+  "source_reference": "Vendor Pack Vol. 1",
   "assets": {
-    "midi": ["seeds/licensed_third_party/vendor_jazz_pack/groove_12.mid"]
+    "midi": ["groove_12.mid"]
   },
-  "tags": ["bossa", "latin", "120bpm"],
-  "notes": "Purchased pack; extract patterns, don't ship raw MIDI."
+  "tags": ["groove", "swing"],
+  "notes": "Used only as internal groove reference"
 }
 ```
 
 ---
 
-### 3) Suno-Generated Backing
+## 5) Example C — AI-Generated External (Suno)
 
-**Files:**
-- `seeds/ai_generated_external/suno/raw/ballad_c_major_001.wav`
-- `seeds/ai_generated_external/suno/stems/ballad_c_major_001_instrumental.wav`
-- `seeds/ai_generated_external/suno/midi/ballad_c_major_001_bass.mid`
-
-**Metadata:** `seeds/ai_generated_external/suno/meta/ballad_c_major_001.seed.json`
+```
+seeds/ai_generated_external/suno/
+  raw/track_001.wav
+  midi/track_001_bass.mid
+  meta/track_001.seed.json
+```
 
 ```json
 {
   "source_category": "ai_generated_external",
   "provider": "suno",
-  "plan_tier": "pro",
-  "suno_task_id": "abc123-task",
-  "suno_audio_id": "def456-audio",
   "created_at": "2025-12-29",
+  "license_notes": "Generated under paid plan; used as internal seed and backing material",
+  "source_reference": "Suno task_id=XXXX audio_id=YYYY",
   "assets": {
-    "audio": "seeds/ai_generated_external/suno/raw/ballad_c_major_001.wav",
-    "stems": [
-      "seeds/ai_generated_external/suno/stems/ballad_c_major_001_instrumental.wav"
-    ],
-    "midi": [
-      "seeds/ai_generated_external/suno/midi/ballad_c_major_001_bass.mid"
-    ]
+    "audio": ["raw/track_001.wav"],
+    "midi": ["midi/track_001_bass.mid"]
   },
-  "tags": ["ballad", "C_major", "70bpm"],
-  "notes": "Used for pattern extraction and backing track variations."
+  "tags": ["ballad", "C_major"],
+  "notes": "Seed for groove extraction and accompaniment variation"
 }
 ```
 
 ---
 
-## Quick Rules
+## 6) What Happens Next (Later)
 
-✅ **DO:** Track every seed with a `.seed.json` file  
-✅ **DO:** Extract patterns → store in `seeds/derived/patterns/`  
-✅ **DO:** Use seeds for practice/pedagogy internally
+You do **not** need to act on this now.
 
-❌ **DON'T:** Redistribute raw third-party or AI assets without checking terms  
-❌ **DON'T:** Lose provenance (no orphan files)
+Later tools may:
 
----
+* extract patterns into `derived/patterns/`
+* convert seeds into `.ztprog` or `.ztex`
+* attach seeds to exercises as backing sources
 
-## Template
-
-Copy `seeds/_TEMPLATE.seed.json` and fill in the blanks.
+None of that changes how seeds are stored.
 
 ---
 
-**That's it.** Now go seed some grooves. 🎸
+## 7) Rule of Thumb
+
+If future-you can answer:
+
+* *Where did this come from?*
+* *What am I allowed to do with it?*
+* *Why is it here?*
+
+…then the seed was added correctly.

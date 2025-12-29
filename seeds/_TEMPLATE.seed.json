@@ -1,24 +1,14 @@
 {
-  "source_category": "handcrafted|public_domain_or_open|licensed_third_party|ai_generated_external",
-  "provider": "self|suno|vendor_name",
+  "source_category": "handcrafted | public_domain_or_open | licensed_third_party | ai_generated_external",
+  "provider": "your_name | vendor_name | suno | other",
   "created_at": "YYYY-MM-DD",
-  "plan_tier": "optional_if_ai",
-  "suno_task_id": "optional_if_suno",
-  "suno_audio_id": "optional_if_suno",
-  "vendor_name": "optional_if_licensed",
-  "product_name": "optional_if_licensed",
-  "license_notes": "short_summary_of_terms",
-  "creator": "optional_if_handcrafted",
+  "license_notes": "Short human-readable summary of usage rights or constraints",
+  "source_reference": "URL, product name, task ID, or other identifier",
   "assets": {
-    "audio": "path/to/audio.wav",
-    "stems": [
-      "path/to/stem1.wav",
-      "path/to/stem2.wav"
-    ],
-    "midi": [
-      "path/to/midi1.mid"
-    ]
+    "audio": [],
+    "midi": [],
+    "stems": []
   },
-  "tags": ["style_tag", "key_tag", "tempo_tag"],
-  "notes": "Free-form notes about this seed's purpose and usage."
+  "tags": [],
+  "notes": "Why this seed exists and how it is intended to be used"
 }
