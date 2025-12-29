@@ -1,0 +1,22 @@
+name: "Cycle of Dominants — by 4ths (12 Keys)"
+chords:
+  - C7
+  - F7
+  - Bb7
+  - Eb7
+  - Ab7
+  - Db7
+  - Gb7
+  - B7
+  - E7
+  - A7
+  - D7
+  - G7
+  - C7
+style: "swing_basic"
+tempo: 120
+bars_per_chord: 1
+tritone_mode: "probabilistic"
+tritone_strength: 0.5
+tritone_seed: 42
+outfile: "cycle_dominants_fourths.mid"

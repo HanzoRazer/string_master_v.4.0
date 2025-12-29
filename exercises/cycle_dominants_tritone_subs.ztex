@@ -1,0 +1,18 @@
+name: "Cycle of Dominants — Tritone Subs (Guide Tone Mission)"
+program: "../programs/cycle_dominants_fourths.ztprog"
+exercise_type: "cycle_dominants_tritone_subs"
+
+task:
+  mode: "play_shells"
+  instructions: "Play ONLY 3rds and 7ths for each dominant chord. When a tritone-sub appears, keep the SAME tritone and re-hear the root change."
+  prompts:
+    - "Call out the tritone axis (e.g., B–F) as you play it."
+    - "Notice: tritone-sub keeps guide tones but changes the bass/root."
+    - "Try comping: if the track flips to Db7 instead of G7, keep the guide-tone line smooth."
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Could you feel the sub as 'same tritone, different root'?"
+    - "Which substitutions sounded most natural?"
+    - "Did the chromatic motion feel like 'dominants in half steps'?"
