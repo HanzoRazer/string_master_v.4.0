@@ -1,0 +1,16 @@
+name: "Cycle of Thirds — Guide Tones"
+program: "../programs/cycle_thirds_dominant.ztprog"
+exercise_type: "cycle_thirds_guidetones"
+
+task:
+  mode: "play_shells"
+  instructions: "Play 3rds and 7ths of each chord while the progression cycles in thirds."
+  prompts:
+    - "Listen for how the guide tones move by step from chord to chord."
+    - "Aim to keep a smooth legato line even when the roots jump."
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Could you keep the guide-tone line mostly within a single octave?"
+    - "Where did the line feel most angular or awkward?"

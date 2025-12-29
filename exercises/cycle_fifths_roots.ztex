@@ -1,0 +1,17 @@
+name: "Cycle of Fifths — Roots (All Keys)"
+program: "../programs/cycle_fifths_all_keys.ztprog"
+exercise_type: "cycle_fifths_roots"
+
+task:
+  mode: "play_roots"
+  instructions: "Play the root note of each chord as it sounds, staying locked with the backing track."
+  prompts:
+    - "Say the key or chord name out loud before you play."
+    - "Keep your time steady; avoid chasing the track."
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Which keys felt least stable under your fingers?"
+    - "Could you predict the next root before it played?"
+    - "Did you feel the circle motion rather than just memorizing chords?"

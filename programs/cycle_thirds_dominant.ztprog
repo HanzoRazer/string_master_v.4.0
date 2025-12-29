@@ -1,0 +1,9 @@
+name: "Cycle of Thirds — Dominant Chain"
+chords: "C7 Eb7 F#7 A7 C7"
+style: "swing_basic"
+tempo: 110
+bars_per_chord: 2
+tritone_mode: "none"
+tritone_strength: 1.0
+tritone_seed: null
+outfile: "cycle_thirds_dominant.mid"

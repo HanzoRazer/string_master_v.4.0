@@ -12,6 +12,7 @@ from .patterns import STYLE_REGISTRY
 from .config import load_program_config
 from .programs import discover_programs
 from .playlist import load_playlist, render_playlist_to_midi
+from .exercises import load_exercise_config, run_exercise
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -185,6 +186,38 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Optional override for playlist outfile (e.g. session.mid).",
     )
     p_play.set_defaults(func=cmd_play)
+
+    # ---- ex-list subcommand ----
+    p_ex_list = subparsers.add_parser(
+        "ex-list",
+        help="List .ztex exercise definitions in a directory (default: ./exercises).",
+    )
+    p_ex_list.add_argument(
+        "--dir",
+        type=str,
+        default="exercises",
+        help="Directory to scan for .ztex files (default: exercises).",
+    )
+    p_ex_list.set_defaults(func=cmd_ex_list)
+
+    # ---- ex-run subcommand ----
+    p_ex_run = subparsers.add_parser(
+        "ex-run",
+        help="Run a single .ztex exercise (generate backing + print instructions).",
+    )
+    p_ex_run.add_argument(
+        "--file",
+        type=str,
+        required=True,
+        help="Path to a .ztex exercise file.",
+    )
+    p_ex_run.add_argument(
+        "--outfile",
+        type=str,
+        default=None,
+        help="Optional override for the MIDI filename.",
+    )
+    p_ex_run.set_defaults(func=cmd_ex_run)
 
     return parser
 
@@ -531,6 +564,49 @@ def cmd_play(args: argparse.Namespace) -> int:
 
     label = pl.name or playlist_path
     print(f"Rendered playlist '{label}' to: {outfile}")
+    return 0
+
+
+# ------------------------
+# ex-list / ex-run commands
+# ------------------------
+
+
+def cmd_ex_list(args: argparse.Namespace) -> int:
+    root = Path(args.dir)
+    print(f"Scanning '{root}' for .ztex exercises...\n")
+
+    if not root.exists() or not root.is_dir():
+        print("No exercises directory found.")
+        return 0
+
+    files = sorted(root.glob("*.ztex"))
+    if not files:
+        print("No .ztex exercise files found.")
+        return 0
+
+    print("file                         | name                          | type")
+    print("-----------------------------+-------------------------------+---------------------")
+
+    for path in files:
+        try:
+            ex = load_exercise_config(path)
+            rel = path.relative_to(root)
+            print(f"{str(rel):<29} | {ex.name:<29} | {ex.exercise_type:<19}")
+        except Exception as exc:  # noqa: BLE001
+            print(f"{path.name:<29} | ERROR: {exc}")
+
+    return 0
+
+
+def cmd_ex_run(args: argparse.Namespace) -> int:
+    ex_path = args.file
+    outfile = args.outfile
+
+    ex = load_exercise_config(ex_path)
+    midi_out = run_exercise(ex, outfile=outfile)
+
+    print(f"\nExercise complete. MIDI written to: {midi_out}")
     return 0
 
 

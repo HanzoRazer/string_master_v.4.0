@@ -1,0 +1,9 @@
+name: "Cycle of Fifths — All 12 Keys"
+chords: "Cmaj7 Fmaj7 Bbmaj7 Ebmaj7 Abmaj7 Dbmaj7 F#maj7 Bmaj7 Emaj7 Amaj7 Dmaj7 Gmaj7"
+style: "swing_basic"
+tempo: 100
+bars_per_chord: 2
+tritone_mode: "none"
+tritone_strength: 1.0
+tritone_seed: null
+outfile: "cycle_fifths_all_keys.mid"
