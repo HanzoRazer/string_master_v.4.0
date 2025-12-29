@@ -1,0 +1,16 @@
+name: "Autumn Leaves - Ballad with Tritone Subs"
+chords:
+  - Cm7
+  - F7
+  - Bbmaj7
+  - Ebmaj7
+  - Am7b5
+  - D7
+  - Gm7
+style: "ballad_basic"
+tempo: 70
+bars_per_chord: 2
+tritone_mode: "probabilistic"
+tritone_strength: 0.7
+tritone_seed: 1337
+outfile: "autumn_leaves_ballad.mid"
