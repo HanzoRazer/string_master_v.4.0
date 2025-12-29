@@ -1,0 +1,11 @@
+name: "Cycle Training Pack 01 (5ths → 3rds → 4ths)"
+tempo: 120
+outfile: "cycle_training_pack_01.mid"
+
+programs:
+  - config: "../programs/cycle_fifths_roots.ztprog"
+    repeat: 1
+  - config: "../programs/cycle_thirds_symmetry.ztprog"
+    repeat: 2
+  - config: "../programs/cycle_fourths_ii_v_i.ztprog"
+    repeat: 1
