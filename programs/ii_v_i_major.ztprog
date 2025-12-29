@@ -1,0 +1,9 @@
+name: "ii–V–I Major"
+chords: "Dm7 G7 Cmaj7"
+style: "swing_basic"
+tempo: 120
+bars_per_chord: 2
+tritone_mode: "none"
+tritone_strength: 1.0
+tritone_seed: null
+outfile: "ii_v_i_major.mid"

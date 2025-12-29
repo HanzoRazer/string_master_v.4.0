@@ -1,0 +1,9 @@
+name: "Zone Theory Practice Session"
+outfile: "zone_theory_session.mid"
+programs:
+  - config: "../programs/c_major_swing.ztprog"
+    repeat: 2
+  - config: "../programs/blue_bossa_bossa.ztprog"
+    repeat: 1
+  - config: "../programs/autumn_leaves.ztprog"
+    repeat: 1

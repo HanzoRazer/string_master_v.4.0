@@ -1,0 +1,6 @@
+name: "Swing Practice Loop"
+tempo: 120
+outfile: "swing_practice.mid"
+programs:
+  - config: "../programs/c_major_swing.ztprog"
+    repeat: 3

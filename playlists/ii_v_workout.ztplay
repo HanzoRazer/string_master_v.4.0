@@ -1,0 +1,10 @@
+name: "ii–V Workout Session"
+tempo: 120
+outfile: "ii_v_workout.mid"
+programs:
+  - config: "../programs/ii_v_i_major.ztprog"
+    repeat: 2
+  - config: "../programs/ii_v_i_minor.ztprog"
+    repeat: 2
+  - config: "../programs/c_major_swing.ztprog"
+    repeat: 1

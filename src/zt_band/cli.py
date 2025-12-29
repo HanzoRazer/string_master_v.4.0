@@ -10,6 +10,8 @@ from .engine import generate_accompaniment
 from .gravity_bridge import annotate_progression, compute_transitions
 from .patterns import STYLE_REGISTRY
 from .config import load_program_config
+from .programs import discover_programs
+from .playlist import load_playlist, render_playlist_to_midi
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -25,7 +27,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         prog="zt-band",
         description=(
             "Smart Guitar / Zone–Tritone backing band prototype.\n"
-            "Can operate on inline chords, files, or .ztprog program configs."
+            "Works with inline chords, chord files, .ztprog presets, and .ztplay playlists."
         ),
     )
 
@@ -151,6 +153,38 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="List available accompaniment styles.",
     )
     p_styles.set_defaults(func=cmd_styles)
+
+    # ---- programs subcommand ----
+    p_programs = subparsers.add_parser(
+        "programs",
+        help="List .ztprog presets in a directory (default: ./programs).",
+    )
+    p_programs.add_argument(
+        "--dir",
+        type=str,
+        default="programs",
+        help="Directory to scan for .ztprog files (default: programs).",
+    )
+    p_programs.set_defaults(func=cmd_programs)
+
+    # ---- play subcommand ----
+    p_play = subparsers.add_parser(
+        "play",
+        help="Render a .ztplay playlist into one long MIDI practice session.",
+    )
+    p_play.add_argument(
+        "--playlist",
+        type=str,
+        required=True,
+        help="Path to a .ztplay (JSON/YAML) playlist file.",
+    )
+    p_play.add_argument(
+        "--outfile",
+        type=str,
+        default=None,
+        help="Optional override for playlist outfile (e.g. session.mid).",
+    )
+    p_play.set_defaults(func=cmd_play)
 
     return parser
 
@@ -440,6 +474,63 @@ def cmd_styles(args: argparse.Namespace) -> int:
     print("--------------+---------------------------------------------")
     for key, style in STYLE_REGISTRY.items():
         print(f"{key:<12} | {style.description}")
+    return 0
+
+
+# ------------------------
+# programs command
+# ------------------------
+
+
+def cmd_programs(args: argparse.Namespace) -> int:
+    root = args.dir
+    descs = discover_programs(root)
+
+    print(f"Scanning '{root}' for .ztprog files...\n")
+
+    if not descs:
+        print("No .ztprog presets found.")
+        return 0
+
+    print("path                         | name                     | style        | tempo | status")
+    print("-----------------------------+--------------------------+--------------+-------+-------------------------")
+
+    for d in descs:
+        rel = d.path
+        try:
+            rel = d.path.relative_to(Path(root))
+        except ValueError:
+            rel = d.path
+
+        if d.config is None:
+            print(
+                f"{str(rel):<29} | {'-':<24} | {'-':<12} | {'-':<5} | ERROR: {d.error}"
+            )
+            continue
+
+        cfg = d.config
+        name = cfg.name or "-"
+        print(
+            f"{str(rel):<29} | {name:<24} | {cfg.style:<12} | {cfg.tempo:>5} | OK"
+        )
+
+    return 0
+
+
+# ------------------------
+# play command
+# ------------------------
+
+
+def cmd_play(args: argparse.Namespace) -> int:
+    playlist_path = args.playlist
+    pl = load_playlist(playlist_path)
+
+    outfile = args.outfile or pl.outfile or "playlist_session.mid"
+    render_playlist_to_midi(pl, outfile=outfile)
+
+    label = pl.name or playlist_path
+    print(f"Rendered playlist '{label}' to: {outfile}")
     return 0
 
 
