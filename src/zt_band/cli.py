@@ -242,8 +242,8 @@ def _format_annotations_markdown(annotated, transitions) -> str:
     # Chord table
     lines.append("### Chord Annotations")
     lines.append("")
-    lines.append("| # | Chord | Root | PC | Zone | Tritone Axis | Gravity → | On Chain |")
-    lines.append("|---|-------|------|----|------|--------------|-----------|----------|")
+    lines.append("| # | Chord | Root | PC | Zone | Tritone Axis | Gravity -> | On Chain |")
+    lines.append("|---|-------|------|----|------|--------------|------------|----------|")
 
     for idx, ac in enumerate(annotated):
         root_name = name_from_pc(ac.root_pc)
@@ -262,8 +262,8 @@ def _format_annotations_markdown(annotated, transitions) -> str:
         lines.append("")
         lines.append("### Stepwise Transitions")
         lines.append("")
-        lines.append("| From → To | Interval (semitones) | Zones | Tags |")
-        lines.append("|-----------|----------------------|-------|------|")
+        lines.append("| From -> To | Interval (semitones) | Zones | Tags |")
+        lines.append("|------------|----------------------|-------|------|")
         for tr in transitions:
             from_name = name_from_pc(tr.from_root)
             to_name = name_from_pc(tr.to_root)
@@ -281,7 +281,7 @@ def _format_annotations_markdown(annotated, transitions) -> str:
 
             tag_str = ", ".join(tags) if tags else "-"
             lines.append(
-                f"| {from_name} → {to_name} | {tr.interval_semitones} | "
+                f"| {from_name} -> {to_name} | {tr.interval_semitones} | "
                 f"{zone_pair} | {tag_str} |"
             )
 
