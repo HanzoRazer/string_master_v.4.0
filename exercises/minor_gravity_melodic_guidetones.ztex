@@ -1,0 +1,18 @@
+name: "Minor Gravity — Melodic Minor Guide Tones (Two-Tritone Hearing)"
+program: "../programs/minor_gravity_melodic_ii_v_i.ztprog"
+exercise_type: "minor_gravity_melodic_guidetones"
+
+task:
+  mode: "play_shells"
+  instructions: "Play ONLY guide tones (3rds & 7ths). On the V7alt, lock onto the tritone and resolve it into the i chord."
+  prompts:
+    - "On iiø→V7alt: hear the pull as a tritone event, not a scale."
+    - "On V7alt→i: keep the tritone shape stable while the root changes."
+    - "Try staying in one fretboard position for 3 keys before shifting."
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Could you hear the V7alt tritone as the true driver of resolution?"
+    - "Where did the minor color feel strongest (iiø, V7alt, or i)?"
+    - "Did the tritone-sub moments feel like 'same tension, new bass'?"

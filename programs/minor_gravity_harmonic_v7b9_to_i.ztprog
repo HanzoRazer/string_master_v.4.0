@@ -1,0 +1,56 @@
+name: "Minor Gravity — Harmonic Minor V7b9 → i (Cycle by 4ths)"
+chords:
+  - Cm
+  - G7b9
+  - Cm
+
+  - Fm
+  - C7b9
+  - Fm
+
+  - Bbm
+  - F7b9
+  - Bbm
+
+  - Ebm
+  - Bb7b9
+  - Ebm
+
+  - Abm
+  - Eb7b9
+  - Abm
+
+  - Dbm
+  - Ab7b9
+  - Dbm
+
+  - Gbm
+  - Db7b9
+  - Gbm
+
+  - Bm
+  - F#7b9
+  - Bm
+
+  - Em
+  - B7b9
+  - Em
+
+  - Am
+  - E7b9
+  - Am
+
+  - Dm
+  - A7b9
+  - Dm
+
+  - Gm
+  - D7b9
+  - Gm
+
+style: "ballad_basic"
+tempo: 108
+bars_per_chord: 2
+
+tritone_mode: "none"
+tritone_strength: 1.0
