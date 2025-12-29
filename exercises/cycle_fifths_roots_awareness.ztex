@@ -1,0 +1,16 @@
+name: "Cycle of Fifths — Root Awareness"
+program: "../programs/cycle_fifths_roots.ztprog"
+exercise_type: "cycle_fifths_roots"
+
+task:
+  mode: "play_roots"
+  instructions: "Play the root of each chord in time with the backing track."
+  prompts:
+    - "Say the next root out loud before it arrives."
+    - "Feel the circular motion — do not think in isolated keys."
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Where did the cycle feel strongest?"
+    - "Could you anticipate the next root without counting?"

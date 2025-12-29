@@ -1,0 +1,16 @@
+name: "Cycle of Thirds — Tritone Awareness"
+program: "../programs/cycle_thirds_symmetry.ztprog"
+exercise_type: "cycle_thirds_tritone"
+
+task:
+  mode: "play_shells"
+  instructions: "Play only 3rds and 7ths of each dominant chord."
+  prompts:
+    - "Notice how guide tones move by half-step."
+    - "Identify the shared tritone between chords."
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Which tritone felt like a pivot point?"
+    - "Did the symmetry feel stable or disorienting?"

@@ -1,0 +1,9 @@
+name: "Cycle of Fifths — Roots"
+tempo: 110
+style: "swing_basic"
+bars_per_chord: 1
+chords: "C F Bb Eb Ab Db Gb B E A D G"
+tritone_mode: "none"
+tritone_strength: 0.6
+tritone_seed: null
+outfile: "cycle_fifths_roots.mid"

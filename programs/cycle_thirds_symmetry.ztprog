@@ -1,0 +1,9 @@
+name: "Cycle of Thirds — Dominant Symmetry"
+tempo: 100
+style: "swing_basic"
+bars_per_chord: 2
+chords: "C7 Eb7 Gb7 A7"
+tritone_mode: "all_doms"
+tritone_strength: 0.8
+tritone_seed: null
+outfile: "cycle_thirds_symmetry.mid"
