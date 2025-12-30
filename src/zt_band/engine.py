@@ -11,6 +11,7 @@ from .midi_out import NoteEvent, write_midi_file
 from .gravity_bridge import apply_tritone_substitutions
 from .musical_contract import validate_note_events, enforce_determinism_inputs
 from .expressive_layer import apply_velocity_profile
+from .expressive_swing import ExpressiveSpec, apply_expressive
 
 
 def generate_accompaniment(
@@ -22,6 +23,7 @@ def generate_accompaniment(
     tritone_mode: str = "none",
     tritone_strength: float = 1.0,
     tritone_seed: int | None = None,
+    expressive: ExpressiveSpec | None = None,
 ) -> Tuple[List[NoteEvent], List[NoteEvent]]:
     """
     Generate comping + bass MIDI note events for a simple chord progression.
@@ -134,6 +136,10 @@ def generate_accompaniment(
     validate_note_events(bass_events)
 
     if outfile:
+        # Apply optional expressive layer (swing/humanize) before writing
+        if expressive is not None:
+            comp_events = apply_expressive(comp_events, spec=expressive, tempo_bpm=tempo_bpm)
+            bass_events = apply_expressive(bass_events, spec=expressive, tempo_bpm=tempo_bpm)
         write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=outfile)
 
     return comp_events, bass_events

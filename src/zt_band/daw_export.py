@@ -19,6 +19,19 @@ def _now_stamp() -> str:
     return datetime.now().strftime("%Y-%m-%d_%H%M%S")
 
 
+def _has_program_change_at_start(track: MidiTrack, channel: int) -> bool:
+    """
+    True if the track already has a program_change for this channel at time=0
+    near the start of the track (first few events).
+    """
+    # Look only at the first few events to avoid scanning huge tracks
+    for m in list(track)[:12]:
+        if isinstance(m, Message) and m.type == "program_change" and getattr(m, "channel", None) == channel:
+            if m.time == 0:
+                return True
+    return False
+
+
 def _inject_gm_program_changes(mid: MidiFile) -> None:
     """
     Minimal "sounds everywhere" behavior:
@@ -64,7 +77,13 @@ def _inject_gm_program_changes(mid: MidiFile) -> None:
         else:
             program = 0
 
-        tr.insert(1, Message("program_change", channel=ch, program=program, time=0))
+        # Avoid double-injecting if generator already emitted program changes
+        if _has_program_change_at_start(tr, ch):
+            continue
+
+        # Insert near the top (after an optional track_name at index 0)
+        insert_at = 1 if tr and isinstance(tr[0], MetaMessage) and tr[0].type == "track_name" else 0
+        tr.insert(insert_at, Message("program_change", channel=ch, program=program, time=0))
 
 
 def _write_import_guide(

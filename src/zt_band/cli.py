@@ -14,6 +14,7 @@ from .programs import discover_programs
 from .playlist import load_playlist, render_playlist_to_midi
 from .exercises import load_exercise_config, run_exercise
 from .daw_export import export_for_daw
+from .expressive_swing import ExpressiveSpec
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -107,6 +108,30 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=int,
         default=None,
         help="Optional random seed for reproducible tritone-sub patterns. Ignored if --config is used.",
+    )
+    p_create.add_argument(
+        "--swing",
+        type=float,
+        default=0.0,
+        help="Swing amount 0..1 for 8th-note offbeats (default: 0 = OFF). Ignored if --config is used.",
+    )
+    p_create.add_argument(
+        "--humanize-ms",
+        type=float,
+        default=0.0,
+        help="Timing jitter in milliseconds (default: 0 = OFF). Ignored if --config is used.",
+    )
+    p_create.add_argument(
+        "--humanize-vel",
+        type=int,
+        default=0,
+        help="Velocity jitter +/- (default: 0 = OFF). Ignored if --config is used.",
+    )
+    p_create.add_argument(
+        "--humanize-seed",
+        type=int,
+        default=None,
+        help="Seed for reproducible humanization. Ignored if --config is used.",
     )
     p_create.set_defaults(func=cmd_create)
 
@@ -313,6 +338,16 @@ def cmd_create(args: argparse.Namespace) -> int:
         )
         return 1
 
+    # Build expressive spec if any parameter is non-zero
+    expressive: ExpressiveSpec | None = None
+    if args.swing or args.humanize_ms or args.humanize_vel:
+        expressive = ExpressiveSpec(
+            swing=args.swing,
+            humanize_ms=args.humanize_ms,
+            humanize_vel=args.humanize_vel,
+            seed=args.humanize_seed,
+        )
+
     generate_accompaniment(
         chord_symbols=chords,
         style_name=args.style,
@@ -322,6 +357,7 @@ def cmd_create(args: argparse.Namespace) -> int:
         tritone_mode=args.tritone_mode,
         tritone_strength=args.tritone_strength,
         tritone_seed=args.tritone_seed,
+        expressive=expressive,
     )
 
     print(f"Created backing track: {args.outfile}")
