@@ -55,6 +55,28 @@ We support these seed categories. Each category has different constraints.
 
 ---
 
+## Seed Governance (AI Agent Rules)
+
+AI agents MAY:
+- Create `.seed.json` metadata stubs using the template.
+- Create placeholder entries that reference a human-provided source.
+- Validate schema, required fields, and file placement.
+
+AI agents MAY NOT (without explicit human approval):
+- Add or ingest third-party audio/MIDI assets into `seeds/`.
+- Assert license terms, ownership, or provenance as "verified."
+- Pull seeds from online services or APIs.
+- Generate seeds from copyrighted material.
+
+Approval required for:
+- Any new seed asset file (audio/MIDI/stems)
+- Any seed source labeled `licensed_third_party` or `ai_generated_external`
+
+Enforcement:
+- CI may enforce that `source_reference` and `license_notes` are non-empty for non-handcrafted categories.
+
+---
+
 ### B) `public_domain_or_open`
 **Meaning:** legitimately public domain or openly licensed materials.
 

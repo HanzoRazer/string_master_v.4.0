@@ -14,6 +14,21 @@
 
 ---
 
+## 🎵 MIDI Generation Invariants (Do Not Break)
+
+All generated MIDI must satisfy:
+- Standard MIDI File (SMF) Type 1 preferred (multi-track) unless intentionally Type 0.
+- Valid tempo map (BPM) and time signature events at time 0.
+- No stuck notes: every note_on must have a corresponding note_off.
+- Deterministic outputs when seed/inputs are identical (unless explicitly randomized with a documented seed).
+- Track names should be stable when possible (e.g., Comp, Bass, Drums, Meta).
+- Output must import cleanly in a DAW without manual repair.
+
+**Quick smoke test:**
+- Generate → import into DAW → press play → sound + no hanging notes.
+
+---
+
 ## 📦 Installation
 
 After installing the `zone-tritone` package:
@@ -444,6 +459,98 @@ The CLI is designed for:
 - **Composers** — Validate harmonic choices
 - **Educators** — Demonstrate Zone-Tritone concepts
 - **Researchers** — Extract transition statistics from corpora
+
+---
+
+## Raspberry Pi + Ardour Quick-Start (Proof-of-Sound)
+
+This guide verifies that zt-band MIDI output produces audible sound on a
+Raspberry Pi using Ardour.
+
+### Supported Platform
+- Raspberry Pi 5
+- Raspberry Pi OS (64-bit) or Debian 12
+- I2S or USB audio interface
+- Ardour (Linux build)
+
+---
+
+### 1. Install Ardour
+```bash
+sudo apt update
+sudo apt install ardour
+```
+
+(Optional but recommended for MIDI sound)
+```bash
+sudo apt install fluidsynth fluid-soundfont-gm
+```
+
+### 2. Audio System Settings (First Launch)
+
+When Ardour starts:
+
+- **Audio System**: ALSA (or JACK if already configured)
+- **Sample Rate**: 48000
+- **Buffer Size**: 128 (256 if underruns occur)
+- **Input/Output device**: select your I2S codec or USB interface
+
+### 3. Import zt-band MIDI
+
+Generate MIDI using zt-band:
+```bash
+zt-band play <program>.ztprog
+```
+
+Export for DAW use:
+```bash
+zt-band daw-export --midi output.mid
+```
+
+Open Ardour:
+- Drag the exported `.mid` file into the timeline
+- Accept tempo and time-signature prompts
+
+### 4. Assign Sound (If Silent)
+
+If no sound is heard:
+- Add a MIDI track instrument
+- Load FluidSynth
+- Select a GM sound (piano, bass, etc.)
+
+This is expected behavior on fresh systems.
+
+### 5. Proof-of-Sound Checklist
+
+- ▶ Press Play → sound is heard
+- ⏱ Tempo matches program
+- 🎼 No stuck or hanging notes
+- 📁 MIDI imports without errors
+
+**At this point, Project 1A is complete.**
+
+---
+
+## Headless Raspberry Pi Operation
+
+zt-band does not require a graphical environment.
+
+Supported headless workflow:
+- SSH into Pi
+- Generate MIDI via CLI
+- Export DAW-ready bundles
+- Transfer files via SCP or USB
+
+Example:
+```bash
+zt-band play cycle_5ths.ztprog
+zt-band daw-export --midi output.mid
+scp exports/daw/*/*.mid user@desktop:/music/
+```
+
+The DAW may run on another machine if desired.
+
+**This keeps your Smart Guitar usable without a screen.**
 
 ---
 

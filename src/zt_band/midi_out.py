@@ -39,7 +39,14 @@ def write_midi_file(
     outfile: str = "backing.mid",
 ) -> None:
     """
-    Write MIDI note events to a .mid file.
+    Write MIDI note events to a .mid file with enforced stability invariants.
+    
+    Invariants enforced:
+    - SMF Type 1 (multiple tracks)
+    - Tempo meta-event at time 0
+    - Time signature meta-event at time 0 (4/4)
+    - Stable track names ("Comping", "Bass")
+    - No stuck notes (verified after rendering)
     
     Parameters:
         comp_events: List of comping track events
@@ -49,19 +56,25 @@ def write_midi_file(
     
     Raises:
         ImportError: If mido library is not installed
+        ValueError: If stuck notes detected (unbalanced note on/off)
     """
     if not MIDO_AVAILABLE:
         raise ImportError(
             "mido library required for MIDI output. Install with: pip install mido"
         )
     
-    # Create MIDI file with two tracks
+    # Validate tempo range (1-999 BPM reasonable for MIDI)
+    if not (1 <= tempo_bpm <= 999):
+        raise ValueError(f"tempo_bpm out of reasonable range 1-999: {tempo_bpm}")
+    
+    # Create MIDI file with multiple tracks (Type 1)
     mid = mido.MidiFile(type=1)
     
-    # Track 0: Tempo track
+    # Track 0: Tempo + time signature at time 0 (INVARIANT)
     tempo_track = mido.MidiTrack()
     mid.tracks.append(tempo_track)
     tempo_track.append(mido.MetaMessage('set_tempo', tempo=mido.bpm2tempo(tempo_bpm), time=0))
+    tempo_track.append(mido.MetaMessage('time_signature', numerator=4, denominator=4, time=0))
     
     # Track 1: Comping (piano/guitar)
     comp_track = mido.MidiTrack()
@@ -78,6 +91,9 @@ def write_midi_file(
     bass_track.append(mido.Message('program_change', program=32, time=0))  # Acoustic Bass
     
     _add_events_to_track(bass_track, bass_events, tempo_bpm)
+    
+    # Verify no stuck notes before saving (INVARIANT)
+    _verify_no_stuck_notes(mid)
     
     # Save file
     mid.save(outfile)
@@ -145,3 +161,34 @@ def list_midi_ports() -> List[str]:
         )
     
     return mido.get_output_names()
+
+
+def _verify_no_stuck_notes(mid: 'mido.MidiFile') -> None:
+    """
+    Verify that all note_on events have corresponding note_off events.
+    
+    Scans all tracks and ensures balanced note on/off per (channel, note) tuple.
+    
+    Raises:
+        ValueError: If any notes are stuck (unbalanced on/off).
+    """
+    from collections import defaultdict
+    
+    # Track note balance per (channel, note)
+    note_balance: dict[tuple[int, int], int] = defaultdict(int)
+    
+    for track in mid.tracks:
+        for msg in track:
+            if msg.type == 'note_on' and msg.velocity > 0:
+                note_balance[(msg.channel, msg.note)] += 1
+            elif msg.type == 'note_off' or (msg.type == 'note_on' and msg.velocity == 0):
+                note_balance[(msg.channel, msg.note)] -= 1
+    
+    # Check for imbalances
+    stuck_notes = [(ch, note) for (ch, note), bal in note_balance.items() if bal != 0]
+    
+    if stuck_notes:
+        raise ValueError(
+            f"Stuck notes detected (unbalanced note on/off): {stuck_notes}. "
+            "This indicates a bug in event generation."
+        )

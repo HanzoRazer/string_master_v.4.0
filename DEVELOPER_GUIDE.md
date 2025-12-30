@@ -223,6 +223,13 @@ pip install -e .  # Refresh entry points
 
 ---
 
+## 📚 **LaTeX Academic Papers**
+
+Refer to [LATEX_COMPILATION_GUIDE.md](LATEX_COMPILATION_GUIDE.md).
+AI agents should not modify LaTeX build tooling unless a compilation failure is reproduced and documented.
+
+---
+
 ## 🎼 **Core Theory API**
 
 ### Pitch Class (PC) Operations
@@ -248,6 +255,25 @@ half = is_half_step(0, 1)            # True (C→C# is half-step)
 whole = is_whole_step(0, 2)          # True (C→D is whole-step)
 dist = interval(0, 7)                # 7 (C→G = 7 semitones)
 ```
+
+### PitchClass Pitfalls & Debug Patterns
+
+**Pitfalls:**
+- PitchClass is always int in [0..11]. Never store note names as internal truth.
+- Normalize with `% 12` at all boundaries (input parsing, transposition, interval math).
+- Beware negative intervals: always normalize `((pc + delta) % 12)`.
+- Avoid mixing enharmonic spelling concerns into numeric core logic.
+
+**Debug patterns:**
+- Log both (pc) and (pc_name) for readability, but compute only on pc.
+- When results seem "off by one," inspect:
+  - accidental parsing
+  - interval direction (ascending vs descending)
+  - normalization points
+
+**Performance:**
+- Keep hot loops integer-only.
+- Cache parsed chord tokens if iterating long sequences.
 
 ### Tritone Operations
 ```python
@@ -549,6 +575,18 @@ license = { text = "MIT" }
 - **CLI**: See `CLI_DOCUMENTATION.md`, `FORMAT_GUIDE.md`
 - **Architecture**: See `ARCHITECTURE.md`, `PROJECT_STRUCTURE.md`
 - **API**: Auto-generated from docstrings (future: use `pdoc` or `sphinx`)
+
+---
+
+## Proof-of-Sound Badge Governance
+
+Any change that breaks the Proof-of-Sound workflow
+invalidates the Raspberry Pi verification badge.
+
+Before removing or modifying the badge:
+- Reproduce the failure
+- Document the cause
+- Update the verification section accordingly
 
 ---
 

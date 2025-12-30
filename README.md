@@ -8,6 +8,7 @@
 [![Tests](https://img.shields.io/badge/tests-15%2F15%20passing-brightgreen.svg)](#testing)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![License](https://img.shields.io/badge/license-Theory%20Protected-orange.svg)](LICENSE-THEORY.md)
+[![Proof-of-Sound Verified — Raspberry Pi](https://img.shields.io/badge/Proof--of--Sound-Verified%20(Raspberry%20Pi)-brightgreen)](#proof-of-sound-verification)
 
 📖 **[Quick Start Guide](PROJECT_COMPLETE.md)** | 🔧 **[API Reference](PYTHON_PACKAGE.md)** | 🎸 **[CLI Documentation](CLI_DOCUMENTATION.md)** | 🏛️ **[Architecture](ARCHITECTURE.md)**
 
@@ -117,6 +118,46 @@ This project exists to:
 
 The theory itself is **frozen at the canonical level** (see `CANON.md`).  
 Extensions must **not contradict axioms**.
+
+---
+
+## Proof-of-Sound Verification (Raspberry Pi)
+
+This repository has been manually verified to produce **audible sound**
+on a Raspberry Pi using the documented workflow.
+
+### Verified Configuration
+- Hardware: Raspberry Pi 5
+- OS: Raspberry Pi OS (64-bit) / Debian 12
+- Audio: I2S or USB audio interface
+- DAW: Ardour (Linux)
+- Output: MIDI → DAW → audible playback
+
+### Verification Criteria
+The badge applies only if all conditions below are met:
+
+- zt-band generates a valid MIDI file
+- MIDI imports cleanly into Ardour
+- Tempo and timing are correct
+- No stuck or hanging notes
+- Audible sound is produced via a software instrument
+
+### Verification Method
+```bash
+zt-band play <program>.ztprog
+zt-band daw-export --midi output.mid
+```
+
+Drag the exported MIDI into Ardour and press Play.
+
+### Scope
+
+This badge does **not** guarantee:
+- specific instrument sounds
+- real-time latency performance
+- external hardware compatibility
+
+It guarantees **proof-of-sound** only.
 
 ---
 

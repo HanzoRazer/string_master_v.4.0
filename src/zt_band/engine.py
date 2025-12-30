@@ -9,6 +9,8 @@ from .chords import parse_chord_symbol, chord_pitches, chord_bass_pitch, Chord
 from .patterns import STYLE_REGISTRY, StylePattern
 from .midi_out import NoteEvent, write_midi_file
 from .gravity_bridge import apply_tritone_substitutions
+from .musical_contract import validate_note_events, enforce_determinism_inputs
+from .expressive_layer import apply_velocity_profile
 
 
 def generate_accompaniment(
@@ -111,6 +113,25 @@ def generate_accompaniment(
                 )
 
         current_bar += bars_per_chord
+
+    # ---- Musical Contract Enforcement ----
+    # Validate inputs: ensure determinism for probabilistic operations
+    enforce_determinism_inputs(
+        tritone_mode=tritone_mode,
+        tritone_seed=tritone_seed,
+    )
+
+    # Validate raw generator output before expressive layer
+    validate_note_events(comp_events)
+    validate_note_events(bass_events)
+
+    # ---- Expressive Layer (velocity shaping only; stability-first) ----
+    comp_events = apply_velocity_profile(comp_events)
+    bass_events = apply_velocity_profile(bass_events)
+
+    # Re-validate after shaping to ensure contract still satisfied
+    validate_note_events(comp_events)
+    validate_note_events(bass_events)
 
     if outfile:
         write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=outfile)

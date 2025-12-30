@@ -4,11 +4,172 @@
 
 This repository contains the **Zone–Tritone System** — a canonical music theory framework that unifies harmony through whole-tone zones, tritone gravity, and chromatic motion. This is a **formal, governed, educational discipline** with frozen terminology and immutable axioms.
 
-**Critical Context**: This is NOT typical software development. This is a **theoretical framework** with strict canonical rules, protected terminology, and pedagogical sequencing that must never be violated.
+**Critical Context**: This is a **dual-nature project**:
+1. **Theoretical Framework** with strict canonical rules, protected terminology, and pedagogical sequencing
+2. **Production Python Library** (`smart-guitar` package v0.1.0) with CLI tools and MIDI generation
 
-**Repository Type**: Documentation-only theory framework (no executable code)  
-**Primary Output**: Educational materials, diagrams, examples, and governance documents  
-**Version Control**: Canon v1.0 (immutable axioms), expandable examples directory
+**Repository Structure**: 
+- **Theory**: Canonical documentation (CANON.md, GLOSSARY.md, etc.) — immutable axioms
+- **Code**: Python package in `src/` with Zone-Tritone engine, CLI tools (`zt-gravity`, `zt-band`), MIDI generators
+- **Content**: Educational materials, exercises (`.ztex`), programs (`.ztprog`), playlists (`.ztplay`), seed files
+
+---
+
+## 🐍 Python Package Architecture (CRITICAL FOR CODE WORK)
+
+### Package Identity
+- **Name**: `smart-guitar` (PyPI installable)
+- **Version**: 0.1.0
+- **Python**: ≥3.10
+- **Dependencies**: `mido>=1.2.10`, `pyyaml>=6.0`
+- **Entry Points**: `zt-gravity`, `zt-band`
+
+### Module Structure
+
+```
+src/
+├── shared/
+│   └── zone_tritone/              # Core theory engine
+│       ├── pc.py                  # Pitch class (0-11) utilities
+│       ├── zones.py               # Zone membership (0=Z1, 1=Z2)
+│       ├── tritones.py            # Tritone axes & partners
+│       ├── gravity.py             # Dominant chains (cycle of 4ths)
+│       ├── corpus.py              # Chord symbol parsing
+│       ├── markov.py              # Transition matrices
+│       ├── cli.py                 # zt-gravity CLI
+│       └── types.py               # Type aliases
+└── zt_band/                       # Accompaniment engine
+    └── cli.py                     # zt-band CLI
+
+### zt-band Status (MVP Guardrail)
+
+zt-band is production-ready for MIDI generation and CLI workflows.
+Do not expand scope (new interactive systems, scoring, or large refactors) unless it directly supports:
+- DAW proof-of-sound on Linux/Pi
+- deterministic MIDI export
+- reliability fixes
+```
+
+### Import Protocol (CRITICAL - VIOLATIONS CAUSE ERRORS)
+
+**Within `src/shared/zone_tritone/` modules** → Use **RELATIVE imports**:
+```python
+from .pc import pc_from_name, name_from_pc
+from .zones import zone, is_zone_cross
+from .gravity import gravity_chain
+from .types import PitchClass
+```
+
+**In `src/zt_band/` or other top-level modules** → Use **ABSOLUTE imports**:
+```python
+from shared.zone_tritone.pc import pc_from_name
+from shared.zone_tritone.zones import zone_name
+from shared.zone_tritone.gravity import gravity_chain
+```
+
+**In `tests/`** → Always use **ABSOLUTE imports**:
+```python
+from shared.zone_tritone import pc_from_name, zone, gravity_chain
+```
+
+### Key Python Conventions
+
+1. **Pitch Classes**: Always use integers 0-11 (C=0, C#=1, ..., B=11)
+2. **Zones**: Return 0 (Zone 1) or 1 (Zone 2) from `zone()` function
+3. **Zone-Crossing**: `is_zone_cross(pc1, pc2)` checks if `abs(pc1-pc2) % 12 == 1` (half-step)
+4. **Gravity Chains**: Generate via `gravity_chain(start_pc, steps)` → descends by perfect 4ths
+5. **Tritone Axes**: Return sorted tuples `(low, high)` where `high = (low + 6) % 12`
+
+### Testing Commands
+
+```bash
+# Run all tests (15 tests, must all pass)
+python -m pytest tests/ -v
+
+# Specific test file
+python -m pytest tests/test_gravity.py -v
+
+# Install package in editable mode
+pip install -e .
+```
+
+### CLI Usage Patterns
+
+```bash
+# Generate gravity chain (dominant cycle)
+zt-gravity gravity --root G --steps 7
+
+# Analyze chord progression
+zt-gravity analyze --chords "Dm7 G7 Cmaj7" --show-matrix
+
+# Generate detailed explanation (3 formats: text/html/markdown)
+zt-gravity explain --chords "C7 F7 Bb7" --format markdown > analysis.md
+
+# Python module invocation (if PATH issues)
+python -m shared.zone_tritone.cli gravity --root C --steps 12
+```
+
+### Custom File Formats
+
+**`.ztprog`** (YAML) — Chord progressions with style/tempo/tritone settings:
+```yaml
+name: "Autumn Leaves - Ballad"
+chords: [Cm7, F7, Bbmaj7, Ebmaj7, Am7b5, D7, Gm7]
+style: "ballad_basic"
+tempo: 70
+bars_per_chord: 2
+tritone_mode: "probabilistic"
+outfile: "autumn_leaves_ballad.mid"
+```
+
+**`.ztex`** (YAML) — Practice exercises with instructions:
+```yaml
+name: "Cycle of Fifths — Roots"
+program: "../programs/cycle_fifths_all_keys.ztprog"
+exercise_type: "cycle_fifths_roots"
+task:
+  mode: "play_roots"
+  instructions: "Play root of each chord..."
+```
+
+**`.ztplay`** (YAML) — Playlists referencing exercises/programs
+
+### Development Workflow
+
+1. **Setup**: `git clone` → `python -m venv .venv` → `pip install -e .`
+2. **Before coding**: Check [DEVELOPER_GUIDE.md](../DEVELOPER_GUIDE.md) for namespace rules
+3. **After changes**: Run `pytest tests/` (all 15 tests must pass)
+4. **New modules**: Add to `src/shared/` or `src/zt_band/`, update imports
+5. **CLI changes**: Test with `python -m shared.zone_tritone.cli` before using entry point
+
+### Common Code Patterns
+
+**Parse chord symbol to pitch class**:
+```python
+from shared.zone_tritone.corpus import parse_root
+root_pc = parse_root("F#m7")  # Returns 6 (F# pitch class)
+```
+
+**Check zone membership**:
+```python
+from shared.zone_tritone.zones import zone_name
+print(zone_name(0))   # "Zone 1" (C is even PC)
+print(zone_name(7))   # "Zone 2" (G is odd PC)
+```
+
+**Generate ii-V-I progression**:
+```python
+from shared.zone_tritone.gravity import gravity_chain
+chain = gravity_chain(2, 2)  # [2, 7, 0] = D → G → C
+```
+
+### File Organization Rules
+
+- **Protected theory docs**: CANON.md, GLOSSARY.md, PEDAGOGY.md, GOVERNANCE.md (governance approval required)
+- **Expandable content**: `examples/`, `exercises/`, `programs/`, `playlists/`, `seeds/`
+- **Python source**: All code in `src/`, all tests in `tests/`
+- **Academic papers**: `papers/` (LaTeX .tex files, compile with MiKTeX/TeXLive)
+- **Generated MIDI**: Root directory (e.g., `autumn_leaves_ballad.mid`)
 
 ---
 
@@ -134,22 +295,52 @@ When creating content, specify required certification level.
 
 ```
 zone-tritone-theory/
-├── README.md                        # Public-facing overview
+├── README.md                        # Public-facing overview + Python quickstart
 ├── CANON.md                         # ⚠️ IMMUTABLE — Version 1.0
 ├── GLOSSARY.md                      # ⚠️ FROZEN TERMS
 ├── PEDAGOGY.md                      # ⚠️ PROTECTED SEQUENCE
 ├── GOVERNANCE.md                    # Change control process
 ├── LICENSE-THEORY.md                # IP protection
-├── INSTRUCTOR_CERTIFICATION.md      # Three-tier certification program
-├── STUDENT_ASSESSMENT_RUBRICS.md    # Standardized evaluation criteria
-├── FAQ.md                           # For skeptics & students
+├── pyproject.toml                   # 🐍 Package configuration
+├── PYTHON_PACKAGE.md                # 🐍 Complete API docs
+├── CLI_DOCUMENTATION.md             # 🐍 CLI reference
+├── DEVELOPER_GUIDE.md               # 🐍 Coding standards
+├── ARCHITECTURE.md                  # 🐍 Module design
 ├── BRAND_STYLE_GUIDE.md            # Visual identity rules
 ├── NOTATION_CONVENTIONS.md          # Musical notation standards
 ├── THEORY_DIAGRAMS.md              # Diagram design rules
-└── examples/                        # ✅ Expandable educational content
-    ├── melodic-minor.md
-    ├── tritone-motion.md
-    └── dominant-chains.md
+├── FORMAT_GUIDE.md                  # Output format specs
+├── INSTRUCTOR_CERTIFICATION.md      # Three-tier certification program
+├── STUDENT_ASSESSMENT_RUBRICS.md    # Standardized evaluation criteria
+├── FAQ.md                           # For skeptics & students
+│
+├── src/                             # 🐍 Python source
+│   ├── shared/zone_tritone/         # Core theory engine (9 modules)
+│   └── zt_band/                     # Accompaniment CLI (WIP)
+│
+├── tests/                           # 🐍 pytest suite (15 tests)
+│
+├── exercises/                       # .ztex practice files
+├── programs/                        # .ztprog chord progressions
+├── playlists/                       # .ztplay collections
+├── seeds/                           # Source material catalog
+│   ├── handcrafted/                 # Original compositions
+│   └── _TEMPLATE.seed.json          # Seed metadata template
+│
+├── examples/                        # ✅ Expandable educational content
+│   ├── melodic-minor.md
+│   ├── tritone-motion.md
+│   └── dominant-chains.md
+│
+├── papers/                          # 📚 LaTeX academic papers
+│   ├── zone_tritone_canon.tex       # Short paper (3 pages)
+│   ├── zone_tritone_canon_extended.tex  # Monograph (~15 pages)
+│   └── compile-paper.sh / .ps1      # Compilation scripts
+│
+└── docs/                            # Additional documentation
+    ├── SEED_SOURCES.md              # Seed material governance
+    ├── SEED_SOURCES_QUICKSTART.md
+    └── DAW_WORKFLOW.md
 ```
 
 ### Protected Files (Governance Required)
@@ -163,8 +354,16 @@ Per [GOVERNANCE.md](../GOVERNANCE.md), any changes to these files require writte
 ### Expandable Directories
 
 You may freely add content to:
-- `examples/` — Practical demonstrations
-- Future directories: `exercises/`, `assessments/`, `tools/`
+- `examples/` — Practical demonstrations (theory)
+- `exercises/`, `programs/`, `playlists/` — Practice content (`.ztex`, `.ztprog`, `.ztplay` files)
+- `seeds/handcrafted/` — Original musical compositions
+- `src/shared/` or `src/zt_band/` — Python modules (follow import protocol)
+- `tests/` — Test files (must use absolute imports)
+
+**Do NOT freely modify**:
+- Protected theory docs (CANON.md, GLOSSARY.md, PEDAGOGY.md, GOVERNANCE.md)
+- `pyproject.toml` (package configuration - changes require testing)
+- Core module structure in `src/shared/zone_tritone/` (maintain API stability)
 
 ---
 

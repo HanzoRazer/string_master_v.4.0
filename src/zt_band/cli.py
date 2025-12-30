@@ -13,6 +13,7 @@ from .config import load_program_config
 from .programs import discover_programs
 from .playlist import load_playlist, render_playlist_to_midi
 from .exercises import load_exercise_config, run_exercise
+from .daw_export import export_for_daw
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -218,6 +219,30 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Optional override for the MIDI filename.",
     )
     p_ex_run.set_defaults(func=cmd_ex_run)
+
+    # ---- daw-export subcommand ----
+    p_daw = subparsers.add_parser(
+        "daw-export",
+        help="Copy a generated MIDI into a DAW-friendly export folder with import guide.",
+    )
+    p_daw.add_argument(
+        "--midi",
+        type=str,
+        required=True,
+        help="Path to an existing generated MIDI file.",
+    )
+    p_daw.add_argument(
+        "--export-root",
+        type=str,
+        default="exports/daw",
+        help="Export root folder (default: exports/daw).",
+    )
+    p_daw.add_argument(
+        "--no-gm",
+        action="store_true",
+        help="Do not inject GM program changes (for DAWs with auto-instrument detection).",
+    )
+    p_daw.set_defaults(func=cmd_daw_export)
 
     return parser
 
@@ -607,6 +632,25 @@ def cmd_ex_run(args: argparse.Namespace) -> int:
     midi_out = run_exercise(ex, outfile=outfile)
 
     print(f"\nExercise complete. MIDI written to: {midi_out}")
+    return 0
+
+
+# ------------------------
+# daw-export command
+# ------------------------
+
+
+def cmd_daw_export(args: argparse.Namespace) -> int:
+    res = export_for_daw(
+        source_midi_path=args.midi,
+        export_root=args.export_root,
+        title="ZT-Band DAW Export",
+        inject_gm=not args.no_gm,
+    )
+    print("OK: DAW export written")
+    print(f"  dir:  {res.export_dir}")
+    print(f"  midi: {res.midi_path}")
+    print(f"  doc:  {res.guide_path}")
     return 0
 
 
