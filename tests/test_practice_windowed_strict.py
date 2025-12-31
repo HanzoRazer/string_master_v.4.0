@@ -27,6 +27,27 @@ def test_rtspec_accepts_custom_window_ms():
     assert spec.practice_window_ms == 35.0
 
 
+def test_rtspec_has_separate_on_off_windows():
+    """RtSpec should have separate window fields for note-on and note-off."""
+    spec = RtSpec(midi_in="X", midi_out="Y")
+    assert hasattr(spec, "practice_window_on_ms")
+    assert hasattr(spec, "practice_window_off_ms")
+    assert spec.practice_window_on_ms is None
+    assert spec.practice_window_off_ms is None
+
+
+def test_rtspec_accepts_custom_on_off_windows():
+    """RtSpec should accept custom on/off window values."""
+    spec = RtSpec(
+        midi_in="X",
+        midi_out="Y",
+        practice_window_on_ms=25.0,
+        practice_window_off_ms=120.0,
+    )
+    assert spec.practice_window_on_ms == 25.0
+    assert spec.practice_window_off_ms == 120.0
+
+
 # ---------------------------------------------------------------------
 # CLI test: --strict-window-ms flag exists
 # ---------------------------------------------------------------------

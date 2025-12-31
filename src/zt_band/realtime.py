@@ -36,6 +36,8 @@ class RtSpec:
     # Practice behavior
     practice_strict: bool = True
     practice_window_ms: float = 0.0  # tolerance window (ms) around nearest clave hit
+    practice_window_on_ms: float | None = None  # override for NOTE-ON only
+    practice_window_off_ms: float | None = None  # override for NOTE-OFF (defaults loose)
     practice_quantize: Literal["nearest", "down", "up"] = "nearest"
     practice_reject_offgrid: bool = False  # if True, drop notes not on allowed steps (strict mode)
 
@@ -220,6 +222,22 @@ def practice_lock_to_clave(spec: RtSpec) -> None:
                         outport.send(msg)
                         continue
 
+                    # Determine note type: note_on with velocity>0 vs note_off (or note_on with velocity=0)
+                    is_note_on = (msg.type == "note_on" and getattr(msg, "velocity", 0) > 0)
+                    is_note_off = (msg.type == "note_off" or (msg.type == "note_on" and getattr(msg, "velocity", 0) == 0))
+
+                    # Compute per-type windows
+                    base_window_s = max(0.0, spec.practice_window_ms) / 1000.0
+                    if spec.practice_window_on_ms is not None:
+                        on_window_s = max(0.0, spec.practice_window_on_ms) / 1000.0
+                    else:
+                        on_window_s = base_window_s
+                    if spec.practice_window_off_ms is not None:
+                        off_window_s = max(0.0, spec.practice_window_off_ms) / 1000.0
+                    else:
+                        # Default NOTE-OFF window: looser to prevent choke artifacts in legato
+                        off_window_s = max(base_window_s * 4.0, 0.080)  # >= 80ms or 4x base
+
                     # map arrival time to step in current cycle
                     t_in_cycle = (now - next_cycle_start) % cycle_len
                     step_f = _t_to_step(t_in_cycle, grid)
@@ -232,19 +250,25 @@ def practice_lock_to_clave(spec: RtSpec) -> None:
                             nearest = min(allowed, key=lambda a: abs(a - step_i))
 
                             # Window check: if actual time is within ±window of nearest hit, pass-through
-                            window_s = max(0.0, spec.practice_window_ms) / 1000.0
-                            if window_s > 0.0:
+                            win_s = on_window_s if is_note_on else off_window_s
+                            if win_s > 0.0:
                                 nearest_due = next_cycle_start + _step_to_t(nearest, grid)
                                 # Handle cycle boundary wrap
                                 if nearest_due < now - (cycle_len / 2.0):
                                     nearest_due += cycle_len
                                 elif nearest_due > now + (cycle_len / 2.0):
                                     nearest_due -= cycle_len
-                                if abs(nearest_due - now) <= window_s:
+                                if abs(nearest_due - now) <= win_s:
                                     # Within tolerance: send immediately without snapping
                                     outport.send(msg)
                                     continue
 
+                            # NOTE-OFF safety: never reject note-off to prevent stuck notes
+                            if is_note_off:
+                                outport.send(msg)
+                                continue
+
+                            # For NOTE-ON: reject or snap based on settings
                             if spec.practice_reject_offgrid:
                                 continue
                             step_i = nearest

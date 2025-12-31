@@ -523,6 +523,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Strict mode tolerance window (ms): notes within ±window of nearest clave hit pass through unchanged (default: 0).",
     )
     p_prac.add_argument(
+        "--strict-window-on-ms",
+        type=float,
+        default=None,
+        help="Override strict window for NOTE-ON only (ms). If set, takes precedence over --strict-window-ms.",
+    )
+    p_prac.add_argument(
+        "--strict-window-off-ms",
+        type=float,
+        default=None,
+        help="Override strict window for NOTE-OFF only (ms). If unset, defaults to loose (max(4x base, 80ms)) to prevent choke.",
+    )
+    p_prac.add_argument(
         "--quantize",
         choices=["nearest", "down", "up"],
         default="nearest",
@@ -1170,6 +1182,8 @@ def cmd_practice(args: argparse.Namespace) -> int:
         clave=args.clave,
         practice_strict=args.strict,
         practice_window_ms=args.strict_window_ms,
+        practice_window_on_ms=args.strict_window_on_ms,
+        practice_window_off_ms=args.strict_window_off_ms,
         practice_reject_offgrid=args.reject_offgrid,
         practice_quantize=args.quantize,
         click=args.click,
