@@ -87,8 +87,30 @@ BALLAD_BASIC = StylePattern(
 )
 
 
+# 4) Samba 4/4 (partido alto feel): syncopated Brazilian groove.
+#    Comp: hits on "and" of 1, beat 2, "and" of 3, beat 4 — classic partido alto bounce.
+#    Bass: surdo-style with strong beat 2, anticipation into beat 1.
+SAMBA_4_4 = StylePattern(
+    name="samba_4_4",
+    description="Brazilian samba in 4/4: partido alto comp, surdo-style bass.",
+    comp_hits=[
+        CompEventSpec(beat=0.5, length_beats=0.5, velocity=85),   # "and" of 1
+        CompEventSpec(beat=1.0, length_beats=0.5, velocity=90),   # beat 2 (strong)
+        CompEventSpec(beat=2.5, length_beats=0.5, velocity=85),   # "and" of 3
+        CompEventSpec(beat=3.0, length_beats=0.5, velocity=80),   # beat 4
+    ],
+    bass_pattern=[
+        (0.0, 0.75, 75),   # beat 1 (lighter)
+        (1.0, 1.0, 90),    # beat 2 (surdo strong hit)
+        (2.5, 0.5, 70),    # "and" of 3 (anticipation)
+        (3.0, 0.75, 80),   # beat 4 (pickup into next bar)
+    ],
+)
+
+
 STYLE_REGISTRY = {
     "swing_basic": SWING_BASIC,
     "bossa_basic": BOSSA_BASIC,
     "ballad_basic": BALLAD_BASIC,
+    "samba_4_4": SAMBA_4_4,
 }
