@@ -1,0 +1,44 @@
+# Bucket A — Samba 4/4 Extension (G Major)
+
+id: samba_basic_G_4_4_extension
+title: "Basic Samba — 4/4 Variation (G Major)"
+level: "A"
+category: "groove_extension"
+style_family: "latin/samba"
+
+program_ref: "programs/bucket_a/samba_basic_G_4_4.ztprog"
+
+goals:
+  - "Keep samba forward-motion in 4/4 without turning it into rock."
+  - "Feel off-beat pushes (&2 and &4) as the main lift points."
+  - "Maintain percussive chord releases (short stabs)."
+
+rhythm_focus:
+  meter: "4/4"
+  hits:
+    - "1 (light)"
+    - "&2 (strong)"
+    - "3 (light)"
+    - "&4 (strong)"
+  verbal_count: "1 & 2 & 3 & 4 &"
+  cue: "boom… push… boom… push"
+
+practice_steps:
+  - "Play muted strings only and lock the pattern: 1, &2, 3, &4."
+  - "Add chords quietly; keep stabs short (no ringing)."
+  - "Accent &2 and &4 slightly; do NOT accent 2 and 4 like rock."
+  - "Loop the progression 4 times; aim for a circular groove."
+
+assessment:
+  pass_condition:
+    - "Off-beats feel intentional and consistent."
+    - "No rock backbeat creep (2/4 samba feel preserved)."
+    - "Chord changes do not interrupt the pulse."
+
+tags:
+  - bucket_a
+  - samba
+  - groove
+  - latin
+  - extension
+  - four_four

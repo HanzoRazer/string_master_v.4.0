@@ -1,0 +1,36 @@
+# Bucket A — Basic Samba in G Major (4/4 Brazilian Feel)
+# Purpose: full Brazilian groove with pickup anticipation + ghost taps
+
+name: samba_basic_G_4_4_brazil_pickup_ghost
+tempo: 104
+time_signature: 4/4
+bars_per_chord: 1
+
+style:
+  comp: samba_basic_4_4_pickup
+  bass: samba_four_feel_pickup
+
+chords:
+  - Gmaj7
+  - A7
+  - D7
+  - Bm7
+  - E7
+  - Am7
+  - D7
+  - Gmaj7
+
+notes:
+  - "Brazilian feel = pickup on &4 + quiet ghost taps on 'e' subdivisions."
+  - "Ghost taps at velocity 14 on steps 1, 5, 9, 13 (the 'e' of each beat)."
+  - "Pickup anticipation on &4 creates forward motion into chord changes."
+  - "Keep attacks short and percussive; the ghosts add air, not weight."
+
+tags:
+  - bucket_a
+  - samba
+  - brazil
+  - pickup
+  - ghost
+  - groove
+  - key_G

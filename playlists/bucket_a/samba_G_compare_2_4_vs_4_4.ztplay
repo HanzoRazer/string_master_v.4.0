@@ -1,0 +1,15 @@
+# Bucket A — Samba Comparison: 2/4 vs 4/4
+
+id: samba_G_compare_2_4_vs_4_4
+title: "Samba in G — Compare 2/4 vs 4/4"
+level: "A"
+category: "groove"
+
+items:
+  - name: "2/4 Samba"
+    file: "programs/bucket_a/samba_basic_G.ztprog"
+    repeats: 2
+
+  - name: "4/4 Variation"
+    file: "programs/bucket_a/samba_basic_G_4_4.ztprog"
+    repeats: 2

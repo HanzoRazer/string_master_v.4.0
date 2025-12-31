@@ -1,0 +1,33 @@
+# Bucket A — Basic Samba in G Major (4/4 Variation)
+# Purpose: same changes, 4/4 pocket with off-beat emphasis
+
+name: samba_basic_G_4_4
+tempo: 104
+time_signature: 4/4
+bars_per_chord: 1
+
+style:
+  comp: samba_basic_4_4
+  bass: samba_four_feel
+
+chords:
+  - Gmaj7
+  - A7
+  - D7
+  - Bm7
+  - E7
+  - Am7
+  - D7
+  - Gmaj7
+
+notes:
+  - "4/4 samba variation: emphasize off-beats (&2, &4) with light surdo feel on 1/3."
+  - "Keep attacks short and percussive; avoid sustained pads."
+
+tags:
+  - bucket_a
+  - samba
+  - latin
+  - groove
+  - key_G
+  - four_four

@@ -12,6 +12,7 @@ from .gravity_bridge import apply_tritone_substitutions
 from .musical_contract import validate_note_events, enforce_determinism_inputs
 from .expressive_layer import apply_velocity_profile
 from .expressive_swing import ExpressiveSpec, apply_expressive
+from .ghost_layer import GhostSpec, add_ghost_hits
 
 
 def generate_accompaniment(
@@ -89,10 +90,13 @@ def generate_accompaniment(
         for bar_offset in range(bars_per_chord):
             bar_start_beats = (current_bar + bar_offset) * 4.0  # assume 4/4
 
+            # Collect bar events before adding ghosts
+            bar_comp_events: List[NoteEvent] = []
+
             # Comping hits: full chord on each hit for now
             for spec in style.comp_hits:
                 for p in pitches:
-                    comp_events.append(
+                    bar_comp_events.append(
                         NoteEvent(
                             start_beats=bar_start_beats + spec.beat,
                             duration_beats=spec.length_beats,
@@ -101,6 +105,24 @@ def generate_accompaniment(
                             channel=0,
                         )
                     )
+
+            # Add ghost hits if style has them enabled
+            if style.ghost_vel > 0 and style.ghost_steps:
+                ghost_spec = GhostSpec(
+                    ghost_vel=style.ghost_vel,
+                    ghost_steps=style.ghost_steps,
+                    ghost_len_beats=style.ghost_len_beats,
+                )
+                bar_comp_events = add_ghost_hits(
+                    bar_comp_events,
+                    chord_pitches=pitches,
+                    bar_start_beats=bar_start_beats,
+                    beats_per_bar=4,
+                    ghost_spec=ghost_spec,
+                    comp_channel=0,
+                )
+
+            comp_events.extend(bar_comp_events)
 
             # Bass pattern: root on pattern beats
             for beat, length, vel in style.bass_pattern:

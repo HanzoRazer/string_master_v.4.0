@@ -1,0 +1,11 @@
+# Bucket A — Samba Loop Practice
+
+id: samba_basic_G_loop
+title: "Basic Samba Loop — G Major"
+level: "A"
+category: "groove"
+
+items:
+  - name: "Samba Basic in G"
+    file: "programs/bucket_a/samba_basic_G.ztprog"
+    repeats: 4

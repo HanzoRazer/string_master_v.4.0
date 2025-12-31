@@ -1,0 +1,44 @@
+# Bucket A — Basic Samba Groove (G Major)
+
+id: samba_basic_G
+title: "Basic Samba — G Major"
+level: "A"
+category: "groove"
+style_family: "latin/samba"
+
+program_ref: "programs/bucket_a/samba_basic_G.ztprog"
+
+goals:
+  - "Internalize samba syncopation in 2/4."
+  - "Feel the second beat as a point of lift."
+  - "Maintain relaxed time while chords move."
+
+rhythm_focus:
+  meter: "2/4"
+  pattern_description: >
+    Beat 1: rest → short attack
+    Beat 2: syncopated off-beat emphasis
+  mnemonic: "1..&/.."
+
+practice_steps:
+  - "Loop the full progression; mute strings lightly to feel rhythm."
+  - "Add chords softly, focusing on off-beat clarity."
+  - "Accent beat 2 slightly without rushing."
+  - "Repeat until groove feels circular, not linear."
+
+listening_cues:
+  - "Does the groove feel like it's rolling forward?"
+  - "Are off-beats light and consistent?"
+  - "Does the harmony feel secondary to rhythm?"
+
+assessment:
+  pass_condition:
+    - "Time feels steady without metronome anxiety."
+    - "Off-beats are intentional, not accidental."
+    - "Chord changes do not interrupt groove."
+
+tags:
+  - bucket_a
+  - samba
+  - groove
+  - latin

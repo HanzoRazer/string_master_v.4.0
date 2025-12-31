@@ -1,0 +1,33 @@
+# Bucket A — Basic Samba in G Major
+# Purpose: groove-first samba harmony with authentic dominant motion
+
+name: samba_basic_G
+tempo: 104
+time_signature: 2/4
+bars_per_chord: 1
+
+style:
+  comp: samba_basic
+  bass: samba_two_feel
+
+chords:
+  - Gmaj7
+  - A7
+  - D7
+  - Bm7
+  - E7
+  - Am7
+  - D7
+  - Gmaj7
+
+notes:
+  - "Classic Brazilian-style dominant flow in G major."
+  - "Focus on syncopation and light articulation."
+  - "Let the rhythm breathe; avoid straight 8ths."
+
+tags:
+  - bucket_a
+  - samba
+  - latin
+  - groove
+  - key_G
