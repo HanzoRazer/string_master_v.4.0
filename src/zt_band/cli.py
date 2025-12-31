@@ -885,11 +885,11 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         live_chords = z.get("chords", None)
         if not isinstance(live_chords, list) or not all(isinstance(x, str) for x in live_chords):
             raise SystemExit("rt-play --file must contain 'chords: [\"Dm7\", \"G7\", ...]'")
-        # File tempo used unless --bpm explicitly differs from default
-        if isinstance(z.get("tempo"), (int, float)):
-            # Only override if user didn't explicitly pass --bpm (check if still at default)
-            # Simple heuristic: if args.bpm == 120.0 (the default), prefer file tempo
-            if args.bpm == 120.0:
+        # Tempo precedence: file tempo unless CLI explicitly set --bpm/--bpm=...
+        argv_flags = getattr(args, "_explicit_args", set())
+        cli_bpm_explicit = ("--bpm" in argv_flags) or any(str(x).startswith("--bpm=") for x in argv_flags)
+        if not cli_bpm_explicit:
+            if isinstance(z.get("tempo"), (int, float)):
                 live_bpm = float(z["tempo"])
         if isinstance(z.get("bars_per_chord"), int):
             live_bars_per_chord = int(z["bars_per_chord"])
@@ -1001,7 +1001,12 @@ def cmd_practice(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = build_arg_parser()
+    if argv is None:
+        argv = sys.argv[1:]
     args = parser.parse_args(argv)
+    # Track explicit flags for precedence decisions (belt & suspenders).
+    # This is intentionally simple: only used for a few precedence checks.
+    args._explicit_args = set(a for a in argv if a.startswith("--"))  # type: ignore[attr-defined]
     return args.func(args)  # type: ignore[arg-type]
 
 

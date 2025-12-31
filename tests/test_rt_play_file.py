@@ -289,3 +289,100 @@ def test_bars_per_chord_from_file():
         assert bpc == 4
     finally:
         prog.unlink()
+
+
+# ---------------------------------------------------------------------
+# Test explicit CLI flag precedence (integration tests)
+# ---------------------------------------------------------------------
+
+
+def test_rt_play_file_uses_file_tempo_when_bpm_not_explicit(monkeypatch, tmp_path):
+    """File tempo should be used when --bpm not explicitly provided."""
+    p = tmp_path / "t.ztprog"
+    p.write_text(
+        """
+name: t
+tempo: 85
+bars_per_chord: 1
+chords: [ "Dm7", "G7", "Cmaj7" ]
+style: { comp: ballad_basic }
+""".strip(),
+        encoding="utf-8",
+    )
+
+    # Patch rt_play_cycle to avoid running the loop
+    from zt_band import cli as zcli
+    calls = {}
+
+    def fake_rt_play_cycle(*, events, spec):
+        calls["bpm"] = spec.bpm
+        raise SystemExit(0)
+
+    monkeypatch.setattr(zcli, "rt_play_cycle", fake_rt_play_cycle)
+
+    # Act: no --bpm flag (so file tempo should apply)
+    with pytest.raises(SystemExit):
+        zcli.main(["rt-play", "--midi-out", "DummyOut", "--file", str(p), "--grid", "16", "--clave", "son_2_3", "--no-click"])
+
+    # Assert
+    assert abs(calls["bpm"] - 85.0) < 1e-9
+
+
+def test_rt_play_file_cli_bpm_overrides_file_tempo(monkeypatch, tmp_path):
+    """Explicit --bpm should override file tempo."""
+    p = tmp_path / "t.ztprog"
+    p.write_text(
+        """
+name: t
+tempo: 85
+bars_per_chord: 1
+chords: [ "Dm7", "G7", "Cmaj7" ]
+style: ballad_basic
+""".strip(),
+        encoding="utf-8",
+    )
+
+    from zt_band import cli as zcli
+    calls = {}
+
+    def fake_rt_play_cycle(*, events, spec):
+        calls["bpm"] = spec.bpm
+        raise SystemExit(0)
+
+    monkeypatch.setattr(zcli, "rt_play_cycle", fake_rt_play_cycle)
+
+    # Explicit bpm wins
+    with pytest.raises(SystemExit):
+        zcli.main(["rt-play", "--midi-out", "DummyOut", "--file", str(p), "--bpm", "140", "--grid", "16", "--clave", "son_2_3", "--no-click"])
+
+    assert abs(calls["bpm"] - 140.0) < 1e-9
+
+
+def test_rt_play_file_cli_bpm_equals_syntax_overrides(monkeypatch, tmp_path):
+    """--bpm=140 syntax should also override file tempo."""
+    p = tmp_path / "t.ztprog"
+    p.write_text(
+        """
+name: t
+tempo: 85
+bars_per_chord: 1
+chords: [ "Dm7", "G7", "Cmaj7" ]
+style: ballad_basic
+""".strip(),
+        encoding="utf-8",
+    )
+
+    from zt_band import cli as zcli
+    calls = {}
+
+    def fake_rt_play_cycle(*, events, spec):
+        calls["bpm"] = spec.bpm
+        raise SystemExit(0)
+
+    monkeypatch.setattr(zcli, "rt_play_cycle", fake_rt_play_cycle)
+
+    # --bpm=140 syntax
+    with pytest.raises(SystemExit):
+        zcli.main(["rt-play", "--midi-out", "DummyOut", "--file", str(p), "--bpm=140", "--grid", "16", "--clave", "son_2_3", "--no-click"])
+
+    assert abs(calls["bpm"] - 140.0) < 1e-9
