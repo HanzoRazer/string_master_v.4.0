@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import sys
 import json
+import yaml
 from pathlib import Path
 from typing import List, Literal
 
@@ -294,6 +295,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=str,
         default=None,
         help='Optional chord list to generate live accompaniment (e.g. "Dm7 G7 Cmaj7"). If omitted, click-only.',
+    )
+    p_rt.add_argument(
+        "--file",
+        type=str,
+        default=None,
+        help="Optional .ztprog YAML preset path. If provided, overrides --chords.",
     )
     p_rt.add_argument(
         "--style",
@@ -857,9 +864,48 @@ def cmd_midi_ports(args: argparse.Namespace) -> int:
 
 
 def cmd_rt_play(args: argparse.Namespace) -> int:
+    # Helper to load .ztprog YAML
+    def _load_ztprog(path_str: str) -> dict:
+        p = Path(path_str)
+        if not p.exists():
+            raise SystemExit(f"rt-play --file not found: {p}")
+        data = yaml.safe_load(p.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise SystemExit(f"rt-play --file invalid YAML (expected mapping): {p}")
+        return data
+
+    # Resolve source of live program: --file wins over --chords
+    live_chords = None
+    live_style = str(args.style)
+    live_bars_per_chord = int(args.bars_per_chord)
+    live_bpm = float(args.bpm)
+
+    if args.file:
+        z = _load_ztprog(str(args.file))
+        live_chords = z.get("chords", None)
+        if not isinstance(live_chords, list) or not all(isinstance(x, str) for x in live_chords):
+            raise SystemExit("rt-play --file must contain 'chords: [\"Dm7\", \"G7\", ...]'")
+        # File tempo used unless --bpm explicitly differs from default
+        if isinstance(z.get("tempo"), (int, float)):
+            # Only override if user didn't explicitly pass --bpm (check if still at default)
+            # Simple heuristic: if args.bpm == 120.0 (the default), prefer file tempo
+            if args.bpm == 120.0:
+                live_bpm = float(z["tempo"])
+        if isinstance(z.get("bars_per_chord"), int):
+            live_bars_per_chord = int(z["bars_per_chord"])
+        style_obj = z.get("style", {})
+        if isinstance(style_obj, dict) and isinstance(style_obj.get("comp"), str):
+            live_style = style_obj["comp"]
+        elif isinstance(style_obj, str):
+            live_style = style_obj
+
+    elif args.chords:
+        live_chords = [c.strip() for c in args.chords.split() if c.strip()]
+
+    # Build RtSpec with resolved bpm
     spec = RtSpec(
         midi_out=args.midi_out,
-        bpm=args.bpm,
+        bpm=live_bpm,
         grid=args.grid,
         clave=args.clave,
         click=args.click,
@@ -867,23 +913,23 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
 
     events = []
 
-    # If chords provided, generate live accompaniment
-    if args.chords:
-        chord_symbols = [c.strip() for c in args.chords.split() if c.strip()]
+    # If we have chords (from --file or --chords), generate live accompaniment
+    if live_chords:
+        chord_symbols = list(live_chords)
         if not chord_symbols:
-            print("error: --chords provided but parsed empty chord list", file=sys.stderr)
+            print("error: chord list parsed empty", file=sys.stderr)
             return 1
 
-        if args.style not in STYLE_REGISTRY:
-            print(f"error: unknown style '{args.style}'", file=sys.stderr)
+        if live_style not in STYLE_REGISTRY:
+            print(f"error: unknown style '{live_style}'", file=sys.stderr)
             return 1
 
         # Generate comp + bass events using existing engine
         comp_events, bass_events = generate_accompaniment(
             chord_symbols=chord_symbols,
-            style_name=args.style,
-            tempo_bpm=int(round(args.bpm)),
-            bars_per_chord=args.bars_per_chord,
+            style_name=live_style,
+            tempo_bpm=int(round(spec.bpm)),
+            bars_per_chord=live_bars_per_chord,
             outfile=None,  # No file output
             tritone_mode="none",
         )
@@ -896,7 +942,7 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         # Convert NoteEvents to step-indexed RT messages
         steps_per_cycle = int(args.grid) * bars_per_cycle
         rts = RtRenderSpec(
-            bpm=args.bpm,
+            bpm=spec.bpm,
             grid=args.grid,
             bars_per_cycle=bars_per_cycle,
             quantize=args.rt_quantize,
@@ -906,9 +952,13 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         events.extend(note_events_to_step_messages(comp_events, spec=rts, steps_per_cycle=steps_per_cycle))
         events.extend(note_events_to_step_messages(bass_events, spec=rts, steps_per_cycle=steps_per_cycle))
 
+        src = f"file={args.file}" if args.file else "chords=inline"
         print(f"RT Play: live mode")
+        print(f"  source: {src}")
         print(f"  chords: {' '.join(chord_symbols)}")
-        print(f"  style:  {args.style}")
+        print(f"  style:  {live_style}")
+        print(f"  bpm:    {spec.bpm}")
+        print(f"  bars/chord: {live_bars_per_chord}")
         print(f"  events: {len(events)} (comp+bass+GM)")
     else:
         print("RT Play: click-only mode")
