@@ -1,0 +1,24 @@
+name: minor_iiv_loop_Cm
+description: Repeatable minor iiø–V7alt–i loop in C minor (practice engine)
+tempo: 128
+time_signature: 4/4
+bars_per_chord: 2
+
+chords:
+  - Dm7b5
+  - G7alt
+  - Cm6
+  - Cm6
+  - Dm7b5
+  - G7alt
+  - Cm6
+  - Cm6
+
+style:
+  comp: jazz_minor
+  bass: walking_minor
+
+expressive:
+  swing: 0.25
+  humanize_ms: 6
+  humanize_vel: 4

@@ -1,0 +1,21 @@
+name: andalusian_Dm
+description: Andalusian cadence in D minor (Dm–C–Bb–A)
+tempo: 110
+time_signature: 4/4
+bars_per_chord: 2
+
+chords:
+  - Dm
+  - C
+  - Bb
+  - A7
+  - Dm
+
+style:
+  comp: latin_basic
+  bass: descending_root
+
+expressive:
+  swing: 0.0
+  humanize_ms: 0
+  humanize_vel: 0

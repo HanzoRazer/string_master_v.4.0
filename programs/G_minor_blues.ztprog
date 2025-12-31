@@ -1,0 +1,29 @@
+name: G_minor_blues
+description: Jazz minor blues in G (modal + dominant resolution)
+tempo: 120
+time_signature: 4/4
+bars_per_chord: 1
+
+chords:
+  - Gm7
+  - Cm7
+  - Gm7
+  - Gm7
+  - Cm7
+  - Cm7
+  - Gm7
+  - Gm7
+  - Bb7
+  - A7
+  - Gm7
+  - D7
+  - Gm7
+
+style:
+  comp: jazz_blues_minor
+  bass: walking_minor
+
+expressive:
+  swing: 0.2
+  humanize_ms: 6
+  humanize_vel: 4

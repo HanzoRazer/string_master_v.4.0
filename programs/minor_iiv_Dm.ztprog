@@ -1,0 +1,20 @@
+name: minor_iiv_Dm
+description: Minor iiø–V7alt–i in D minor (gravity baseline)
+tempo: 120
+time_signature: 4/4
+bars_per_chord: 2
+
+chords:
+  - Em7b5
+  - A7alt
+  - Dm6
+  - Dm6
+
+style:
+  comp: jazz_minor
+  bass: walking_minor
+
+expressive:
+  swing: 0.22
+  humanize_ms: 6
+  humanize_vel: 4
