@@ -52,6 +52,7 @@ class RtSpec:
     bar_cc_channel: int = 15  # 0-15 (default 16th MIDI channel)
     bar_cc_countdown: int = 20  # CC number for bars-remaining countdown
     bar_cc_index: int = 21  # CC number for bar index count-up
+    bar_cc_section: int = 22  # CC number for section/item marker
     bars_limit: int | None = None  # total bars for countdown calculation
 
 

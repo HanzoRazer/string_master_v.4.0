@@ -119,6 +119,7 @@ class TestRtSpecBarCcFields:
         assert spec.bar_cc_channel == 15
         assert spec.bar_cc_countdown == 20
         assert spec.bar_cc_index == 21
+        assert spec.bar_cc_section == 22
         assert spec.bars_limit is None
     
     def test_bar_cc_custom_values(self):
@@ -130,6 +131,7 @@ class TestRtSpecBarCcFields:
             bar_cc_channel=10,
             bar_cc_countdown=50,
             bar_cc_index=51,
+            bar_cc_section=52,
             bars_limit=16,
         )
         
@@ -137,6 +139,7 @@ class TestRtSpecBarCcFields:
         assert spec.bar_cc_channel == 10
         assert spec.bar_cc_countdown == 50
         assert spec.bar_cc_index == 51
+        assert spec.bar_cc_section == 52
         assert spec.bars_limit == 16
 
 
@@ -202,9 +205,45 @@ class TestCliBarCcFlags:
             "--bar-cc-channel", "8",
             "--bar-cc-countdown", "60",
             "--bar-cc-index", "61",
+            "--bar-cc-section", "62",
         ])
         
         assert args.bar_cc == True
         assert args.bar_cc_channel == 8
         assert args.bar_cc_countdown == 60
         assert args.bar_cc_index == 61
+        assert args.bar_cc_section == 62
+
+
+class TestBarCcSectionMarker:
+    """Tests for section marker (CC#22) feature."""
+    
+    def test_bar_cc_section_flag_parsed(self):
+        from zt_band.cli import build_arg_parser
+        
+        parser = build_arg_parser()
+        args = parser.parse_args([
+            "rt-play",
+            "--midi-out", "test_port",
+            "--bar-cc-section", "40",
+        ])
+        
+        assert args.bar_cc_section == 40
+    
+    def test_bar_cc_section_default(self):
+        from zt_band.cli import build_arg_parser
+        
+        parser = build_arg_parser()
+        args = parser.parse_args([
+            "rt-play",
+            "--midi-out", "test_port",
+        ])
+        
+        assert args.bar_cc_section == 22
+    
+    def test_clamp_cc_value_export(self):
+        from zt_band.realtime_telemetry import _clamp_cc_value
+        
+        assert _clamp_cc_value(50) == 50
+        assert _clamp_cc_value(-1) == 0
+        assert _clamp_cc_value(200) == 127

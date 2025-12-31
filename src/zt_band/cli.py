@@ -490,6 +490,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=21,
         help="CC number for bar index count-up (default: 21).",
     )
+    p_rt.add_argument(
+        "--bar-cc-section",
+        type=int,
+        default=22,
+        help="CC number for section/item marker at program start (default: 22).",
+    )
     p_rt.set_defaults(func=cmd_rt_play)
 
     # ---- practice subcommand ----
@@ -1066,6 +1072,11 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
                 clave=args.clave,
                 click=args.click,
                 rt_quantize=args.rt_quantize,
+                bar_cc_enabled=getattr(args, "bar_cc", False),
+                bar_cc_channel=getattr(args, "bar_cc_channel", 15),
+                bar_cc_countdown=getattr(args, "bar_cc_countdown", 20),
+                bar_cc_index=getattr(args, "bar_cc_index", 21),
+                bar_cc_section=getattr(args, "bar_cc_section", 22),
             )
         except (FileNotFoundError, ValueError, RuntimeError) as e:
             print(f"error: {e}", file=sys.stderr)
@@ -1115,6 +1126,11 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         live_chords = [c.strip() for c in args.chords.split() if c.strip()]
 
     # Build RtSpec with resolved bpm
+    # Compute bars_limit for bar CC countdown
+    bars_limit = None
+    if live_chords:
+        bars_limit = live_bars_per_chord * len(live_chords)
+
     spec = RtSpec(
         midi_out=args.midi_out,
         bpm=live_bpm,
@@ -1125,6 +1141,8 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         bar_cc_channel=getattr(args, "bar_cc_channel", 15),
         bar_cc_countdown=getattr(args, "bar_cc_countdown", 20),
         bar_cc_index=getattr(args, "bar_cc_index", 21),
+        bar_cc_section=getattr(args, "bar_cc_section", 22),
+        bars_limit=bars_limit,
     )
 
     events = []
@@ -1175,7 +1193,10 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         print(f"  style:  {live_style}")
         print(f"  bpm:    {spec.bpm}")
         print(f"  bars/chord: {live_bars_per_chord}")
+        print(f"  total bars: {bars_limit}")
         print(f"  events: {len(events)} (comp+bass+GM)")
+        if spec.bar_cc_enabled:
+            print(f"  bar CC: ch={spec.bar_cc_channel}, countdown=CC#{spec.bar_cc_countdown}, index=CC#{spec.bar_cc_index}, section=CC#{spec.bar_cc_section}")
     else:
         print("RT Play: click-only mode")
 
