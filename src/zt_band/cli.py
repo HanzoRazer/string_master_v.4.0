@@ -517,6 +517,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="In strict mode, drop notes not on allowed steps (default: snap to nearest).",
     )
     p_prac.add_argument(
+        "--strict-window-ms",
+        type=float,
+        default=0.0,
+        help="Strict mode tolerance window (ms): notes within ±window of nearest clave hit pass through unchanged (default: 0).",
+    )
+    p_prac.add_argument(
         "--quantize",
         choices=["nearest", "down", "up"],
         default="nearest",
@@ -1163,6 +1169,7 @@ def cmd_practice(args: argparse.Namespace) -> int:
         grid=args.grid,
         clave=args.clave,
         practice_strict=args.strict,
+        practice_window_ms=args.strict_window_ms,
         practice_reject_offgrid=args.reject_offgrid,
         practice_quantize=args.quantize,
         click=args.click,
