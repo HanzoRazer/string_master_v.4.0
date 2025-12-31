@@ -47,6 +47,13 @@ class RtSpec:
     click_vel: int = 40
     click_channel: int = 9  # GM drums
 
+    # Telemetry (bar boundary CC)
+    bar_cc_enabled: bool = False
+    bar_cc_channel: int = 15  # 0-15 (default 16th MIDI channel)
+    bar_cc_countdown: int = 20  # CC number for bars-remaining countdown
+    bar_cc_index: int = 21  # CC number for bar index count-up
+    bars_limit: int | None = None  # total bars for countdown calculation
+
 
 def _now() -> float:
     return time.monotonic()
@@ -107,7 +114,9 @@ def rt_play_cycle(
 
     grid = ClaveGrid(bpm=spec.bpm, grid=spec.grid, clave=spec.clave)
     steps_per_cycle = grid.steps_per_cycle()
+    steps_per_bar = spec.grid  # 8 or 16 steps per bar
     cycle_len = _cycle_time(grid)
+    bar_len = grid.seconds_per_bar()
 
     events_sorted = sorted(((s % steps_per_cycle), msg) for s, msg in events)
 
@@ -124,12 +133,20 @@ def rt_play_cycle(
         ci = 0
         cycle_count = 0
         
+        # bar CC tracking
+        bars_per_cycle = 2
+        total_bars = (max_cycles * bars_per_cycle) if max_cycles else None
+        bars_in_cycle_emitted = [False, False]  # track which bars in current cycle have had CC emitted
+        bar_index = 0  # global bar counter (0-based)
+        
         print(f"RT Play: {spec.bpm} BPM, grid={spec.grid}, clave={spec.clave}")
         print(f"Output: {spec.midi_out}")
         if max_cycles:
             print(f"Cycles: {max_cycles}")
         else:
             print("Press Ctrl+C to stop...")
+        if spec.bar_cc_enabled:
+            print(f"Bar CC: channel={spec.bar_cc_channel}, countdown=CC#{spec.bar_cc_countdown}, index=CC#{spec.bar_cc_index}")
         
         try:
             while True:
@@ -145,8 +162,36 @@ def rt_play_cycle(
                     i = 0
                     ci = 0
                     cycle_count += 1
+                    bars_in_cycle_emitted = [False, False]
                     if max_cycles and cycle_count >= max_cycles:
                         break
+
+                # emit bar CC messages at bar boundaries
+                if spec.bar_cc_enabled:
+                    elapsed_in_cycle = now - next_cycle_start
+                    for bar_in_cycle in range(bars_per_cycle):
+                        bar_start = bar_in_cycle * bar_len
+                        if elapsed_in_cycle >= bar_start and not bars_in_cycle_emitted[bar_in_cycle]:
+                            # calculate countdown (bars remaining) and bar index
+                            current_bar_index = (cycle_count * bars_per_cycle) + bar_in_cycle
+                            if total_bars is not None:
+                                bars_remaining = max(0, total_bars - current_bar_index - 1)
+                            else:
+                                bars_remaining = 127  # no countdown in infinite mode
+                            
+                            # emit CC messages
+                            from .realtime_telemetry import make_bar_cc_messages
+                            cc_msgs = make_bar_cc_messages(
+                                channel=spec.bar_cc_channel,
+                                cc_countdown=spec.bar_cc_countdown,
+                                cc_index=spec.bar_cc_index,
+                                bars_remaining=bars_remaining,
+                                bar_index=current_bar_index,
+                            )
+                            for msg in cc_msgs:
+                                outport.send(msg)
+                            bars_in_cycle_emitted[bar_in_cycle] = True
+                            bar_index = current_bar_index
 
                 # schedule events within lookahead window
                 window_end = now + spec.lookahead_s

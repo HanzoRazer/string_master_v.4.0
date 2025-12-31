@@ -467,6 +467,29 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=None,
         help="Path to .ztplay playlist file for live rotation of programs.",
     )
+    p_rt.add_argument(
+        "--bar-cc",
+        action="store_true",
+        help="Emit MIDI CC at each bar boundary (telemetry for UI/DAW mapping).",
+    )
+    p_rt.add_argument(
+        "--bar-cc-channel",
+        type=int,
+        default=15,
+        help="0-15 MIDI channel for bar CC (default: 15).",
+    )
+    p_rt.add_argument(
+        "--bar-cc-countdown",
+        type=int,
+        default=20,
+        help="CC number for bars-remaining countdown (default: 20).",
+    )
+    p_rt.add_argument(
+        "--bar-cc-index",
+        type=int,
+        default=21,
+        help="CC number for bar index count-up (default: 21).",
+    )
     p_rt.set_defaults(func=cmd_rt_play)
 
     # ---- practice subcommand ----
@@ -1098,6 +1121,10 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         grid=args.grid,
         clave=args.clave,
         click=args.click,
+        bar_cc_enabled=getattr(args, "bar_cc", False),
+        bar_cc_channel=getattr(args, "bar_cc_channel", 15),
+        bar_cc_countdown=getattr(args, "bar_cc_countdown", 20),
+        bar_cc_index=getattr(args, "bar_cc_index", 21),
     )
 
     events = []
