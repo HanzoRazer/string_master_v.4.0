@@ -1,0 +1,27 @@
+# Bucket A — Backdoor Cadence Playlist (C → G → D)
+# Goal: one-click session that cycles the movable pack across keys.
+# Intended duration: ~6–8 minutes depending on repeats.
+
+id: backdoor_cadence_C_G_D
+title: "Backdoor Cadence — Movable Session (C → G → D)"
+level: "A"
+category: "cadence"
+tags: [bucket_a, backdoor, cadence, movable, gospel, jazz]
+
+defaults:
+  tempo: 88
+  bars_per_chord: 2
+  style: gospel_slow
+
+items:
+  - name: "C — Backdoor (F → Bb7 → C)"
+    file: "programs/bucket_a/backdoor_cadence_C.ztprog"
+    repeats: 2
+
+  - name: "G — Backdoor (C → F7 → G)"
+    file: "programs/bucket_a/backdoor_cadence_G.ztprog"
+    repeats: 2
+
+  - name: "D — Backdoor (G → C7 → D)"
+    file: "programs/bucket_a/backdoor_cadence_D.ztprog"
+    repeats: 2
