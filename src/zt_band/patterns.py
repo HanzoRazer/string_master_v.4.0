@@ -36,6 +36,13 @@ class StylePattern:
     Pickup params:
     pickup_beat:     beat position for anticipation hit before chord change (None = disabled)
     pickup_vel:      velocity for pickup hit
+
+    Velocity contour params (Brazilian "breathing"):
+    vel_contour_enabled: whether to apply per-bar velocity shaping
+    vel_contour_soft:    multiplier for beats 1, 3 (soft)
+    vel_contour_strong:  multiplier for &2, &4 (strong)
+    vel_contour_pickup:  multiplier for pickup anticipation hits
+    vel_contour_ghost:   multiplier for ghost hits (on top of ghost_vel)
     """
     name: str
     description: str
@@ -48,6 +55,12 @@ class StylePattern:
     # Pickup params (OFF by default)
     pickup_beat: Optional[float] = None
     pickup_vel: int = 70
+    # Velocity contour params (OFF by default)
+    vel_contour_enabled: bool = False
+    vel_contour_soft: float = 0.80
+    vel_contour_strong: float = 1.08
+    vel_contour_pickup: float = 0.65
+    vel_contour_ghost: float = 1.0
 
 
 # --- Styles -------------------------------------------------------------
@@ -275,6 +288,34 @@ SAMBA_FOUR_FEEL_PICKUP = StylePattern(
 )
 
 
+# 13) samba_brazil_full — Full Brazilian feel with pickup + ghost + velocity contour
+#     Complete "breathing" samba: soft on 1/3, strong on &2/&4, soft pickup, ghost taps
+SAMBA_BRAZIL_FULL = StylePattern(
+    name="samba_brazil_full",
+    description="Full Brazilian samba: pickup + ghost + velocity contour (breathing feel).",
+    comp_hits=[
+        CompEventSpec(beat=0.0, length_beats=0.25, velocity=75),   # beat 1 (soft)
+        CompEventSpec(beat=1.5, length_beats=0.25, velocity=90),   # &2 (strong)
+        CompEventSpec(beat=2.0, length_beats=0.25, velocity=75),   # beat 3 (soft)
+        CompEventSpec(beat=3.5, length_beats=0.25, velocity=90),   # &4 (strong)
+    ],
+    bass_pattern=[],
+    # Ghost hits
+    ghost_vel=14,
+    ghost_steps=(1, 5, 9, 13),
+    ghost_len_beats=0.0625,
+    # Pickup
+    pickup_beat=3.5,
+    pickup_vel=65,
+    # Velocity contour (Brazilian breathing)
+    vel_contour_enabled=True,
+    vel_contour_soft=0.80,
+    vel_contour_strong=1.08,
+    vel_contour_pickup=0.65,
+    vel_contour_ghost=1.0,
+)
+
+
 STYLE_REGISTRY = {
     "swing_basic": SWING_BASIC,
     "bossa_basic": BOSSA_BASIC,
@@ -290,4 +331,6 @@ STYLE_REGISTRY = {
     # Bucket A — Brazilian feel (pickup + ghost)
     "samba_basic_4_4_pickup": SAMBA_BASIC_4_4_PICKUP,
     "samba_four_feel_pickup": SAMBA_FOUR_FEEL_PICKUP,
+    # Bucket A — Full Brazilian (pickup + ghost + contour)
+    "samba_brazil_full": SAMBA_BRAZIL_FULL,
 }

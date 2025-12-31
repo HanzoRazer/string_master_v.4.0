@@ -13,6 +13,7 @@ from .musical_contract import validate_note_events, enforce_determinism_inputs
 from .expressive_layer import apply_velocity_profile
 from .expressive_swing import ExpressiveSpec, apply_expressive
 from .ghost_layer import GhostSpec, add_ghost_hits
+from .velocity_contour import VelContour, apply_velocity_contour_4_4
 
 
 def generate_accompaniment(
@@ -120,6 +121,31 @@ def generate_accompaniment(
                     beats_per_bar=4,
                     ghost_spec=ghost_spec,
                     comp_channel=0,
+                )
+
+            # Apply velocity contour if style has it enabled (Brazilian "breathing")
+            if style.vel_contour_enabled:
+                contour = VelContour(
+                    enabled=True,
+                    soft_mul=style.vel_contour_soft,
+                    strong_mul=style.vel_contour_strong,
+                    pickup_mul=style.vel_contour_pickup,
+                    ghost_mul=style.vel_contour_ghost,
+                )
+                # Calculate pickup and ghost step sets for this bar
+                pickup_steps_set = set()
+                if style.pickup_beat is not None:
+                    # Convert pickup beat to 16th-note step: &4 = 3.5 -> step 14
+                    pickup_step = int(style.pickup_beat * 4)
+                    pickup_steps_set.add(pickup_step)
+                ghost_steps_set = set(style.ghost_steps) if style.ghost_steps else set()
+
+                bar_comp_events = apply_velocity_contour_4_4(
+                    bar_comp_events,
+                    bar_steps=16,
+                    contour=contour,
+                    pickup_steps=pickup_steps_set,
+                    ghost_steps=ghost_steps_set,
                 )
 
             comp_events.extend(bar_comp_events)
