@@ -1,0 +1,67 @@
+# Bucket A — Backdoor Cadence Lesson (C)
+# Purpose: teach + train (lightweight, no deep theory detours)
+
+id: backdoor_cadence_C
+title: "Backdoor Cadence (IV → ♭VII7 → I) — C Major"
+level: "A"
+category: "cadence"
+key_center: "C"
+
+program_ref: "programs/bucket_a/backdoor_cadence_C.ztprog"
+
+goals:
+  - "Hear & feel the backdoor cadence resolving into I."
+  - "Keep top voices smooth (minimal motion)."
+  - "Play with gospel timing: delay Bb7 slightly, let it simmer."
+
+targets:
+  # guide-tone targets (what your ear should lock onto)
+  - name: "Guide-tone resolution 1"
+    from: "Bb7: 3rd (D)"
+    to: "C: 3rd (E)"
+    motion: "up a half-step"
+  - name: "Guide-tone resolution 2"
+    from: "Bb7: 7th (Ab)"
+    to: "C: 5th (G) or maj7 (B)"
+    motion: "down a half-step (to G) OR up whole-step (to B)"
+
+voicing_sets:
+  - name: "Set A — compact jazz grips (mid-neck)"
+    chords:
+      Fmaj7: "x-8-7-5-6-5"
+      Bb7:   "x-x-7-6-6-6"
+      Cmaj7: "x-x-9-9-8-7"
+  - name: "Set B — gospel grabs (open/low)"
+    chords:
+      Fmaj9: "x-3-2-0-1-0"
+      Bb9:   "x-1-0-1-1-1"
+      Cmaj9: "x-3-2-0-3-0"
+
+rhythm:
+  feel: "soul/gospel"
+  tips:
+    - "Anticipate Bb7 by an eighth-note (push slightly early)."
+    - "Let C land slightly late (relax into home)."
+
+practice_steps:
+  - "Loop IV → ♭VII7 → I for 2 minutes. Only focus on smooth top note."
+  - "Loop again; now only focus on guide tones resolving (D→E, Ab→G)."
+  - "Add the turnaround (G13 → C6) and keep groove relaxed."
+
+licks:
+  - name: "Chromatic butter (Bb7→C)"
+    degrees: "3-4-#4-5 over C"
+    notes: "E F F# G"
+    tab_high_e: "0-1-2-3"
+
+assessment:
+  pass_condition:
+    - "No rushing the resolution."
+    - "At least 80% of changes have minimal top-voice motion."
+    - "Guide-tone resolution is audible."
+tags:
+  - bucket_a
+  - backdoor
+  - cadence
+  - gospel
+  - jazz

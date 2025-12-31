@@ -1,0 +1,32 @@
+# Bucket A — Backdoor Cadence (IV → ♭VII7 → I) in C
+# Purpose: immediate playable program for zt-band create / rt-play / daw-export
+# Feel: warm gospel/jazz, smooth voice-leading
+
+name: backdoor_cadence_C
+tempo: 88
+time_sig: "4/4"
+bars_per_chord: 2
+
+style:
+  comp: gospel_slow
+  bass: simple_roots
+
+chords:
+  # IV → ♭VII7 → I
+  - Fmaj9
+  - Bb9
+  - Cmaj9
+  # loopable turnaround color
+  - G13
+  - C6
+
+notes:
+  - "Backdoor cadence = IV → ♭VII7 → I (F → Bb7 → C)."
+  - "Use Bb9 / Bb13 / Bb7#11 for gospel color."
+  - "Target voice-leading: D→E and Ab→G in Bb7→C."
+tags:
+  - bucket_a
+  - backdoor
+  - gospel
+  - jazz
+  - cadence
