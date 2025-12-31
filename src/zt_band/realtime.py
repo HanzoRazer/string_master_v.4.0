@@ -1,0 +1,263 @@
+"""
+Real-time MIDI scheduler and practice quantizer.
+
+Provides:
+- rt_play_cycle: Real-time playback aligned to clave grid
+- practice_lock_to_clave: MIDI IN quantized/locked to clave grid -> MIDI OUT
+"""
+from __future__ import annotations
+
+import time
+from dataclasses import dataclass
+from typing import List, Optional, Literal, Tuple
+
+try:
+    import mido
+    MIDO_AVAILABLE = True
+except ImportError:
+    MIDO_AVAILABLE = False
+
+from .clave import ClaveGrid, clave_hit_steps, quantize_step, is_allowed_on_clave
+
+
+@dataclass(frozen=True)
+class RtSpec:
+    midi_out: str
+    midi_in: Optional[str] = None
+
+    bpm: float = 120.0
+    grid: Literal[8, 16] = 16
+    clave: Literal["son_2_3", "son_3_2"] = "son_2_3"
+
+    # Scheduler behavior
+    lookahead_s: float = 0.05    # how far ahead to schedule
+    tick_s: float = 0.01         # loop sleep
+
+    # Practice behavior
+    practice_strict: bool = True
+    practice_quantize: Literal["nearest", "down", "up"] = "nearest"
+    practice_reject_offgrid: bool = False  # if True, drop notes not on allowed steps (strict mode)
+
+    # Click
+    click: bool = True
+    click_note: int = 37  # rimshot-ish
+    click_vel: int = 40
+    click_channel: int = 9  # GM drums
+
+
+def _now() -> float:
+    return time.monotonic()
+
+
+def _cycle_time(grid: ClaveGrid) -> float:
+    return grid.seconds_per_bar() * grid.bars_per_cycle
+
+
+def _t_to_step(t_in_cycle: float, grid: ClaveGrid) -> float:
+    return t_in_cycle / grid.seconds_per_step()
+
+
+def _step_to_t(step_i: int, grid: ClaveGrid) -> float:
+    return step_i * grid.seconds_per_step()
+
+
+def _send_at(outport, msg, when: float) -> None:
+    """
+    Busy-wait is avoided; caller uses lookahead scheduling.
+    """
+    # msg.time is ignored for realtime; we schedule by wall clock.
+    outport.send(msg)
+
+
+def _make_click_msgs(grid: ClaveGrid, spec: RtSpec) -> List[Tuple[int, 'mido.Message']]:
+    """
+    Returns list of (step_i, msg) for click hits in a 2-bar cycle.
+    Click follows clave hit steps (so you hear the grid).
+    """
+    if not spec.click:
+        return []
+    if not MIDO_AVAILABLE:
+        return []
+    hits = clave_hit_steps(grid.grid, grid.clave)
+    out = []
+    for s in hits:
+        out.append((s, mido.Message("note_on", channel=spec.click_channel, note=spec.click_note, velocity=spec.click_vel, time=0)))
+        out.append((s + 1, mido.Message("note_off", channel=spec.click_channel, note=spec.click_note, velocity=0, time=0)))
+    return out
+
+
+def rt_play_cycle(
+    *,
+    events: List[Tuple[int, 'mido.Message']],
+    spec: RtSpec,
+) -> None:
+    """
+    Real-time scheduler: repeatedly plays a 2-bar cycle of step-indexed MIDI messages.
+    events: list of (step_i, Message) in cycle coordinates (0..steps_per_cycle-1)
+    
+    Press Ctrl+C to stop.
+    """
+    if not MIDO_AVAILABLE:
+        raise RuntimeError("mido is not installed; cannot use realtime features")
+
+    grid = ClaveGrid(bpm=spec.bpm, grid=spec.grid, clave=spec.clave)
+    steps_per_cycle = grid.steps_per_cycle()
+    cycle_len = _cycle_time(grid)
+
+    events_sorted = sorted(((s % steps_per_cycle), msg) for s, msg in events)
+
+    with mido.open_output(spec.midi_out) as outport:
+        t0 = _now()
+        next_cycle_start = t0
+
+        # optional click layer
+        click_events = _make_click_msgs(grid, spec)
+        click_sorted = sorted(((s % steps_per_cycle), msg) for s, msg in click_events)
+
+        # schedule loop
+        i = 0
+        ci = 0
+        
+        print(f"RT Play: {spec.bpm} BPM, grid={spec.grid}, clave={spec.clave}")
+        print(f"Output: {spec.midi_out}")
+        print("Press Ctrl+C to stop...")
+        
+        try:
+            while True:
+                now = _now()
+
+                # advance cycle start if we're past it
+                while now >= next_cycle_start + cycle_len:
+                    next_cycle_start += cycle_len
+                    i = 0
+                    ci = 0
+
+                # schedule events within lookahead window
+                window_end = now + spec.lookahead_s
+
+                # main events
+                while i < len(events_sorted):
+                    step_i, msg = events_sorted[i]
+                    due = next_cycle_start + _step_to_t(step_i, grid)
+                    if due > window_end:
+                        break
+                    if due <= now:
+                        _send_at(outport, msg, due)
+                    i += 1
+
+                # click events
+                while ci < len(click_sorted):
+                    step_i, msg = click_sorted[ci]
+                    due = next_cycle_start + _step_to_t(step_i, grid)
+                    if due > window_end:
+                        break
+                    if due <= now:
+                        _send_at(outport, msg, due)
+                    ci += 1
+
+                time.sleep(spec.tick_s)
+        except KeyboardInterrupt:
+            print("\nStopped.")
+
+
+def practice_lock_to_clave(spec: RtSpec) -> None:
+    """
+    MIDI IN -> quantize/lock to clave grid -> MIDI OUT.
+    
+    Press Ctrl+C to stop.
+    """
+    if not MIDO_AVAILABLE:
+        raise RuntimeError("mido is not installed; cannot use realtime features")
+    
+    if not spec.midi_in:
+        raise ValueError("practice requires midi_in")
+
+    grid = ClaveGrid(bpm=spec.bpm, grid=spec.grid, clave=spec.clave)
+    steps_per_cycle = grid.steps_per_cycle()
+    cycle_len = _cycle_time(grid)
+    allowed = clave_hit_steps(grid.grid, grid.clave)
+
+    print(f"Practice Mode: {spec.bpm} BPM, grid={spec.grid}, clave={spec.clave}")
+    print(f"Input: {spec.midi_in}")
+    print(f"Output: {spec.midi_out}")
+    print(f"Strict: {spec.practice_strict}, Quantize: {spec.practice_quantize}")
+    print("Press Ctrl+C to stop...")
+
+    with mido.open_input(spec.midi_in) as inport, mido.open_output(spec.midi_out) as outport:
+        t0 = _now()
+
+        # optional click
+        click_events = _make_click_msgs(grid, spec)
+        click_sorted = sorted(((s % steps_per_cycle), msg) for s, msg in click_events)
+        ci = 0
+        next_cycle_start = t0
+
+        try:
+            while True:
+                now = _now()
+
+                # maintain cycle alignment
+                while now >= next_cycle_start + cycle_len:
+                    next_cycle_start += cycle_len
+                    ci = 0
+
+                # schedule click within lookahead
+                if spec.click:
+                    window_end = now + spec.lookahead_s
+                    while ci < len(click_sorted):
+                        step_i, msg = click_sorted[ci]
+                        due = next_cycle_start + _step_to_t(step_i, grid)
+                        if due > window_end:
+                            break
+                        if due <= now:
+                            outport.send(msg)
+                        ci += 1
+
+                # read input messages (non-blocking-ish)
+                for msg in inport.iter_pending():
+                    if msg.type not in ("note_on", "note_off"):
+                        outport.send(msg)
+                        continue
+
+                    # map arrival time to step in current cycle
+                    t_in_cycle = (now - next_cycle_start) % cycle_len
+                    step_f = _t_to_step(t_in_cycle, grid)
+                    step_i = quantize_step(step_f, grid_steps=steps_per_cycle, mode=spec.practice_quantize)
+
+                    if spec.practice_strict:
+                        ok = is_allowed_on_clave(step_i, allowed=allowed, strict=True)
+                        if not ok:
+                            if spec.practice_reject_offgrid:
+                                continue
+                            # If not rejecting, snap to nearest allowed hit
+                            nearest = min(allowed, key=lambda a: abs(a - step_i))
+                            step_i = nearest
+
+                    # schedule output at the quantized step boundary (in this cycle)
+                    due = next_cycle_start + _step_to_t(step_i, grid)
+
+                    # If due is in the past (late), push to next step boundary
+                    if due < now:
+                        due += grid.seconds_per_step()
+
+                    # Sleep tiny amount if needed then send (kept simple; can be improved later)
+                    wait = due - _now()
+                    if wait > 0:
+                        time.sleep(min(wait, spec.lookahead_s))
+
+                    outport.send(msg)
+
+                time.sleep(spec.tick_s)
+        except KeyboardInterrupt:
+            print("\nStopped.")
+
+
+def list_midi_ports() -> Tuple[List[str], List[str]]:
+    """Return (input_names, output_names) for available MIDI ports."""
+    if not MIDO_AVAILABLE:
+        return [], []
+    try:
+        return list(mido.get_input_names()), list(mido.get_output_names())
+    except Exception:
+        # rtmidi backend may not be installed
+        return [], []

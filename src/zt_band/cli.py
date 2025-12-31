@@ -15,6 +15,7 @@ from .playlist import load_playlist, render_playlist_to_midi
 from .exercises import load_exercise_config, run_exercise
 from .daw_export import export_for_daw
 from .expressive_swing import ExpressiveSpec
+from .realtime import RtSpec, rt_play_cycle, practice_lock_to_clave, list_midi_ports
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -268,6 +269,115 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Do not inject GM program changes (for DAWs with auto-instrument detection).",
     )
     p_daw.set_defaults(func=cmd_daw_export)
+
+    # ---- midi-ports subcommand ----
+    p_ports = subparsers.add_parser(
+        "midi-ports",
+        help="List available MIDI input and output ports.",
+    )
+    p_ports.set_defaults(func=cmd_midi_ports)
+
+    # ---- rt-play subcommand ----
+    p_rt = subparsers.add_parser(
+        "rt-play",
+        help="Real-time playback aligned to clave grid (loop until Ctrl+C).",
+    )
+    p_rt.add_argument(
+        "--midi-out",
+        type=str,
+        required=True,
+        help="MIDI output port name (use 'zt-band midi-ports' to list).",
+    )
+    p_rt.add_argument(
+        "--bpm",
+        type=float,
+        default=120.0,
+        help="Tempo in BPM (default: 120).",
+    )
+    p_rt.add_argument(
+        "--grid",
+        type=int,
+        choices=[8, 16],
+        default=16,
+        help="Grid resolution: 8 (8th notes) or 16 (16th notes, default).",
+    )
+    p_rt.add_argument(
+        "--clave",
+        choices=["son_2_3", "son_3_2"],
+        default="son_2_3",
+        help="Clave pattern: son_2_3 (default) or son_3_2.",
+    )
+    p_rt.add_argument(
+        "--click/--no-click",
+        dest="click",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Enable/disable clave click (default: enabled).",
+    )
+    p_rt.set_defaults(func=cmd_rt_play)
+
+    # ---- practice subcommand ----
+    p_prac = subparsers.add_parser(
+        "practice",
+        help="MIDI IN quantized/locked to clave grid -> MIDI OUT (loop until Ctrl+C).",
+    )
+    p_prac.add_argument(
+        "--midi-in",
+        type=str,
+        required=True,
+        help="MIDI input port name (use 'zt-band midi-ports' to list).",
+    )
+    p_prac.add_argument(
+        "--midi-out",
+        type=str,
+        required=True,
+        help="MIDI output port name.",
+    )
+    p_prac.add_argument(
+        "--bpm",
+        type=float,
+        default=120.0,
+        help="Tempo in BPM (default: 120).",
+    )
+    p_prac.add_argument(
+        "--grid",
+        type=int,
+        choices=[8, 16],
+        default=16,
+        help="Grid resolution: 8 (8th notes) or 16 (16th notes, default).",
+    )
+    p_prac.add_argument(
+        "--clave",
+        choices=["son_2_3", "son_3_2"],
+        default="son_2_3",
+        help="Clave pattern: son_2_3 (default) or son_3_2.",
+    )
+    p_prac.add_argument(
+        "--strict/--loose",
+        dest="strict",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Strict mode: only allow notes on clave hits (default: strict).",
+    )
+    p_prac.add_argument(
+        "--reject-offgrid",
+        action="store_true",
+        help="In strict mode, drop notes not on allowed steps (default: snap to nearest).",
+    )
+    p_prac.add_argument(
+        "--quantize",
+        choices=["nearest", "down", "up"],
+        default="nearest",
+        help="Quantize mode: nearest (default), down, or up.",
+    )
+    p_prac.add_argument(
+        "--click/--no-click",
+        dest="click",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Enable/disable clave click (default: enabled).",
+    )
+    p_prac.set_defaults(func=cmd_practice)
 
     return parser
 
@@ -687,6 +797,83 @@ def cmd_daw_export(args: argparse.Namespace) -> int:
     print(f"  dir:  {res.export_dir}")
     print(f"  midi: {res.midi_path}")
     print(f"  doc:  {res.guide_path}")
+    return 0
+
+
+# ------------------------
+# midi-ports command
+# ------------------------
+
+
+def cmd_midi_ports(args: argparse.Namespace) -> int:
+    inputs, outputs = list_midi_ports()
+
+    print("MIDI Input Ports:")
+    if inputs:
+        for name in inputs:
+            print(f"  {name}")
+    else:
+        print("  (none found)")
+
+    print("\nMIDI Output Ports:")
+    if outputs:
+        for name in outputs:
+            print(f"  {name}")
+    else:
+        print("  (none found)")
+
+    return 0
+
+
+# ------------------------
+# rt-play command
+# ------------------------
+
+
+def cmd_rt_play(args: argparse.Namespace) -> int:
+    spec = RtSpec(
+        midi_out=args.midi_out,
+        bpm=args.bpm,
+        grid=args.grid,
+        clave=args.clave,
+        click=args.click,
+    )
+
+    # For now, we play an empty event list (click-only mode).
+    # Later: feed generated comp/bass events from engine.
+    try:
+        rt_play_cycle(events=[], spec=spec)
+    except RuntimeError as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 1
+
+    return 0
+
+
+# ------------------------
+# practice command
+# ------------------------
+
+
+def cmd_practice(args: argparse.Namespace) -> int:
+    spec = RtSpec(
+        midi_out=args.midi_out,
+        midi_in=args.midi_in,
+        bpm=args.bpm,
+        grid=args.grid,
+        clave=args.clave,
+        practice_strict=args.strict,
+        practice_reject_offgrid=args.reject_offgrid,
+        practice_quantize=args.quantize,
+        click=args.click,
+    )
+
+    try:
+        practice_lock_to_clave(spec)
+    except (RuntimeError, ValueError) as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 1
+
     return 0
 
 
