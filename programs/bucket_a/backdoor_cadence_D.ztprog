@@ -1,0 +1,23 @@
+# Bucket A — Backdoor Cadence (IV → ♭VII7 → I) in D
+# Backdoor in D: G → C7 → D
+
+name: backdoor_cadence_D
+tempo: 88
+time_sig: "4/4"
+bars_per_chord: 2
+
+style:
+  comp: gospel_slow
+  bass: simple_roots
+
+chords:
+  - Gmaj9
+  - C9
+  - Dmaj9
+  - A13
+  - D6
+
+notes:
+  - "Backdoor in D = G → C7 → D"
+  - "Color: C9/C13 or C7#11; land on Dmaj9 or D6."
+tags: [bucket_a, backdoor, gospel, jazz, cadence, key_D]
