@@ -16,6 +16,7 @@ from .exercises import load_exercise_config, run_exercise
 from .daw_export import export_for_daw
 from .expressive_swing import ExpressiveSpec
 from .realtime import RtSpec, rt_play_cycle, practice_lock_to_clave, list_midi_ports
+from .rt_bridge import RtRenderSpec, note_events_to_step_messages, gm_program_changes_at_start, truncate_events_to_cycle
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -287,6 +288,31 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=str,
         required=True,
         help="MIDI output port name (use 'zt-band midi-ports' to list).",
+    )
+    p_rt.add_argument(
+        "--chords",
+        type=str,
+        default=None,
+        help='Optional chord list to generate live accompaniment (e.g. "Dm7 G7 Cmaj7"). If omitted, click-only.',
+    )
+    p_rt.add_argument(
+        "--style",
+        type=str,
+        default="salsa_clave_2_3",
+        help="Accompaniment style for live generation (default: salsa_clave_2_3).",
+    )
+    p_rt.add_argument(
+        "--bars-per-chord",
+        type=int,
+        default=1,
+        help="Bars per chord for live generation (default: 1).",
+    )
+    p_rt.add_argument(
+        "--rt-quantize",
+        type=str,
+        choices=["nearest", "down"],
+        default="nearest",
+        help="Quantize beat->step mapping for RT (default: nearest).",
     )
     p_rt.add_argument(
         "--bpm",
@@ -839,10 +865,56 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         click=args.click,
     )
 
-    # For now, we play an empty event list (click-only mode).
-    # Later: feed generated comp/bass events from engine.
+    events = []
+
+    # If chords provided, generate live accompaniment
+    if args.chords:
+        chord_symbols = [c.strip() for c in args.chords.split() if c.strip()]
+        if not chord_symbols:
+            print("error: --chords provided but parsed empty chord list", file=sys.stderr)
+            return 1
+
+        if args.style not in STYLE_REGISTRY:
+            print(f"error: unknown style '{args.style}'", file=sys.stderr)
+            return 1
+
+        # Generate comp + bass events using existing engine
+        comp_events, bass_events = generate_accompaniment(
+            chord_symbols=chord_symbols,
+            style_name=args.style,
+            tempo_bpm=int(round(args.bpm)),
+            bars_per_chord=args.bars_per_chord,
+            outfile=None,  # No file output
+            tritone_mode="none",
+        )
+
+        # Truncate to 2-bar cycle for looping
+        bars_per_cycle = 2
+        comp_events = truncate_events_to_cycle(comp_events, bars_per_cycle)
+        bass_events = truncate_events_to_cycle(bass_events, bars_per_cycle)
+
+        # Convert NoteEvents to step-indexed RT messages
+        steps_per_cycle = int(args.grid) * bars_per_cycle
+        rts = RtRenderSpec(
+            bpm=args.bpm,
+            grid=args.grid,
+            bars_per_cycle=bars_per_cycle,
+            quantize=args.rt_quantize,
+        )
+
+        events.extend(gm_program_changes_at_start())
+        events.extend(note_events_to_step_messages(comp_events, spec=rts, steps_per_cycle=steps_per_cycle))
+        events.extend(note_events_to_step_messages(bass_events, spec=rts, steps_per_cycle=steps_per_cycle))
+
+        print(f"RT Play: live mode")
+        print(f"  chords: {' '.join(chord_symbols)}")
+        print(f"  style:  {args.style}")
+        print(f"  events: {len(events)} (comp+bass+GM)")
+    else:
+        print("RT Play: click-only mode")
+
     try:
-        rt_play_cycle(events=[], spec=spec)
+        rt_play_cycle(events=events, spec=spec)
     except RuntimeError as e:
         print(f"error: {e}", file=sys.stderr)
         return 1
