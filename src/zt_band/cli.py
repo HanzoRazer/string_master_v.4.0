@@ -24,6 +24,100 @@ from shared.zone_tritone.pc import name_from_pc
 OutputFormat = Literal["text", "markdown", "json"]
 
 
+# ---------------------------------------------------------------------
+# Preset resolver + .ztprog loader helpers
+# ---------------------------------------------------------------------
+
+
+def _resolve_ztprog_program(name: str, programs_dir: str = "programs") -> str:
+    """
+    Resolve a program name to a .ztprog path.
+
+    Accepts:
+      - "salsa_minor_Dm"
+      - "salsa_minor_Dm.ztprog"
+      - "programs/salsa_minor_Dm.ztprog"
+
+    Resolution order:
+      1) If name is an existing file path, use it.
+      2) Look in programs_dir for exact match (case-insensitive) with/without extension.
+    """
+    p = Path(name)
+    if p.exists() and p.is_file():
+        return str(p)
+
+    base = name
+    if base.lower().endswith(".ztprog"):
+        base = base[:-7]
+
+    root = Path(programs_dir)
+    if not root.exists():
+        raise SystemExit(f"Programs dir not found: {root}")
+
+    # index all .ztprog
+    files = list(root.glob("*.ztprog"))
+    if not files:
+        raise SystemExit(f"No .ztprog files found in: {root}")
+
+    # case-insensitive map
+    idx = {f.stem.lower(): f for f in files}
+    hit = idx.get(base.lower())
+    if hit:
+        return str(hit)
+
+    # allow raw filename match
+    idx2 = {f.name.lower(): f for f in files}
+    hit2 = idx2.get(name.lower())
+    if hit2:
+        return str(hit2)
+
+    raise SystemExit(f"Program not found: {name} (searched {root}/*.ztprog)")
+
+
+def _load_ztprog_yaml(path_str: str) -> dict:
+    """
+    Minimal, strict .ztprog loader for CLI use (tempo/chords/style/bars_per_chord).
+    """
+    p = Path(path_str)
+    if not p.exists():
+        raise SystemExit(f".ztprog not found: {p}")
+    data = yaml.safe_load(p.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise SystemExit(f"Invalid .ztprog YAML (expected mapping): {p}")
+    return data
+
+
+def _ztprog_get_style_comp(z: dict) -> str | None:
+    """
+    Supports:
+      style: salsa_clave_2_3
+      style: { comp: salsa_clave_2_3, bass: tumbao_major }
+    """
+    style = z.get("style")
+    if isinstance(style, str):
+        return style
+    if isinstance(style, dict):
+        comp = style.get("comp")
+        if isinstance(comp, str):
+            return comp
+    return None
+
+
+def _infer_clave_from_style_comp(comp: str | None) -> str | None:
+    """
+    Map style names to clave defaults when possible.
+    We keep it heuristic + non-invasive.
+    """
+    if not comp:
+        return None
+    s = comp.lower()
+    if "3_2" in s:
+        return "son_3_2"
+    if "2_3" in s:
+        return "son_2_3"
+    return None
+
+
 def _parse_chord_string(chord_str: str) -> List[str]:
     return [tok for tok in chord_str.strip().split() if tok]
 
@@ -347,6 +441,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=True,
         help="Enable/disable clave click (default: enabled).",
     )
+    p_rt.add_argument(
+        "--program",
+        type=str,
+        default=None,
+        help="Program name (resolves programs/*.ztprog). Example: salsa_minor_Dm",
+    )
+    p_rt.add_argument(
+        "--programs-dir",
+        type=str,
+        default="programs",
+        help="Directory to search for .ztprog programs (default: programs).",
+    )
     p_rt.set_defaults(func=cmd_rt_play)
 
     # ---- practice subcommand ----
@@ -409,6 +515,24 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action=argparse.BooleanOptionalAction,
         default=True,
         help="Enable/disable clave click (default: enabled).",
+    )
+    p_prac.add_argument(
+        "--file",
+        type=str,
+        default=None,
+        help="Optional .ztprog YAML preset path to pull tempo/style defaults.",
+    )
+    p_prac.add_argument(
+        "--program",
+        type=str,
+        default=None,
+        help="Program name (resolves programs/*.ztprog). Example: salsa_minor_Dm",
+    )
+    p_prac.add_argument(
+        "--programs-dir",
+        type=str,
+        default="programs",
+        help="Directory to search for .ztprog programs (default: programs).",
     )
     p_prac.set_defaults(func=cmd_practice)
 
@@ -864,6 +988,10 @@ def cmd_midi_ports(args: argparse.Namespace) -> int:
 
 
 def cmd_rt_play(args: argparse.Namespace) -> int:
+    # --program resolves to --file
+    if getattr(args, "program", None) and not getattr(args, "file", None):
+        args.file = _resolve_ztprog_program(str(args.program), programs_dir=str(args.programs_dir))
+
     # Helper to load .ztprog YAML
     def _load_ztprog(path_str: str) -> dict:
         p = Path(path_str)
@@ -978,6 +1106,31 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
 
 
 def cmd_practice(args: argparse.Namespace) -> int:
+    # Detect explicit CLI flags for precedence
+    explicit = getattr(args, "_explicit_args", set())
+    bpm_explicit = ("--bpm" in explicit) or any(str(x).startswith("--bpm=") for x in explicit)
+    clave_explicit = ("--clave" in explicit) or any(str(x).startswith("--clave=") for x in explicit)
+
+    # Resolve --program to file path
+    ztprog_path = None
+    if getattr(args, "program", None):
+        ztprog_path = _resolve_ztprog_program(str(args.program), programs_dir=str(args.programs_dir))
+    elif getattr(args, "file", None):
+        ztprog_path = str(args.file)
+
+    # Pull defaults from .ztprog if provided
+    if ztprog_path:
+        z = _load_ztprog_yaml(ztprog_path)
+
+        if not bpm_explicit and isinstance(z.get("tempo"), (int, float)):
+            args.bpm = float(z["tempo"])
+
+        if not clave_explicit:
+            comp = _ztprog_get_style_comp(z)
+            inferred = _infer_clave_from_style_comp(comp)
+            if inferred:
+                args.clave = inferred
+
     spec = RtSpec(
         midi_out=args.midi_out,
         midi_in=args.midi_in,

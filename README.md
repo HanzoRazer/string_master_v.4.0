@@ -5,12 +5,13 @@
 **Complete with command-line tools for musicians and educators!** 🎸
 
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/tests-15%2F15%20passing-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-28%2F28%20passing-brightgreen.svg)](#testing)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![License](https://img.shields.io/badge/license-Theory%20Protected-orange.svg)](LICENSE-THEORY.md)
 [![Proof-of-Sound Verified — Raspberry Pi](https://img.shields.io/badge/Proof--of--Sound-Verified%20(Raspberry%20Pi)-brightgreen)](#proof-of-sound-verification)
+[![Core Locked](https://img.shields.io/badge/Core-Locked%20%26%20Stable-blue)](#core-stability)
 
-📖 **[Quick Start Guide](PROJECT_COMPLETE.md)** | 🔧 **[API Reference](PYTHON_PACKAGE.md)** | 🎸 **[CLI Documentation](CLI_DOCUMENTATION.md)** | 🏛️ **[Architecture](ARCHITECTURE.md)**
+📖 **[Quick Start Guide](PROJECT_COMPLETE.md)** | 🔧 **[API Reference](PYTHON_PACKAGE.md)** | 🎸 **[CLI Documentation](CLI_DOCUMENTATION.md)** | 🏛️ **[Architecture](ARCHITECTURE.md)** | 🔒 **[Core Lock Report](CORE_LOCK_REPORT.md)**
 
 ---
 
@@ -158,6 +159,42 @@ This badge does **not** guarantee:
 - external hardware compatibility
 
 It guarantees **proof-of-sound** only.
+
+---
+
+## Core Stability
+
+The `zt-band` MIDI generator core is **locked and stable** as of v0.1.0.
+
+### What This Means
+
+✅ **Deterministic output**: Same inputs always produce byte-identical MIDI files  
+✅ **Contract enforcement**: Runtime validation prevents invalid MIDI generation  
+✅ **Collision-safe timing**: Deterministic rounding ensures DAW compatibility  
+✅ **Expressive layer**: Velocity shaping adds musical feel without timing edits
+
+### Verification
+
+Run the comprehensive stability tests:
+
+```bash
+python verify_lock.py
+```
+
+Expected result: **5/5 tests pass** ✅
+
+See [CORE_LOCK_REPORT.md](CORE_LOCK_REPORT.md) for complete verification details.
+
+### Development Philosophy
+
+**Core changes are frozen** — only stability improvements enter the locked core.
+
+New expressive features (swing, humanize, etc.) will be **layered on top** as optional transforms that:
+- Preserve determinism (require seed when randomized)
+- Pass contract validation
+- Can be disabled to reproduce core output
+
+This ensures the foundation remains stable while allowing creative exploration.
 
 ---
 
