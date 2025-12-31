@@ -118,6 +118,14 @@ def _infer_clave_from_style_comp(comp: str | None) -> str | None:
     return None
 
 
+def _infer_strict_from_style_comp(comp: str | None) -> bool:
+    """Heuristic: salsa/clave styles benefit from strict lock by default."""
+    if not comp:
+        return False
+    s = comp.lower()
+    return ("salsa" in s) or ("clave" in s)
+
+
 def _parse_chord_string(chord_str: str) -> List[str]:
     return [tok for tok in chord_str.strip().split() if tok]
 
@@ -492,11 +500,16 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Clave pattern: son_2_3 (default) or son_3_2.",
     )
     p_prac.add_argument(
-        "--strict/--loose",
-        dest="strict",
-        action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Strict mode: only allow notes on clave hits (default: strict).",
+        "--strict",
+        action="store_true",
+        default=False,
+        help="Strict clave lock: only clave hit-steps allowed.",
+    )
+    p_prac.add_argument(
+        "--loose",
+        action="store_true",
+        default=False,
+        help="Force non-strict practice (overrides any preset heuristics).",
     )
     p_prac.add_argument(
         "--reject-offgrid",
@@ -1110,6 +1123,8 @@ def cmd_practice(args: argparse.Namespace) -> int:
     explicit = getattr(args, "_explicit_args", set())
     bpm_explicit = ("--bpm" in explicit) or any(str(x).startswith("--bpm=") for x in explicit)
     clave_explicit = ("--clave" in explicit) or any(str(x).startswith("--clave=") for x in explicit)
+    strict_explicit = ("--strict" in explicit)
+    loose_explicit = ("--loose" in explicit)
 
     # Resolve --program to file path
     ztprog_path = None
@@ -1130,6 +1145,16 @@ def cmd_practice(args: argparse.Namespace) -> int:
             inferred = _infer_clave_from_style_comp(comp)
             if inferred:
                 args.clave = inferred
+
+        # Auto-enable strict for salsa/clave styles unless user explicitly chose strict/loose
+        if not strict_explicit and not loose_explicit:
+            comp = _ztprog_get_style_comp(z)
+            if _infer_strict_from_style_comp(comp):
+                args.strict = True
+
+    # Loose always wins (belt & suspenders)
+    if loose_explicit:
+        args.strict = False
 
     spec = RtSpec(
         midi_out=args.midi_out,
