@@ -93,11 +93,13 @@ def rt_play_cycle(
     *,
     events: List[Tuple[int, 'mido.Message']],
     spec: RtSpec,
+    max_cycles: int | None = None,
 ) -> None:
     """
     Real-time scheduler: repeatedly plays a 2-bar cycle of step-indexed MIDI messages.
     events: list of (step_i, Message) in cycle coordinates (0..steps_per_cycle-1)
     
+    If max_cycles is set, exits after that many cycles. Otherwise loops forever.
     Press Ctrl+C to stop.
     """
     if not MIDO_AVAILABLE:
@@ -120,13 +122,21 @@ def rt_play_cycle(
         # schedule loop
         i = 0
         ci = 0
+        cycle_count = 0
         
         print(f"RT Play: {spec.bpm} BPM, grid={spec.grid}, clave={spec.clave}")
         print(f"Output: {spec.midi_out}")
-        print("Press Ctrl+C to stop...")
+        if max_cycles:
+            print(f"Cycles: {max_cycles}")
+        else:
+            print("Press Ctrl+C to stop...")
         
         try:
             while True:
+                # Check cycle limit
+                if max_cycles and cycle_count >= max_cycles:
+                    break
+                
                 now = _now()
 
                 # advance cycle start if we're past it
@@ -134,6 +144,9 @@ def rt_play_cycle(
                     next_cycle_start += cycle_len
                     i = 0
                     ci = 0
+                    cycle_count += 1
+                    if max_cycles and cycle_count >= max_cycles:
+                        break
 
                 # schedule events within lookahead window
                 window_end = now + spec.lookahead_s

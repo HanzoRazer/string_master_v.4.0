@@ -461,6 +461,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default="programs",
         help="Directory to search for .ztprog programs (default: programs).",
     )
+    p_rt.add_argument(
+        "--playlist",
+        type=str,
+        default=None,
+        help="Path to .ztplay playlist file for live rotation of programs.",
+    )
     p_rt.set_defaults(func=cmd_rt_play)
 
     # ---- practice subcommand ----
@@ -1019,6 +1025,30 @@ def cmd_midi_ports(args: argparse.Namespace) -> int:
 
 
 def cmd_rt_play(args: argparse.Namespace) -> int:
+    # Handle --playlist mode (live rotation)
+    if getattr(args, "playlist", None):
+        from .rt_playlist import rt_play_playlist
+        
+        # Detect explicit CLI bpm
+        explicit = getattr(args, "_explicit_args", set())
+        bpm_explicit = ("--bpm" in explicit) or any(str(x).startswith("--bpm=") for x in explicit)
+        bpm_override = args.bpm if bpm_explicit else None
+        
+        try:
+            rt_play_playlist(
+                playlist_file=args.playlist,
+                midi_out=args.midi_out,
+                bpm_override=bpm_override,
+                grid=args.grid,
+                clave=args.clave,
+                click=args.click,
+                rt_quantize=args.rt_quantize,
+            )
+        except (FileNotFoundError, ValueError, RuntimeError) as e:
+            print(f"error: {e}", file=sys.stderr)
+            return 1
+        return 0
+
     # --program resolves to --file
     if getattr(args, "program", None) and not getattr(args, "file", None):
         args.file = _resolve_ztprog_program(str(args.program), programs_dir=str(args.programs_dir))
