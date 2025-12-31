@@ -4,8 +4,9 @@
 **Now available as a Python library!** 🎉  
 **Complete with command-line tools for musicians and educators!** 🎸
 
+[![CI](https://github.com/HanzoRazer/string_master_v.4.0/actions/workflows/ci.yml/badge.svg)](https://github.com/HanzoRazer/string_master_v.4.0/actions/workflows/ci.yml)
 [![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](CHANGELOG.md)
-[![Tests](https://img.shields.io/badge/tests-28%2F28%20passing-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-159%20passing-brightgreen.svg)](#testing)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![License](https://img.shields.io/badge/license-Theory%20Protected-orange.svg)](LICENSE-THEORY.md)
 [![Proof-of-Sound Verified — Raspberry Pi](https://img.shields.io/badge/Proof--of--Sound-Verified%20(Raspberry%20Pi)-brightgreen)](#proof-of-sound-verification)
