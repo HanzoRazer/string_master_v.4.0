@@ -3,7 +3,8 @@ Accompaniment generation engine with gravity-aware reharmonization.
 """
 from __future__ import annotations
 
-from typing import List, Tuple
+from dataclasses import replace
+from typing import Any, Dict, List, Optional, Tuple
 
 from .chords import parse_chord_symbol, chord_pitches, chord_bass_pitch, Chord
 from .patterns import STYLE_REGISTRY, StylePattern
@@ -16,6 +17,89 @@ from .ghost_layer import GhostSpec, add_ghost_hits
 from .velocity_contour import VelContour, apply_velocity_contour
 
 
+# Velocity contour presets (must match validate.py)
+_VEL_PRESETS: Dict[str, Dict[str, float]] = {
+    "none": {"soft": 1.0, "strong": 1.0, "pickup": 1.0, "ghost": 1.0},
+    "brazil_samba": {"soft": 0.82, "strong": 1.08, "pickup": 0.65, "ghost": 0.55},
+}
+
+
+def _apply_style_overrides(base: StylePattern, overrides: Dict[str, Any]) -> StylePattern:
+    """
+    Return a COPY of base StylePattern with whitelisted overrides applied.
+    Never mutates STYLE_REGISTRY objects.
+
+    Supports both nested YAML sugar and flat canonical fields.
+    """
+    updates: Dict[str, Any] = {}
+
+    # ---- ghost hits (nested sugar) ----
+    gh = overrides.get("ghost_hits") or overrides.get("ghost")
+    if isinstance(gh, dict):
+        if gh.get("enabled", False):
+            steps = gh.get("steps")
+            if isinstance(steps, (list, tuple)) and all(isinstance(x, int) for x in steps):
+                updates["ghost_steps"] = tuple(steps)
+            vel = gh.get("vel")
+            if vel is None:
+                # Default ghost velocity when enabled but not specified
+                updates["ghost_vel"] = 14
+            elif isinstance(vel, int):
+                updates["ghost_vel"] = vel
+            glb = gh.get("len_beats")
+            if isinstance(glb, (int, float)):
+                updates["ghost_len_beats"] = float(glb)
+
+    # ---- ghost hits (flat canonical fields override nested) ----
+    if "ghost_steps" in overrides:
+        gs = overrides["ghost_steps"]
+        if isinstance(gs, (list, tuple)) and all(isinstance(x, int) for x in gs):
+            updates["ghost_steps"] = tuple(gs)
+    if "ghost_vel" in overrides and isinstance(overrides["ghost_vel"], int):
+        updates["ghost_vel"] = overrides["ghost_vel"]
+    if "ghost_len_beats" in overrides and isinstance(overrides["ghost_len_beats"], (int, float)):
+        updates["ghost_len_beats"] = float(overrides["ghost_len_beats"])
+
+    # ---- velocity contour (nested sugar) ----
+    vc = overrides.get("vel_contour")
+    if isinstance(vc, dict) and vc.get("enabled", False):
+        updates["vel_contour_enabled"] = True
+        preset = vc.get("preset")
+        if isinstance(preset, str):
+            p = _VEL_PRESETS.get(preset.strip().lower())
+            if p:
+                updates["vel_contour_soft"] = p["soft"]
+                updates["vel_contour_strong"] = p["strong"]
+                updates["vel_contour_pickup"] = p["pickup"]
+                updates["vel_contour_ghost"] = p["ghost"]
+        # Explicit numeric overrides in nested dict win over preset
+        for src, attr in [("soft", "vel_contour_soft"), ("strong", "vel_contour_strong"),
+                          ("pickup", "vel_contour_pickup"), ("ghost", "vel_contour_ghost")]:
+            if src in vc and isinstance(vc[src], (int, float)):
+                updates[attr] = float(vc[src])
+
+    # ---- velocity contour (flat canonical fields override nested) ----
+    if "vel_contour_enabled" in overrides and isinstance(overrides["vel_contour_enabled"], bool):
+        updates["vel_contour_enabled"] = overrides["vel_contour_enabled"]
+    for k in ("vel_contour_soft", "vel_contour_strong", "vel_contour_pickup", "vel_contour_ghost"):
+        if k in overrides and isinstance(overrides[k], (int, float)):
+            updates[k] = float(overrides[k])
+
+    # ---- pickup (flat only) ----
+    if "pickup_beat" in overrides:
+        pb = overrides["pickup_beat"]
+        if pb is None or isinstance(pb, (int, float)):
+            updates["pickup_beat"] = pb if pb is None else float(pb)
+    if "pickup_vel" in overrides and isinstance(overrides["pickup_vel"], int):
+        updates["pickup_vel"] = overrides["pickup_vel"]
+
+    # Always return a copy (never mutate registry)
+    if updates:
+        return replace(base, **updates)
+    # Return a copy even with no updates to guarantee immutability
+    return replace(base)
+
+
 def generate_accompaniment(
     chord_symbols: List[str],
     style_name: str = "swing_basic",
@@ -26,6 +110,7 @@ def generate_accompaniment(
     tritone_strength: float = 1.0,
     tritone_seed: int | None = None,
     expressive: ExpressiveSpec | None = None,
+    style_overrides: Optional[Dict[str, Any]] = None,
 ) -> Tuple[List[NoteEvent], List[NoteEvent]]:
     """
     Generate comping + bass MIDI note events for a simple chord progression.
@@ -51,6 +136,9 @@ def generate_accompaniment(
         Probability [0.0, 1.0] for 'probabilistic' mode.
     tritone_seed:
         Optional random seed for reproducible reharmonization patterns.
+    style_overrides:
+        Optional dict of style knob overrides from .ztprog config.
+        Supports nested sugar (ghost_hits, vel_contour) or flat canonical fields.
 
     Returns
     -------
@@ -61,6 +149,10 @@ def generate_accompaniment(
         raise ValueError(f"Unknown style: {style_name}")
 
     style: StylePattern = STYLE_REGISTRY[style_name]
+
+    # Apply style overrides from config (never mutates registry)
+    if style_overrides:
+        style = _apply_style_overrides(style, style_overrides)
 
     # Parse initial chord symbols
     base_chords: List[Chord] = [parse_chord_symbol(s) for s in chord_symbols]

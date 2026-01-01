@@ -20,17 +20,23 @@ class ProgramConfig:
 
     name: "C major swing demo"
     chords: "Cmaj7 Dm7 G7 Cmaj7"
-    style: "swing_basic"
+    style: "swing_basic"          # can be string OR dict with overrides
     tempo: 120
     bars_per_chord: 1
     tritone_mode: "none"
     tritone_strength: 1.0
     tritone_seed: null
     outfile: "c_major_swing.mid"
+
+    When style is a dict, it must contain 'comp' (or 'name'/'style') for base style:
+    style:
+      comp: samba_basic
+      ghost_hits: { enabled: true, steps: [1,5,9,13] }
+      vel_contour: { enabled: true, preset: brazil_samba }
     """
     name: Optional[str]
     chords: List[str]
-    style: str
+    style: Union[str, Dict[str, Any]]  # string or dict with overrides
     tempo: int
     bars_per_chord: int
     tritone_mode: TritoneMode

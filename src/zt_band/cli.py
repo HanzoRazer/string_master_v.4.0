@@ -662,9 +662,29 @@ def cmd_create(args: argparse.Namespace) -> int:
     if args.config:
         cfg = load_program_config(args.config)
 
-        if cfg.style not in STYLE_REGISTRY:
+        # Handle style as string OR dict with overrides
+        style_name: str
+        style_overrides: dict | None = None
+        
+        if isinstance(cfg.style, dict):
+            # Extract base style name from dict
+            # Support 'comp', 'name', or 'style' keys for base style
+            style_name = cfg.style.get("comp") or cfg.style.get("name") or cfg.style.get("style", "")
+            if not style_name:
+                print(
+                    "error: style dict must contain 'comp' (or 'name'/'style') key "
+                    "specifying the base style name.",
+                    file=sys.stderr,
+                )
+                return 1
+            # Pass full dict as overrides (engine will extract relevant knobs)
+            style_overrides = cfg.style
+        else:
+            style_name = cfg.style
+
+        if style_name not in STYLE_REGISTRY:
             print(
-                f"error: style '{cfg.style}' from config is not a known style. "
+                f"error: style '{style_name}' from config is not a known style. "
                 "Use 'zt-band styles' to list available styles.",
                 file=sys.stderr,
             )
@@ -672,13 +692,14 @@ def cmd_create(args: argparse.Namespace) -> int:
 
         generate_accompaniment(
             chord_symbols=cfg.chords,
-            style_name=cfg.style,
+            style_name=style_name,
             tempo_bpm=cfg.tempo,
             bars_per_chord=cfg.bars_per_chord,
             outfile=cfg.outfile,
             tritone_mode=cfg.tritone_mode,
             tritone_strength=cfg.tritone_strength,
             tritone_seed=cfg.tritone_seed,
+            style_overrides=style_overrides,
         )
 
         label = cfg.name or args.config
