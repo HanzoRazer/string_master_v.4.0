@@ -627,6 +627,40 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     p_val.set_defaults(func=cmd_validate)
 
+    # ---- validate-all subcommand ----
+    p_va = subparsers.add_parser(
+        "validate-all",
+        help="Validate all .ztprog files under a directory (no MIDI generation).",
+    )
+    p_va.add_argument(
+        "root",
+        nargs="?",
+        default="programs",
+        help="Root folder to scan (default: programs).",
+    )
+    p_va.add_argument(
+        "--glob",
+        default="**/*.ztprog",
+        help="Glob pattern under root (default: **/*.ztprog).",
+    )
+    p_va.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="Output format: text (default) or json.",
+    )
+    p_va.add_argument(
+        "--warn-only",
+        action="store_true",
+        help="Always exit 0 even when validation finds issues.",
+    )
+    p_va.add_argument(
+        "--quiet-ok",
+        action="store_true",
+        help="Suppress OK lines; only print failures.",
+    )
+    p_va.set_defaults(func=cmd_validate_all)
+
     return parser
 
 
@@ -1336,6 +1370,55 @@ def cmd_validate(args: argparse.Namespace) -> int:
     if args.warn_only:
         return 0
     return 0 if not issues else 2
+
+
+def cmd_validate_all(args: argparse.Namespace) -> int:
+    """Validate all .ztprog files under a directory (no MIDI generation)."""
+    root = Path(args.root)
+    if not root.exists():
+        print(f"error: path not found: {root}", file=sys.stderr)
+        return 2
+
+    files = sorted(root.glob(args.glob))
+    if not files:
+        msg = f"no .ztprog files found under {root} (glob={args.glob})"
+        print(msg, file=sys.stderr)
+        return 2 if not args.warn_only else 0
+
+    any_fail = False
+    results = []
+
+    for f in files:
+        issues = validate_ztprog_file(f)
+        ok = (len(issues) == 0)
+        if not ok:
+            any_fail = True
+
+        if args.format == "json":
+            results.append({
+                "file": str(f),
+                "ok": ok,
+                "issues": [{"code": x.code, "path": x.path, "message": x.message} for x in issues],
+            })
+        else:
+            if ok and args.quiet_ok:
+                continue
+            print(format_issues_text(issues, str(f)))
+
+    if args.format == "json":
+        payload = {
+            "root": str(root),
+            "glob": args.glob,
+            "ok": (not any_fail),
+            "count": len(files),
+            "failed": sum(1 for r in results if not r["ok"]),
+            "results": results,
+        }
+        print(json.dumps(payload, indent=2))
+
+    if args.warn_only:
+        return 0
+    return 0 if not any_fail else 2
 
 
 def main(argv: list[str] | None = None) -> int:
