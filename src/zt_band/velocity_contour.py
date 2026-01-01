@@ -39,6 +39,91 @@ class VelContour:
     ghost_mul: float = 1.0
 
 
+# ---------------------------------------------------------------------------
+# Preset system
+# ---------------------------------------------------------------------------
+
+_PRESETS: dict[str, dict[str, float | int]] = {
+    # Explicit no-op preset (standardizes YAML without altering behavior)
+    "none": {
+        "base": 72,
+        "soft_mul": 1.0,
+        "strong_mul": 1.0,
+        "pickup_mul": 1.0,
+        "ghost_mul": 1.0,
+    },
+    # Brazilian samba breathing feel
+    "brazil_samba": {
+        "base": 72,
+        "soft_mul": 0.82,
+        "strong_mul": 1.08,
+        "pickup_mul": 0.65,
+        "ghost_mul": 0.55,
+    },
+}
+
+
+def resolve_vel_contour(cfg: dict | None) -> VelContour:
+    """
+    Resolve a YAML config dict to a VelContour instance.
+
+    Config shape:
+        vel_contour:
+          enabled: true
+          preset: brazil_samba   # optional
+          soft_mul: 0.80         # optional overrides
+
+    Rules:
+    - If cfg is None or missing 'enabled', returns disabled contour.
+    - If enabled is False, returns disabled contour.
+    - If preset is given, start from preset values, then apply overrides.
+    - Unknown preset names fall back to VelContour defaults.
+
+    Parameters
+    ----------
+    cfg:
+        Dict from YAML vel_contour section (or None).
+
+    Returns
+    -------
+    VelContour instance.
+    """
+    if cfg is None:
+        return VelContour(enabled=False)
+
+    enabled = cfg.get("enabled", False)
+    if not enabled:
+        return VelContour(enabled=False)
+
+    # Start with preset if given
+    preset_name = cfg.get("preset", "")
+    if preset_name and preset_name in _PRESETS:
+        base_vals = _PRESETS[preset_name].copy()
+    else:
+        # Use VelContour defaults
+        base_vals = {
+            "base": 72,
+            "soft_mul": 0.80,
+            "strong_mul": 1.08,
+            "pickup_mul": 0.65,
+            "ghost_mul": 1.0,
+        }
+
+    # Apply explicit overrides from config
+    for key in ("base", "soft_mul", "strong_mul", "pickup_mul", "ghost_mul"):
+        if key in cfg:
+            base_vals[key] = cfg[key]
+
+    return VelContour(
+        enabled=True,
+        base=int(base_vals["base"]),
+        soft_mul=float(base_vals["soft_mul"]),
+        strong_mul=float(base_vals["strong_mul"]),
+        pickup_mul=float(base_vals["pickup_mul"]),
+        ghost_mul=float(base_vals["ghost_mul"]),
+    )
+
+
 def _clamp_vel(v: int) -> int:
     """Clamp velocity to MIDI range [1, 127]."""
     if v < 1:
