@@ -13,7 +13,7 @@ from .musical_contract import validate_note_events, enforce_determinism_inputs
 from .expressive_layer import apply_velocity_profile
 from .expressive_swing import ExpressiveSpec, apply_expressive
 from .ghost_layer import GhostSpec, add_ghost_hits
-from .velocity_contour import VelContour, apply_velocity_contour_4_4
+from .velocity_contour import VelContour, apply_velocity_contour
 
 
 def generate_accompaniment(
@@ -140,8 +140,10 @@ def generate_accompaniment(
                     pickup_steps_set.add(pickup_step)
                 ghost_steps_set = set(style.ghost_steps) if style.ghost_steps else set()
 
-                bar_comp_events = apply_velocity_contour_4_4(
+                # Use dispatcher: currently assumes 4/4, but ready for 2/4 styles
+                bar_comp_events = apply_velocity_contour(
                     bar_comp_events,
+                    meter="4/4",
                     bar_steps=16,
                     contour=contour,
                     pickup_steps=pickup_steps_set,

@@ -209,3 +209,69 @@ def apply_velocity_contour_2_4(
         ))
 
     return out
+
+
+def apply_velocity_contour(
+    events: List[NoteEvent],
+    *,
+    meter: str,
+    bar_steps: int,
+    contour: VelContour,
+    pickup_steps: Optional[Set[int]] = None,
+    ghost_steps: Optional[Set[int]] = None,
+) -> List[NoteEvent]:
+    """
+    Unified dispatcher for velocity contour. Strict:
+      - meter "4/4" requires bar_steps == 16
+      - meter "2/4" requires bar_steps == 8
+
+    If meter/steps mismatch or contour disabled, returns events unchanged (safe).
+
+    Parameters
+    ----------
+    events:
+        List of NoteEvent to process.
+    meter:
+        Time signature string ("4/4" or "2/4").
+    bar_steps:
+        Steps per bar (16 for 4/4, 8 for 2/4).
+    contour:
+        VelContour configuration.
+    pickup_steps:
+        Set of step indices for pickup hits.
+    ghost_steps:
+        Set of step indices for ghost hits.
+
+    Returns
+    -------
+    List of NoteEvent with scaled velocities (or unchanged if meter/steps mismatch).
+    """
+    if not contour.enabled:
+        return events
+
+    m = str(meter).strip()
+
+    if m == "4/4":
+        if bar_steps != 16:
+            return events
+        return apply_velocity_contour_4_4(
+            events,
+            bar_steps=bar_steps,
+            contour=contour,
+            pickup_steps=pickup_steps,
+            ghost_steps=ghost_steps,
+        )
+
+    if m == "2/4":
+        if bar_steps != 8:
+            return events
+        return apply_velocity_contour_2_4(
+            events,
+            bar_steps=bar_steps,
+            contour=contour,
+            pickup_steps=pickup_steps,
+            ghost_steps=ghost_steps,
+        )
+
+    # Unknown meter: do nothing (strict & safe)
+    return events
