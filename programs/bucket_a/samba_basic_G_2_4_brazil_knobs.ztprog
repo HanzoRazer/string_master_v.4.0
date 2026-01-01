@@ -1,0 +1,39 @@
+# samba_basic_G_2_4_brazil_knobs.ztprog
+# Canonical example demonstrating Brazilian feel knobs in 2/4 meter
+#
+# This program shows nested knob shape (recommended YAML form):
+#   ghost_hits: { enabled, steps }
+#   vel_contour: { enabled, preset }
+#
+# Zone-Tritone Context:
+#   G7 is the tonal anchor with tritone B-F
+#   8-bar vamp in authentic Brazilian 2/4 for samba batucada practice
+
+name: "Samba Basic G - 2/4 Brazil Knobs"
+tempo: 90
+time_signature: "2/4"
+bars_per_chord: 1
+
+chords:
+  - G7
+  - G7
+  - G7
+  - G7
+  - G7
+  - G7
+  - G7
+  - G7
+
+style:
+  name: "samba_2_4"
+  swing_ratio: 0.5          # straight 8ths for authentic feel
+  bar_steps: 8              # 8 steps per bar in 2/4 (sixteenth notes)
+  ghost_hits:
+    enabled: true
+    steps: [1, 5]           # ghost on weak sixteenths (offbeats)
+  vel_contour:
+    enabled: true
+    preset: brazil_samba    # characteristic Brazil accent pattern
+
+tritone_mode: "off"
+outfile: "samba_basic_G_2_4_brazil_knobs.mid"

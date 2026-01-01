@@ -131,7 +131,12 @@ def validate_ztprog_file(path: str | Path) -> List[ValidationIssue]:
 
 
 def _validate_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[int]) -> List[ValidationIssue]:
-    """Validate style knobs: ghost_hits, vel_contour, meter/bar_steps consistency."""
+    """
+    Validate style knobs: ghost_hits, vel_contour, meter/bar_steps consistency.
+
+    Accepts BOTH nested form (ghost_hits: {enabled, steps}) AND flat form
+    (ghost_vel, ghost_steps) to match code-side StylePattern fields.
+    """
     issues: List[ValidationIssue] = []
 
     # Optional explicit meter/bar_steps in style block
@@ -165,82 +170,82 @@ def _validate_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[in
                 )
             )
 
-    # ---- ghost hits ----
-    ghost = style.get("ghost_hits") or style.get("ghost") or {}
-    if isinstance(ghost, dict):
-        ghost_enabled = bool(ghost.get("enabled", False))
-        ghost_steps = ghost.get("steps", None)
-        if ghost_steps is not None:
-            steps = _as_int_list(ghost_steps)
-            if steps is None:
-                issues.append(
-                    ValidationIssue(
-                        code="GHOST_STEPS_TYPE",
-                        message="ghost_hits.steps must be a list of integers.",
-                        path="style.ghost_hits.steps",
-                    )
+    # ---- ghost hits: nested OR flat form ----
+    ghost_nested = style.get("ghost_hits") or style.get("ghost")
+    if isinstance(ghost_nested, dict):
+        # Nested form: ghost_hits: { enabled: true, steps: [...] }
+        ghost_enabled = bool(ghost_nested.get("enabled", False))
+        ghost_steps_raw = ghost_nested.get("steps", None)
+        ghost_path_prefix = "style.ghost_hits"
+    else:
+        # Flat form: ghost_vel, ghost_steps (matches StylePattern fields)
+        ghost_vel = style.get("ghost_vel", 0)
+        ghost_enabled = (isinstance(ghost_vel, int) and ghost_vel > 0)
+        ghost_steps_raw = style.get("ghost_steps", None)
+        ghost_path_prefix = "style"
+
+    # Validate ghost_steps if provided
+    if ghost_steps_raw is not None:
+        steps = _as_int_list(ghost_steps_raw)
+        if steps is None:
+            issues.append(
+                ValidationIssue(
+                    code="GHOST_STEPS_TYPE",
+                    message="ghost_steps must be a list of integers.",
+                    path=f"{ghost_path_prefix}.steps" if ghost_nested else "style.ghost_steps",
                 )
-            else:
-                if bar_steps is not None:
-                    bad = [s for s in steps if s < 0 or s >= bar_steps]
-                    if bad:
-                        issues.append(
-                            ValidationIssue(
-                                code="GHOST_STEPS_RANGE",
-                                message=f"ghost_hits.steps contains out-of-range steps {bad} for meter {ts} (0..{bar_steps-1}).",
-                                path="style.ghost_hits.steps",
-                            )
-                        )
-                # if steps provided but ghost disabled, warn (not error)
-                if not ghost_enabled:
+            )
+        else:
+            if bar_steps is not None:
+                bad = [s for s in steps if s < 0 or s >= bar_steps]
+                if bad:
                     issues.append(
                         ValidationIssue(
-                            code="GHOST_DISABLED",
-                            message="ghost_hits.steps provided but ghost_hits.enabled is false; ghost hits will not apply.",
-                            path="style.ghost_hits.enabled",
+                            code="GHOST_STEPS_RANGE",
+                            message=f"ghost_steps contains out-of-range steps {bad} for meter {ts} (0..{bar_steps-1}).",
+                            path=f"{ghost_path_prefix}.steps" if ghost_nested else "style.ghost_steps",
                         )
                     )
-    elif ghost is not None and ghost != {}:
+            # if steps provided but ghost disabled, warn (not error)
+            if not ghost_enabled:
+                issues.append(
+                    ValidationIssue(
+                        code="GHOST_DISABLED",
+                        message="ghost_steps provided but ghost is disabled; ghost hits will not apply.",
+                        path=f"{ghost_path_prefix}.enabled" if ghost_nested else "style.ghost_vel",
+                    )
+                )
+
+    # ---- velocity contour: nested OR flat form ----
+    vel_nested = style.get("vel_contour")
+    if isinstance(vel_nested, dict):
+        # Nested form: vel_contour: { enabled: true, preset: "brazil_samba" }
+        vel_enabled = bool(vel_nested.get("enabled", False))
+        preset = vel_nested.get("preset", None)
+        vel_path_prefix = "style.vel_contour"
+    else:
+        # Flat form: vel_contour_enabled, vel_contour_preset (matches StylePattern fields)
+        vel_enabled = bool(style.get("vel_contour_enabled", False))
+        preset = style.get("vel_contour_preset", None)
+        vel_path_prefix = "style"
+
+    allowed_presets = {"brazil_samba", "none"}
+    if preset is not None and preset not in allowed_presets:
         issues.append(
             ValidationIssue(
-                code="GHOST_TYPE",
-                message="style.ghost_hits must be a mapping/object.",
-                path="style.ghost_hits",
+                code="VEL_PRESET_UNKNOWN",
+                message=f"vel_contour preset '{preset}' not recognized. Allowed: {sorted(allowed_presets)}",
+                path=f"{vel_path_prefix}.preset" if vel_nested else "style.vel_contour_preset",
             )
         )
 
-    # ---- velocity contour ----
-    vel = style.get("vel_contour") or {}
-    if isinstance(vel, dict):
-        vel_enabled = bool(vel.get("enabled", False))
-        preset = vel.get("preset", None)
-
-        allowed_presets = {"brazil_samba", "none"}
-        if preset is not None and preset not in allowed_presets:
-            issues.append(
-                ValidationIssue(
-                    code="VEL_PRESET_UNKNOWN",
-                    message=f"vel_contour.preset '{preset}' not recognized. Allowed: {sorted(allowed_presets)}",
-                    path="style.vel_contour.preset",
-                )
-            )
-
-        # Explicitly document: preset=none is allowed, but still requires enabled:true to apply
-        # preset: none => neutral multipliers (no shaping), useful for standardizing YAML
-        if preset is not None and not vel_enabled:
-            issues.append(
-                ValidationIssue(
-                    code="VEL_DISABLED",
-                    message="vel_contour.preset provided but vel_contour.enabled is false; contour will not apply.",
-                    path="style.vel_contour.enabled",
-                )
-            )
-    elif vel is not None and vel != {}:
+    # preset: none => neutral multipliers (no shaping), useful for standardizing YAML
+    if preset is not None and not vel_enabled:
         issues.append(
             ValidationIssue(
-                code="VEL_TYPE",
-                message="style.vel_contour must be a mapping/object.",
-                path="style.vel_contour",
+                code="VEL_DISABLED",
+                message="vel_contour preset provided but vel_contour is disabled; contour will not apply.",
+                path=f"{vel_path_prefix}.enabled" if vel_nested else "style.vel_contour_enabled",
             )
         )
 

@@ -158,3 +158,57 @@ def test_validate_missing_style(tmp_path: Path):
     r = _run("validate", "--file", str(p))
     assert r.returncode == 2
     assert "STYLE_MISSING" in r.stdout
+
+
+def test_validate_flat_knobs_valid(tmp_path: Path):
+    """Flat knob shape (ghost_vel, ghost_steps, vel_contour_enabled) should pass."""
+    p = tmp_path / "flat_ok.ztprog"
+    p.write_text(
+        textwrap.dedent(
+            """\
+            name: flat_knobs
+            time_signature: "4/4"
+            tempo: 100
+            bars_per_chord: 1
+            chords: ["G7"]
+            style:
+              comp: bossa
+              bar_steps: 16
+              ghost_vel: 45
+              ghost_steps: [1, 5, 9, 13]
+              vel_contour_enabled: true
+              vel_contour_preset: brazil_samba
+            """
+        ),
+        encoding="utf-8",
+    )
+    r = _run("validate", "--file", str(p))
+    assert r.returncode == 0
+    assert "OK:" in r.stdout
+
+
+def test_validate_flat_knobs_bad_range(tmp_path: Path):
+    """Flat knob shape with out-of-range ghost_steps should fail."""
+    p = tmp_path / "flat_bad.ztprog"
+    p.write_text(
+        textwrap.dedent(
+            """\
+            name: flat_bad
+            time_signature: "2/4"
+            chords: ["G7"]
+            style:
+              comp: samba_2_4
+              bar_steps: 8
+              ghost_vel: 40
+              ghost_steps: [0, 1, 99]
+              vel_contour_enabled: false
+              vel_contour_preset: nope
+            """
+        ),
+        encoding="utf-8",
+    )
+    r = _run("validate", "--file", str(p))
+    assert r.returncode == 2
+    # should catch out-of-range step and unknown preset
+    assert "GHOST_STEPS_RANGE" in r.stdout
+    assert "VEL_PRESET_UNKNOWN" in r.stdout
