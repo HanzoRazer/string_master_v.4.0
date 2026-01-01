@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zone-tritone.dev/schemas/ztprog.schema.json",
+  "title": "Zone-Tritone Program (.ztprog)",
+  "description": "Schema for Zone-Tritone program configuration files defining chord progressions, styles, and MIDI output settings.",
+  "type": "object",
+  "required": ["name", "chords", "tempo", "bars_per_chord", "outfile"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for this program."
+    },
+    "chords": {
+      "type": "array",
+      "description": "Array of chord symbols in standard notation (e.g., 'Cm7', 'G7', 'Dmaj7').",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-G][#b]?(maj|min|m|dim|aug|sus[24]?)?[0-9]*(b5|#5|b9|#9|b11|#11|b13|#13)*(/[A-G][#b]?)?$"
+      },
+      "minItems": 1
+    },
+    "style": {
+      "description": "Either a style preset name (string) or an object with detailed style settings.",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Name of a built-in style preset (e.g., 'bossa_basic', 'swing')."
+        },
+        {
+          "type": "object",
+          "description": "Detailed style configuration object.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Style preset name as base."
+            },
+            "comp": {
+              "type": "string",
+              "description": "Comping style preset name."
+            },
+            "swing_ratio": {
+              "type": "number",
+              "description": "Swing ratio (0.0 = straight, 0.5 = triplet swing, 1.0 = max swing).",
+              "minimum": 0.0,
+              "maximum": 1.0
+            },
+            "bar_steps": {
+              "type": "integer",
+              "description": "Number of subdivision steps per bar (e.g., 16 for sixteenth notes in 4/4).",
+              "minimum": 4,
+              "maximum": 64
+            },
+            "ghost_hits": {
+              "type": "object",
+              "description": "Ghost note configuration for Brazilian feel.",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable ghost hit generation."
+                },
+                "vel": {
+                  "type": "integer",
+                  "description": "Velocity for ghost hits (0-127).",
+                  "minimum": 0,
+                  "maximum": 127
+                },
+                "steps": {
+                  "type": "array",
+                  "description": "Step positions for ghost hits (0-indexed within bar).",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            },
+            "vel_contour": {
+              "type": "object",
+              "description": "Velocity contouring/shaping configuration.",
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Enable velocity contouring."
+                },
+                "preset": {
+                  "type": "string",
+                  "description": "Velocity contour preset name (e.g., 'brazil_samba')."
+                }
+              }
+            },
+            "pickup_beat": {
+              "type": "number",
+              "description": "Beat position for pickup note before bar 1.",
+              "minimum": 0.0
+            },
+            "pickup_vel": {
+              "type": "integer",
+              "description": "Velocity for pickup note (0-127).",
+              "minimum": 0,
+              "maximum": 127
+            }
+          }
+        }
+      ]
+    },
+    "tempo": {
+      "type": "number",
+      "description": "Tempo in beats per minute (BPM).",
+      "minimum": 20,
+      "maximum": 400
+    },
+    "time_signature": {
+      "type": "string",
+      "description": "Time signature in 'N/D' format (e.g., '4/4', '2/4', '3/4').",
+      "pattern": "^[1-9][0-9]*/[124816]$",
+      "default": "4/4"
+    },
+    "bars_per_chord": {
+      "type": "integer",
+      "description": "Number of bars each chord is held.",
+      "minimum": 1,
+      "maximum": 32
+    },
+    "tritone_mode": {
+      "type": "string",
+      "description": "How tritone substitutions are applied.",
+      "enum": ["off", "probabilistic", "deterministic"],
+      "default": "off"
+    },
+    "tritone_strength": {
+      "type": "number",
+      "description": "Probability of tritone substitution when mode is 'probabilistic' (0.0-1.0).",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "tritone_seed": {
+      "type": "integer",
+      "description": "Random seed for reproducible tritone substitution patterns."
+    },
+    "outfile": {
+      "type": "string",
+      "description": "Output MIDI filename.",
+      "pattern": "^.+\\.mid$"
+    }
+  },
+  "additionalProperties": false
+}

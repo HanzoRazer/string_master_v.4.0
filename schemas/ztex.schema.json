@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zone-tritone.dev/schemas/ztex.schema.json",
+  "title": "Zone-Tritone Exercise (.ztex)",
+  "description": "Schema for Zone-Tritone exercise files defining practice tasks, prompts, and assessment criteria.",
+  "type": "object",
+  "oneOf": [
+    {
+      "$ref": "#/definitions/simpleExercise"
+    },
+    {
+      "$ref": "#/definitions/packExercise"
+    }
+  ],
+  "definitions": {
+    "simpleExercise": {
+      "type": "object",
+      "description": "Simple exercise linked to a single program.",
+      "required": ["name", "program", "exercise_type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable exercise name."
+        },
+        "program": {
+          "type": "string",
+          "description": "Relative path to the backing .ztprog file."
+        },
+        "exercise_type": {
+          "type": "string",
+          "description": "Exercise type identifier (e.g., 'cycle_fifths_roots', 'play_shells')."
+        },
+        "task": {
+          "$ref": "#/definitions/taskSpec"
+        },
+        "interaction": {
+          "$ref": "#/definitions/interactionSpec"
+        }
+      },
+      "additionalProperties": false
+    },
+    "packExercise": {
+      "type": "object",
+      "description": "Complex exercise pack with multiple programs and detailed pedagogy.",
+      "required": ["id", "title"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this exercise pack."
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title for this exercise pack."
+        },
+        "level": {
+          "type": "string",
+          "description": "Difficulty level identifier (e.g., 'A', 'B', 'C')."
+        },
+        "category": {
+          "type": "string",
+          "description": "Exercise category (e.g., 'cadence', 'groove', 'voicing')."
+        },
+        "concept": {
+          "type": "string",
+          "description": "Musical concept being practiced."
+        },
+        "program_refs": {
+          "type": "array",
+          "description": "Array of paths to associated .ztprog files.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "goals": {
+          "type": "array",
+          "description": "Learning objectives for this exercise.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "quick_map": {
+          "type": "object",
+          "description": "Quick reference mapping keys to progressions.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "voicing_families": {
+          "type": "array",
+          "description": "Voicing options grouped by family/style.",
+          "items": {
+            "$ref": "#/definitions/voicingFamily"
+          }
+        },
+        "rhythm": {
+          "type": "object",
+          "description": "Rhythm and feel guidance.",
+          "properties": {
+            "feel": {
+              "type": "string",
+              "description": "Rhythmic feel descriptor."
+            },
+            "tips": {
+              "type": "array",
+              "description": "Rhythm tips and suggestions.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "practice_steps": {
+          "type": "array",
+          "description": "Ordered practice steps.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assessment": {
+          "$ref": "#/definitions/assessmentSpec"
+        },
+        "tags": {
+          "type": "array",
+          "description": "Searchable tags for categorization.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "taskSpec": {
+      "type": "object",
+      "description": "Task specification for practice.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "Task mode (e.g., 'play_roots', 'play_shells', 'improvise')."
+        },
+        "instructions": {
+          "type": "string",
+          "description": "Main instruction text for the student."
+        },
+        "prompts": {
+          "type": "array",
+          "description": "Additional prompts and guidance.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "interactionSpec": {
+      "type": "object",
+      "description": "Interaction and feedback configuration.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "Interaction mode (e.g., 'self_report', 'auto_detect')."
+        },
+        "questions": {
+          "type": "array",
+          "description": "Reflection questions for self-assessment.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "voicingFamily": {
+      "type": "object",
+      "description": "A family of related voicings.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Family name."
+        },
+        "idea": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ],
+          "description": "Core voicing idea or approach."
+        },
+        "examples": {
+          "type": "object",
+          "description": "Example voicings by key.",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "assessmentSpec": {
+      "type": "object",
+      "description": "Assessment criteria.",
+      "properties": {
+        "pass_condition": {
+          "type": "array",
+          "description": "Conditions for successful completion.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

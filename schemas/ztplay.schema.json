@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zone-tritone.dev/schemas/ztplay.schema.json",
+  "title": "Zone-Tritone Playlist (.ztplay)",
+  "description": "Schema for Zone-Tritone playlist files that sequence multiple programs for extended practice sessions.",
+  "type": "object",
+  "oneOf": [
+    {
+      "$ref": "#/definitions/simplePlaylist"
+    },
+    {
+      "$ref": "#/definitions/comparisonPlaylist"
+    }
+  ],
+  "definitions": {
+    "simplePlaylist": {
+      "type": "object",
+      "description": "Simple playlist with program sequence.",
+      "required": ["name", "programs"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable playlist name."
+        },
+        "tempo": {
+          "type": "number",
+          "description": "Override tempo for all programs in BPM.",
+          "minimum": 20,
+          "maximum": 400
+        },
+        "outfile": {
+          "type": "string",
+          "description": "Output MIDI filename for combined playlist.",
+          "pattern": "^.+\\.mid$"
+        },
+        "programs": {
+          "type": "array",
+          "description": "Ordered list of program references.",
+          "items": {
+            "$ref": "#/definitions/programRef"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "comparisonPlaylist": {
+      "type": "object",
+      "description": "Comparison playlist for A/B testing different configurations.",
+      "required": ["id", "title", "items"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for this playlist."
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title for this playlist."
+        },
+        "level": {
+          "type": "string",
+          "description": "Difficulty level identifier."
+        },
+        "category": {
+          "type": "string",
+          "description": "Playlist category (e.g., 'groove', 'comparison')."
+        },
+        "items": {
+          "type": "array",
+          "description": "Named items for comparison.",
+          "items": {
+            "$ref": "#/definitions/playlistItem"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "programRef": {
+      "type": "object",
+      "description": "Reference to a program with repeat count.",
+      "required": ["config"],
+      "properties": {
+        "config": {
+          "type": "string",
+          "description": "Relative path to .ztprog file."
+        },
+        "repeat": {
+          "type": "integer",
+          "description": "Number of times to repeat this program.",
+          "minimum": 1,
+          "default": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "playlistItem": {
+      "type": "object",
+      "description": "Named playlist item for comparison playlists.",
+      "required": ["name", "file"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Display name for this item."
+        },
+        "file": {
+          "type": "string",
+          "description": "Relative path to .ztprog file."
+        },
+        "repeats": {
+          "type": "integer",
+          "description": "Number of times to repeat this item.",
+          "minimum": 1,
+          "default": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

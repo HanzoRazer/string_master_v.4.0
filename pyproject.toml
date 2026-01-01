@@ -23,7 +23,17 @@ classifiers = [
 ]
 dependencies = [
   "mido>=1.2.10",
-  "pyyaml>=6.0"
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+# Developer tooling used by CI and local contributors.
+dev = [
+  "pytest>=7.0",
+  "pytest-cov>=4.0",
+  "ruff>=0.5",
+  "mypy>=1.7",
+  "types-PyYAML",
 ]
 
 [project.urls]
@@ -35,3 +45,39 @@ zt-band = "zt_band.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "B008",   # do not perform function calls in argument defaults
+    "B905",   # zip without strict= (Python 3.10+)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["shared", "zt_band"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
