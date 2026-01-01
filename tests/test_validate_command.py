@@ -177,7 +177,8 @@ def test_validate_flat_knobs_valid(tmp_path: Path):
               ghost_vel: 45
               ghost_steps: [1, 5, 9, 13]
               vel_contour_enabled: true
-              vel_contour_preset: brazil_samba
+              vel_contour_soft: 0.82
+              vel_contour_strong: 1.08
             """
         ),
         encoding="utf-8",
@@ -201,14 +202,103 @@ def test_validate_flat_knobs_bad_range(tmp_path: Path):
               bar_steps: 8
               ghost_vel: 40
               ghost_steps: [0, 1, 99]
-              vel_contour_enabled: false
-              vel_contour_preset: nope
             """
         ),
         encoding="utf-8",
     )
     r = _run("validate", "--file", str(p))
     assert r.returncode == 2
-    # should catch out-of-range step and unknown preset
     assert "GHOST_STEPS_RANGE" in r.stdout
-    assert "VEL_PRESET_UNKNOWN" in r.stdout
+
+
+def test_validate_ghost_vel_range(tmp_path: Path):
+    """ghost_vel out of 0..127 should fail."""
+    p = tmp_path / "bad_vel.ztprog"
+    p.write_text(
+        textwrap.dedent(
+            """\
+            name: bad_vel
+            time_signature: "4/4"
+            chords: ["C7"]
+            style:
+              comp: swing
+              ghost_vel: 200
+              ghost_steps: [1]
+            """
+        ),
+        encoding="utf-8",
+    )
+    r = _run("validate", "--file", str(p))
+    assert r.returncode == 2
+    assert "GHOST_VEL_RANGE" in r.stdout
+
+
+def test_validate_pickup_beat_range(tmp_path: Path):
+    """pickup_beat out of [0, beats_per_bar) should fail."""
+    p = tmp_path / "bad_pickup.ztprog"
+    p.write_text(
+        textwrap.dedent(
+            """\
+            name: bad_pickup
+            time_signature: "4/4"
+            chords: ["C7"]
+            style:
+              comp: swing
+              pickup_beat: 5.0
+              pickup_vel: 70
+            """
+        ),
+        encoding="utf-8",
+    )
+    r = _run("validate", "--file", str(p))
+    assert r.returncode == 2
+    assert "PICKUP_BEAT_RANGE" in r.stdout
+
+
+def test_validate_vel_mult_range(tmp_path: Path):
+    """vel_contour multipliers must be positive."""
+    p = tmp_path / "bad_mult.ztprog"
+    p.write_text(
+        textwrap.dedent(
+            """\
+            name: bad_mult
+            time_signature: "4/4"
+            chords: ["C7"]
+            style:
+              comp: swing
+              vel_contour_enabled: true
+              vel_contour_soft: -0.5
+            """
+        ),
+        encoding="utf-8",
+    )
+    r = _run("validate", "--file", str(p))
+    assert r.returncode == 2
+    assert "VEL_MULT_RANGE" in r.stdout
+
+
+def test_validate_nested_sugar_expands_preset(tmp_path: Path):
+    """Nested sugar with preset expands to flat multipliers and passes."""
+    p = tmp_path / "nested_preset.ztprog"
+    p.write_text(
+        textwrap.dedent(
+            """\
+            name: nested_preset
+            time_signature: "4/4"
+            chords: ["Dm7", "G7", "Cmaj7"]
+            style:
+              comp: bossa
+              bar_steps: 16
+              ghost_hits:
+                enabled: true
+                steps: [1, 5, 9, 13]
+              vel_contour:
+                enabled: true
+                preset: brazil_samba
+            """
+        ),
+        encoding="utf-8",
+    )
+    r = _run("validate", "--file", str(p))
+    assert r.returncode == 0
+    assert "OK:" in r.stdout

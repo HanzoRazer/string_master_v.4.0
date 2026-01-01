@@ -130,124 +130,248 @@ def validate_ztprog_file(path: str | Path) -> List[ValidationIssue]:
     return issues
 
 
+def _beats_per_bar(ts: str) -> Optional[int]:
+    """Return beats per bar for supported meters."""
+    ts = (ts or "").strip()
+    if ts == "4/4":
+        return 4
+    if ts == "2/4":
+        return 2
+    return None
+
+
+def _normalize_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[int]) -> tuple[Dict[str, Any], List[ValidationIssue]]:
+    """
+    Normalize nested YAML sugar into canonical flat StylePattern fields.
+
+    Accepts either:
+      - canonical flat knobs (StylePattern fields)
+      - nested sugar: ghost_hits{enabled,steps,...}, vel_contour{enabled,preset}
+
+    Returns (flat, issues) where flat is a dict of StylePattern field values.
+    Flat fields always take precedence over nested sugar.
+    """
+    issues: List[ValidationIssue] = []
+    flat: Dict[str, Any] = {}
+
+    # --- ghost hits (nested sugar -> flat) ---
+    ghost_nested = style.get("ghost_hits") or style.get("ghost")
+    if ghost_nested is not None and not isinstance(ghost_nested, dict):
+        issues.append(ValidationIssue("GHOST_TYPE", "style.ghost_hits must be a mapping/object.", "style.ghost_hits"))
+    elif isinstance(ghost_nested, dict):
+        enabled = bool(ghost_nested.get("enabled", False))
+        steps = ghost_nested.get("steps", None)
+        vel = ghost_nested.get("vel", None)
+        glb = ghost_nested.get("len_beats", None)
+
+        # Map to canonical flat fields
+        if vel is None:
+            # If enabled but no velocity → safe default; else disabled
+            vel = 14 if enabled else 0
+        flat["ghost_vel"] = int(vel)
+        if steps is not None:
+            flat["ghost_steps"] = steps
+        if glb is not None:
+            flat["ghost_len_beats"] = float(glb)
+
+    # Flat fields override nested sugar
+    for k in ("ghost_vel", "ghost_steps", "ghost_len_beats"):
+        if k in style:
+            flat[k] = style[k]
+
+    # --- pickup (flat only, no nested sugar yet) ---
+    for k in ("pickup_beat", "pickup_vel"):
+        if k in style:
+            flat[k] = style[k]
+
+    # --- vel contour (nested sugar -> flat) ---
+    vel_nested = style.get("vel_contour")
+    if vel_nested is not None and not isinstance(vel_nested, dict):
+        issues.append(ValidationIssue("VEL_TYPE", "style.vel_contour must be a mapping/object.", "style.vel_contour"))
+    elif isinstance(vel_nested, dict):
+        enabled = bool(vel_nested.get("enabled", False))
+        preset = vel_nested.get("preset", None)
+
+        flat["vel_contour_enabled"] = enabled
+
+        # preset expansion (maps into canonical multipliers)
+        if preset is not None:
+            preset_str = str(preset).strip()
+            allowed = {"none", "brazil_samba"}
+            if preset_str not in allowed:
+                issues.append(ValidationIssue(
+                    "VEL_PRESET_UNKNOWN",
+                    f"vel_contour.preset '{preset_str}' not recognized. Allowed: {sorted(allowed)}",
+                    "style.vel_contour.preset",
+                ))
+            else:
+                if preset_str == "none":
+                    flat.update({
+                        "vel_contour_soft": 1.0,
+                        "vel_contour_strong": 1.0,
+                        "vel_contour_pickup": 1.0,
+                        "vel_contour_ghost": 1.0,
+                    })
+                elif preset_str == "brazil_samba":
+                    flat.update({
+                        "vel_contour_soft": 0.82,
+                        "vel_contour_strong": 1.08,
+                        "vel_contour_pickup": 0.65,
+                        "vel_contour_ghost": 0.55,
+                    })
+
+        # Explicit multipliers in nested dict override preset defaults
+        for suffix in ("soft", "strong", "pickup", "ghost"):
+            key = f"vel_contour_{suffix}"
+            if suffix in vel_nested:
+                flat[key] = vel_nested[suffix]
+            elif key in vel_nested:
+                flat[key] = vel_nested[key]
+
+    # Flat contour fields override nested sugar
+    for k in ("vel_contour_enabled", "vel_contour_soft", "vel_contour_strong", "vel_contour_pickup", "vel_contour_ghost"):
+        if k in style:
+            flat[k] = style[k]
+
+    return flat, issues
+
+
 def _validate_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[int]) -> List[ValidationIssue]:
     """
-    Validate style knobs: ghost_hits, vel_contour, meter/bar_steps consistency.
+    Validate style knobs against canonical StylePattern contract.
 
-    Accepts BOTH nested form (ghost_hits: {enabled, steps}) AND flat form
-    (ghost_vel, ghost_steps) to match code-side StylePattern fields.
+    1. Normalizes nested sugar → flat canonical fields
+    2. Validates flat fields strictly (types, ranges)
     """
     issues: List[ValidationIssue] = []
 
-    # Optional explicit meter/bar_steps in style block
+    # --- meter / bar_steps consistency (existing logic) ---
     style_meter = style.get("meter")
     style_steps = style.get("bar_steps")
 
     if style_meter is not None and str(style_meter).strip() != ts:
-        issues.append(
-            ValidationIssue(
-                code="METER_MISMATCH",
-                message=f"style.meter '{style_meter}' does not match program time_signature '{ts}'.",
-                path="style.meter",
-            )
-        )
+        issues.append(ValidationIssue(
+            "METER_MISMATCH",
+            f"style.meter '{style_meter}' does not match program time_signature '{ts}'.",
+            "style.meter",
+        ))
 
     if style_steps is not None:
         if not isinstance(style_steps, int):
-            issues.append(
-                ValidationIssue(
-                    code="BAR_STEPS_TYPE",
-                    message="style.bar_steps must be an integer.",
-                    path="style.bar_steps",
-                )
-            )
+            issues.append(ValidationIssue(
+                "BAR_STEPS_TYPE",
+                "style.bar_steps must be an integer.",
+                "style.bar_steps",
+            ))
         elif bar_steps is not None and style_steps != bar_steps:
-            issues.append(
-                ValidationIssue(
-                    code="BAR_STEPS_MISMATCH",
-                    message=f"style.bar_steps={style_steps} does not match meter '{ts}' (expected {bar_steps}).",
-                    path="style.bar_steps",
-                )
-            )
+            issues.append(ValidationIssue(
+                "BAR_STEPS_MISMATCH",
+                f"style.bar_steps={style_steps} does not match meter '{ts}' (expected {bar_steps}).",
+                "style.bar_steps",
+            ))
 
-    # ---- ghost hits: nested OR flat form ----
-    ghost_nested = style.get("ghost_hits") or style.get("ghost")
-    if isinstance(ghost_nested, dict):
-        # Nested form: ghost_hits: { enabled: true, steps: [...] }
-        ghost_enabled = bool(ghost_nested.get("enabled", False))
-        ghost_steps_raw = ghost_nested.get("steps", None)
-        ghost_path_prefix = "style.ghost_hits"
-    else:
-        # Flat form: ghost_vel, ghost_steps (matches StylePattern fields)
-        ghost_vel = style.get("ghost_vel", 0)
-        ghost_enabled = (isinstance(ghost_vel, int) and ghost_vel > 0)
-        ghost_steps_raw = style.get("ghost_steps", None)
-        ghost_path_prefix = "style"
+    # --- normalize nested sugar → flat canonical fields ---
+    flat, norm_issues = _normalize_style_knobs(style, ts, bar_steps)
+    issues.extend(norm_issues)
 
-    # Validate ghost_steps if provided
-    if ghost_steps_raw is not None:
-        steps = _as_int_list(ghost_steps_raw)
+    # --- validate ghost fields (canonical: ghost_vel, ghost_steps, ghost_len_beats) ---
+    ghost_vel = flat.get("ghost_vel", 0)
+    ghost_steps = flat.get("ghost_steps")
+    ghost_len = flat.get("ghost_len_beats")
+
+    # ghost_vel: int in 0..127
+    if ghost_vel is not None:
+        if not isinstance(ghost_vel, int) or ghost_vel < 0 or ghost_vel > 127:
+            issues.append(ValidationIssue(
+                "GHOST_VEL_RANGE",
+                f"ghost_vel must be int 0..127, got {ghost_vel!r}.",
+                "style.ghost_vel",
+            ))
+
+    # ghost_steps: list[int] in [0, bar_steps-1]
+    if ghost_steps is not None:
+        steps = _as_int_list(ghost_steps)
         if steps is None:
-            issues.append(
-                ValidationIssue(
-                    code="GHOST_STEPS_TYPE",
-                    message="ghost_steps must be a list of integers.",
-                    path=f"{ghost_path_prefix}.steps" if ghost_nested else "style.ghost_steps",
-                )
-            )
+            issues.append(ValidationIssue(
+                "GHOST_STEPS_TYPE",
+                "ghost_steps must be a list of integers.",
+                "style.ghost_steps",
+            ))
         else:
             if bar_steps is not None:
                 bad = [s for s in steps if s < 0 or s >= bar_steps]
                 if bad:
-                    issues.append(
-                        ValidationIssue(
-                            code="GHOST_STEPS_RANGE",
-                            message=f"ghost_steps contains out-of-range steps {bad} for meter {ts} (0..{bar_steps-1}).",
-                            path=f"{ghost_path_prefix}.steps" if ghost_nested else "style.ghost_steps",
-                        )
-                    )
-            # if steps provided but ghost disabled, warn (not error)
-            if not ghost_enabled:
-                issues.append(
-                    ValidationIssue(
-                        code="GHOST_DISABLED",
-                        message="ghost_steps provided but ghost is disabled; ghost hits will not apply.",
-                        path=f"{ghost_path_prefix}.enabled" if ghost_nested else "style.ghost_vel",
-                    )
-                )
+                    issues.append(ValidationIssue(
+                        "GHOST_STEPS_RANGE",
+                        f"ghost_steps contains out-of-range steps {bad} for meter {ts} (0..{bar_steps-1}).",
+                        "style.ghost_steps",
+                    ))
+            # Warn if steps provided but velocity is 0 (ghost disabled)
+            if ghost_vel == 0 and steps:
+                issues.append(ValidationIssue(
+                    "GHOST_DISABLED",
+                    "ghost_steps provided but ghost_vel=0; ghost hits will not apply.",
+                    "style.ghost_vel",
+                ))
 
-    # ---- velocity contour: nested OR flat form ----
-    vel_nested = style.get("vel_contour")
-    if isinstance(vel_nested, dict):
-        # Nested form: vel_contour: { enabled: true, preset: "brazil_samba" }
-        vel_enabled = bool(vel_nested.get("enabled", False))
-        preset = vel_nested.get("preset", None)
-        vel_path_prefix = "style.vel_contour"
-    else:
-        # Flat form: vel_contour_enabled, vel_contour_preset (matches StylePattern fields)
-        vel_enabled = bool(style.get("vel_contour_enabled", False))
-        preset = style.get("vel_contour_preset", None)
-        vel_path_prefix = "style"
+    # ghost_len_beats: positive float
+    if ghost_len is not None:
+        if not isinstance(ghost_len, (int, float)) or ghost_len <= 0:
+            issues.append(ValidationIssue(
+                "GHOST_LEN_RANGE",
+                f"ghost_len_beats must be a positive number, got {ghost_len!r}.",
+                "style.ghost_len_beats",
+            ))
 
-    allowed_presets = {"brazil_samba", "none"}
-    if preset is not None and preset not in allowed_presets:
-        issues.append(
-            ValidationIssue(
-                code="VEL_PRESET_UNKNOWN",
-                message=f"vel_contour preset '{preset}' not recognized. Allowed: {sorted(allowed_presets)}",
-                path=f"{vel_path_prefix}.preset" if vel_nested else "style.vel_contour_preset",
-            )
-        )
+    # --- validate pickup fields (canonical: pickup_beat, pickup_vel) ---
+    pickup_beat = flat.get("pickup_beat")
+    pickup_vel = flat.get("pickup_vel")
+    beats_per = _beats_per_bar(ts)
 
-    # preset: none => neutral multipliers (no shaping), useful for standardizing YAML
-    if preset is not None and not vel_enabled:
-        issues.append(
-            ValidationIssue(
-                code="VEL_DISABLED",
-                message="vel_contour preset provided but vel_contour is disabled; contour will not apply.",
-                path=f"{vel_path_prefix}.enabled" if vel_nested else "style.vel_contour_enabled",
-            )
-        )
+    if pickup_beat is not None:
+        if not isinstance(pickup_beat, (int, float)):
+            issues.append(ValidationIssue(
+                "PICKUP_BEAT_TYPE",
+                f"pickup_beat must be a number, got {type(pickup_beat).__name__}.",
+                "style.pickup_beat",
+            ))
+        elif beats_per is not None and (pickup_beat < 0 or pickup_beat >= beats_per):
+            issues.append(ValidationIssue(
+                "PICKUP_BEAT_RANGE",
+                f"pickup_beat must be in [0, {beats_per}) for meter {ts}, got {pickup_beat}.",
+                "style.pickup_beat",
+            ))
+
+    if pickup_vel is not None:
+        if not isinstance(pickup_vel, int) or pickup_vel < 1 or pickup_vel > 127:
+            issues.append(ValidationIssue(
+                "PICKUP_VEL_RANGE",
+                f"pickup_vel must be int 1..127, got {pickup_vel!r}.",
+                "style.pickup_vel",
+            ))
+
+    # --- validate vel contour fields (canonical: vel_contour_enabled, vel_contour_soft/strong/pickup/ghost) ---
+    vel_enabled = flat.get("vel_contour_enabled", False)
+    multiplier_fields = ["vel_contour_soft", "vel_contour_strong", "vel_contour_pickup", "vel_contour_ghost"]
+
+    for mf in multiplier_fields:
+        val = flat.get(mf)
+        if val is not None:
+            if not isinstance(val, (int, float)) or val <= 0:
+                issues.append(ValidationIssue(
+                    "VEL_MULT_RANGE",
+                    f"{mf} must be a positive number, got {val!r}.",
+                    f"style.{mf}",
+                ))
+
+    # Warn if multipliers provided but vel_contour_enabled is false
+    has_multipliers = any(flat.get(mf) is not None for mf in multiplier_fields)
+    if has_multipliers and not vel_enabled:
+        issues.append(ValidationIssue(
+            "VEL_DISABLED",
+            "vel_contour multipliers provided but vel_contour_enabled=false; contour will not apply.",
+            "style.vel_contour_enabled",
+        ))
 
     return issues
 
