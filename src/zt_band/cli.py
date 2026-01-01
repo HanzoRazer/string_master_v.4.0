@@ -18,6 +18,7 @@ from .daw_export import export_for_daw
 from .expressive_swing import ExpressiveSpec
 from .realtime import RtSpec, rt_play_cycle, practice_lock_to_clave, list_midi_ports
 from .rt_bridge import RtRenderSpec, note_events_to_step_messages, gm_program_changes_at_start, truncate_events_to_cycle
+from .validate import validate_ztprog_file, format_issues_text, format_issues_json
 from shared.zone_tritone.pc import name_from_pc
 
 
@@ -601,6 +602,30 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Directory to search for .ztprog programs (default: programs).",
     )
     p_prac.set_defaults(func=cmd_practice)
+
+    # ---- validate subcommand ----
+    p_val = subparsers.add_parser(
+        "validate",
+        help="Validate a .ztprog file (style knobs, meter/steps consistency) without generating MIDI.",
+    )
+    p_val.add_argument(
+        "--file",
+        type=str,
+        required=True,
+        help="Path to a .ztprog JSON/YAML program file.",
+    )
+    p_val.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="Output format: text (default) or json.",
+    )
+    p_val.add_argument(
+        "--warn-only",
+        action="store_true",
+        help="Always exit 0 even when validation finds issues.",
+    )
+    p_val.set_defaults(func=cmd_validate)
 
     return parser
 
@@ -1274,6 +1299,22 @@ def cmd_practice(args: argparse.Namespace) -> int:
         return 1
 
     return 0
+
+
+def cmd_validate(args: argparse.Namespace) -> int:
+    """Validate a .ztprog file without generating MIDI."""
+    issues = validate_ztprog_file(args.file)
+
+    if args.format == "json":
+        out = format_issues_json(issues, args.file)
+    else:
+        out = format_issues_text(issues, args.file)
+
+    print(out)
+
+    if args.warn_only:
+        return 0
+    return 0 if not issues else 2
 
 
 def main(argv: list[str] | None = None) -> int:
