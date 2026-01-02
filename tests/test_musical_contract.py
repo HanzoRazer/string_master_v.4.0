@@ -11,14 +11,14 @@ from __future__ import annotations
 
 import pytest
 
-from src.zt_band.musical_contract import (
+from zt_band.musical_contract import (
     ContractViolation,
     MusicalContract,
     enforce_determinism_inputs,
     validate_note_events,
 )
-from src.zt_band.expressive_layer import apply_velocity_profile
-from src.zt_band.midi_out import NoteEvent
+from zt_band.expressive_layer import apply_velocity_profile
+from zt_band.midi_out import NoteEvent
 
 
 def test_enforce_determinism_requires_seed_for_probabilistic():

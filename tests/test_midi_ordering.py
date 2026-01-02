@@ -8,7 +8,7 @@ import tempfile
 import pytest
 import mido
 
-from src.zt_band.midi_out import NoteEvent, write_midi_file
+from zt_band.midi_out import NoteEvent, write_midi_file
 
 
 def _abs_ticks(track: mido.MidiTrack) -> List[Tuple[int, mido.Message]]:
