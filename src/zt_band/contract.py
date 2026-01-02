@@ -11,8 +11,8 @@ Mirrors the published invariants in CLI_DOCUMENTATION.md.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable, Optional, Sequence
 
 
 class ContractViolation(ValueError):
@@ -51,7 +51,7 @@ class ProgramSpec:
     time_sig_num: int = 4
     time_sig_den: int = 4
     ticks_per_beat: int = 480
-    seed: Optional[int] = None  # If set, any randomness MUST derive from this.
+    seed: int | None = None  # If set, any randomness MUST derive from this.
 
     def validate(self) -> None:
         if not (20 <= self.tempo_bpm <= 300):

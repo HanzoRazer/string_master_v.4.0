@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import Tuple, List, Sequence, Dict
+
+from collections.abc import Sequence
 
 PitchClass = int              # 0–11
-TritoneAxis = Tuple[int, int] # sorted pitch-class pair
+TritoneAxis = tuple[int, int] # sorted pitch-class pair
 RootSequence = Sequence[int]
-Matrix = List[List[float]]
+Matrix = list[list[float]]
 
 __all__ = [
     "PitchClass",

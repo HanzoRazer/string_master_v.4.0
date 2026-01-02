@@ -4,7 +4,6 @@ Chord parsing and pitch generation for the accompaniment engine.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 from shared.zone_tritone.pc import pc_from_name
 from shared.zone_tritone.types import PitchClass
@@ -14,7 +13,7 @@ from shared.zone_tritone.types import PitchClass
 class Chord:
     """
     Represents a parsed chord symbol.
-    
+
     Attributes:
         symbol: Original chord symbol string (e.g. "Cmaj7")
         root_pc: Root pitch class (0-11)
@@ -24,20 +23,20 @@ class Chord:
     symbol: str
     root_pc: PitchClass
     quality: str
-    extensions: List[str]
+    extensions: list[str]
 
 
 def parse_chord_symbol(symbol: str) -> Chord:
     """
     Parse a chord symbol into a Chord object.
-    
+
     Supports common jazz notation:
     - Major: Cmaj7, CΔ7, CM7
     - Minor: Cm7, C-7, Cmin7
     - Dominant: C7
     - Half-diminished: Cm7b5, Cø7
     - Diminished: Cdim, C°
-    
+
     Examples:
         >>> parse_chord_symbol("Cmaj7")
         Chord(symbol='Cmaj7', root_pc=0, quality='maj', extensions=[])
@@ -47,25 +46,25 @@ def parse_chord_symbol(symbol: str) -> Chord:
     s = symbol.strip()
     if not s:
         raise ValueError("Empty chord symbol")
-    
+
     # Extract root note (1 or 2 characters: C, C#, Bb, etc.)
     root_str = s[0]
     idx = 1
-    
+
     if idx < len(s) and s[idx] in ("b", "#"):
         root_str += s[idx]
         idx += 1
-    
+
     try:
         root_pc = pc_from_name(root_str)
     except (KeyError, ValueError) as e:
         raise ValueError(f"Invalid root note: {root_str}") from e
-    
+
     # Parse quality from remainder
     remainder = s[idx:]
     quality = "maj"  # default
-    extensions: List[str] = []
-    
+    extensions: list[str] = []
+
     # Detect quality
     if not remainder or remainder.startswith("maj") or remainder.startswith("Δ") or remainder.startswith("M"):
         quality = "maj"
@@ -91,11 +90,11 @@ def parse_chord_symbol(symbol: str) -> Chord:
     elif remainder and remainder[0].isdigit():
         # Dominant 7th (just a number like "7")
         quality = "dom"
-    
+
     # Parse extensions (simplified - just store as strings)
     if remainder:
         extensions.append(remainder)
-    
+
     return Chord(
         symbol=symbol,
         root_pc=root_pc,
@@ -104,23 +103,23 @@ def parse_chord_symbol(symbol: str) -> Chord:
     )
 
 
-def chord_pitches(chord: Chord, octave: int = 4) -> List[int]:
+def chord_pitches(chord: Chord, octave: int = 4) -> list[int]:
     """
     Generate MIDI note numbers for a chord voicing.
-    
+
     Parameters:
         chord: Parsed chord object
         octave: MIDI octave for the root (default: 4, middle C = 60)
-    
+
     Returns:
         List of MIDI note numbers for the chord voicing
-    
+
     Examples:
         >>> chord_pitches(parse_chord_symbol("Cmaj7"), octave=4)
         [60, 64, 67, 71]  # C E G B
     """
     root_midi = chord.root_pc + (octave * 12)
-    
+
     if chord.quality == "maj":
         # Major 7th: 1 3 5 7
         return [root_midi, root_midi + 4, root_midi + 7, root_midi + 11]
@@ -144,11 +143,11 @@ def chord_pitches(chord: Chord, octave: int = 4) -> List[int]:
 def chord_bass_pitch(chord: Chord, octave: int = 2) -> int:
     """
     Generate MIDI note number for the bass note (root).
-    
+
     Parameters:
         chord: Parsed chord object
         octave: MIDI octave for the bass (default: 2)
-    
+
     Returns:
         MIDI note number for the bass note
     """

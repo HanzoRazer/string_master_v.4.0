@@ -7,7 +7,6 @@ They add "air" to samba/bossa grooves without changing harmonic rhythm.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Set, Tuple
 
 from .midi_out import NoteEvent
 
@@ -24,20 +23,20 @@ class GhostSpec:
     ghost_channel:   MIDI channel for ghosts (None = use comp channel)
     """
     ghost_vel: int = 0
-    ghost_steps: Tuple[int, ...] = ()
+    ghost_steps: tuple[int, ...] = ()
     ghost_len_beats: float = 0.0625  # 1/16 note default
-    ghost_channel: Optional[int] = None
+    ghost_channel: int | None = None
 
 
 def add_ghost_hits(
-    events: List[NoteEvent],
-    chord_pitches: List[int],
+    events: list[NoteEvent],
+    chord_pitches: list[int],
     *,
     bar_start_beats: float,
     beats_per_bar: int,
     ghost_spec: GhostSpec,
     comp_channel: int = 0,
-) -> List[NoteEvent]:
+) -> list[NoteEvent]:
     """
     Add low-velocity staccato ghost chord taps at selected grid steps.
 
@@ -76,7 +75,7 @@ def add_ghost_hits(
     step_duration_beats = beats_per_bar / steps_per_bar
 
     # Find occupied steps (where real hits already exist)
-    occupied_steps: Set[int] = set()
+    occupied_steps: set[int] = set()
     for e in events:
         if e.channel == comp_channel:
             # Convert beat position to step

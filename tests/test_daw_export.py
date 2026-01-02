@@ -9,15 +9,16 @@ import pytest
 # daw_export requires mido
 pytest.importorskip("mido")
 
+import mido
+
 from zt_band.daw_export import (
     DawExportResult,
-    export_for_daw,
-    _now_stamp,
     _has_program_change_at_start,
     _inject_gm_program_changes,
+    _now_stamp,
     _write_import_guide,
+    export_for_daw,
 )
-import mido
 
 
 class TestNowStamp:

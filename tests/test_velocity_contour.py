@@ -1,10 +1,13 @@
 """
 Tests for velocity contour (Brazilian "breathing" feel).
 """
-import pytest
 
-from zt_band.velocity_contour import VelContour, apply_velocity_contour_4_4, apply_velocity_contour_2_4
 from zt_band.midi_out import NoteEvent
+from zt_band.velocity_contour import (
+    VelContour,
+    apply_velocity_contour_2_4,
+    apply_velocity_contour_4_4,
+)
 
 
 def make_note(start: float, velocity: int, channel: int = 0) -> NoteEvent:

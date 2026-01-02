@@ -27,20 +27,20 @@ def make_bar_cc_messages(
 ):
     """
     Create MIDI CC messages for bar boundary telemetry.
-    
+
     Args:
         channel: MIDI channel (0-15)
         cc_countdown: CC number for bars-remaining countdown
         cc_index: CC number for bar index count-up
         bars_remaining: Bars left in current item (countdown)
         bar_index: Current bar number (count-up, 1-based)
-    
+
     Returns:
         List of two mido.Message objects (countdown CC, index CC)
     """
     if not MIDO_AVAILABLE:
         return []
-    
+
     return [
         mido.Message(
             "control_change",

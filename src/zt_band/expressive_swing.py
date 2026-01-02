@@ -5,9 +5,9 @@ Safe-by-design: never changes chord logic, fully bypassable.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Iterable, List, Optional
 import random
+from collections.abc import Iterable
+from dataclasses import dataclass
 
 from .midi_out import NoteEvent
 
@@ -16,10 +16,10 @@ from .midi_out import NoteEvent
 class ExpressiveSpec:
     """
     Expressive layer specification.
-    
+
     All parameters default to OFF (0.0 or 0) so the core remains unchanged
     unless explicitly requested.
-    
+
     Attributes:
         swing: 0..1, applied to 8th offbeats (0 = straight, 1 = max swing)
         humanize_ms: +/- ms jitter for timing (0 = perfect timing)
@@ -29,7 +29,7 @@ class ExpressiveSpec:
     swing: float = 0.0
     humanize_ms: float = 0.0
     humanize_vel: int = 0
-    seed: Optional[int] = None
+    seed: int | None = None
 
 
 def apply_expressive(
@@ -37,22 +37,22 @@ def apply_expressive(
     *,
     spec: ExpressiveSpec,
     tempo_bpm: int,
-) -> List[NoteEvent]:
+) -> list[NoteEvent]:
     """
     Apply swing and humanize to note events.
-    
+
     This is a pure post-processing layer that does NOT change:
     - Chord logic
     - Note counts
     - MIDI structure
-    
+
     Can be bypassed by setting all spec values to 0.
-    
+
     Parameters:
         events: Input note events (from generator)
         spec: Expressive specification
         tempo_bpm: Tempo for beats->seconds conversion
-    
+
     Returns:
         New list of events with expressive adjustments applied.
     """
@@ -66,7 +66,7 @@ def apply_expressive(
     sec_per_beat = 60.0 / max(1, tempo_bpm)
     jitter_beats = (spec.humanize_ms / 1000.0) / sec_per_beat if spec.humanize_ms > 0 else 0.0
 
-    out: List[NoteEvent] = []
+    out: list[NoteEvent] = []
     for ev in events:
         t = ev.start_beats
 

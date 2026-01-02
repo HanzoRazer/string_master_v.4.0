@@ -1,7 +1,10 @@
 from __future__ import annotations
-from typing import Sequence
-from .types import PitchClass, RootSequence
+
+from collections.abc import Sequence
+
 from .pc import pc_from_name
+from .types import PitchClass, RootSequence
+
 
 # Very simple root extraction: read leading letter + optional #/b
 # This is intentionally conservative and can be improved later.

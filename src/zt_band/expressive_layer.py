@@ -6,8 +6,8 @@ following the stability-first principle: never modify timing, only dynamics.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable, List
 
 
 @dataclass(frozen=True)
@@ -25,11 +25,11 @@ def _clamp(v: int, mn: int, mx: int) -> int:
     return max(mn, min(mx, v))
 
 
-def apply_velocity_profile(events: Iterable[object], profile: VelocityProfile = VelocityProfile()) -> List[object]:
-    out: List[object] = []
+def apply_velocity_profile(events: Iterable[object], profile: VelocityProfile = VelocityProfile()) -> list[object]:
+    out: list[object] = []
     for e in events:
-        start = float(getattr(e, "start_beats"))
-        vel = int(getattr(e, "velocity"))
+        start = float(e.start_beats)
+        vel = int(e.velocity)
 
         beat_in_bar = start % 4.0
         tick = beat_in_bar - int(beat_in_bar)

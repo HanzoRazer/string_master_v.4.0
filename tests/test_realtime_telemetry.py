@@ -4,9 +4,9 @@ Tests for realtime_telemetry.py — Bar boundary CC emission.
 import pytest
 
 from zt_band.realtime_telemetry import (
+    MIDO_AVAILABLE,
     _clamp_cc_value,
     make_bar_cc_messages,
-    MIDO_AVAILABLE,
 )
 
 

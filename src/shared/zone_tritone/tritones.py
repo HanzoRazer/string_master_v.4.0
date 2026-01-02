@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 from .types import PitchClass, TritoneAxis
-from .zones import is_same_zone, interval
+from .zones import interval, is_same_zone
 
 
 def tritone_partner(pc: PitchClass) -> PitchClass:

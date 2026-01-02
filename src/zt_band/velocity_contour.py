@@ -14,7 +14,6 @@ The contour applies:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Set, Tuple, Optional
 
 from .midi_out import NoteEvent
 
@@ -134,13 +133,13 @@ def _clamp_vel(v: int) -> int:
 
 
 def apply_velocity_contour_4_4(
-    events: List[NoteEvent],
+    events: list[NoteEvent],
     *,
     bar_steps: int,
     contour: VelContour,
-    pickup_steps: Optional[Set[int]] = None,
-    ghost_steps: Optional[Set[int]] = None,
-) -> List[NoteEvent]:
+    pickup_steps: set[int] | None = None,
+    ghost_steps: set[int] | None = None,
+) -> list[NoteEvent]:
     """
     Apply per-bar velocity contour for 4/4 with 16-step grid.
 
@@ -179,7 +178,7 @@ def apply_velocity_contour_4_4(
     soft_steps = {0, 8}      # beat 1, beat 3
     strong_steps = {6, 14}   # &2, &4
 
-    out: List[NoteEvent] = []
+    out: list[NoteEvent] = []
 
     for e in events:
         # Calculate step within bar
@@ -217,13 +216,13 @@ def apply_velocity_contour_4_4(
 
 
 def apply_velocity_contour_2_4(
-    events: List[NoteEvent],
+    events: list[NoteEvent],
     *,
     bar_steps: int,
     contour: VelContour,
-    pickup_steps: Optional[Set[int]] = None,
-    ghost_steps: Optional[Set[int]] = None,
-) -> List[NoteEvent]:
+    pickup_steps: set[int] | None = None,
+    ghost_steps: set[int] | None = None,
+) -> list[NoteEvent]:
     """
     Apply per-bar velocity contour for 2/4 with 8-step grid.
 
@@ -263,7 +262,7 @@ def apply_velocity_contour_2_4(
     soft_steps = {0}         # beat 1
     strong_steps = {6}       # &2
 
-    out: List[NoteEvent] = []
+    out: list[NoteEvent] = []
 
     for e in events:
         bar_beat = e.start_beats % 2  # position within 2/4 bar
@@ -297,14 +296,14 @@ def apply_velocity_contour_2_4(
 
 
 def apply_velocity_contour(
-    events: List[NoteEvent],
+    events: list[NoteEvent],
     *,
     meter: str,
     bar_steps: int,
     contour: VelContour,
-    pickup_steps: Optional[Set[int]] = None,
-    ghost_steps: Optional[Set[int]] = None,
-) -> List[NoteEvent]:
+    pickup_steps: set[int] | None = None,
+    ghost_steps: set[int] | None = None,
+) -> list[NoteEvent]:
     """
     Unified dispatcher for velocity contour. Strict:
       - meter "4/4" requires bar_steps == 16

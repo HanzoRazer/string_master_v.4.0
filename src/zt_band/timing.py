@@ -11,7 +11,7 @@ Single source of truth for MIDI generation:
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Dict, Iterable, List, Tuple
+from collections.abc import Iterable
 
 from mido import Message, MetaMessage, MidiFile, MidiTrack, bpm2tempo
 
@@ -22,7 +22,7 @@ def build_midi_type1(
     *,
     program: ProgramSpec,
     events: Iterable[NoteEvent],
-    track_order: List[str] | None = None,
+    track_order: list[str] | None = None,
     contract: MidiContract = MidiContract(),
 ) -> MidiFile:
     """
@@ -44,7 +44,7 @@ def build_midi_type1(
     mid.tracks.append(meta)
 
     # --- Group events by track name
-    by_track: Dict[str, List[NoteEvent]] = defaultdict(list)
+    by_track: dict[str, list[NoteEvent]] = defaultdict(list)
     for e in ev:
         by_track[e.track].append(e)
 
@@ -55,7 +55,7 @@ def build_midi_type1(
             tr.append(MetaMessage("track_name", name=name, time=0))
 
         # Convert NoteEvents to on/off messages, then delta-time encode
-        msgs: List[Tuple[int, Message]] = []
+        msgs: list[tuple[int, Message]] = []
         for e in sorted(by_track.get(name, []), key=lambda x: (x.start_tick, x.note, x.channel)):
             on = Message("note_on", channel=e.channel, note=e.note, velocity=e.velocity, time=0)
             off = Message("note_off", channel=e.channel, note=e.note, velocity=0, time=0)
@@ -70,7 +70,7 @@ def build_midi_type1(
     return mid
 
 
-def _append_delta_encoded(track: MidiTrack, timed_msgs: List[Tuple[int, Message]]) -> None:
+def _append_delta_encoded(track: MidiTrack, timed_msgs: list[tuple[int, Message]]) -> None:
     timed_msgs.sort(key=lambda x: (x[0], 0 if x[1].type == "note_off" else 1))
     last_tick = 0
     for tick, msg in timed_msgs:

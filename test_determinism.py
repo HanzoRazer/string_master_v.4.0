@@ -1,5 +1,6 @@
 """Quick test to verify deterministic behavior with probabilistic mode."""
 import filecmp
+
 from src.zt_band.engine import generate_accompaniment
 
 # Generate two files with same parameters and seed

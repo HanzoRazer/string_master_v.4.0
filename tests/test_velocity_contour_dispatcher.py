@@ -1,10 +1,9 @@
 """
 Tests for velocity contour dispatcher (unified entry point).
 """
-import pytest
 
-from zt_band.velocity_contour import VelContour, apply_velocity_contour
 from zt_band.midi_out import NoteEvent
+from zt_band.velocity_contour import VelContour, apply_velocity_contour
 
 
 def make_note(start: float, velocity: int, channel: int = 0) -> NoteEvent:

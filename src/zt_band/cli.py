@@ -1,26 +1,32 @@
 from __future__ import annotations
 
 import argparse
-import sys
 import json
-import yaml
+import sys
 from pathlib import Path
-from typing import List, Literal
+from typing import Literal
 
-from .engine import generate_accompaniment
-from .gravity_bridge import annotate_progression, compute_transitions
-from .patterns import STYLE_REGISTRY
-from .config import load_program_config
-from .programs import discover_programs
-from .playlist import load_playlist, render_playlist_to_midi
-from .exercises import load_exercise_config, run_exercise
-from .daw_export import export_for_daw
-from .expressive_swing import ExpressiveSpec
-from .realtime import RtSpec, rt_play_cycle, practice_lock_to_clave, list_midi_ports
-from .rt_bridge import RtRenderSpec, note_events_to_step_messages, gm_program_changes_at_start, truncate_events_to_cycle
-from .validate import validate_ztprog_file, format_issues_text, format_issues_json
+import yaml
+
 from shared.zone_tritone.pc import name_from_pc
 
+from .config import load_program_config
+from .daw_export import export_for_daw
+from .engine import generate_accompaniment
+from .exercises import load_exercise_config, run_exercise
+from .expressive_swing import ExpressiveSpec
+from .gravity_bridge import annotate_progression, compute_transitions
+from .patterns import STYLE_REGISTRY
+from .playlist import load_playlist, render_playlist_to_midi
+from .programs import discover_programs
+from .realtime import RtSpec, list_midi_ports, practice_lock_to_clave, rt_play_cycle
+from .rt_bridge import (
+    RtRenderSpec,
+    gm_program_changes_at_start,
+    note_events_to_step_messages,
+    truncate_events_to_cycle,
+)
+from .validate import format_issues_json, format_issues_text, validate_ztprog_file
 
 OutputFormat = Literal["text", "markdown", "json"]
 
@@ -127,7 +133,7 @@ def _infer_strict_from_style_comp(comp: str | None) -> bool:
     return ("salsa" in s) or ("clave" in s)
 
 
-def _parse_chord_string(chord_str: str) -> List[str]:
+def _parse_chord_string(chord_str: str) -> list[str]:
     return [tok for tok in chord_str.strip().split() if tok]
 
 
@@ -664,7 +670,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _load_chords_from_args(args: argparse.Namespace) -> List[str]:
+def _load_chords_from_args(args: argparse.Namespace) -> list[str]:
     if not args.chords and not args.file:
         print("error: either --chords or --file must be provided", file=sys.stderr)
         sys.exit(1)
@@ -699,7 +705,7 @@ def cmd_create(args: argparse.Namespace) -> int:
         # Handle style as string OR dict with overrides
         style_name: str
         style_overrides: dict | None = None
-        
+
         if isinstance(cfg.style, dict):
             # Extract base style name from dict
             # Support 'comp', 'name', or 'style' keys for base style
@@ -783,7 +789,7 @@ def cmd_create(args: argparse.Namespace) -> int:
 
 
 def _format_annotations_text(annotated, transitions) -> str:
-    lines: List[str] = []
+    lines: list[str] = []
     lines.append("Chord annotations:")
     lines.append("idx | chord    | root | pc | zone     | tritone axis | gravity-> | on_chain")
     lines.append("----+----------+------+----+----------+--------------+-----------+---------")
@@ -810,7 +816,7 @@ def _format_annotations_text(annotated, transitions) -> str:
             to_name = name_from_pc(tr.to_root)
             zone_pair = f"{tr.from_zone} -> {tr.to_zone}"
 
-            tags: List[str] = []
+            tags: list[str] = []
             if tr.is_desc_fourth:
                 tags.append("↓4")
             if tr.is_asc_fourth:
@@ -830,7 +836,7 @@ def _format_annotations_text(annotated, transitions) -> str:
 
 
 def _format_annotations_markdown(annotated, transitions) -> str:
-    lines: List[str] = []
+    lines: list[str] = []
 
     # Chord table
     lines.append("### Chord Annotations")
@@ -862,7 +868,7 @@ def _format_annotations_markdown(annotated, transitions) -> str:
             to_name = name_from_pc(tr.to_root)
             zone_pair = f"{tr.from_zone} -> {tr.to_zone}"
 
-            tags: List[str] = []
+            tags: list[str] = []
             if tr.is_desc_fourth:
                 tags.append("↓4")
             if tr.is_asc_fourth:
@@ -1137,12 +1143,12 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
     # Handle --playlist mode (live rotation)
     if getattr(args, "playlist", None):
         from .rt_playlist import rt_play_playlist
-        
+
         # Detect explicit CLI bpm
         explicit = getattr(args, "_explicit_args", set())
         bpm_explicit = ("--bpm" in explicit) or any(str(x).startswith("--bpm=") for x in explicit)
         bpm_override = args.bpm if bpm_explicit else None
-        
+
         try:
             rt_play_playlist(
                 playlist_file=args.playlist,
@@ -1267,7 +1273,7 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         events.extend(note_events_to_step_messages(bass_events, spec=rts, steps_per_cycle=steps_per_cycle))
 
         src = f"file={args.file}" if args.file else "chords=inline"
-        print(f"RT Play: live mode")
+        print("RT Play: live mode")
         print(f"  source: {src}")
         print(f"  chords: {' '.join(chord_symbols)}")
         print(f"  style:  {live_style}")
@@ -1428,7 +1434,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     # Track explicit flags for precedence decisions (belt & suspenders).
     # This is intentionally simple: only used for a few precedence checks.
-    args._explicit_args = set(a for a in argv if a.startswith("--"))  # type: ignore[attr-defined]
+    args._explicit_args = {a for a in argv if a.startswith("--")}  # type: ignore[attr-defined]
     return args.func(args)  # type: ignore[arg-type]
 
 

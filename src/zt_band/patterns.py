@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
+from dataclasses import dataclass
 
 
 @dataclass
@@ -46,14 +45,14 @@ class StylePattern:
     """
     name: str
     description: str
-    comp_hits: List[CompEventSpec]
-    bass_pattern: List[Tuple[float, float, int]]
+    comp_hits: list[CompEventSpec]
+    bass_pattern: list[tuple[float, float, int]]
     # Ghost hit params (OFF by default)
     ghost_vel: int = 0
-    ghost_steps: Tuple[int, ...] = ()
+    ghost_steps: tuple[int, ...] = ()
     ghost_len_beats: float = 0.0625
     # Pickup params (OFF by default)
-    pickup_beat: Optional[float] = None
+    pickup_beat: float | None = None
     pickup_vel: int = 70
     # Velocity contour params (OFF by default)
     vel_contour_enabled: bool = False

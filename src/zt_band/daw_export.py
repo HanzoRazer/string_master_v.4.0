@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Sequence
 
-from mido import MidiFile, MidiTrack, Message, MetaMessage
+from mido import Message, MetaMessage, MidiFile, MidiTrack
 
 
 @dataclass(frozen=True)

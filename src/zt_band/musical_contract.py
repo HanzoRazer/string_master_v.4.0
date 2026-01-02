@@ -6,8 +6,8 @@ BEFORE MIDI writing, ensuring reproducible and DAW-compatible output.
 """
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable, Optional
 
 
 class ContractViolation(ValueError):
@@ -37,11 +37,11 @@ def validate_note_events(
       channel: int 0..15
     """
     for e in events:
-        start = float(getattr(e, "start_beats"))
-        dur = float(getattr(e, "duration_beats"))
-        note = int(getattr(e, "midi_note"))
-        vel = int(getattr(e, "velocity"))
-        ch = int(getattr(e, "channel"))
+        start = float(e.start_beats)
+        dur = float(e.duration_beats)
+        note = int(e.midi_note)
+        vel = int(e.velocity)
+        ch = int(e.channel)
 
         if contract.forbid_negative_start and start < 0:
             raise ContractViolation(f"start_beats < 0: {start}")
@@ -65,7 +65,7 @@ def validate_note_events(
 def enforce_determinism_inputs(
     *,
     tritone_mode: str,
-    tritone_seed: Optional[int],
+    tritone_seed: int | None,
     contract: MusicalContract = MusicalContract(),
 ) -> None:
     if (

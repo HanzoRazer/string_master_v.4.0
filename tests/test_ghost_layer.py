@@ -1,16 +1,15 @@
 """
 Tests for ghost_layer.py — ghost hit generation for Brazilian feel.
 """
-import pytest
 from zt_band.ghost_layer import (
-    GhostSpec,
-    add_ghost_hits,
-    GHOST_STEPS_E_ALL,
-    GHOST_STEPS_A_ALL,
-    GHOST_STEPS_E_OFFBEAT,
-    GHOST_STEPS_TAMBORIM,
     GHOST_SPEC_BRAZIL,
     GHOST_SPEC_OFF,
+    GHOST_STEPS_A_ALL,
+    GHOST_STEPS_E_ALL,
+    GHOST_STEPS_E_OFFBEAT,
+    GHOST_STEPS_TAMBORIM,
+    GhostSpec,
+    add_ghost_hits,
 )
 from zt_band.midi_out import NoteEvent
 

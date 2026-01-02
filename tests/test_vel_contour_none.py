@@ -4,8 +4,7 @@ Tests for vel_contour preset: 'none' (explicit no-op).
 The 'none' preset allows YAML standardization across programs
 without changing any velocities.
 """
-import pytest
-from zt_band.velocity_contour import resolve_vel_contour, VelContour
+from zt_band.velocity_contour import resolve_vel_contour
 
 
 def test_vel_contour_none_preset_is_noop():

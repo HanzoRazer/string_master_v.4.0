@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 import random
-from typing import Sequence, Optional
-from .types import PitchClass, RootSequence, Matrix
+
+from .types import Matrix, PitchClass, RootSequence
 
 
 def build_transition_counts(roots: RootSequence) -> list[list[int]]:
@@ -55,7 +56,7 @@ def normalize_transition_matrix(
 def sample_next_root(
     current: PitchClass,
     matrix: Matrix,
-    rng: Optional[random.Random] = None,
+    rng: random.Random | None = None,
 ) -> PitchClass:
     """
     Sample the next dominant root from a Markov transition matrix.

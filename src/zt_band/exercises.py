@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Literal, Any, Dict
+from typing import Any, Literal
 
-import json
 import yaml  # type: ignore[import-not-found]
 
-from .config import load_program_config, ProgramConfig
+from .config import ProgramConfig, load_program_config
 from .engine import generate_accompaniment
-
 
 TaskMode = Literal[
     "play_roots",        # student plays roots
@@ -35,7 +34,7 @@ class TaskSpec:
     """
     mode: TaskMode
     instructions: str
-    prompts: List[str]
+    prompts: list[str]
 
 
 @dataclass
@@ -51,7 +50,7 @@ class InteractionSpec:
     - scoring & progress tracking
     """
     mode: InteractionMode
-    questions: List[str]
+    questions: list[str]
 
 
 @dataclass
@@ -90,7 +89,7 @@ class ExerciseConfig:
 # -----------------
 
 
-def _ensure_dict(obj: Any, ctx: str) -> Dict[str, Any]:
+def _ensure_dict(obj: Any, ctx: str) -> dict[str, Any]:
     if not isinstance(obj, dict):
         raise TypeError(f"{ctx} must be a mapping/object, got {type(obj)!r}")
     return obj
@@ -105,7 +104,7 @@ def _parse_task(raw: Any) -> TaskSpec:
     if not isinstance(prompts_raw, list):
         raise TypeError("exercise.task.prompts must be a list of strings.")
 
-    prompts: List[str] = []
+    prompts: list[str] = []
     for item in prompts_raw:
         if isinstance(item, str) and item.strip():
             prompts.append(item.strip())
@@ -138,7 +137,7 @@ def _parse_interaction(raw: Any) -> InteractionSpec:
     if not isinstance(questions_raw, list):
         raise TypeError("exercise.interaction.questions must be a list of strings.")
 
-    questions: List[str] = []
+    questions: list[str] = []
     for q in questions_raw:
         if isinstance(q, str) and q.strip():
             questions.append(q.strip())
@@ -222,7 +221,7 @@ def load_exercise_config(path: str | Path) -> ExerciseConfig:
 # -----------------
 
 
-def run_exercise(ex: ExerciseConfig, outfile: Optional[str] = None) -> str:
+def run_exercise(ex: ExerciseConfig, outfile: str | None = None) -> str:
     """
     Run an exercise by:
 

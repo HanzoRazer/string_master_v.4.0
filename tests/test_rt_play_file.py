@@ -10,7 +10,6 @@ from pathlib import Path
 import pytest
 import yaml
 
-
 # ---------------------------------------------------------------------
 # Helper to create temp .ztprog files for testing
 # ---------------------------------------------------------------------
@@ -98,7 +97,7 @@ def test_real_ztprog_autumn_leaves():
     prog_path = Path(__file__).parent.parent / "programs" / "autumn_leaves.ztprog"
     if not prog_path.exists():
         pytest.skip("programs/autumn_leaves.ztprog not found")
-    
+
     data = yaml.safe_load(prog_path.read_text(encoding="utf-8"))
     assert isinstance(data, dict)
     assert "chords" in data
@@ -111,7 +110,7 @@ def test_real_ztprog_salsa_minor_dm():
     prog_path = Path(__file__).parent.parent / "programs" / "salsa_minor_Dm.ztprog"
     if not prog_path.exists():
         pytest.skip("programs/salsa_minor_Dm.ztprog not found")
-    
+
     data = yaml.safe_load(prog_path.read_text(encoding="utf-8"))
     assert isinstance(data, dict)
     assert "chords" in data
@@ -129,10 +128,10 @@ def test_real_ztprog_salsa_minor_dm():
 def test_rt_play_help_shows_file_flag():
     """rt-play --help should show --file argument."""
     from zt_band.cli import build_arg_parser
-    
+
     parser = build_arg_parser()
-    help_text = parser.format_help()
-    
+    parser.format_help()
+
     # We can't easily get subcommand help, but we can test subparser exists
     # and has the file argument by inspecting the parser structure
     # For now, just verify the parser builds without error
@@ -142,9 +141,9 @@ def test_rt_play_help_shows_file_flag():
 def test_rt_play_file_arg_exists():
     """rt-play subparser should accept --file argument."""
     from zt_band.cli import build_arg_parser
-    
+
     parser = build_arg_parser()
-    
+
     # Parse with --file argument (note: will fail at runtime since midi-out required)
     # but parsing should succeed
     args = parser.parse_args([
@@ -152,7 +151,7 @@ def test_rt_play_file_arg_exists():
         "--midi-out", "TestPort",
         "--file", "test.ztprog",
     ])
-    
+
     assert args.file == "test.ztprog"
     assert args.midi_out == "TestPort"
 
@@ -160,7 +159,7 @@ def test_rt_play_file_arg_exists():
 def test_rt_play_chords_and_file_both_accepted():
     """Parser should accept both --chords and --file (file wins in handler)."""
     from zt_band.cli import build_arg_parser
-    
+
     parser = build_arg_parser()
     args = parser.parse_args([
         "rt-play",
@@ -168,7 +167,7 @@ def test_rt_play_chords_and_file_both_accepted():
         "--file", "test.ztprog",
         "--chords", "Dm7 G7",
     ])
-    
+
     assert args.file == "test.ztprog"
     assert args.chords == "Dm7 G7"
 
@@ -189,12 +188,12 @@ def test_tempo_from_file_when_bpm_default():
         # Simulating the logic: if args.bpm == 120.0 (default), use file tempo
         args_bpm = 120.0  # default
         file_tempo = data.get("tempo", 120)
-        
+
         if args_bpm == 120.0 and isinstance(file_tempo, (int, float)):
             resolved_bpm = float(file_tempo)
         else:
             resolved_bpm = args_bpm
-        
+
         assert resolved_bpm == 85.0
     finally:
         prog.unlink()
@@ -211,13 +210,13 @@ def test_tempo_from_cli_wins_over_file():
         # Simulating: user passed --bpm 140
         args_bpm = 140.0
         file_tempo = data.get("tempo", 120)
-        
+
         # Since args_bpm != 120.0, CLI wins
         if args_bpm == 120.0 and isinstance(file_tempo, (int, float)):
             resolved_bpm = float(file_tempo)
         else:
             resolved_bpm = args_bpm
-        
+
         assert resolved_bpm == 140.0
     finally:
         prog.unlink()
@@ -237,14 +236,14 @@ def test_style_from_nested_dict():
     try:
         data = yaml.safe_load(prog.read_text(encoding="utf-8"))
         style_obj = data.get("style", {})
-        
+
         if isinstance(style_obj, dict) and isinstance(style_obj.get("comp"), str):
             resolved_style = style_obj["comp"]
         elif isinstance(style_obj, str):
             resolved_style = style_obj
         else:
             resolved_style = "salsa_clave_2_3"  # default
-        
+
         assert resolved_style == "jazz_minor"
     finally:
         prog.unlink()
@@ -259,14 +258,14 @@ def test_style_from_string():
     try:
         data = yaml.safe_load(prog.read_text(encoding="utf-8"))
         style_obj = data.get("style", {})
-        
+
         if isinstance(style_obj, dict) and isinstance(style_obj.get("comp"), str):
             resolved_style = style_obj["comp"]
         elif isinstance(style_obj, str):
             resolved_style = style_obj
         else:
             resolved_style = "salsa_clave_2_3"
-        
+
         assert resolved_style == "ballad_basic"
     finally:
         prog.unlink()

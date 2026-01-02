@@ -5,17 +5,17 @@ Run this script to see the Zone-Tritone System in action.
 """
 
 from zone_tritone import (
-    pc_from_name,
-    name_from_pc,
-    zone,
-    zone_name,
-    is_zone_cross,
+    __version__,
     all_tritone_axes,
+    build_transition_counts,
     dominant_roots_from_tritone,
     gravity_chain,
-    build_transition_counts,
+    is_zone_cross,
+    name_from_pc,
     normalize_transition_matrix,
-    __version__,
+    pc_from_name,
+    zone,
+    zone_name,
 )
 
 
@@ -51,9 +51,9 @@ def main():
     print("\n4️⃣  DOMINANT FUNCTION: B–F Tritone\n")
     b_f_axis = (11, 5)  # B, F
     roots = dominant_roots_from_tritone(b_f_axis)
-    print(f"   Tritone: B–F")
+    print("   Tritone: B–F")
     print(f"   Dominants: {' and '.join(name_from_pc(r) + '7' for r in roots)}")
-    print(f"   → Classic tritone substitution pair!")
+    print("   → Classic tritone substitution pair!")
 
     # 5. Gravity chain
     print("\n5️⃣  GRAVITY CHAIN: Descending in Fourths\n")

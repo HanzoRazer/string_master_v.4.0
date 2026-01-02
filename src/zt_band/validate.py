@@ -5,11 +5,10 @@ without generating MIDI.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
-import json
+from typing import Any
 
 try:
     import yaml  # pyyaml
@@ -25,7 +24,7 @@ class ValidationIssue:
     path: str  # dotted path into config, e.g. "style.vel_contour.preset"
 
 
-def _load_ztprog_raw(path: Path) -> Dict[str, Any]:
+def _load_ztprog_raw(path: Path) -> dict[str, Any]:
     """Load a .ztprog file as raw dict (JSON or YAML)."""
     if not path.exists():
         raise FileNotFoundError(str(path))
@@ -49,7 +48,7 @@ def _load_ztprog_raw(path: Path) -> Dict[str, Any]:
     return obj
 
 
-def _bar_steps_for_meter(time_signature: str) -> Optional[int]:
+def _bar_steps_for_meter(time_signature: str) -> int | None:
     """Contract: 4/4 -> 16-step grid (16ths), 2/4 -> 8-step grid (16ths inside 2 beats)."""
     ts = (time_signature or "").strip()
     if ts == "4/4":
@@ -59,7 +58,7 @@ def _bar_steps_for_meter(time_signature: str) -> Optional[int]:
     return None
 
 
-def _as_int_list(x: Any) -> Optional[List[int]]:
+def _as_int_list(x: Any) -> list[int] | None:
     """Convert to list of ints if valid, else None."""
     if x is None:
         return None
@@ -68,14 +67,14 @@ def _as_int_list(x: Any) -> Optional[List[int]]:
     return None
 
 
-def validate_ztprog_file(path: str | Path) -> List[ValidationIssue]:
+def validate_ztprog_file(path: str | Path) -> list[ValidationIssue]:
     """
     Validate a .ztprog file for style knobs, meter/steps consistency, preset names.
 
     Returns a list of ValidationIssue (empty = valid).
     """
     p = Path(path)
-    issues: List[ValidationIssue] = []
+    issues: list[ValidationIssue] = []
 
     try:
         cfg = _load_ztprog_raw(p)
@@ -130,7 +129,7 @@ def validate_ztprog_file(path: str | Path) -> List[ValidationIssue]:
     return issues
 
 
-def _beats_per_bar(ts: str) -> Optional[int]:
+def _beats_per_bar(ts: str) -> int | None:
     """Return beats per bar for supported meters."""
     ts = (ts or "").strip()
     if ts == "4/4":
@@ -140,7 +139,7 @@ def _beats_per_bar(ts: str) -> Optional[int]:
     return None
 
 
-def _normalize_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[int]) -> tuple[Dict[str, Any], List[ValidationIssue]]:
+def _normalize_style_knobs(style: dict[str, Any], ts: str, bar_steps: int | None) -> tuple[dict[str, Any], list[ValidationIssue]]:
     """
     Normalize nested YAML sugar into canonical flat StylePattern fields.
 
@@ -151,8 +150,8 @@ def _normalize_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[i
     Returns (flat, issues) where flat is a dict of StylePattern field values.
     Flat fields always take precedence over nested sugar.
     """
-    issues: List[ValidationIssue] = []
-    flat: Dict[str, Any] = {}
+    issues: list[ValidationIssue] = []
+    flat: dict[str, Any] = {}
 
     # --- ghost hits (nested sugar -> flat) ---
     ghost_nested = style.get("ghost_hits") or style.get("ghost")
@@ -236,14 +235,14 @@ def _normalize_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[i
     return flat, issues
 
 
-def _validate_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[int]) -> List[ValidationIssue]:
+def _validate_style_knobs(style: dict[str, Any], ts: str, bar_steps: int | None) -> list[ValidationIssue]:
     """
     Validate style knobs against canonical StylePattern contract.
 
     1. Normalizes nested sugar → flat canonical fields
     2. Validates flat fields strictly (types, ranges)
     """
-    issues: List[ValidationIssue] = []
+    issues: list[ValidationIssue] = []
 
     # --- meter / bar_steps consistency (existing logic) ---
     style_meter = style.get("meter")
@@ -376,7 +375,7 @@ def _validate_style_knobs(style: Dict[str, Any], ts: str, bar_steps: Optional[in
     return issues
 
 
-def format_issues_text(issues: List[ValidationIssue], file: str) -> str:
+def format_issues_text(issues: list[ValidationIssue], file: str) -> str:
     """Format validation issues as human-readable text."""
     if not issues:
         return f"OK: {file}"
@@ -387,7 +386,7 @@ def format_issues_text(issues: List[ValidationIssue], file: str) -> str:
     return "\n".join(lines)
 
 
-def format_issues_json(issues: List[ValidationIssue], file: str) -> str:
+def format_issues_json(issues: list[ValidationIssue], file: str) -> str:
     """Format validation issues as JSON (for CI/machine consumption)."""
     payload = {
         "file": file,

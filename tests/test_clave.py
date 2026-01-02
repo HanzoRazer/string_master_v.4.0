@@ -1,12 +1,11 @@
 """
 Tests for clave grid and quantization utilities.
 """
-import pytest
 from zt_band.clave import (
     ClaveGrid,
     clave_hit_steps,
-    quantize_step,
     is_allowed_on_clave,
+    quantize_step,
 )
 
 

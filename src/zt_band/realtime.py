@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass
-from typing import List, Optional, Literal, Tuple
+from typing import Literal
 
 try:
     import mido
@@ -17,13 +17,13 @@ try:
 except ImportError:
     MIDO_AVAILABLE = False
 
-from .clave import ClaveGrid, clave_hit_steps, quantize_step, is_allowed_on_clave
+from .clave import ClaveGrid, clave_hit_steps, is_allowed_on_clave, quantize_step
 
 
 @dataclass(frozen=True)
 class RtSpec:
     midi_out: str
-    midi_in: Optional[str] = None
+    midi_in: str | None = None
 
     bpm: float = 120.0
     grid: Literal[8, 16] = 16
@@ -80,7 +80,7 @@ def _send_at(outport, msg, when: float) -> None:
     outport.send(msg)
 
 
-def _make_click_msgs(grid: ClaveGrid, spec: RtSpec) -> List[Tuple[int, 'mido.Message']]:
+def _make_click_msgs(grid: ClaveGrid, spec: RtSpec) -> list[tuple[int, mido.Message]]:
     """
     Returns list of (step_i, msg) for click hits in a 2-bar cycle.
     Click follows clave hit steps (so you hear the grid).
@@ -99,14 +99,14 @@ def _make_click_msgs(grid: ClaveGrid, spec: RtSpec) -> List[Tuple[int, 'mido.Mes
 
 def rt_play_cycle(
     *,
-    events: List[Tuple[int, 'mido.Message']],
+    events: list[tuple[int, mido.Message]],
     spec: RtSpec,
     max_cycles: int | None = None,
 ) -> None:
     """
     Real-time scheduler: repeatedly plays a 2-bar cycle of step-indexed MIDI messages.
     events: list of (step_i, Message) in cycle coordinates (0..steps_per_cycle-1)
-    
+
     If max_cycles is set, exits after that many cycles. Otherwise loops forever.
     Press Ctrl+C to stop.
     """
@@ -115,7 +115,6 @@ def rt_play_cycle(
 
     grid = ClaveGrid(bpm=spec.bpm, grid=spec.grid, clave=spec.clave)
     steps_per_cycle = grid.steps_per_cycle()
-    steps_per_bar = spec.grid  # 8 or 16 steps per bar
     cycle_len = _cycle_time(grid)
     bar_len = grid.seconds_per_bar()
 
@@ -133,13 +132,12 @@ def rt_play_cycle(
         i = 0
         ci = 0
         cycle_count = 0
-        
+
         # bar CC tracking
         bars_per_cycle = 2
         total_bars = (max_cycles * bars_per_cycle) if max_cycles else None
         bars_in_cycle_emitted = [False, False]  # track which bars in current cycle have had CC emitted
-        bar_index = 0  # global bar counter (0-based)
-        
+
         print(f"RT Play: {spec.bpm} BPM, grid={spec.grid}, clave={spec.clave}")
         print(f"Output: {spec.midi_out}")
         if max_cycles:
@@ -148,13 +146,13 @@ def rt_play_cycle(
             print("Press Ctrl+C to stop...")
         if spec.bar_cc_enabled:
             print(f"Bar CC: channel={spec.bar_cc_channel}, countdown=CC#{spec.bar_cc_countdown}, index=CC#{spec.bar_cc_index}")
-        
+
         try:
             while True:
                 # Check cycle limit
                 if max_cycles and cycle_count >= max_cycles:
                     break
-                
+
                 now = _now()
 
                 # advance cycle start if we're past it
@@ -179,7 +177,7 @@ def rt_play_cycle(
                                 bars_remaining = max(0, total_bars - current_bar_index - 1)
                             else:
                                 bars_remaining = 127  # no countdown in infinite mode
-                            
+
                             # emit CC messages
                             from .realtime_telemetry import make_bar_cc_messages
                             cc_msgs = make_bar_cc_messages(
@@ -192,7 +190,6 @@ def rt_play_cycle(
                             for msg in cc_msgs:
                                 outport.send(msg)
                             bars_in_cycle_emitted[bar_in_cycle] = True
-                            bar_index = current_bar_index
 
                 # schedule events within lookahead window
                 window_end = now + spec.lookahead_s
@@ -225,12 +222,12 @@ def rt_play_cycle(
 def practice_lock_to_clave(spec: RtSpec) -> None:
     """
     MIDI IN -> quantize/lock to clave grid -> MIDI OUT.
-    
+
     Press Ctrl+C to stop.
     """
     if not MIDO_AVAILABLE:
         raise RuntimeError("mido is not installed; cannot use realtime features")
-    
+
     if not spec.midi_in:
         raise ValueError("practice requires midi_in")
 
@@ -351,7 +348,7 @@ def practice_lock_to_clave(spec: RtSpec) -> None:
             print("\nStopped.")
 
 
-def list_midi_ports() -> Tuple[List[str], List[str]]:
+def list_midi_ports() -> tuple[list[str], list[str]]:
     """Return (input_names, output_names) for available MIDI ports."""
     if not MIDO_AVAILABLE:
         return [], []

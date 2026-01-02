@@ -7,8 +7,8 @@ Future layers (swing, humanize) can be added as separate opt-in modules.
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable, List
 
 from .contract import NoteEvent
 
@@ -35,12 +35,12 @@ def apply_velocity_shape(
     *,
     ticks_per_beat: int,
     shape: VelocityShape = VelocityShape(),
-) -> List[NoteEvent]:
+) -> list[NoteEvent]:
     """
     Simple groove: accents downbeats. No randomness. No timing edits.
     Works even if you later add swing/humanize in a separate (optional) layer.
     """
-    out: List[NoteEvent] = []
+    out: list[NoteEvent] = []
     for e in events:
         beat_index = (e.start_tick // ticks_per_beat) % 4  # assumes 4/4 feel
         tick_in_beat = e.start_tick % ticks_per_beat

@@ -4,30 +4,29 @@ import argparse
 import sys
 from io import StringIO
 from pathlib import Path
-from typing import List
 
 # Ensure UTF-8 output on Windows
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
 
-from .pc import pc_from_name, name_from_pc
-from .gravity import gravity_chain
 from .corpus import chord_sequence_to_roots
+from .gravity import gravity_chain
 from .markov import build_transition_counts, normalize_transition_matrix
-from .zones import (
-    zone_name,
-    is_same_zone,
-    is_zone_cross,
-    is_half_step,
-    is_whole_step,
-    interval,
-)
+from .pc import name_from_pc, pc_from_name
 from .tritones import tritone_axis
 from .types import PitchClass
+from .zones import (
+    interval,
+    is_half_step,
+    is_same_zone,
+    is_whole_step,
+    is_zone_cross,
+    zone_name,
+)
 
 
-def _parse_chord_string(chord_str: str) -> List[str]:
+def _parse_chord_string(chord_str: str) -> list[str]:
     """
     Parse a simple chord string like:
         "Dm7 G7 Cmaj7 A7 Dm7"
@@ -61,7 +60,7 @@ def cmd_gravity(args: argparse.Namespace) -> int:
     return 0
 
 
-def _load_chords_from_file(path: Path) -> List[str]:
+def _load_chords_from_file(path: Path) -> list[str]:
     """
     Load a chord sequence from a text file.
 
@@ -69,7 +68,7 @@ def _load_chords_from_file(path: Path) -> List[str]:
     - Each line may contain space-separated chord symbols.
     - All lines are concatenated into one long sequence.
     """
-    chords: List[str] = []
+    chords: list[str] = []
     text = path.read_text(encoding="utf-8")
     for line in text.splitlines():
         line = line.strip()
@@ -90,7 +89,7 @@ def cmd_analyze(args: argparse.Namespace) -> int:
         print("error: either --chords or --file must be provided", file=sys.stderr)
         return 1
 
-    chords: List[str]
+    chords: list[str]
     if args.chords:
         chords = _parse_chord_string(args.chords)
     else:
@@ -186,14 +185,14 @@ def _explain_transition(a: PitchClass, b: PitchClass) -> str:
 
 # -------- TEXT RENDERING --------
 
-def _render_explain_text(chords: List[str], roots: List[PitchClass]) -> str:
+def _render_explain_text(chords: list[str], roots: list[PitchClass]) -> str:
     """
     Original plain-text explain output.
     Returns the formatted text as a string.
     """
     buf = StringIO()
     w = buf.write
-    
+
     w("# Zone–Tritone EXPLAIN\n")
     w("# Chord progression:\n")
     w("  " + " ".join(chords) + "\n")
@@ -228,7 +227,7 @@ def _render_explain_text(chords: List[str], roots: List[PitchClass]) -> str:
     prev_name = name_from_pc(prev_root)
     prev_zone = zone_name(prev_root)
 
-    for idx, cur_root in enumerate(roots[1:], start=1):
+    for _idx, cur_root in enumerate(roots[1:], start=1):
         cur_name = name_from_pc(cur_root)
         cur_zone = zone_name(cur_root)
         d = interval(prev_root, cur_root)
@@ -292,21 +291,21 @@ def _render_explain_text(chords: List[str], roots: List[PitchClass]) -> str:
     w("  • Everything else is a deliberate tension against the gravity grid.\n")
     w("\n")
     w("  Use this to see how the tune rides, follows, or fights the gravity field.\n")
-    
+
     return buf.getvalue()
 
 
 # -------- HTML / MARKDOWN RENDERING --------
 
-def _render_explain_html(chords: List[str], roots: List[PitchClass]) -> str:
+def _render_explain_html(chords: list[str], roots: list[PitchClass]) -> str:
     """
     HTML-style explain output suitable for SaaS/docs.
-    
+
     Returns the formatted HTML as a string.
     """
     buf = StringIO()
     w = buf.write
-    
+
     # Header
     w("<article class='zt-explain'>\n")
     w("  <h1>Zone&ndash;Tritone EXPLAIN</h1>\n")
@@ -432,21 +431,21 @@ def _render_explain_html(chords: List[str], roots: List[PitchClass]) -> str:
     w("  </ul>\n")
     w("  <p>Use this to see how the tune rides, follows, or pushes against the gravity field.</p>\n")
     w("</article>\n")
-    
+
     return buf.getvalue()
 
 
 # -------- MARKDOWN RENDERING --------
 
-def _render_explain_markdown(chords: List[str], roots: List[PitchClass]) -> str:
+def _render_explain_markdown(chords: list[str], roots: list[PitchClass]) -> str:
     """
     Markdown-style explain output (no raw HTML wrapper).
-    
+
     Returns the formatted Markdown as a string.
     """
     buf = StringIO()
     w = buf.write
-    
+
     prog = " ".join(chords)
     w("# Zone–Tritone EXPLAIN\n")
     w("\n")
@@ -553,7 +552,7 @@ def _render_explain_markdown(chords: List[str], roots: List[PitchClass]) -> str:
     w("- Other moves are deliberate tension against the gravity grid.\n")
     w("\n")
     w("Use this to see how the tune rides, follows, or pushes against the gravity field.\n")
-    
+
     return buf.getvalue()
 
 
@@ -575,7 +574,7 @@ def cmd_explain(args: argparse.Namespace) -> int:
         print("error: either --chords or --file must be provided", file=sys.stderr)
         return 1
 
-    chords: List[str]
+    chords: list[str]
     if args.chords:
         chords = _parse_chord_string(args.chords)
     else:

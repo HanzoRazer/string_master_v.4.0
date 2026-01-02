@@ -1,12 +1,11 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Literal, Any, Dict, Union
-import json
+from typing import Any, Literal
 
 import yaml  # type: ignore[import-not-found]
-
 
 TritoneMode = Literal["none", "all_doms", "probabilistic"]
 
@@ -34,14 +33,14 @@ class ProgramConfig:
       ghost_hits: { enabled: true, steps: [1,5,9,13] }
       vel_contour: { enabled: true, preset: brazil_samba }
     """
-    name: Optional[str]
-    chords: List[str]
-    style: Union[str, Dict[str, Any]]  # string or dict with overrides
+    name: str | None
+    chords: list[str]
+    style: str | dict[str, Any]  # string or dict with overrides
     tempo: int
     bars_per_chord: int
     tritone_mode: TritoneMode
     tritone_strength: float
-    tritone_seed: Optional[int]
+    tritone_seed: int | None
     outfile: str
 
 
@@ -53,7 +52,7 @@ DEFAULT_TRITONE_STRENGTH = 1.0
 DEFAULT_OUTFILE = "backing.mid"
 
 
-def _parse_chords_field(raw: Any) -> List[str]:
+def _parse_chords_field(raw: Any) -> list[str]:
     """
     Accept either:
       - a single string: "Cmaj7 Dm7 G7 Cmaj7"
@@ -141,7 +140,6 @@ def load_program_config(path: str | Path) -> ProgramConfig:
 
     # Heuristic: JSON if first non-whitespace char is '{' or '['
     first_char = text[0]
-    data: Dict[str, Any]
 
     try:
         if first_char in ("{", "["):
@@ -180,7 +178,7 @@ def load_program_config(path: str | Path) -> ProgramConfig:
         DEFAULT_TRITONE_STRENGTH,
     )
     seed_raw = parsed.get("tritone_seed")
-    tritone_seed: Optional[int]
+    tritone_seed: int | None
     if seed_raw is None:
         tritone_seed = None
     else:

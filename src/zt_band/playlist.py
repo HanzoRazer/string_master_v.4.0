@@ -1,13 +1,13 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional, Any, Dict
+from typing import Any
 
-import json
 import yaml  # type: ignore[import-not-found]
 
-from .config import load_program_config, ProgramConfig
+from .config import load_program_config
 from .engine import generate_accompaniment
 from .midi_out import NoteEvent, write_midi_file
 
@@ -34,17 +34,17 @@ class Playlist:
     - items:   ordered list of items
     - outfile: optional suggested output filename (can be overridden by CLI)
     """
-    name: Optional[str]
-    tempo: Optional[int]
-    items: List[PlaylistItem]
-    outfile: Optional[str]
+    name: str | None
+    tempo: int | None
+    items: list[PlaylistItem]
+    outfile: str | None
 
 
-def _parse_playlist_programs(raw: Any, base_dir: Path) -> List[PlaylistItem]:
+def _parse_playlist_programs(raw: Any, base_dir: Path) -> list[PlaylistItem]:
     if not isinstance(raw, list):
         raise TypeError("Playlist 'programs' must be a list.")
 
-    items: List[PlaylistItem] = []
+    items: list[PlaylistItem] = []
 
     for idx, entry in enumerate(raw):
         if not isinstance(entry, dict):
@@ -117,7 +117,7 @@ def load_playlist(path: str | Path) -> Playlist:
 
     name = parsed.get("name")
     tempo_raw = parsed.get("tempo")
-    tempo: Optional[int]
+    tempo: int | None
     if tempo_raw is None:
         tempo = None
     else:
@@ -143,11 +143,11 @@ def render_playlist_to_midi(playlist: Playlist, outfile: str) -> None:
         subsequent programs must match.
       - Each ProgramConfig's 'outfile' is ignored; 'outfile' arg is used instead.
     """
-    all_comp: List[NoteEvent] = []
-    all_bass: List[NoteEvent] = []
+    all_comp: list[NoteEvent] = []
+    all_bass: list[NoteEvent] = []
 
     # Determine global tempo
-    global_tempo: Optional[int] = playlist.tempo
+    global_tempo: int | None = playlist.tempo
     total_beats: float = 0.0
 
     first = True

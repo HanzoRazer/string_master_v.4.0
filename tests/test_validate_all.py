@@ -4,10 +4,10 @@ Tests for zt-band validate-all subcommand.
 """
 from __future__ import annotations
 
-from pathlib import Path
 import subprocess
 import sys
 import textwrap
+from pathlib import Path
 
 
 def _run(*args: str) -> subprocess.CompletedProcess:

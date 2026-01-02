@@ -1,4 +1,4 @@
-from shared.zone_tritone import zone, is_same_zone, is_zone_cross, is_whole_step, is_half_step
+from shared.zone_tritone import is_half_step, is_same_zone, is_whole_step, is_zone_cross, zone
 
 
 def test_zone_parity():

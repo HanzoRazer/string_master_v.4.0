@@ -1,4 +1,4 @@
-from shared.zone_tritone import pc_from_name, name_from_pc
+from shared.zone_tritone import name_from_pc, pc_from_name
 
 
 def test_pc_roundtrip_basic():

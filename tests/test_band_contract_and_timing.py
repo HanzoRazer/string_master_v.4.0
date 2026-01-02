@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pytest
 
-from zt_band.contract import ProgramSpec, NoteEvent, ContractViolation
+from zt_band.contract import ContractViolation, NoteEvent, ProgramSpec
 from zt_band.timing import build_midi_type1
 
 
@@ -42,11 +42,11 @@ def test_no_stuck_notes_enforced():
 def test_program_spec_validation():
     # Valid
     ProgramSpec(tempo_bpm=120).validate()
-    
+
     # Invalid tempo
     with pytest.raises(ContractViolation):
         ProgramSpec(tempo_bpm=500).validate()
-    
+
     # Invalid time signature denominator
     with pytest.raises(ContractViolation):
         ProgramSpec(tempo_bpm=120, time_sig_den=3).validate()
@@ -55,19 +55,19 @@ def test_program_spec_validation():
 def test_note_event_validation():
     # Valid
     NoteEvent(track="Test", start_tick=0, dur_tick=240, channel=0, note=60, velocity=90).validate()
-    
+
     # Invalid: negative start_tick
     with pytest.raises(ContractViolation):
         NoteEvent(track="Test", start_tick=-1, dur_tick=240, channel=0, note=60, velocity=90).validate()
-    
+
     # Invalid: zero duration
     with pytest.raises(ContractViolation):
         NoteEvent(track="Test", start_tick=0, dur_tick=0, channel=0, note=60, velocity=90).validate()
-    
+
     # Invalid: note out of range
     with pytest.raises(ContractViolation):
         NoteEvent(track="Test", start_tick=0, dur_tick=240, channel=0, note=128, velocity=90).validate()
-    
+
     # Invalid: empty track name
     with pytest.raises(ContractViolation):
         NoteEvent(track="", start_tick=0, dur_tick=240, channel=0, note=60, velocity=90).validate()

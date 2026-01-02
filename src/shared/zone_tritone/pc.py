@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Dict
+
 from .types import PitchClass
 
 # Canonical sharp-based pitch names
@@ -8,7 +8,7 @@ NOTES: list[str] = [
     "F#", "G", "Ab", "A", "Bb", "B",
 ]
 
-_name_to_pc: Dict[str, PitchClass] = {
+_name_to_pc: dict[str, PitchClass] = {
     "C": 0,
     "B#": 0,
     "C#": 1, "Db": 1,

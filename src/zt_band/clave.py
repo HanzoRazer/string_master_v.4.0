@@ -7,7 +7,7 @@ for real-time scheduling and practice mode.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Literal
+from typing import Literal
 
 ClaveType = Literal["son_2_3", "son_3_2"]
 Grid = Literal[8, 16]  # steps per bar
@@ -34,7 +34,7 @@ class ClaveGrid:
         return self.grid * self.bars_per_cycle
 
 
-def _son_clave_steps_16(clave: ClaveType) -> List[int]:
+def _son_clave_steps_16(clave: ClaveType) -> list[int]:
     """
     Son clave in 16th-note steps across 2 bars (32 steps).
     Common indexing (0..31):
@@ -47,7 +47,7 @@ def _son_clave_steps_16(clave: ClaveType) -> List[int]:
     return [0, 6, 10, 16, 22]
 
 
-def _son_clave_steps_8(clave: ClaveType) -> List[int]:
+def _son_clave_steps_8(clave: ClaveType) -> list[int]:
     """
     Son clave approximated on 8th grid across 2 bars (16 steps).
     Derived by integer-dividing 16th indices by 2 and de-duplicating.
@@ -60,7 +60,7 @@ def _son_clave_steps_8(clave: ClaveType) -> List[int]:
     return out
 
 
-def clave_hit_steps(grid: Grid, clave: ClaveType) -> List[int]:
+def clave_hit_steps(grid: Grid, clave: ClaveType) -> list[int]:
     if grid == 16:
         return _son_clave_steps_16(clave)
     return _son_clave_steps_8(clave)
@@ -78,7 +78,7 @@ def quantize_step(step: float, *, grid_steps: int, mode: Literal["nearest", "dow
     return int(-(-step // 1)) % grid_steps  # ceil for positives
 
 
-def is_allowed_on_clave(step_i: int, *, allowed: List[int], strict: bool) -> bool:
+def is_allowed_on_clave(step_i: int, *, allowed: list[int], strict: bool) -> bool:
     """
     strict=True means only clave hit steps are allowed.
     strict=False means any grid step is allowed (but we can still align click/groove).

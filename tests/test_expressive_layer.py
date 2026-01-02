@@ -1,8 +1,7 @@
 """
 Tests for expressive_layer.py — velocity shaping (no timing changes).
 """
-import pytest
-from zt_band.expressive_layer import VelocityProfile, apply_velocity_profile, _clamp
+from zt_band.expressive_layer import VelocityProfile, _clamp, apply_velocity_profile
 from zt_band.midi_out import NoteEvent
 
 

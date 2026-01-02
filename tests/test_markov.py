@@ -1,4 +1,8 @@
-from shared.zone_tritone import build_transition_counts, normalize_transition_matrix, sample_next_root
+from shared.zone_tritone import (
+    build_transition_counts,
+    normalize_transition_matrix,
+    sample_next_root,
+)
 
 
 def test_markov_counts_and_normalization():
@@ -25,7 +29,7 @@ def test_markov_smoothing():
     # Empty sequence should produce uniform distribution with smoothing
     roots = [0, 0]  # Only self-transitions on C
     counts = build_transition_counts(roots)
-    
+
     matrix = normalize_transition_matrix(counts, smoothing=1.0)
     # With smoothing, all probabilities should be > 0
     for i in range(12):

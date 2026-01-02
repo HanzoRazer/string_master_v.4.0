@@ -1,17 +1,16 @@
 """
 Tests for RT bridge: NoteEvents -> step-indexed MIDI messages.
 """
-import pytest
+from zt_band.midi_out import NoteEvent
 from zt_band.rt_bridge import (
     RtRenderSpec,
-    note_events_to_step_messages,
-    gm_program_changes_at_start,
-    truncate_events_to_cycle,
-    _beats_per_step,
     _beats_per_cycle,
+    _beats_per_step,
     _step_index,
+    gm_program_changes_at_start,
+    note_events_to_step_messages,
+    truncate_events_to_cycle,
 )
-from zt_band.midi_out import NoteEvent
 
 
 class TestRtRenderSpec:
@@ -54,16 +53,16 @@ class TestNoteEventsToStepMessages:
     def test_single_note_produces_on_and_off(self):
         spec = RtRenderSpec(bpm=120.0, grid=16, bars_per_cycle=2)
         steps_per_cycle = 32
-        
+
         events = [
             NoteEvent(start_beats=0.0, duration_beats=0.5, midi_note=60, velocity=100, channel=0)
         ]
-        
+
         msgs = note_events_to_step_messages(events, spec=spec, steps_per_cycle=steps_per_cycle)
-        
+
         # Should have note_on and note_off
         assert len(msgs) == 2
-        
+
         # First should be note_on at step 0
         step, msg = msgs[0] if msgs[0][1].type == "note_on" and msgs[0][1].velocity > 0 else msgs[1]
         assert msg.note == 60
@@ -72,14 +71,14 @@ class TestNoteEventsToStepMessages:
     def test_note_off_not_same_step_as_note_on(self):
         spec = RtRenderSpec(bpm=120.0, grid=16, bars_per_cycle=2)
         steps_per_cycle = 32
-        
+
         # Very short note that might land on same step
         events = [
             NoteEvent(start_beats=0.0, duration_beats=0.1, midi_note=60, velocity=100, channel=0)
         ]
-        
+
         msgs = note_events_to_step_messages(events, spec=spec, steps_per_cycle=steps_per_cycle)
-        
+
         # Get the steps
         on_step = None
         off_step = None
@@ -88,22 +87,22 @@ class TestNoteEventsToStepMessages:
                 on_step = step
             elif msg.type == "note_off" or (msg.type == "note_on" and msg.velocity == 0):
                 off_step = step
-        
+
         # They should be different (off is at least 1 step after on)
         assert on_step != off_step
 
     def test_ordering_note_off_before_note_on_at_same_step(self):
         spec = RtRenderSpec(bpm=120.0, grid=16, bars_per_cycle=2)
         steps_per_cycle = 32
-        
+
         # Two notes: one ends at step 4, another starts at step 4
         events = [
             NoteEvent(start_beats=0.0, duration_beats=1.0, midi_note=60, velocity=100, channel=0),  # ends step 4
             NoteEvent(start_beats=1.0, duration_beats=1.0, midi_note=64, velocity=100, channel=0),  # starts step 4
         ]
-        
+
         msgs = note_events_to_step_messages(events, spec=spec, steps_per_cycle=steps_per_cycle)
-        
+
         # At step 4, note_off should come before note_on
         step_4_msgs = [(s, m) for s, m in msgs if s == 4]
         if len(step_4_msgs) >= 2:
@@ -116,7 +115,7 @@ class TestGmProgramChanges:
     def test_returns_two_program_changes(self):
         msgs = gm_program_changes_at_start()
         assert len(msgs) == 2
-        
+
         # Both at step 0
         for step, msg in msgs:
             assert step == 0
@@ -129,7 +128,7 @@ class TestTruncateEventsToCycle:
             NoteEvent(start_beats=0.0, duration_beats=1.0, midi_note=60, velocity=100, channel=0),
             NoteEvent(start_beats=4.0, duration_beats=1.0, midi_note=64, velocity=100, channel=0),
         ]
-        
+
         # 2 bars = 8 beats, both events should be kept
         result = truncate_events_to_cycle(events, bars_per_cycle=2)
         assert len(result) == 2
@@ -139,7 +138,7 @@ class TestTruncateEventsToCycle:
             NoteEvent(start_beats=0.0, duration_beats=1.0, midi_note=60, velocity=100, channel=0),
             NoteEvent(start_beats=10.0, duration_beats=1.0, midi_note=64, velocity=100, channel=0),  # outside 2-bar cycle
         ]
-        
+
         # 2 bars = 8 beats, second event at beat 10 should be dropped
         result = truncate_events_to_cycle(events, bars_per_cycle=2)
         assert len(result) == 1

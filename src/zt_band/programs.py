@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Optional
 
-from .config import load_program_config, ProgramConfig
+from .config import ProgramConfig, load_program_config
 
 
 @dataclass
@@ -17,11 +16,11 @@ class ProgramDescriptor:
     - error:  error message if parsing failed, otherwise None
     """
     path: Path
-    config: Optional[ProgramConfig]
-    error: Optional[str] = None
+    config: ProgramConfig | None
+    error: str | None = None
 
 
-def discover_programs(root: str | Path = "programs") -> List[ProgramDescriptor]:
+def discover_programs(root: str | Path = "programs") -> list[ProgramDescriptor]:
     """
     Discover .ztprog files under the given directory (non-recursive).
 
@@ -32,7 +31,7 @@ def discover_programs(root: str | Path = "programs") -> List[ProgramDescriptor]:
     if not base.exists() or not base.is_dir():
         return []
 
-    descriptors: List[ProgramDescriptor] = []
+    descriptors: list[ProgramDescriptor] = []
     for file in sorted(base.glob("*.ztprog")):
         try:
             cfg = load_program_config(file)

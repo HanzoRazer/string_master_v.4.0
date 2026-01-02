@@ -4,34 +4,33 @@ Accompaniment generation engine with gravity-aware reharmonization.
 from __future__ import annotations
 
 from dataclasses import replace
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
-from .chords import parse_chord_symbol, chord_pitches, chord_bass_pitch, Chord
-from .patterns import STYLE_REGISTRY, StylePattern
-from .midi_out import NoteEvent, write_midi_file
-from .gravity_bridge import apply_tritone_substitutions
-from .musical_contract import validate_note_events, enforce_determinism_inputs
+from .chords import Chord, chord_bass_pitch, chord_pitches, parse_chord_symbol
 from .expressive_layer import apply_velocity_profile
 from .expressive_swing import ExpressiveSpec, apply_expressive
 from .ghost_layer import GhostSpec, add_ghost_hits
+from .gravity_bridge import apply_tritone_substitutions
+from .midi_out import NoteEvent, write_midi_file
+from .musical_contract import enforce_determinism_inputs, validate_note_events
+from .patterns import STYLE_REGISTRY, StylePattern
 from .velocity_contour import VelContour, apply_velocity_contour
 
-
 # Velocity contour presets (must match validate.py)
-_VEL_PRESETS: Dict[str, Dict[str, float]] = {
+_VEL_PRESETS: dict[str, dict[str, float]] = {
     "none": {"soft": 1.0, "strong": 1.0, "pickup": 1.0, "ghost": 1.0},
     "brazil_samba": {"soft": 0.82, "strong": 1.08, "pickup": 0.65, "ghost": 0.55},
 }
 
 
-def _apply_style_overrides(base: StylePattern, overrides: Dict[str, Any]) -> StylePattern:
+def _apply_style_overrides(base: StylePattern, overrides: dict[str, Any]) -> StylePattern:
     """
     Return a COPY of base StylePattern with whitelisted overrides applied.
     Never mutates STYLE_REGISTRY objects.
 
     Supports both nested YAML sugar and flat canonical fields.
     """
-    updates: Dict[str, Any] = {}
+    updates: dict[str, Any] = {}
 
     # ---- ghost hits (nested sugar) ----
     gh = overrides.get("ghost_hits") or overrides.get("ghost")
@@ -101,7 +100,7 @@ def _apply_style_overrides(base: StylePattern, overrides: Dict[str, Any]) -> Sty
 
 
 def generate_accompaniment(
-    chord_symbols: List[str],
+    chord_symbols: list[str],
     style_name: str = "swing_basic",
     tempo_bpm: int = 120,
     bars_per_chord: int = 1,
@@ -110,8 +109,8 @@ def generate_accompaniment(
     tritone_strength: float = 1.0,
     tritone_seed: int | None = None,
     expressive: ExpressiveSpec | None = None,
-    style_overrides: Optional[Dict[str, Any]] = None,
-) -> Tuple[List[NoteEvent], List[NoteEvent]]:
+    style_overrides: dict[str, Any] | None = None,
+) -> tuple[list[NoteEvent], list[NoteEvent]]:
     """
     Generate comping + bass MIDI note events for a simple chord progression.
 
@@ -155,7 +154,7 @@ def generate_accompaniment(
         style = _apply_style_overrides(style, style_overrides)
 
     # Parse initial chord symbols
-    base_chords: List[Chord] = [parse_chord_symbol(s) for s in chord_symbols]
+    base_chords: list[Chord] = [parse_chord_symbol(s) for s in chord_symbols]
 
     # Optional tritone reharmonization
     if tritone_mode not in ("none", "all_doms", "probabilistic"):
@@ -171,8 +170,8 @@ def generate_accompaniment(
     else:
         chords = base_chords
 
-    comp_events: List[NoteEvent] = []
-    bass_events: List[NoteEvent] = []
+    comp_events: list[NoteEvent] = []
+    bass_events: list[NoteEvent] = []
 
     current_bar = 0
 
@@ -184,7 +183,7 @@ def generate_accompaniment(
             bar_start_beats = (current_bar + bar_offset) * 4.0  # assume 4/4
 
             # Collect bar events before adding ghosts
-            bar_comp_events: List[NoteEvent] = []
+            bar_comp_events: list[NoteEvent] = []
 
             # Comping hits: full chord on each hit for now
             for spec in style.comp_hits:

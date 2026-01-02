@@ -6,15 +6,14 @@ and provides tritone substitution utilities.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List, Optional
 import random
+from dataclasses import dataclass
 
-from shared.zone_tritone.types import PitchClass
-from shared.zone_tritone.pc import name_from_pc
-from shared.zone_tritone.zones import zone_name, interval
-from shared.zone_tritone.tritones import tritone_axis
 from shared.zone_tritone.gravity import gravity_chain
+from shared.zone_tritone.pc import name_from_pc
+from shared.zone_tritone.tritones import tritone_axis
+from shared.zone_tritone.types import PitchClass
+from shared.zone_tritone.zones import interval, zone_name
 
 from .chords import Chord, parse_chord_symbol
 
@@ -35,7 +34,7 @@ class GravityAnnotatedChord:
     root_pc: PitchClass
     zone: str
     axis: tuple[PitchClass, PitchClass]
-    gravity_target: Optional[PitchClass]
+    gravity_target: PitchClass | None
     is_on_chain: bool
 
 
@@ -56,7 +55,7 @@ class GravityTransition:
     is_whole_step: bool
 
 
-def annotate_progression(chord_symbols: List[str]) -> List[GravityAnnotatedChord]:
+def annotate_progression(chord_symbols: list[str]) -> list[GravityAnnotatedChord]:
     """
     Annotate a chord progression with Zone–Tritone information.
 
@@ -76,7 +75,7 @@ def annotate_progression(chord_symbols: List[str]) -> List[GravityAnnotatedChord
     else:
         chain = [roots[0]]
 
-    annotated: List[GravityAnnotatedChord] = []
+    annotated: list[GravityAnnotatedChord] = []
 
     for idx, c in enumerate(chords):
         root_pc = c.root_pc
@@ -92,7 +91,7 @@ def annotate_progression(chord_symbols: List[str]) -> List[GravityAnnotatedChord
 
         axis = tritone_axis(third_pc)
 
-        gravity_target: Optional[PitchClass] = None
+        gravity_target: PitchClass | None = None
         if idx < len(chain) - 1:
             gravity_target = chain[idx + 1]
 
@@ -116,14 +115,14 @@ def annotate_progression(chord_symbols: List[str]) -> List[GravityAnnotatedChord
 
 
 def compute_transitions(
-    annotated: List[GravityAnnotatedChord],
-) -> List[GravityTransition]:
+    annotated: list[GravityAnnotatedChord],
+) -> list[GravityTransition]:
     """
     Compute stepwise motion diagnostics between annotated chords.
 
     Returns one GravityTransition for each pair (i -> i+1).
     """
-    transitions: List[GravityTransition] = []
+    transitions: list[GravityTransition] = []
     if len(annotated) < 2:
         return transitions
 
@@ -173,11 +172,11 @@ def tritone_sub_root(root_pc: PitchClass) -> PitchClass:
 
 
 def apply_tritone_substitutions(
-    chords: List[Chord],
+    chords: list[Chord],
     mode: str = "none",
     strength: float = 1.0,
-    seed: Optional[int] = None,
-) -> List[Chord]:
+    seed: int | None = None,
+) -> list[Chord]:
     """
     Apply tritone substitutions to a chord progression.
 
@@ -203,7 +202,7 @@ def apply_tritone_substitutions(
         return list(chords)
 
     rng = random.Random(seed)
-    out: List[Chord] = []
+    out: list[Chord] = []
 
     for chord in chords:
         new_chord = chord

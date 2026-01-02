@@ -1,19 +1,17 @@
 # tests/test_midi_ordering.py
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Dict, List, Tuple
 import tempfile
+from pathlib import Path
 
-import pytest
 import mido
 
 from zt_band.midi_out import NoteEvent, write_midi_file
 
 
-def _abs_ticks(track: mido.MidiTrack) -> List[Tuple[int, mido.Message]]:
+def _abs_ticks(track: mido.MidiTrack) -> list[tuple[int, mido.Message]]:
     """Return list of (absolute_tick, message) for a track."""
-    out: List[Tuple[int, mido.Message]] = []
+    out: list[tuple[int, mido.Message]] = []
     t = 0
     for msg in track:
         t += int(getattr(msg, "time", 0) or 0)
@@ -21,7 +19,7 @@ def _abs_ticks(track: mido.MidiTrack) -> List[Tuple[int, mido.Message]]:
     return out
 
 
-def _same_tick_rehit_events(note: int = 60, channel: int = 0) -> List[NoteEvent]:
+def _same_tick_rehit_events(note: int = 60, channel: int = 0) -> list[NoteEvent]:
     """
     Create a re-hit where note-off and next note-on land on the same tick:
       - event1: start=0.0, dur=0.5
@@ -42,7 +40,7 @@ def test_midi_orders_note_off_before_note_on_at_same_tick() -> None:
     or can cause audible artifacts.
     """
     comp = _same_tick_rehit_events(note=60, channel=0)
-    bass: List[NoteEvent] = []
+    bass: list[NoteEvent] = []
 
     with tempfile.TemporaryDirectory() as td:
         out = Path(td) / "rehit.mid"
@@ -56,7 +54,7 @@ def test_midi_orders_note_off_before_note_on_at_same_tick() -> None:
         abs_msgs = _abs_ticks(track)
 
         # Build per-tick ordered list of message types for (channel, note)
-        per_tick: Dict[Tuple[int, int, int], List[str]] = {}
+        per_tick: dict[tuple[int, int, int], list[str]] = {}
         # key: (abs_tick, channel, note) -> list of 'note_on'/'note_off' in encounter order
         for t, msg in abs_msgs:
             if msg.type not in ("note_on", "note_off"):
@@ -92,7 +90,7 @@ def test_midi_rehit_is_balanced_and_loadable() -> None:
     (This is already enforced by write_midi_file's invariant checks.)
     """
     comp = _same_tick_rehit_events(note=64, channel=0)
-    bass: List[NoteEvent] = []
+    bass: list[NoteEvent] = []
 
     with tempfile.TemporaryDirectory() as td:
         out = Path(td) / "rehit_balanced.mid"

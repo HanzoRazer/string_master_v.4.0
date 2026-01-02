@@ -1,6 +1,7 @@
 from __future__ import annotations
-from .types import PitchClass, TritoneAxis
+
 from .tritones import is_tritone_pair
+from .types import PitchClass, TritoneAxis
 
 
 def dominant_roots_from_tritone(axis: TritoneAxis) -> list[PitchClass]:
@@ -37,16 +38,16 @@ def gravity_chain(root: PitchClass, steps: int) -> list[PitchClass]:
 
     This corresponds to the classical dominant cycle:
         G(7) -> C(2) -> F(9) -> Bb(4) -> ...
-    
+
     Wait, let me recalculate:
     - G (7) down a perfect 4th (5 semitones) = 7-5 = 2 (D), not C!
-    
+
     Actually, the traditional cycle of fifths DESCENDS:
     - C -> F (down 5 semitones, or up 7 semitones)
-    
+
     But in jazz theory, we often talk about "descending in fourths" meaning
     roots moving DOWN by 5 semitones: G -> C -> F -> Bb
-    
+
     G(7) - 7 = 0 (C) ✓
     C(0) - 7 = -7 = 5 (F) ✓
     F(5) - 7 = -2 = 10 (Bb) ✓

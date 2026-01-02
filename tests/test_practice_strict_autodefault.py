@@ -6,7 +6,6 @@ import pytest
 
 from zt_band import cli as zcli
 
-
 # ---------------------------------------------------------------------
 # Test _infer_strict_from_style_comp helper
 # ---------------------------------------------------------------------

@@ -11,14 +11,13 @@ from __future__ import annotations
 
 import pytest
 
+from zt_band.expressive_layer import apply_velocity_profile
+from zt_band.midi_out import NoteEvent
 from zt_band.musical_contract import (
     ContractViolation,
-    MusicalContract,
     enforce_determinism_inputs,
     validate_note_events,
 )
-from zt_band.expressive_layer import apply_velocity_profile
-from zt_band.midi_out import NoteEvent
 
 
 def test_enforce_determinism_requires_seed_for_probabilistic():
@@ -120,13 +119,13 @@ def test_expressive_layer_preserves_contract():
         NoteEvent(0.5, 0.5, 62, 80, 0),   # offbeat
         NoteEvent(2.0, 1.0, 64, 80, 0),   # beat 3
     ]
-    
+
     # Apply expressive layer
     shaped_events = apply_velocity_profile(events)
-    
+
     # Should still pass validation
     validate_note_events(shaped_events)
-    
+
     # Verify velocities were adjusted
     assert shaped_events[0].velocity != 80  # downbeat boosted
     assert shaped_events[1].velocity != 80  # offbeat cut
@@ -139,9 +138,9 @@ def test_expressive_layer_clamps_velocity():
         NoteEvent(0.0, 1.0, 60, 1, 0),    # Very low velocity
         NoteEvent(2.0, 1.0, 64, 127, 0),  # Max velocity
     ]
-    
+
     shaped_events = apply_velocity_profile(events)
-    
+
     # Should be clamped to [min_vel, max_vel] from profile
     for e in shaped_events:
         assert 20 <= e.velocity <= 120  # Default profile range

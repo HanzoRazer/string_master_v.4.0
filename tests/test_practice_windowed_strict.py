@@ -2,12 +2,12 @@
 Tests for windowed strict practice mode (±ms tolerance before snap/reject).
 """
 
-import pytest
 import time
+
+import pytest
 
 from zt_band import realtime
 from zt_band.realtime import RtSpec
-
 
 # ---------------------------------------------------------------------
 # Unit test: window field exists on RtSpec

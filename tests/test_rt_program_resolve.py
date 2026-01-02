@@ -4,11 +4,11 @@ Tests for rt-play --program and program resolution.
 
 from __future__ import annotations
 
-import pytest
 from pathlib import Path
 
-from zt_band import cli as zcli
+import pytest
 
+from zt_band import cli as zcli
 
 # ---------------------------------------------------------------------
 # Test _resolve_ztprog_program helper
