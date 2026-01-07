@@ -80,6 +80,38 @@ class LateDropPolicy:
     def late_drop_s(self) -> float:
         return max(0, self.late_drop_ms) / 1000.0
 
+    def is_ornament(self, msg: mido.Message) -> bool:
+        """
+        Returns True if this MIDI message is considered expendable
+        (ornament/ghost) and can be dropped when late.
+        """
+        if msg.type != "note_on":
+            return False
+        # velocity-based ornament classification
+        # structural notes (comp/bass) must survive late scheduling
+        try:
+            vel = int(msg.velocity)
+        except Exception:
+            return False
+        # note_on with vel=0 is actually note-off — never drop
+        if vel == 0:
+            return False
+        return vel <= self.ghost_note_on_max_vel
+
+    def should_drop(self, *, due_s: float, now_s: float, msg: mido.Message) -> bool:
+        """
+        Returns True if this message should be dropped due to lateness.
+        Only ornaments are dropped; structural notes always survive.
+        """
+        if not self.enabled:
+            return False
+
+        lateness_ms = (now_s - due_s) * 1000.0
+        if lateness_ms <= self.late_drop_ms:
+            return False
+        # only drop if expendable ornament
+        return self.is_ornament(msg)
+
 
 def _panic_cleanup(sender, *, channels: Iterable[int] = range(16)) -> None:
     """
