@@ -32,3 +32,38 @@ def test_rt_play_backend_rtmidi():
     parser = build_arg_parser()
     ns = parser.parse_args(["rt-play", "--backend", "rtmidi", "--midi-out", "TestPort"])
     assert ns.backend == "rtmidi"
+
+
+def test_rt_play_panic_flag_default_on():
+    """--panic is on by default."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--midi-out", "TestPort"])
+    assert ns.panic is True
+
+
+def test_rt_play_no_panic_flag():
+    """--no-panic disables panic cleanup."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--no-panic", "--midi-out", "TestPort"])
+    assert ns.panic is False
+
+
+def test_rt_play_late_drop_ms_default():
+    """--late-drop-ms defaults to 35."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--midi-out", "TestPort"])
+    assert ns.late_drop_ms == 35
+
+
+def test_rt_play_late_drop_ms_custom():
+    """--late-drop-ms accepts custom value."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--late-drop-ms", "50", "--midi-out", "TestPort"])
+    assert ns.late_drop_ms == 50
+
+
+def test_rt_play_late_drop_ms_zero_disables():
+    """--late-drop-ms 0 disables late-drop."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--late-drop-ms", "0", "--midi-out", "TestPort"])
+    assert ns.late_drop_ms == 0

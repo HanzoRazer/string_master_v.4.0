@@ -166,6 +166,7 @@ def rt_play_cycle(
     max_cycles: int | None = None,
     backend: str = "mido",
     late_drop: LateDropPolicy | None = None,
+    panic: bool = True,
 ) -> None:
     """
     Real-time scheduler: repeatedly plays a 2-bar cycle of step-indexed MIDI messages.
@@ -292,8 +293,9 @@ def rt_play_cycle(
     except KeyboardInterrupt:
         print("\nStopped.")
     finally:
-        # PANIC CLEANUP FIRST, then close the port.
-        _panic_cleanup(sender)
+        # PANIC CLEANUP FIRST (if enabled), then close the port.
+        if panic:
+            _panic_cleanup(sender)
         try:
             sender.close()
         except Exception:

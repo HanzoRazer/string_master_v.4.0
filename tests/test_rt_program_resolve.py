@@ -121,7 +121,7 @@ style: { comp: ballad_basic }
 
     captured = {}
 
-    def fake_rt_play_cycle(*, events, spec, backend="mido"):
+    def fake_rt_play_cycle(*, events, spec, backend="mido", late_drop=None, panic=True):
         captured["bpm"] = spec.bpm
         raise SystemExit(0)
 

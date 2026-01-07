@@ -401,6 +401,20 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="MIDI backend for realtime output. Use rtmidi on Pi/Linux for lower latency.",
     )
     p_rt.add_argument(
+        "--panic/--no-panic",
+        dest="panic",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Send MIDI panic (CC 120/121/123/64) on exit to prevent stuck notes (default: on).",
+    )
+    p_rt.add_argument(
+        "--late-drop-ms",
+        type=int,
+        default=35,
+        metavar="MS",
+        help="Late-drop threshold in ms for ornament events (click, ghost notes). 0=disabled (default: 35).",
+    )
+    p_rt.add_argument(
         "--midi-out",
         type=str,
         required=True,
@@ -1294,7 +1308,18 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         print("RT Play: click-only mode")
 
     try:
-        rt_play_cycle(events=events, spec=spec, backend=args.backend)
+        from .realtime import LateDropPolicy
+        late_drop = LateDropPolicy(
+            enabled=(args.late_drop_ms > 0),
+            late_drop_ms=args.late_drop_ms,
+        )
+        rt_play_cycle(
+            events=events,
+            spec=spec,
+            backend=args.backend,
+            late_drop=late_drop,
+            panic=args.panic,
+        )
     except RuntimeError as e:
         print(f"error: {e}", file=sys.stderr)
         return 1
