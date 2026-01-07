@@ -394,6 +394,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Real-time playback aligned to clave grid (loop until Ctrl+C).",
     )
     p_rt.add_argument(
+        "--backend",
+        type=str,
+        choices=["mido", "rtmidi"],
+        default="mido",
+        help="MIDI backend for realtime output. Use rtmidi on Pi/Linux for lower latency.",
+    )
+    p_rt.add_argument(
         "--midi-out",
         type=str,
         required=True,
@@ -1287,7 +1294,7 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         print("RT Play: click-only mode")
 
     try:
-        rt_play_cycle(events=events, spec=spec)
+        rt_play_cycle(events=events, spec=spec, backend=args.backend)
     except RuntimeError as e:
         print(f"error: {e}", file=sys.stderr)
         return 1

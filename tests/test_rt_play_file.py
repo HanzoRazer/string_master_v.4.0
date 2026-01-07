@@ -313,7 +313,7 @@ style: { comp: ballad_basic }
     from zt_band import cli as zcli
     calls = {}
 
-    def fake_rt_play_cycle(*, events, spec):
+    def fake_rt_play_cycle(*, events, spec, backend="mido"):
         calls["bpm"] = spec.bpm
         raise SystemExit(0)
 
@@ -344,7 +344,7 @@ style: ballad_basic
     from zt_band import cli as zcli
     calls = {}
 
-    def fake_rt_play_cycle(*, events, spec):
+    def fake_rt_play_cycle(*, events, spec, backend="mido"):
         calls["bpm"] = spec.bpm
         raise SystemExit(0)
 
@@ -374,7 +374,7 @@ style: ballad_basic
     from zt_band import cli as zcli
     calls = {}
 
-    def fake_rt_play_cycle(*, events, spec):
+    def fake_rt_play_cycle(*, events, spec, backend="mido"):
         calls["bpm"] = spec.bpm
         raise SystemExit(0)
 
