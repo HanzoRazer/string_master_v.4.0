@@ -67,3 +67,17 @@ def test_rt_play_late_drop_ms_zero_disables():
     parser = build_arg_parser()
     ns = parser.parse_args(["rt-play", "--late-drop-ms", "0", "--midi-out", "TestPort"])
     assert ns.late_drop_ms == 0
+
+
+def test_rt_play_ghost_vel_max_default():
+    """--ghost-vel-max defaults to 22."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--midi-out", "TestPort"])
+    assert ns.ghost_vel_max == 22
+
+
+def test_rt_play_ghost_vel_max_custom():
+    """--ghost-vel-max accepts custom value."""
+    parser = build_arg_parser()
+    ns = parser.parse_args(["rt-play", "--ghost-vel-max", "30", "--midi-out", "TestPort"])
+    assert ns.ghost_vel_max == 30

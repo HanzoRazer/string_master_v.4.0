@@ -415,6 +415,13 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Late-drop threshold in ms for ornament events (click, ghost notes). 0=disabled (default: 35).",
     )
     p_rt.add_argument(
+        "--ghost-vel-max",
+        type=int,
+        default=22,
+        metavar="VEL",
+        help="Max velocity treated as ornament/ghost for late-drop (default: 22).",
+    )
+    p_rt.add_argument(
         "--midi-out",
         type=str,
         required=True,
@@ -1312,6 +1319,7 @@ def cmd_rt_play(args: argparse.Namespace) -> int:
         late_drop = LateDropPolicy(
             enabled=(args.late_drop_ms > 0),
             late_drop_ms=args.late_drop_ms,
+            ghost_note_on_max_vel=args.ghost_vel_max,
         )
         rt_play_cycle(
             events=events,
