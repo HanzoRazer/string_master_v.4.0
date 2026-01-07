@@ -1,4 +1,5 @@
 from zt_band.cli import build_arg_parser
+import pytest
 
 
 def test_rt_play_parses_panic_and_late_drop_ms():
@@ -19,3 +20,19 @@ def test_rt_play_parses_panic_and_late_drop_ms():
     )
     assert ns3.ghost_vel_max == 30
     assert ns3.late_drop_ms == 50
+
+
+def test_rt_play_flag_range_validation_errors_are_clean():
+    p = build_arg_parser()
+
+    with pytest.raises(SystemExit):
+        p.parse_args(["rt-play", "--midi-out", "X", "--late-drop-ms", "-1"])
+
+    with pytest.raises(SystemExit):
+        p.parse_args(["rt-play", "--midi-out", "X", "--late-drop-ms", "999"])
+
+    with pytest.raises(SystemExit):
+        p.parse_args(["rt-play", "--midi-out", "X", "--ghost-vel-max", "0"])
+
+    with pytest.raises(SystemExit):
+        p.parse_args(["rt-play", "--midi-out", "X", "--ghost-vel-max", "200"])

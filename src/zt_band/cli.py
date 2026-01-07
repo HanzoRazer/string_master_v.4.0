@@ -28,6 +28,22 @@ from .rt_bridge import (
 )
 from .validate import format_issues_json, format_issues_text, validate_ztprog_file
 
+
+def _bounded_int(name: str, lo: int, hi: int):
+    """
+    argparse type factory: ensures an integer is within [lo, hi],
+    raising a clean argparse error if not.
+    """
+    def _parse(x: str) -> int:
+        try:
+            v = int(x)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"{name} must be an integer")
+        if v < lo or v > hi:
+            raise argparse.ArgumentTypeError(f"{name} must be in range {lo}..{hi}")
+        return v
+    return _parse
+
 OutputFormat = Literal["text", "markdown", "json"]
 
 
@@ -409,14 +425,14 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     p_rt.add_argument(
         "--late-drop-ms",
-        type=int,
+        type=_bounded_int("--late-drop-ms", 0, 500),
         default=35,
         metavar="MS",
         help="Late-drop threshold in ms for ornament events (click, ghost notes). 0=disabled (default: 35).",
     )
     p_rt.add_argument(
         "--ghost-vel-max",
-        type=int,
+        type=_bounded_int("--ghost-vel-max", 1, 127),
         default=22,
         metavar="VEL",
         help="Max velocity treated as ornament/ghost for late-drop (default: 22).",
