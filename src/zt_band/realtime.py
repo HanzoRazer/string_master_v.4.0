@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass
-from typing import Literal
+from typing import Iterable, Literal
 
 try:
     import mido
@@ -62,6 +62,66 @@ def _now() -> float:
     return time.monotonic()
 
 
+@dataclass(frozen=True)
+class LateDropPolicy:
+    """
+    Late-event handling policy for realtime playback.
+
+    Design goals:
+      - never destabilize core timing/contract
+      - preserve telemetry and core musical hits
+      - drop ornaments first (click + low-velocity ghost note-ons)
+      - never drop note_off (prevents stuck notes)
+    """
+    enabled: bool = True
+    late_drop_ms: int = 35
+    ghost_note_on_max_vel: int = 22  # <= this velocity is treated as "ornament"
+
+    def late_drop_s(self) -> float:
+        return max(0, self.late_drop_ms) / 1000.0
+
+
+def _panic_cleanup(sender, *, channels: Iterable[int] = range(16)) -> None:
+    """
+    Belt-and-suspenders: send a minimal 'panic' sequence to prevent stuck notes
+    when rt-play exits (Ctrl+C, exceptions, etc).
+    """
+    for ch in channels:
+        # All Sound Off (120), Reset All Controllers (121), All Notes Off (123)
+        try:
+            sender.send(mido.Message("control_change", channel=int(ch), control=120, value=0))
+            sender.send(mido.Message("control_change", channel=int(ch), control=121, value=0))
+            sender.send(mido.Message("control_change", channel=int(ch), control=123, value=0))
+            # Sustain off (64) is a common cause of "stuck" sounding notes
+            sender.send(mido.Message("control_change", channel=int(ch), control=64, value=0))
+        except Exception:
+            # Never let cleanup throw during shutdown
+            pass
+
+
+def _should_drop_click(*, lateness_s: float, policy: LateDropPolicy) -> bool:
+    if not policy.enabled:
+        return False
+    return lateness_s > policy.late_drop_s()
+
+
+def _should_drop_note_on(*, msg: mido.Message, lateness_s: float, policy: LateDropPolicy) -> bool:
+    """
+    Drop only low-velocity ornament note-ons when late.
+    Never drop note-offs (handled elsewhere).
+    """
+    if not policy.enabled:
+        return False
+    if msg.type != "note_on":
+        return False
+    # Many systems represent note_off as note_on vel=0; treat that as NEVER dropped.
+    if getattr(msg, "velocity", 0) == 0:
+        return False
+    if lateness_s <= policy.late_drop_s():
+        return False
+    return int(getattr(msg, "velocity", 127)) <= policy.ghost_note_on_max_vel
+
+
 def _cycle_time(grid: ClaveGrid) -> float:
     return grid.seconds_per_bar() * grid.bars_per_cycle
 
@@ -105,6 +165,7 @@ def rt_play_cycle(
     spec: RtSpec,
     max_cycles: int | None = None,
     backend: str = "mido",
+    late_drop: LateDropPolicy | None = None,
 ) -> None:
     """
     Real-time scheduler: repeatedly plays a 2-bar cycle of step-indexed MIDI messages.
@@ -205,6 +266,11 @@ def rt_play_cycle(
                 if due > window_end:
                     break
                 if due <= now:
+                    lateness_s = now - due
+                    # Late-drop only applies to ornament note-ons; never drop note-off
+                    if msg.type == "note_on" and _should_drop_note_on(msg=msg, lateness_s=lateness_s, policy=policy):
+                        i += 1
+                        continue
                     _send_at(sender, msg, due)
                 i += 1
 
@@ -215,6 +281,10 @@ def rt_play_cycle(
                 if due > window_end:
                     break
                 if due <= now:
+                    lateness_s = now - due
+                    if _should_drop_click(lateness_s=lateness_s, policy=policy):
+                        ci += 1
+                        continue
                     _send_at(sender, msg, due)
                 ci += 1
 
@@ -222,7 +292,8 @@ def rt_play_cycle(
     except KeyboardInterrupt:
         print("\nStopped.")
     finally:
-        # Always close sender (rtmidi needs explicit close)
+        # PANIC CLEANUP FIRST, then close the port.
+        _panic_cleanup(sender)
         try:
             sender.close()
         except Exception:
