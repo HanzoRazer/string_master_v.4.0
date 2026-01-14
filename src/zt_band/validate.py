@@ -165,7 +165,7 @@ def _normalize_style_knobs(style: dict[str, Any], ts: str, bar_steps: int | None
 
         # Map to canonical flat fields
         if vel is None:
-            # If enabled but no velocity → safe default; else disabled
+            # If enabled but no velocity -> safe default; else disabled
             vel = 14 if enabled else 0
         flat["ghost_vel"] = int(vel)
         if steps is not None:
@@ -239,7 +239,7 @@ def _validate_style_knobs(style: dict[str, Any], ts: str, bar_steps: int | None)
     """
     Validate style knobs against canonical StylePattern contract.
 
-    1. Normalizes nested sugar → flat canonical fields
+    1. Normalizes nested sugar -> flat canonical fields
     2. Validates flat fields strictly (types, ranges)
     """
     issues: list[ValidationIssue] = []
@@ -269,7 +269,7 @@ def _validate_style_knobs(style: dict[str, Any], ts: str, bar_steps: int | None)
                 "style.bar_steps",
             ))
 
-    # --- normalize nested sugar → flat canonical fields ---
+    # --- normalize nested sugar -> flat canonical fields ---
     flat, norm_issues = _normalize_style_knobs(style, ts, bar_steps)
     issues.extend(norm_issues)
 

@@ -27,7 +27,7 @@ _name_to_pc: dict[str, PitchClass] = {
 
 def pc_from_name(name: str) -> PitchClass:
     """
-    Convert a pitch name (e.g. 'C', 'Db', 'F#', 'Bb') to a pitch class (0–11).
+    Convert a pitch name (e.g. 'C', 'Db', 'F#', 'Bb') to a pitch class (0-11).
 
     Normalizes enharmonic equivalents via a small name dictionary.
     Raises ValueError for unknown names.
@@ -40,12 +40,12 @@ def pc_from_name(name: str) -> PitchClass:
 
 def name_from_pc(pc: PitchClass, prefer_sharps: bool = True) -> str:
     """
-    Convert a pitch class (0–11) to a canonical name.
+    Convert a pitch class (0-11) to a canonical name.
 
     Parameters
     ----------
     pc:
-        Pitch class integer (0–11). Values outside range are reduced modulo 12.
+        Pitch class integer (0-11). Values outside range are reduced modulo 12.
     prefer_sharps:
         Currently unused (future extension for flat-preference).
     """

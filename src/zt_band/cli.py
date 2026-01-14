@@ -157,7 +157,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="zt-band",
         description=(
-            "Smart Guitar / Zone–Tritone backing band prototype.\n"
+            "Smart Guitar / Zone-Tritone backing band prototype.\n"
             "Works with inline chords, chord files, .ztprog presets, and .ztplay playlists."
         ),
     )
@@ -227,7 +227,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=1.0,
         help=(
             "Probability [0.0, 1.0] for applying tritone subs when "
-            "tritone-mode=probabilistic (default: 1.0 → always). "
+            "tritone-mode=probabilistic (default: 1.0 -> always). "
             "Ignored if --config is used."
         ),
     )
@@ -266,7 +266,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     # ---- annotate subcommand ----
     p_annot = subparsers.add_parser(
         "annotate",
-        help=("Print Zone–Tritone annotations and gravity diagnostics "
+        help=("Print Zone-Tritone annotations and gravity diagnostics "
               "for a progression or for a .ztprog config's chords."),
     )
     p_annot.add_argument(
@@ -841,7 +841,7 @@ def _format_annotations_text(annotated, transitions) -> str:
     for idx, ac in enumerate(annotated):
         root_name = name_from_pc(ac.root_pc)
         axis_a, axis_b = ac.axis
-        axis_str = f"{name_from_pc(axis_a)}–{name_from_pc(axis_b)}"
+        axis_str = f"{name_from_pc(axis_a)}-{name_from_pc(axis_b)}"
         grav_str = "-"
         if ac.gravity_target is not None:
             grav_str = name_from_pc(ac.gravity_target)
@@ -862,9 +862,9 @@ def _format_annotations_text(annotated, transitions) -> str:
 
             tags: list[str] = []
             if tr.is_desc_fourth:
-                tags.append("↓4")
+                tags.append("v4")
             if tr.is_asc_fourth:
-                tags.append("↑4")
+                tags.append("^4")
             if tr.is_half_step:
                 tags.append("±1")
             if tr.is_whole_step:
@@ -891,7 +891,7 @@ def _format_annotations_markdown(annotated, transitions) -> str:
     for idx, ac in enumerate(annotated):
         root_name = name_from_pc(ac.root_pc)
         axis_a, axis_b = ac.axis
-        axis_str = f"{name_from_pc(axis_a)}–{name_from_pc(axis_b)}"
+        axis_str = f"{name_from_pc(axis_a)}-{name_from_pc(axis_b)}"
         grav_str = "-"
         if ac.gravity_target is not None:
             grav_str = name_from_pc(ac.gravity_target)
@@ -914,9 +914,9 @@ def _format_annotations_markdown(annotated, transitions) -> str:
 
             tags: list[str] = []
             if tr.is_desc_fourth:
-                tags.append("↓4")
+                tags.append("v4")
             if tr.is_asc_fourth:
-                tags.append("↑4")
+                tags.append("^4")
             if tr.is_half_step:
                 tags.append("±1")
             if tr.is_whole_step:

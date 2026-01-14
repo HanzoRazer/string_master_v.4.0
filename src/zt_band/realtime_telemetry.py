@@ -1,5 +1,5 @@
 """
-realtime_telemetry.py — Bar boundary CC emission for UI/DAW mapping.
+realtime_telemetry.py -- Bar boundary CC emission for UI/DAW mapping.
 
 Pure helper functions for generating telemetry MIDI messages.
 Keeps telemetry logic testable without realtime dependencies.

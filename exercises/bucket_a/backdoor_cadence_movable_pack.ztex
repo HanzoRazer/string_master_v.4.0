@@ -1,11 +1,11 @@
-# Bucket A — Movable Backdoor Cadence Pack (C, G, D)
-# Purpose: keep it practical—same SOUND, different keys, same shapes.
+# Bucket A -- Movable Backdoor Cadence Pack (C, G, D)
+# Purpose: keep it practical--same SOUND, different keys, same shapes.
 
 id: backdoor_cadence_movable_pack
-title: "Backdoor Cadence — Movable Pack (C / G / D)"
+title: "Backdoor Cadence -- Movable Pack (C / G / D)"
 level: "A"
 category: "cadence"
-concept: "IV → ♭VII7 → I (backdoor cadence)"
+concept: "IV -> ♭VII7 -> I (backdoor cadence)"
 
 program_refs:
   - "programs/bucket_a/backdoor_cadence_C.ztprog"
@@ -18,12 +18,12 @@ goals:
   - "Keep voice-leading smooth: top notes move by step whenever possible."
 
 quick_map:
-  C: "F → Bb7 → C"
-  G: "C → F7 → G"
-  D: "G → C7 → D"
+  C: "F -> Bb7 -> C"
+  G: "C -> F7 -> G"
+  D: "G -> C7 -> D"
 
 voicing_families:
-  - name: "Family 1 — 'Gospel grab' shapes (low/open zone)"
+  - name: "Family 1 -- 'Gospel grab' shapes (low/open zone)"
     idea:
       - "Use maj9 / 9 / maj9 whenever possible."
       - "Try to keep the top two strings moving minimally."
@@ -48,16 +48,16 @@ rhythm:
     - "Let the I chord land relaxed (don't rush home)."
 
 practice_steps:
-  - "Step 1: Play only IV → ♭VII7 → I in C for 2 minutes."
+  - "Step 1: Play only IV -> ♭VII7 -> I in C for 2 minutes."
   - "Step 2: Repeat in G (same feel, same idea)."
   - "Step 3: Repeat in D."
-  - "Step 4: Put all 3 keys back-to-back (C → G → D), no stopping."
-  - "Step 5: Add turnaround color (V13 → I6) in each key."
+  - "Step 4: Put all 3 keys back-to-back (C -> G -> D), no stopping."
+  - "Step 5: Add turnaround color (V13 -> I6) in each key."
 
 assessment:
   pass_condition:
     - "You can play all 3 keys without losing time."
     - "The ♭VII chord always sounds like a 'side door' into I."
-    - "No 'choking'—chords ring and release naturally."
+    - "No 'choking'--chords ring and release naturally."
 
 tags: [bucket_a, backdoor, cadence, movable, gospel, jazz]

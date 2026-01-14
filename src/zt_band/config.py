@@ -114,8 +114,8 @@ def load_program_config(path: str | Path) -> ProgramConfig:
     Load a .ztprog file (JSON or YAML) into a ProgramConfig.
 
     Detection:
-      - if the file starts with '{' or '[' → JSON
-      - otherwise → YAML (via yaml.safe_load)
+      - if the file starts with '{' or '[' -> JSON
+      - otherwise -> YAML (via yaml.safe_load)
 
     Required fields:
       - chords

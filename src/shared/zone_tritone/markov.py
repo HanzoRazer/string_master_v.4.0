@@ -11,7 +11,7 @@ def build_transition_counts(roots: RootSequence) -> list[list[int]]:
 
     counts[i][j] = number of observed transitions i -> j.
 
-    roots: sequence of integers 0–11.
+    roots: sequence of integers 0-11.
     """
     counts: list[list[int]] = [[0 for _ in range(12)] for _ in range(12)]
     if len(roots) < 2:
@@ -64,7 +64,7 @@ def sample_next_root(
     Parameters
     ----------
     current:
-        Current root pitch class (0–11).
+        Current root pitch class (0-11).
     matrix:
         Row-stochastic 12x12 probability matrix.
     rng:
@@ -73,7 +73,7 @@ def sample_next_root(
     Returns
     -------
     int:
-        Next root pitch class (0–11).
+        Next root pitch class (0-11).
     """
     if rng is None:
         rng = random

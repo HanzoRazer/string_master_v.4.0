@@ -1,5 +1,5 @@
 """
-rt_playlist.py — Live playlist runner for rt-play --playlist
+rt_playlist.py -- Live playlist runner for rt-play --playlist
 
 Orchestrates sequential playback of .ztplay items, switching
 programs at bar boundaries without engine rewrite.

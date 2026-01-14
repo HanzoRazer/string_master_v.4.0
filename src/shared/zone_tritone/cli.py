@@ -49,7 +49,7 @@ def cmd_gravity(args: argparse.Namespace) -> int:
     chain = gravity_chain(root_pc, steps)
 
     print(f"# Gravity chain starting from {args.root} (steps={steps})")
-    print("# (cycle of fourths, Zone–Tritone gravity view)")
+    print("# (cycle of fourths, Zone-Tritone gravity view)")
     print()
 
     for idx, pc in enumerate(chain):
@@ -107,7 +107,7 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     counts = build_transition_counts(roots)
     matrix = normalize_transition_matrix(counts, smoothing=args.smoothing)
 
-    print("# Zone–Tritone Gravity Analysis")
+    print("# Zone-Tritone Gravity Analysis")
     print("# Chord sequence:")
     print("  " + " ".join(chords))
     print()
@@ -155,7 +155,7 @@ def cmd_analyze(args: argparse.Namespace) -> int:
 def _explain_transition(a: PitchClass, b: PitchClass) -> str:
     """
     Return a human-readable explanation of the motion from root a to root b,
-    using Zone–Tritone terminology.
+    using Zone-Tritone terminology.
     """
     d = interval(a, b)  # in semitones mod 12
     same = (d == 0)
@@ -193,7 +193,7 @@ def _render_explain_text(chords: list[str], roots: list[PitchClass]) -> str:
     buf = StringIO()
     w = buf.write
 
-    w("# Zone–Tritone EXPLAIN\n")
+    w("# Zone-Tritone EXPLAIN\n")
     w("# Chord progression:\n")
     w("  " + " ".join(chords) + "\n")
     w("\n")
@@ -210,7 +210,7 @@ def _render_explain_text(chords: list[str], roots: list[PitchClass]) -> str:
         third_pc = (r + 4) % 12
         axis = tritone_axis(third_pc)
         a, b = axis
-        axis_str = f"{name_from_pc(a)}–{name_from_pc(b)}"
+        axis_str = f"{name_from_pc(a)}-{name_from_pc(b)}"
         w(f"{idx:3d}:  {ch:6s} {root_name:4s} {r:2d}  {zname:7s}  {axis_str}\n")
 
     w("\n")
@@ -247,9 +247,9 @@ def _render_explain_text(chords: list[str], roots: list[PitchClass]) -> str:
 
         motion_tags = []
         if desc_fourth:
-            motion_tags.append("↓4")
+            motion_tags.append("v4")
         if asc_fourth:
-            motion_tags.append("↑4")
+            motion_tags.append("^4")
         if hs:
             motion_tags.append("±1")
         if ws:
@@ -285,7 +285,7 @@ def _render_explain_text(chords: list[str], roots: list[PitchClass]) -> str:
 
     w("\n")
     w("# Reading guide:\n")
-    w("  • Descending 4th (↓4) steps align with pure functional gravity.\n")
+    w("  • Descending 4th (v4) steps align with pure functional gravity.\n")
     w("  • Semitone (±1) steps are chromatic zone-crossings (strong direction).\n")
     w("  • Whole-step (±2) in-zone steps are modal / color motion.\n")
     w("  • Everything else is a deliberate tension against the gravity grid.\n")
@@ -369,17 +369,17 @@ def _render_explain_html(chords: list[str], roots: list[PitchClass]) -> str:
         ws = is_whole_step(prev_root, cur_root)
 
         if cross:
-            zone_relation = f"{prev_zone} → {cur_zone} (zone-cross)"
+            zone_relation = f"{prev_zone} -> {cur_zone} (zone-cross)"
         elif same_zone:
-            zone_relation = f"{prev_zone} → {cur_zone} (in-zone)"
+            zone_relation = f"{prev_zone} -> {cur_zone} (in-zone)"
         else:
-            zone_relation = f"{prev_zone} → {cur_zone}"
+            zone_relation = f"{prev_zone} -> {cur_zone}"
 
         motion_tags = []
         if desc_fourth:
-            motion_tags.append("↓4")
+            motion_tags.append("v4")
         if asc_fourth:
-            motion_tags.append("↑4")
+            motion_tags.append("^4")
         if hs:
             motion_tags.append("±1")
         if ws:
@@ -424,7 +424,7 @@ def _render_explain_html(chords: list[str], roots: list[PitchClass]) -> str:
     # Reading guide
     w("  <h2>Reading guide</h2>\n")
     w("  <ul>\n")
-    w("    <li><strong>Descending 4th (↓4)</strong> steps align with pure functional gravity.</li>\n")
+    w("    <li><strong>Descending 4th (v4)</strong> steps align with pure functional gravity.</li>\n")
     w("    <li><strong>Semitone (±1)</strong> steps are chromatic zone-crossings (strong directional pull).</li>\n")
     w("    <li><strong>Whole-step (±2)</strong> in-zone steps are modal / color motion.</li>\n")
     w("    <li>Other moves are deliberate tension against the gravity grid.</li>\n")
@@ -447,7 +447,7 @@ def _render_explain_markdown(chords: list[str], roots: list[PitchClass]) -> str:
     w = buf.write
 
     prog = " ".join(chords)
-    w("# Zone–Tritone EXPLAIN\n")
+    w("# Zone-Tritone EXPLAIN\n")
     w("\n")
     w("## Chord progression\n")
     w("\n")
@@ -466,7 +466,7 @@ def _render_explain_markdown(chords: list[str], roots: list[PitchClass]) -> str:
         third_pc = (r + 4) % 12
         axis = tritone_axis(third_pc)
         a, b = axis
-        axis_str = f"{name_from_pc(a)}–{name_from_pc(b)}"
+        axis_str = f"{name_from_pc(a)}-{name_from_pc(b)}"
         w(f"| {idx} | `{ch}` | {root_name} | {r} | {zname} | {axis_str} |\n")
 
     w("\n")
@@ -496,17 +496,17 @@ def _render_explain_markdown(chords: list[str], roots: list[PitchClass]) -> str:
         ws = is_whole_step(prev_root, cur_root)
 
         if cross:
-            zone_relation = f"{prev_zone} → {cur_zone} (zone-cross)"
+            zone_relation = f"{prev_zone} -> {cur_zone} (zone-cross)"
         elif same_zone:
-            zone_relation = f"{prev_zone} → {cur_zone} (in-zone)"
+            zone_relation = f"{prev_zone} -> {cur_zone} (in-zone)"
         else:
-            zone_relation = f"{prev_zone} → {cur_zone}"
+            zone_relation = f"{prev_zone} -> {cur_zone}"
 
         motion_tags = []
         if desc_fourth:
-            motion_tags.append("↓4")
+            motion_tags.append("v4")
         if asc_fourth:
-            motion_tags.append("↑4")
+            motion_tags.append("^4")
         if hs:
             motion_tags.append("±1")
         if ws:
@@ -530,8 +530,8 @@ def _render_explain_markdown(chords: list[str], roots: list[PitchClass]) -> str:
     chain_names = [name_from_pc(r) for r in chain]
     actual_names = [name_from_pc(r) for r in roots]
 
-    grav_chain_md = " → ".join(chain_names)
-    actual_md = " → ".join(actual_names)
+    grav_chain_md = " -> ".join(chain_names)
+    actual_md = " -> ".join(actual_names)
 
     w("\n")
     w("## Gravity comparison\n")
@@ -546,7 +546,7 @@ def _render_explain_markdown(chords: list[str], roots: list[PitchClass]) -> str:
     w("\n")
     w("## Reading guide\n")
     w("\n")
-    w("- **Descending 4th (↓4)** steps align with pure functional gravity.\n")
+    w("- **Descending 4th (v4)** steps align with pure functional gravity.\n")
     w("- **Semitone (±1)** steps are chromatic zone-crossings (strong directional pull).\n")
     w("- **Whole-step (±2)** in-zone steps are modal / color motion.\n")
     w("- Other moves are deliberate tension against the gravity grid.\n")
@@ -617,7 +617,7 @@ def cmd_explain(args: argparse.Namespace) -> int:
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="zt-gravity",
-        description="Zone–Tritone System CLI: gravity chains and chord analysis.",
+        description="Zone-Tritone System CLI: gravity chains and chord analysis.",
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)

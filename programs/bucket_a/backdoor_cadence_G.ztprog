@@ -1,5 +1,5 @@
-# Bucket A — Backdoor Cadence (IV → ♭VII7 → I) in G
-# Backdoor in G: C → F7 → G
+# Bucket A -- Backdoor Cadence (IV -> ♭VII7 -> I) in G
+# Backdoor in G: C -> F7 -> G
 
 name: backdoor_cadence_G
 tempo: 88
@@ -18,6 +18,6 @@ chords:
   - G6
 
 notes:
-  - "Backdoor in G = C → F7 → G"
+  - "Backdoor in G = C -> F7 -> G"
   - "Color: F9/F13 or F7#11; land on Gmaj9 or G6."
 tags: [bucket_a, backdoor, gospel, jazz, cadence, key_G]

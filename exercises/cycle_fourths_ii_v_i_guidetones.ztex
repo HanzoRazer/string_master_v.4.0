@@ -1,13 +1,13 @@
-name: "Cycle of 4ths — ii–V–I Guide Tones"
+name: "Cycle of 4ths -- ii-V-I Guide Tones"
 program: "../programs/cycle_fourths_ii_v_i.ztprog"
 exercise_type: "cycle_fourths_ii_v_i_guidetones"
 
 task:
   mode: "play_shells"
-  instructions: "Play ONLY the 3rd and 7th of each chord (guide tones) through the full ii–V–I cycle."
+  instructions: "Play ONLY the 3rd and 7th of each chord (guide tones) through the full ii-V-I cycle."
   prompts:
     - "Keep guide tones in one position on the neck as long as possible."
-    - "Notice how 3rds/7ths move by half-step between ii→V and V→I."
+    - "Notice how 3rds/7ths move by half-step between ii->V and V->I."
     - "Say the target I chord out loud before the V arrives (predictive hearing)."
 
 interaction:

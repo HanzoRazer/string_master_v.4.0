@@ -21,11 +21,11 @@ from .chords import Chord, parse_chord_symbol
 @dataclass
 class GravityAnnotatedChord:
     """
-    A single chord annotated with Zone–Tritone metadata.
+    A single chord annotated with Zone-Tritone metadata.
 
     - chord: original parsed chord
-    - root_pc: pitch class of the root (0–11)
-    - zone: zone label from the Zone–Tritone system (e.g. 'Zone 1', 'Zone 2')
+    - root_pc: pitch class of the root (0-11)
+    - zone: zone label from the Zone-Tritone system (e.g. 'Zone 1', 'Zone 2')
     - axis: the tritone axis implied by the chord's 3rd/7th
     - gravity_target: the "ideal" next root in a pure descending-4ths gravity chain
     - is_on_chain: whether this chord's root matches the ideal gravity chain step
@@ -57,9 +57,9 @@ class GravityTransition:
 
 def annotate_progression(chord_symbols: list[str]) -> list[GravityAnnotatedChord]:
     """
-    Annotate a chord progression with Zone–Tritone information.
+    Annotate a chord progression with Zone-Tritone information.
 
-    This does not change the chords — it only adds metadata that can be used
+    This does not change the chords -- it only adds metadata that can be used
     by the engine, CLI, or UI for analysis or display.
     """
     if not chord_symbols:
@@ -82,8 +82,8 @@ def annotate_progression(chord_symbols: list[str]) -> list[GravityAnnotatedChord
         zname = zone_name(root_pc)
 
         # Use 3rd of the chord to define the tritone axis.
-        # Major/dom: 1–3–5–7 → 3 is root+4
-        # Minor: 1–b3–5–b7 → 3 is root+3
+        # Major/dom: 1-3-5-7 -> 3 is root+4
+        # Minor: 1-b3-5-b7 -> 3 is root+3
         if c.quality in ("maj", "dom"):
             third_pc = (root_pc + 4) % 12
         else:

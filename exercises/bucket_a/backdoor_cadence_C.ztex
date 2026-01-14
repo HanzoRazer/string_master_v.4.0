@@ -1,8 +1,8 @@
-# Bucket A — Backdoor Cadence Lesson (C)
+# Bucket A -- Backdoor Cadence Lesson (C)
 # Purpose: teach + train (lightweight, no deep theory detours)
 
 id: backdoor_cadence_C
-title: "Backdoor Cadence (IV → ♭VII7 → I) — C Major"
+title: "Backdoor Cadence (IV -> ♭VII7 -> I) -- C Major"
 level: "A"
 category: "cadence"
 key_center: "C"
@@ -26,12 +26,12 @@ targets:
     motion: "down a half-step (to G) OR up whole-step (to B)"
 
 voicing_sets:
-  - name: "Set A — compact jazz grips (mid-neck)"
+  - name: "Set A -- compact jazz grips (mid-neck)"
     chords:
       Fmaj7: "x-8-7-5-6-5"
       Bb7:   "x-x-7-6-6-6"
       Cmaj7: "x-x-9-9-8-7"
-  - name: "Set B — gospel grabs (open/low)"
+  - name: "Set B -- gospel grabs (open/low)"
     chords:
       Fmaj9: "x-3-2-0-1-0"
       Bb9:   "x-1-0-1-1-1"
@@ -44,12 +44,12 @@ rhythm:
     - "Let C land slightly late (relax into home)."
 
 practice_steps:
-  - "Loop IV → ♭VII7 → I for 2 minutes. Only focus on smooth top note."
-  - "Loop again; now only focus on guide tones resolving (D→E, Ab→G)."
-  - "Add the turnaround (G13 → C6) and keep groove relaxed."
+  - "Loop IV -> ♭VII7 -> I for 2 minutes. Only focus on smooth top note."
+  - "Loop again; now only focus on guide tones resolving (D->E, Ab->G)."
+  - "Add the turnaround (G13 -> C6) and keep groove relaxed."
 
 licks:
-  - name: "Chromatic butter (Bb7→C)"
+  - name: "Chromatic butter (Bb7->C)"
     degrees: "3-4-#4-5 over C"
     notes: "E F F# G"
     tab_high_e: "0-1-2-3"

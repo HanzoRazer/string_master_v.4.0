@@ -1,7 +1,7 @@
-# Bucket A — Basic Samba Groove (G Major)
+# Bucket A -- Basic Samba Groove (G Major)
 
 id: samba_basic_G
-title: "Basic Samba — G Major"
+title: "Basic Samba -- G Major"
 level: "A"
 category: "groove"
 style_family: "latin/samba"
@@ -16,7 +16,7 @@ goals:
 rhythm_focus:
   meter: "2/4"
   pattern_description: >
-    Beat 1: rest → short attack
+    Beat 1: rest -> short attack
     Beat 2: syncopated off-beat emphasis
   mnemonic: "1..&/.."
 

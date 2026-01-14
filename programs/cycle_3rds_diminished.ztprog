@@ -1,5 +1,5 @@
 name: cycle_3rds_diminished
-description: Minor-3rd symmetric diminished cycle (C → Eb → Gb → A → C)
+description: Minor-3rd symmetric diminished cycle (C -> Eb -> Gb -> A -> C)
 tempo: 120
 time_signature: 4/4
 bars_per_chord: 2

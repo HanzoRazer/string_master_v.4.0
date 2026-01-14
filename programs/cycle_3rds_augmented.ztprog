@@ -1,5 +1,5 @@
 name: cycle_3rds_augmented
-description: Major-3rd symmetric augmented cycle (C → E → Ab → C)
+description: Major-3rd symmetric augmented cycle (C -> E -> Ab -> C)
 tempo: 120
 time_signature: 4/4
 bars_per_chord: 2

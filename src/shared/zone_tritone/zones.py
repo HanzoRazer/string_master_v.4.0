@@ -34,12 +34,12 @@ def interval(pc1: PitchClass, pc2: PitchClass) -> int:
 
 
 def is_half_step(a: PitchClass, b: PitchClass) -> bool:
-    """Return True if the interval between a and b is a semitone (↑ or ↓)."""
+    """Return True if the interval between a and b is a semitone (^ or v)."""
     d = interval(a, b)
     return d in (1, 11)
 
 
 def is_whole_step(a: PitchClass, b: PitchClass) -> bool:
-    """Return True if the interval between a and b is a whole step (↑ or ↓)."""
+    """Return True if the interval between a and b is a whole step (^ or v)."""
     d = interval(a, b)
     return d in (2, 10)

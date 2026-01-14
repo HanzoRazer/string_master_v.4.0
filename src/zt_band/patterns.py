@@ -10,7 +10,7 @@ class CompEventSpec:
 
     beat:         0-based index in beats (e.g. 0, 1.5, 2.5)
     length_beats: duration in beats
-    velocity:     MIDI velocity (0–127)
+    velocity:     MIDI velocity (0-127)
     """
     beat: float
     length_beats: float
@@ -116,7 +116,7 @@ BALLAD_BASIC = StylePattern(
 
 
 # 4) Samba 4/4 (partido alto feel): syncopated Brazilian groove.
-#    Comp: hits on "and" of 1, beat 2, "and" of 3, beat 4 — classic partido alto bounce.
+#    Comp: hits on "and" of 1, beat 2, "and" of 3, beat 4 -- classic partido alto bounce.
 #    Bass: surdo-style with strong beat 2, anticipation into beat 1.
 SAMBA_4_4 = StylePattern(
     name="samba_4_4",
@@ -138,7 +138,7 @@ SAMBA_4_4 = StylePattern(
 
 # 5) Samba 2/4 (authentic Brazilian): true samba feel in 2/4 meter.
 #    Pattern per 2-beat bar (half-notes = beats in 2/4):
-#    Comp: tamborim-style syncopation — hit on beat 1, "and" of 1, "and" of 2
+#    Comp: tamborim-style syncopation -- hit on beat 1, "and" of 1, "and" of 2
 #    Bass: surdo pattern with strong beat 2 (characteristic of samba batucada)
 SAMBA_2_4 = StylePattern(
     name="samba_2_4",
@@ -150,8 +150,8 @@ SAMBA_2_4 = StylePattern(
         CompEventSpec(beat=1.5, length_beats=0.25, velocity=80),   # "and" of 2
     ],
     bass_pattern=[
-        (0.0, 0.5, 70),    # beat 1 (lighter surdo — "surdo de primeira")
-        (1.0, 0.75, 95),   # beat 2 (heavy surdo — "surdo de segunda")
+        (0.0, 0.5, 70),    # beat 1 (lighter surdo -- "surdo de primeira")
+        (1.0, 0.75, 95),   # beat 2 (heavy surdo -- "surdo de segunda")
     ],
 )
 
@@ -181,10 +181,10 @@ SAMBA_FUNK = StylePattern(
 
 
 # ============================================================================
-# BUCKET A — SAMBA STYLES (nuanced, document-specified)
+# BUCKET A -- SAMBA STYLES (nuanced, document-specified)
 # ============================================================================
 
-# 7) samba_basic — 2/4 comp pattern (tamborim-inspired)
+# 7) samba_basic -- 2/4 comp pattern (tamborim-inspired)
 #    Short attack on beat 1, syncopated push on "and" of 2.
 #    Designed for authentic Brazilian samba in 2/4.
 SAMBA_BASIC = StylePattern(
@@ -199,20 +199,20 @@ SAMBA_BASIC = StylePattern(
 )
 
 
-# 8) samba_two_feel — 2/4 bass pattern (surdo-inspired)
+# 8) samba_two_feel -- 2/4 bass pattern (surdo-inspired)
 #    Light touch on 1 ("surdo de primeira"), heavy on 2 ("surdo de segunda").
 SAMBA_TWO_FEEL = StylePattern(
     name="samba_two_feel",
     description="2/4 samba bass: light beat 1, heavy beat 2 (surdo feel).",
     comp_hits=[],  # comp handled separately by samba_basic
     bass_pattern=[
-        (0.0, 0.5, 65),    # beat 1 — light ("primeira")
-        (1.0, 0.75, 95),   # beat 2 — heavy ("segunda", the lift)
+        (0.0, 0.5, 65),    # beat 1 -- light ("primeira")
+        (1.0, 0.75, 95),   # beat 2 -- heavy ("segunda", the lift)
     ],
 )
 
 
-# 9) samba_basic_4_4 — 4/4 samba comp pattern
+# 9) samba_basic_4_4 -- 4/4 samba comp pattern
 #    Hits: 1 (light) &2 (strong) 3 (light) &4 (strong)
 #    "Push-pull" feel without rock backbeat.
 SAMBA_BASIC_4_4 = StylePattern(
@@ -228,7 +228,7 @@ SAMBA_BASIC_4_4 = StylePattern(
 )
 
 
-# 10) samba_four_feel — 4/4 bass pattern (stretched surdo)
+# 10) samba_four_feel -- 4/4 bass pattern (stretched surdo)
 #     Surdo-style with light 1 & 3, heavy syncopated pushes before 2 & 4.
 SAMBA_FOUR_FEEL = StylePattern(
     name="samba_four_feel",
@@ -244,10 +244,10 @@ SAMBA_FOUR_FEEL = StylePattern(
 
 
 # ============================================================================
-# BUCKET A — BRAZILIAN FEEL: PICKUP + GHOST HITS
+# BUCKET A -- BRAZILIAN FEEL: PICKUP + GHOST HITS
 # ============================================================================
 
-# 11) samba_basic_4_4_pickup — 4/4 samba with anticipation + ghost taps
+# 11) samba_basic_4_4_pickup -- 4/4 samba with anticipation + ghost taps
 #     Main hits: 1 (light), &2 (push), 3 (light), &4 (push)
 #     Pickup: &4 anticipation into next chord (classic samba/bossa move)
 #     Ghosts: subtle "e" taps (steps 1, 5, 9, 13) at low velocity
@@ -271,7 +271,7 @@ SAMBA_BASIC_4_4_PICKUP = StylePattern(
 )
 
 
-# 12) samba_four_feel_pickup — 4/4 bass with anticipation
+# 12) samba_four_feel_pickup -- 4/4 bass with anticipation
 #     Same surdo feel but with bass pickup on &4.
 SAMBA_FOUR_FEEL_PICKUP = StylePattern(
     name="samba_four_feel_pickup",
@@ -287,7 +287,7 @@ SAMBA_FOUR_FEEL_PICKUP = StylePattern(
 )
 
 
-# 13) samba_brazil_full — Full Brazilian feel with pickup + ghost + velocity contour
+# 13) samba_brazil_full -- Full Brazilian feel with pickup + ghost + velocity contour
 #     Complete "breathing" samba: soft on 1/3, strong on &2/&4, soft pickup, ghost taps
 SAMBA_BRAZIL_FULL = StylePattern(
     name="samba_brazil_full",
@@ -322,14 +322,14 @@ STYLE_REGISTRY = {
     "samba_4_4": SAMBA_4_4,
     "samba_2_4": SAMBA_2_4,
     "samba_funk": SAMBA_FUNK,
-    # Bucket A — nuanced samba (split comp/bass)
+    # Bucket A -- nuanced samba (split comp/bass)
     "samba_basic": SAMBA_BASIC,
     "samba_two_feel": SAMBA_TWO_FEEL,
     "samba_basic_4_4": SAMBA_BASIC_4_4,
     "samba_four_feel": SAMBA_FOUR_FEEL,
-    # Bucket A — Brazilian feel (pickup + ghost)
+    # Bucket A -- Brazilian feel (pickup + ghost)
     "samba_basic_4_4_pickup": SAMBA_BASIC_4_4_PICKUP,
     "samba_four_feel_pickup": SAMBA_FOUR_FEEL_PICKUP,
-    # Bucket A — Full Brazilian (pickup + ghost + contour)
+    # Bucket A -- Full Brazilian (pickup + ghost + contour)
     "samba_brazil_full": SAMBA_BRAZIL_FULL,
 }

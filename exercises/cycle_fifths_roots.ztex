@@ -1,4 +1,4 @@
-name: "Cycle of Fifths — Roots (All Keys)"
+name: "Cycle of Fifths -- Roots (All Keys)"
 program: "../programs/cycle_fifths_all_keys.ztprog"
 exercise_type: "cycle_fifths_roots"
 

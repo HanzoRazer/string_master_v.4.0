@@ -93,7 +93,7 @@ class LateDropPolicy:
             vel = int(msg.velocity)
         except Exception:
             return False
-        # note_on with vel=0 is actually note-off — never drop
+        # note_on with vel=0 is actually note-off -- never drop
         if vel == 0:
             return False
         return vel <= self.ghost_note_on_max_vel

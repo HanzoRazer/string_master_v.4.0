@@ -60,7 +60,7 @@ class ExerciseConfig:
 
     Typical YAML/JSON:
 
-    name: "Cycle of Fifths — Roots"
+    name: "Cycle of Fifths -- Roots"
     program: "c_major_cycle.ztprog"
     exercise_type: "cycle_fifths_roots"
 

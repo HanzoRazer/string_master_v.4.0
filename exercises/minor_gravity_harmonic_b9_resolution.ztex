@@ -1,4 +1,4 @@
-name: "Minor Gravity — Harmonic Minor b9 Resolution Mission"
+name: "Minor Gravity -- Harmonic Minor b9 Resolution Mission"
 program: "../programs/minor_gravity_harmonic_v7b9_to_i.ztprog"
 exercise_type: "minor_gravity_harmonic_b9_resolution"
 
@@ -8,11 +8,11 @@ task:
   prompts:
     - "Say out loud: 'b9 resolves down' before each tonic hit."
     - "Keep the tritone shape consistent; hear the bass as secondary."
-    - "Try voicing V7b9 as: 3rd–7th–b9 (no root)."
+    - "Try voicing V7b9 as: 3rd-7th-b9 (no root)."
 
 interaction:
   mode: "self_report"
   questions:
     - "Did the b9 feel like the 'extra gravity' compared to melodic minor?"
     - "Where did you feel the strongest inevitability of resolution?"
-    - "Could you resolve without thinking scale—just tension rules?"
+    - "Could you resolve without thinking scale--just tension rules?"

@@ -119,9 +119,9 @@ def add_ghost_hits(
 # "e" positions (between beat and &): 1e=1, 2e=5, 3e=9, 4e=13
 # "a" positions (between & and next beat): 1a=3, 2a=7, 3a=11, 4a=15
 
-GHOST_STEPS_E_ALL = (1, 5, 9, 13)       # "e" of each beat — subtle Brazilian feel
-GHOST_STEPS_A_ALL = (3, 7, 11, 15)      # "a" of each beat — more aggressive
-GHOST_STEPS_E_OFFBEAT = (5, 13)         # "e" of 2 and 4 only — minimal
+GHOST_STEPS_E_ALL = (1, 5, 9, 13)       # "e" of each beat -- subtle Brazilian feel
+GHOST_STEPS_A_ALL = (3, 7, 11, 15)      # "a" of each beat -- more aggressive
+GHOST_STEPS_E_OFFBEAT = (5, 13)         # "e" of 2 and 4 only -- minimal
 GHOST_STEPS_TAMBORIM = (1, 3, 5, 7, 9, 11, 13, 15)  # all 16ths except main hits
 
 

@@ -55,7 +55,7 @@ def gravity_chain(root: PitchClass, steps: int) -> list[PitchClass]:
     Parameters
     ----------
     root:
-        Starting root pitch class (0–11).
+        Starting root pitch class (0-11).
     steps:
         Number of steps to generate (non-negative).
 
