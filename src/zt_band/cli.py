@@ -1067,8 +1067,13 @@ def cmd_programs(args: argparse.Namespace) -> int:
 
         cfg = d.config
         name = cfg.name or "-"
+        # Handle style as string or dict
+        if isinstance(cfg.style, dict):
+            style_display = cfg.style.get("comp") or cfg.style.get("name") or cfg.style.get("style", "-")
+        else:
+            style_display = cfg.style or "-"
         print(
-            f"{str(rel):<29} | {name:<24} | {cfg.style:<12} | {cfg.tempo:>5} | OK"
+            f"{str(rel):<29} | {name:<24} | {style_display:<12} | {cfg.tempo:>5} | OK"
         )
 
     return 0
