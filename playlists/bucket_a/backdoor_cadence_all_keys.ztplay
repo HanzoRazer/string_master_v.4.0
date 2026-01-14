@@ -1,0 +1,11 @@
+name: "Backdoor Cadence -- All Keys (C, G, D)"
+tempo: 88
+outfile: "backdoor_cadence_all_keys.mid"
+
+programs:
+  - config: "../../programs/bucket_a/backdoor_cadence_C.ztprog"
+    repeat: 2
+  - config: "../../programs/bucket_a/backdoor_cadence_G.ztprog"
+    repeat: 2
+  - config: "../../programs/bucket_a/backdoor_cadence_D.ztprog"
+    repeat: 2
