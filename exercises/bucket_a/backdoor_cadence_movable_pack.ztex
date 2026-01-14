@@ -5,7 +5,7 @@ id: backdoor_cadence_movable_pack
 title: "Backdoor Cadence -- Movable Pack (C / G / D)"
 level: "A"
 category: "cadence"
-concept: "IV -> ♭VII7 -> I (backdoor cadence)"
+concept: "IV -> bVII7 -> I (backdoor cadence)"
 
 program_refs:
   - "programs/bucket_a/backdoor_cadence_C.ztprog"
@@ -29,26 +29,26 @@ voicing_families:
       - "Try to keep the top two strings moving minimally."
     examples:
       C_major:
-        IV:  "Fmaj9  x-3-2-0-1-0"
-        bVII:"Bb9    x-1-0-1-1-1"
-        I:   "Cmaj9  x-3-2-0-3-0"
+        "IV":   "Fmaj9  x-3-2-0-1-0"
+        "bVII": "Bb9    x-1-0-1-1-1"
+        "I":    "Cmaj9  x-3-2-0-3-0"
       G_major:
-        IV:  "Cmaj9  x-3-2-0-3-0"
-        bVII:"F9     1-x-1-2-1-x  (or F9 x-8-7-8-8-x)"
-        I:   "Gmaj9  3-x-4-4-3-x  (or G6 3-x-2-4-3-x)"
+        "IV":   "Cmaj9  x-3-2-0-3-0"
+        "bVII": "F9     1-x-1-2-1-x  (or F9 x-8-7-8-8-x)"
+        "I":    "Gmaj9  3-x-4-4-3-x  (or G6 3-x-2-4-3-x)"
       D_major:
-        IV:  "Gmaj9  3-x-4-4-3-x"
-        bVII:"C9     x-3-2-3-3-x  (or C9 x-3-2-3-3-3)"
-        I:   "Dmaj9  x-5-4-2-5-x  (or D6 x-5-4-4-5-x)"
+        "IV":   "Gmaj9  3-x-4-4-3-x"
+        "bVII": "C9     x-3-2-3-3-x  (or C9 x-3-2-3-3-3)"
+        "I":    "Dmaj9  x-5-4-2-5-x  (or D6 x-5-4-4-5-x)"
 
 rhythm:
   feel: "soul/gospel"
   tips:
-    - "Slightly anticipate the ♭VII7 (or ♭VII9) chord."
+    - "Slightly anticipate the bVII7 (or bVII9) chord."
     - "Let the I chord land relaxed (don't rush home)."
 
 practice_steps:
-  - "Step 1: Play only IV -> ♭VII7 -> I in C for 2 minutes."
+  - "Step 1: Play only IV -> bVII7 -> I in C for 2 minutes."
   - "Step 2: Repeat in G (same feel, same idea)."
   - "Step 3: Repeat in D."
   - "Step 4: Put all 3 keys back-to-back (C -> G -> D), no stopping."
@@ -57,7 +57,7 @@ practice_steps:
 assessment:
   pass_condition:
     - "You can play all 3 keys without losing time."
-    - "The ♭VII chord always sounds like a 'side door' into I."
+    - "The bVII chord always sounds like a 'side door' into I."
     - "No 'choking'--chords ring and release naturally."
 
 tags: [bucket_a, backdoor, cadence, movable, gospel, jazz]

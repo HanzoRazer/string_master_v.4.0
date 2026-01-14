@@ -155,17 +155,24 @@ def load_exercise_config(path: str | Path) -> ExerciseConfig:
     """
     Load a .ztex exercise file (JSON or YAML).
 
-    Required fields:
-      - name
-      - program  (path to .ztprog)
-      - exercise_type
-      - task.mode
+    Supports two formats:
 
-    Optional:
-      - task.instructions
-      - task.prompts
-      - interaction.mode
-      - interaction.questions
+    1. Simple exercise format:
+       - name (required)
+       - program (required, path to .ztprog)
+       - exercise_type (required)
+
+    2. Pack exercise format:
+       - id (required)
+       - title (required, used as name)
+       - program_ref or program_refs (path(s) to .ztprog)
+       - category (used as exercise_type)
+
+    Optional for both:
+      - task.mode, task.instructions, task.prompts
+      - interaction.mode, interaction.questions
+      - practice_steps (converted to task.prompts if no task block)
+      - goals (used for instructions if no task block)
     """
     p = Path(path)
     if not p.exists():
@@ -188,21 +195,75 @@ def load_exercise_config(path: str | Path) -> ExerciseConfig:
 
     data = _ensure_dict(parsed, "exercise root")
 
-    name = str(data.get("name") or "").strip()
-    if not name:
-        raise ValueError("Exercise config must have a non-empty 'name' field.")
+    # Detect format: simple (name/program) vs pack (id/title)
+    is_pack_format = ("id" in data or "title" in data) and "name" not in data
 
-    program_raw = data.get("program")
+    if is_pack_format:
+        # Pack exercise format
+        name = str(data.get("title") or data.get("id") or "").strip()
+        if not name:
+            raise ValueError("Pack exercise must have 'title' or 'id' field.")
+
+        # program_ref (single) or program_refs (list) - use first available
+        program_raw = data.get("program_ref")
+        if not program_raw:
+            refs = data.get("program_refs", [])
+            if isinstance(refs, list) and refs:
+                program_raw = refs[0]
+
+        exercise_type = str(data.get("id") or data.get("category") or "pack").strip()
+
+        # Build task from pack fields if no explicit task block
+        if "task" not in data:
+            goals = data.get("goals", [])
+            practice_steps = data.get("practice_steps", [])
+            instructions = ""
+            if goals and isinstance(goals, list):
+                instructions = goals[0] if isinstance(goals[0], str) else ""
+            prompts = []
+            if practice_steps and isinstance(practice_steps, list):
+                prompts = [s for s in practice_steps if isinstance(s, str)]
+            data["task"] = {
+                "mode": "custom",
+                "instructions": instructions,
+                "prompts": prompts,
+            }
+
+        # Build interaction from assessment if no explicit interaction block
+        if "interaction" not in data:
+            assessment = data.get("assessment", {})
+            questions = []
+            if isinstance(assessment, dict):
+                pass_cond = assessment.get("pass_condition", [])
+                if isinstance(pass_cond, list):
+                    questions = [f"Self-check: {c}" for c in pass_cond if isinstance(c, str)]
+            data["interaction"] = {
+                "mode": "self_report",
+                "questions": questions or ["How did the exercise feel?"],
+            }
+    else:
+        # Simple exercise format
+        name = str(data.get("name") or "").strip()
+        if not name:
+            raise ValueError("Exercise config must have a non-empty 'name' field.")
+
+        program_raw = data.get("program")
+        exercise_type = str(data.get("exercise_type") or "").strip()
+        if not exercise_type:
+            raise ValueError("Exercise config must specify 'exercise_type' for classification.")
+
     if not program_raw:
-        raise ValueError("Exercise config must include a 'program' field pointing to a .ztprog file.")
+        raise ValueError("Exercise config must include a 'program' (or 'program_ref') field pointing to a .ztprog file.")
 
     program_path = Path(program_raw)
     if not program_path.is_absolute():
-        program_path = p.parent / program_path
-
-    exercise_type = str(data.get("exercise_type") or "").strip()
-    if not exercise_type:
-        raise ValueError("Exercise config must specify 'exercise_type' for classification.")
+        # Pack format paths starting with "programs/" are relative to project root
+        # Simple format paths (starting with "../" or no prefix) are relative to exercise file
+        if is_pack_format and str(program_raw).startswith("programs/"):
+            # Resolve from current working directory (project root)
+            program_path = Path.cwd() / program_path
+        else:
+            program_path = p.parent / program_path
 
     task = _parse_task(data.get("task", {}))
     interaction = _parse_interaction(data.get("interaction"))
@@ -242,16 +303,30 @@ def run_exercise(ex: ExerciseConfig, outfile: str | None = None) -> str:
 
     midi_out = outfile or program.outfile or "exercise.mid"
 
+    # Handle style as string OR dict with overrides
+    style_name: str
+    style_overrides: dict | None = None
+
+    if isinstance(program.style, dict):
+        # Extract base style name from dict (support 'comp', 'name', or 'style' keys)
+        style_name = program.style.get("comp") or program.style.get("name") or program.style.get("style", "")
+        if not style_name:
+            raise ValueError("style dict must contain 'comp' (or 'name'/'style') key specifying base style name.")
+        style_overrides = program.style
+    else:
+        style_name = program.style
+
     # Generate backing using existing engine
     generate_accompaniment(
         chord_symbols=program.chords,
-        style_name=program.style,
+        style_name=style_name,
         tempo_bpm=program.tempo,
         bars_per_chord=program.bars_per_chord,
         outfile=midi_out,
         tritone_mode=program.tritone_mode,
         tritone_strength=program.tritone_strength,
         tritone_seed=program.tritone_seed,
+        style_overrides=style_overrides,
     )
 
     # --- INTERACTIVITY HOOK (text only for now) -------------------------

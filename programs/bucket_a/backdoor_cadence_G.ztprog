@@ -1,4 +1,4 @@
-# Bucket A -- Backdoor Cadence (IV -> ♭VII7 -> I) in G
+# Bucket A -- Backdoor Cadence (IV -> bVII7 -> I) in G
 # Backdoor in G: C -> F7 -> G
 
 name: backdoor_cadence_G
@@ -6,9 +6,7 @@ tempo: 88
 time_signature: "4/4"
 bars_per_chord: 2
 
-style:
-  comp: gospel_slow
-  bass: simple_roots
+style: ballad_basic
 
 chords:
   - Cmaj9

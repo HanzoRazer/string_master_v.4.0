@@ -2,7 +2,7 @@
 # Purpose: teach + train (lightweight, no deep theory detours)
 
 id: backdoor_cadence_C
-title: "Backdoor Cadence (IV -> ♭VII7 -> I) -- C Major"
+title: "Backdoor Cadence (IV -> bVII7 -> I) -- C Major"
 level: "A"
 category: "cadence"
 key_center: "C"
@@ -44,7 +44,7 @@ rhythm:
     - "Let C land slightly late (relax into home)."
 
 practice_steps:
-  - "Loop IV -> ♭VII7 -> I for 2 minutes. Only focus on smooth top note."
+  - "Loop IV -> bVII7 -> I for 2 minutes. Only focus on smooth top note."
   - "Loop again; now only focus on guide tones resolving (D->E, Ab->G)."
   - "Add the turnaround (G13 -> C6) and keep groove relaxed."
 
