@@ -1,0 +1,179 @@
+--- stage_2_7/groove_layer/engine.py
++++ stage_2_8/groove_layer/engine.py
+@@ -1,16 +1,24 @@
+ from __future__ import annotations
+ 
+ from dataclasses import dataclass, asdict, field
+ from typing import Dict, Any, Optional, List
+ 
+ 
+ @dataclass
+ class GrooveStateV0:
+-    """Minimal state container for Stage 2.7.
+-
+-    Adds Vector 07: probe success scoring + persist probe outcomes.
++    """Minimal state container for Stage 2.8.
++
++    Adds Vector 08: Tempo drift detection and correction.
++
++    Vectors included:
++    - Vector 01: Stable baseline
++    - Vector 02: Hard instability corrective mode
++    - Vector 03: Recovery / hysteresis
++    - Vector 04: Missing engine context freeze
++    - Vector 05: Probing + revert
++    - Vector 06: Probe scheduling + cooldown decay
++    - Vector 07: Probe success scoring + persist outcomes
++    - Vector 08: Tempo drift detection + correction
+ 
+     Persistence in v0 is *in-memory only* (state object). Higher layers can store state.
+     """
+@@ -35,6 +43,10 @@
+     probe_last_outcome: str = "unknown"  # success | fail | unknown
+     probe_history: List[Dict[str, Any]] = field(default_factory=list)
+ 
++    # Tempo drift tracking (Vector 08)
++    last_tempo_bpm: Optional[float] = None
++    drift_accum: float = 0.0  # accumulated drift percentage
++
+ 
+ def _avg_conf(events) -> float:
+     if not events:
+@@ -71,10 +83,61 @@
+     state.probe_last_score = prior.get("probe_last_score", state.probe_last_score)
+     state.probe_last_outcome = prior.get("probe_last_outcome", state.probe_last_outcome)
+ 
++    # Vector 08 state
++    state.last_tempo_bpm = prior.get("last_tempo_bpm", state.last_tempo_bpm)
++    state.drift_accum = prior.get("drift_accum", state.drift_accum)
++
++
++def _compute_tempo_drift(events, target_bpm: float, state: GrooveStateV0) -> Dict[str, Any]:
++    """Vector 08: Compute tempo drift and determine correction policy.
++
++    Returns tempo control dict with:
++    - policy: "follow_player" for small drift, "correct_drift" for large drift
++    - nudge_strength: magnitude of correction
++    - max_delta_pct_per_min: rate limit
++
++    Algorithm:
++    - Estimate player BPM from event inter-onset intervals
++    - Compute drift percentage from target
++    - Accumulate drift over windows
++    - If accumulated drift exceeds threshold (3%), trigger correction
++    """
++    if len(events) >= 2:
++        deltas = []
++        for i in range(len(events) - 1):
++            t0 = events[i].get("t_onset_ms", 0)
++            t1 = events[i + 1].get("t_onset_ms", 0)
++            delta = t1 - t0
++            if delta > 0:
++                deltas.append(delta)
++
++        if deltas:
++            avg_ms = sum(deltas) / len(deltas)
++            player_bpm = 60000.0 / avg_ms
++            player_bpm = max(40.0, min(240.0, player_bpm))
++        else:
++            player_bpm = target_bpm
++    else:
++        player_bpm = target_bpm
++
++    state.last_tempo_bpm = player_bpm
++    drift_pct = (player_bpm - target_bpm) / target_bpm if target_bpm > 0 else 0.0
++    drift_pct = max(-0.05, min(0.05, drift_pct))
++    state.drift_accum += drift_pct
++
++    if abs(state.drift_accum) > 0.03:
++        policy = "correct_drift"
++        nudge = max(-0.3, min(0.3, state.drift_accum))
++        state.drift_accum = 0.0
++    else:
++        policy = "follow_player"
++        nudge = drift_pct
+ 
+-def _controls_baseline(engine_context: Dict[str, Any]) -> Dict[str, Any]:
++    return {"policy": policy, "nudge_strength": round(nudge, 3), "max_delta_pct_per_min": 5}
++
++
++def _controls_baseline(engine_context: Dict[str, Any], events, state: GrooveStateV0) -> Dict[str, Any]:
++    """Build baseline controls with Vector 08 tempo drift integration."""
++    target_bpm = engine_context.get("tempo_bpm_target", 120)
++    tempo_control = _compute_tempo_drift(events, target_bpm, state)
+     return {
+-        "tempo": {"policy": "follow_player", "nudge_strength": 0.2, "max_delta_pct_per_min": 5},
++        "tempo": tempo_control,
+         "arrangement": {"density_target": "medium", "instrumentation_policy": "keep_layers", "dynamics_follow": "soft_follow"},
+         "loop": {"policy": "none", "length_bars": 4, "exit_condition": "manual"},
+         "feel": {"feel_policy": engine_context.get("feel", "straight"), "grid": engine_context.get("grid", "eighth"), "click_policy": "subtle"},
+@@ -103,12 +166,15 @@
+ def compute_groove_layer_control(payload: Dict[str, Any], state: Optional[GrooveStateV0] = None) -> Dict[str, Any]:
+     """Compute Groove Layer v0 control intent.
+ 
+-    Stage 2.7 adds Vector 07:
+-      - when a probe completes (after its active window), score it and persist outcome
+-      - adjust probe_interval_windows based on outcome
++    Stage 2.8 adds Vector 08:
++      - Tempo drift detection from player event timing
++      - Accumulated drift tracking across windows
++      - Automatic correction when drift exceeds threshold
++
++    Previous vectors: 01-07 (see GrooveStateV0 docstring)
+     """
+     if state is None:
+         state = GrooveStateV0()
+@@ -130,6 +196,7 @@
+         state.probe_kind = ""
+         state.probe_variant = ""
+         state.probe_windows = 0
++        state.drift_accum = 0.0
+         return {
+             "schema_id": "groove_layer_control",
+             "schema_version": "v0",
+@@ -164,6 +231,7 @@
+             state.probe_cooldown_windows = 8
+             state.last_density = state.probe_baseline_density
+             state.next_probe_in_windows = state.probe_interval_windows
++            state.drift_accum = 0.0  # Reset drift on instability
+ 
+             return {
+                 "schema_id": "groove_layer_control",
+@@ -183,6 +251,7 @@
+ 
+         state.last_loop_policy = "micro_loop"
+         state.last_density = "sparse"
++        state.drift_accum = 0.0  # Reset drift on instability
+         return {
+             "schema_id": "groove_layer_control",
+             "schema_version": "v0",
+@@ -226,7 +295,7 @@
+         state.probe_windows = 0
+         state.next_probe_in_windows = max(1, int(state.probe_interval_windows))
+ 
+-        controls = _controls_baseline(engine_context)
++        controls = _controls_baseline(engine_context, events, state)
+         controls["arrangement"]["density_target"] = "dense"
+         return {
+             "schema_id": "groove_layer_control",
+@@ -240,7 +309,7 @@
+     # --- Probe active (Vector 05) + score on completion (Vector 07)
+     if state.probe_active:
+         state.probe_windows += 1
+-        controls = _controls_baseline(engine_context)
++        controls = _controls_baseline(engine_context, events, state)
+         controls["arrangement"]["density_target"] = state.last_density
+ 
+         # v0: probe lasts for exactly one window; score on completion
+@@ -270,9 +339,9 @@
+             "debug": {"state": asdict(state), "reason": "probe_active"}
+         }
+ 
+-    # --- Stable baseline (Vector 01)
++    # --- Stable baseline with tempo drift detection (Vector 01 + Vector 08)
+     state.last_density = "medium"
+-    controls = _controls_baseline(engine_context)
++    controls = _controls_baseline(engine_context, events, state)
+     return {
+         "schema_id": "groove_layer_control",
+         "schema_version": "v0",

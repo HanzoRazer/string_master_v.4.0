@@ -24,6 +24,7 @@ classifiers = [
 dependencies = [
   "mido>=1.2.10",
   "pyyaml>=6.0",
+  "pydantic>=2.0",
 ]
 
 [project.optional-dependencies]
@@ -42,6 +43,7 @@ Homepage = "https://github.com/HanzoRazer/string_master_v.4.0"
 [project.scripts]
 zt-gravity = "shared.zone_tritone.cli:main"
 zt-band = "zt_band.cli:main"
+sg-coach = "sg_coach.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

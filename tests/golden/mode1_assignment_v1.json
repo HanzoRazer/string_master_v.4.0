@@ -1,0 +1,30 @@
+{
+  "coach_prompt": {
+    "message": "Focus: grid_alignment. Timing consistency on step 7 needs work",
+    "mode": "optional"
+  },
+  "constraints": {
+    "bars_per_loop": 2,
+    "repetitions": 6,
+    "strict": true,
+    "strict_window_ms": 24,
+    "tempo_start": 100,
+    "tempo_step": 5,
+    "tempo_target": 120
+  },
+  "expires_after_sessions": 3,
+  "focus": {
+    "primary": "grid_alignment",
+    "secondary": null
+  },
+  "program": {
+    "hash": "sha256:golden",
+    "name": "golden_vector_program",
+    "type": "ztprog"
+  },
+  "session_id": "00000000-0000-0000-0000-000000000001",
+  "success_criteria": {
+    "max_late_drops": 3,
+    "max_mean_error_ms": 20.0
+  }
+}

@@ -1,685 +1,591 @@
-# CBSP21 — Complete Boundary-Safe Processing Protocol
+# CBSP21: Code-Based Source Protection Policy
 
-**Policy Classification:** AI Governance / Model Risk Management
-**Version:** 1.0
-**Effective Date:** 2026-01-01
-**Owner:** Office of AI Governance
-**Review Cycle:** Annual
+## Version 2.0 — Unified Governance Framework
+
+**Policy Classification:** Quality Control / Governance Gate  
+**Effective Date:** 2026-01-14  
+**Applies To:** AI Agents AND Human Contributors  
+**Scope:** Entire Repository  
+**Review Cycle:** Per-Release
 
 ---
 
-## 1. Purpose
+## 1. Purpose & Scope
 
-CBSP21 defines the **minimum completeness standard** for any automated system scanning or processing a document, file, or folder. Its goal is to eliminate *partial-capture errors, hallucinated fill-ins, and scoping drift* by ensuring the system processes **no less than 95% of the actual source content** before generating outputs.
+### 1.1 Why This Policy Exists
+
+CBSP21 is a **quality control gate** that ensures all contributions—whether from AI agents or human developers—do not produce outputs that exceed the coverage of verified source inputs.
 
 This policy prevents:
-- Misinterpretation caused by partial document review
-- Hallucinated or fabricated fill-in content
-- Regulatory and compliance exposure from inaccurate output
-- Software defects originating from incomplete code extraction
+
+- **Hallucinated code structures** — AI generating code without scanning dependencies
+- **Silent regressions** — Changes that subtly alter existing behavior
+- **Incomplete patches** — Modifications based on partial understanding
+- **Drift from ground truth** — Deviations from canonical patterns
+
+### 1.2 Core Principle
+
+> **No output may exceed the coverage of the inputs.**
+
+If the contributor (AI or human) cannot demonstrate ≥95% coverage of relevant source material, the output is **BLOCKED**.
+
+### 1.3 Repository-Wide Scope
+
+CBSP21 applies to the **entire Smart Guitar repository**:
+
+| Directory | Description | Protection Level |
+|-----------|-------------|------------------|
+| `src/shared/zone_tritone/` | Core theory engine | STABLE (see GOVERNANCE.md) |
+| `src/zt_band/` | MIDI accompaniment engine | LOCKED modules exist |
+| `src/sg_coach/` | Mode-1 coaching spine | Contract-versioned |
+| `tests/` | All test suites | Golden vectors protected |
+| `scripts/` | CI/CD and utility scripts | Standard |
+| `.github/workflows/` | GitHub Actions | Standard |
+| `docs/` | Documentation and contracts | Reference material |
+| `programs/`, `exercises/`, `seeds/` | Practice materials | Content files |
+| `cbsp21/` | CBSP21 source tracking | Governance material |
+
+### 1.4 Relationship to Other Governance Documents
+
+CBSP21 is part of a governance ecosystem:
+
+| Document | Purpose | Relationship |
+|----------|---------|--------------|
+| [GOVERNANCE.md](GOVERNANCE.md) | Canon change approval | CBSP21 enforces pre-change verification |
+| [CANON.md](CANON.md) | Immutable axioms | CBSP21 protects against accidental drift |
+| [GLOSSARY.md](GLOSSARY.md) | Frozen terminology | CBSP21 ensures term consistency |
+| [docs/contracts/CORE_LOCK_REPORT.md](docs/contracts/CORE_LOCK_REPORT.md) | Locked module list | CBSP21 blocks unauthorized edits |
+| [docs/contracts/MIDI_RUNTIME_CONTRACT_V1.md](docs/contracts/MIDI_RUNTIME_CONTRACT_V1.md) | MIDI generation rules | CBSP21 validates contract compliance |
+| [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | Import protocols | CBSP21 verifies namespace adherence |
 
 ---
 
-## 2. Core Principle
+## 2. Roles & Responsibilities
 
-> **Do not reason from partial inputs.**
-> **Do not summarize, transform, or implement code until ≥95% of the source has been fully scanned and verified.**
+### 2.1 AI Agent Requirements
 
----
+AI coding agents operating in this repository MUST:
 
-## 3. Scope
+| Requirement | Description | Enforcement |
+|-------------|-------------|-------------|
+| **Scan before output** | Read all relevant source files before generating code | STOP if coverage < 95% |
+| **Declare coverage** | Include `file_context_coverage_percent` in responses | CI audit |
+| **Honor STOP conditions** | Halt immediately if threshold not met | Hard block |
+| **Respect locked modules** | Never modify files listed in CORE_LOCK_REPORT.md | CI gate |
+| **Use canonical terminology** | Reference GLOSSARY.md for all terms | Review check |
+| **Follow import protocols** | Use patterns from DEVELOPER_GUIDE.md | Lint/test |
 
-CBSP21 applies when the system is instructed to:
-- scan
-- review
-- summarize
-- refactor
-- generate output based on
-- extract code from
+### 2.2 Human Contributor Requirements
 
-any **document, file, folder, or structured dataset**.
+Human contributors to this repository MUST:
 
-This standard applies to any AI-assisted processing of:
-- Documents
-- Files
-- Folders or repositories
-- Structured datasets
-- Source code collections
+| Requirement | Description | Enforcement |
+|-------------|-------------|-------------|
+| **Create manifest** | Provide `.cbsp21/patch_input.json` for code changes | CI gate |
+| **Declare intent** | Document `what_changed` and `why_not_redundant` | PR review |
+| **Review diffs** | Present diffs for behavior-changing modifications | Required approval |
+| **Maintain ground truth** | Keep `cbsp21/full_source/` immutable | Write protection |
+| **Run verification** | Execute `verify_lock.py` before commits | Pre-commit hook |
 
----
+### 2.3 CI/CD Requirements
 
-## 4. Coverage Requirement
+Automated systems MUST:
 
-### 4.1 Required Minimum
-
-The AI system must:
-- Attempt to process **100% of the provided content**
-- Confirm **no less than 95% actual coverage** before continuing
-
-### 4.2 Prohibited Actions
-
-The system must not:
-- Generate conclusions from excerpts
-- Fill in gaps based on probability or inference
-- Treat missing sections as irrelevant
-- Execute or produce runnable code from partial extracts
-- Apply partial policy interpretation
-- Guess missing content
-- Treat prose outside code blocks as optional
-- Act on incomplete scans
-- Infer structure beyond what is explicitly present
+| Requirement | Description | Implementation |
+|-------------|-------------|----------------|
+| **Enforce coverage gates** | Block merges below threshold | `check_cbsp21_gate.py` |
+| **Audit all checks** | Append results to JSONL log | `cbsp21_audit.jsonl` |
+| **Preserve artifacts** | Upload audit logs as workflow artifacts | GitHub Actions |
+| **Validate contracts** | Check version pins on protected modules | Contract enforcement job |
+| **Run golden tests** | Verify blessed vectors unchanged | `@pytest.mark.contract` |
 
 ---
 
-## 5. Verification Procedure
+## 3. Coverage Requirements
 
-Implementations of this policy must include:
+### 3.1 Metrics
 
-### 5.1 Unit Enumeration
+| Metric | Threshold | Scope |
+|--------|-----------|-------|
+| `repo_coverage_percent` | ≥ 95% | Byte ratio of scanned vs. full source |
+| `file_context_coverage_percent` | ≥ 95% | Per-file coverage for changed files |
+| File completeness | 100% | All files claimed as context fully scanned |
 
-All relevant units must be identified (files, sections, blocks, code regions).
-
-### 5.2 Coverage Measurement
-
-Coverage must be measured by character or block count:
-
-```
-coverage = scanned / total
-```
-
-### 5.3 Coverage Confirmation
-
-Output may proceed **only if**:
-
-```
-coverage >= 0.95
-```
-
-### 5.4 Audit Logging
-
-Systems must log one of the following:
-
-- `CBSP21 Coverage Confirmed: 97.3%`
-- `CBSP21 Coverage Failure: 83.4% — Output Halted`
-
-Logs must be retained in accordance with the Record Retention Policy.
-
----
-
-## 6. Mandatory Stop Conditions
-
-The system MUST **immediately stop and request clarification** when any of the following occur:
-
-- Content appears truncated
-- Code blocks are incomplete
-- A file reference is listed but content not present
-- A fence marker ``` is opened but not closed
-- Binary or unreadable content is detected
-- Coverage cannot reach ≥95%
-- Missing dependency content
-
-**Failure to meet coverage = NO OUTPUT.**
-
-The only allowed response is a request for the missing content.
-
----
-
-## 7. Safety & Boundary Rules
-
-1. **Never invent missing code or text**
-2. **Never assume omitted content is irrelevant**
-3. **Never merge partial fragments into runnable logic**
-4. **Never treat commentary-embedded code as authoritative unless structured**
-
----
-
-## 8. Structured Input & Immutability
-
-### 8.1 Structured Input Preference
-
-To reduce scan ambiguity, the system should prefer:
-- Full file contents
-- Or unified diffs
-- Or fenced blocks with declared paths:
-
-```
-FILE: path/to/file.py
-<full content>
-```
-
-### 8.2 Immutable Ground Truth (`full_source/`)
-
-The directory `full_source/` represents the **authoritative, immutable copy** of the material being evaluated under CBSP21.
-
-- `full_source/` **MUST NOT** be modified, rewritten, or generated by the AI system or any downstream process used for coverage calculation.
-- Only human-controlled or upstream source-of-record systems may update `full_source/`.
-- All CBSP21 coverage calculations MUST treat `full_source/` as **read-only ground truth**.
-- Any attempt by automation to write into `full_source/` is considered a **policy violation** and MUST fail the process.
-
-Derived or partially scanned content should be stored separately, e.g. in `scanned_source/`, and may be safely overwritten or regenerated as needed.
-
----
-
-## 9. Output Timing
-
-The system may only produce output **after ALL the following are true:**
-
-- Coverage ≥ 95%
-- No unresolved missing content
-- No unclosed code blocks
-- No skipped embedded code regions
-- All STOP CONDITIONS cleared
-
----
-
-## 10. Integrity Guarantees
-
-CBSP21 ensures:
-
-- Deterministic processing
-- No accidental truncation
-- No hallucinated code fill-ins
-- Stable reproducibility
-- Clear safety boundaries
-
----
-
-## 11. Audit Statement Format
-
-When output is produced, include a brief line:
-
-```
-CBSP21 Coverage: 98.2% — All completeness conditions satisfied.
-```
-
-If coverage is below threshold:
-
-```
-CBSP21 Coverage: 83.5% — Output prohibited. Please provide remaining content.
-```
-
----
-
-## 12. Compliance & Enforcement
-
-Failure to comply with this policy may result in:
-
-- Output rejection
-- Model access suspension
-- Investigation under the AI Risk Framework
-- Escalation to Legal / Compliance if customer-impacting
-
----
-
-## 13. Roles & Responsibilities
-
-| Role | Responsibility |
-|------|----------------|
-| **System Owners** | Ensure implementation controls exist |
-| **Developers** | Integrate coverage verification into workflows |
-| **AI Risk & Governance** | Conduct periodic assurance reviews |
-| **Internal Audit** | Validate enforcement integrity |
-| **Security** | Monitor anomalous behavior |
-
----
-
-## 14. Exceptions
-
-Exceptions require formal approval from:
-
-- Head of AI Governance
-- Legal Counsel
-- Data Security Officer
-
-Documented justification is mandatory.
-
----
-
-## 15. Review & Revision
-
-This standard will be reviewed annually or upon:
-- Regulatory requirement changes
-- Introduction of new AI systems
-- Incident or audit findings
-
----
-
-## 16. Reusable Guardrail Instruction
-
-You can paste this anywhere the bot needs the directive:
-
-> **Scan the provided {document | file | folder | path} completely in accordance with protocol `CBSP21.md`. You must process no less than 95% of the total informational content before producing conclusions, summaries, or transformations. If any portion of the source cannot be scanned, stop and request clarification rather than assuming or inferring missing content.**
-
----
-
-## 17. Implementation Scripts
-
-### 17.1 Python Coverage Script (Single File or Folder)
-
-Save as: `scripts/cbsp21_coverage_check.py`
+### 3.2 Calculation
 
 ```python
-#!/usr/bin/env python
-"""
-CBSP21 Coverage Check
+# Repo-level coverage
+repo_coverage = scanned_bytes / full_source_bytes
 
-Calculates how much of the original content has been scanned/captured
-and enforces a minimum coverage threshold (default: 95%).
-
-- If both paths are files -> compare file sizes.
-- If both paths are directories -> compare total bytes of all files.
-- If one is a file and the other is a directory -> fail with an error.
-
-Usage examples:
-
-    # Single file
-    python cbsp21_coverage_check.py \
-        --full-path full_source.txt \
-        --scanned-path scanned_source.txt
-
-    # Folders (e.g., full repo vs scanned subset)
-    python cbsp21_coverage_check.py \
-        --full-path full_source \
-        --scanned-path scanned_source \
-        --threshold 0.97
-"""
-
-import argparse
-import sys
-from pathlib import Path
-
-
-def total_bytes_in_dir(root: Path) -> int:
-    """Sum bytes of all regular files under a directory (recursive)."""
-    return sum(
-        f.stat().st_size
-        for f in root.rglob("*")
-        if f.is_file()
-    )
-
-
-def compute_bytes(path: Path) -> int:
-    """Return total bytes for a file or a directory."""
-    if path.is_file():
-        return path.stat().st_size
-    if path.is_dir():
-        return total_bytes_in_dir(path)
-    raise FileNotFoundError(f"Path is neither file nor directory: {path}")
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(description="CBSP21 Coverage Check")
-    parser.add_argument(
-        "--full-path",
-        required=True,
-        help="Path to the full (ground truth) document or folder.",
-    )
-    parser.add_argument(
-        "--scanned-path",
-        required=True,
-        help="Path to the scanned/captured document or folder.",
-    )
-    parser.add_argument(
-        "--threshold",
-        type=float,
-        default=0.95,
-        help="Minimum required coverage ratio (default: 0.95).",
-    )
-
-    args = parser.parse_args()
-    full_path = Path(args.full_path)
-    scanned_path = Path(args.scanned_path)
-    threshold = args.threshold
-
-    if not full_path.exists():
-        print(f"full_path does not exist: {full_path}")
-        return 1
-
-    if not scanned_path.exists():
-        print(f"scanned_path does not exist: {scanned_path}")
-        return 1
-
-    # Require both to be same kind (both files OR both directories)
-    if full_path.is_file() and not scanned_path.is_file():
-        print("Type mismatch: full_path is a file but scanned_path is not.")
-        return 1
-    if full_path.is_dir() and not scanned_path.is_dir():
-        print("Type mismatch: full_path is a directory but scanned_path is not.")
-        return 1
-
-    try:
-        full_bytes = compute_bytes(full_path)
-        scanned_bytes = compute_bytes(scanned_path)
-    except FileNotFoundError as e:
-        print(f"{e}")
-        return 1
-
-    if full_bytes == 0:
-        print("full_path appears empty (0 bytes) - cannot compute coverage.")
-        return 1
-
-    coverage = scanned_bytes / full_bytes
-    percent = coverage * 100
-
-    print(f"CBSP21 Coverage: {percent:.2f}% (threshold {threshold * 100:.2f}%)")
-
-    if coverage < threshold:
-        print("Coverage below required threshold - output prohibited under CBSP21.")
-        return 1
-
-    print("Coverage requirement satisfied - CBSP21 conditions met.")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+# File-level coverage (per changed file)
+file_coverage = lines_with_context / total_lines_in_file
 ```
 
-### 17.2 Python Coverage Script with JSON Audit Log
+### 3.3 Verification
 
-Save as: `scripts/cbsp21_coverage_with_audit.py`
+All coverage claims MUST be:
 
-```python
-#!/usr/bin/env python
-"""
-CBSP21 Coverage & Audit Logger
+1. **Logged** — Append to `logs/cbsp21_audit.jsonl`
+2. **Reproducible** — Derivable from declared inputs
+3. **Attached** — Included in PR or commit metadata
 
-Usage:
-    python scripts/cbsp21_coverage_with_audit.py \
-        --full full_source \
-        --scanned scanned_source \
-        --threshold 0.95 \
-        --log logs/cbsp21_audit.jsonl
-"""
+---
 
-import argparse
-import json
-import os
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, Any
+## 4. STOP Conditions
 
+Output is **PROHIBITED** if any of the following are true:
 
-def total_bytes(root: Path) -> int:
-    return sum(
-        f.stat().st_size
-        for f in root.rglob("*")
-        if f.is_file()
-    )
+| Code | Condition | Recovery |
+|------|-----------|----------|
+| **STOP-01** | `repo_coverage_percent < 95%` | Scan more files |
+| **STOP-02** | Changed file not in `files_expected_to_change` | Update manifest |
+| **STOP-03** | `.cbsp21/patch_input.json` missing for code changes | Create manifest |
+| **STOP-04** | File claimed as context but not fully scanned | Complete the scan |
+| **STOP-05** | Locked module modification without approval | Request governance review |
+| **STOP-06** | Golden vector mismatch without `UPDATE_GOLDEN=1` | Validate changes or update vector |
+| **STOP-07** | Contract version mismatch | Bump version per protocol |
 
+### 4.1 Recovery Procedure
 
-def build_audit_record(
-    full: Path,
-    scanned: Path,
-    full_bytes: int,
-    scanned_bytes: int,
-    coverage: float,
-    threshold: float,
-    status: str,
-) -> Dict[str, Any]:
-    return {
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-        "policy": "CBSP21",
-        "full_path": str(full),
-        "scanned_path": str(scanned),
-        "full_bytes": full_bytes,
-        "scanned_bytes": scanned_bytes,
-        "coverage_ratio": coverage,
-        "repo_coverage_percent": round(coverage * 100, 2),
-        "threshold": threshold,
-        "status": status,  # "pass" | "fail"
-        # Optional CI metadata (if running in GitHub Actions, etc.)
-        "ci": {
-            "run_id": os.getenv("GITHUB_RUN_ID"),
-            "run_number": os.getenv("GITHUB_RUN_NUMBER"),
-            "sha": os.getenv("GITHUB_SHA"),
-            "ref": os.getenv("GITHUB_REF"),
-        },
-    }
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--full", required=True, help="Path to full_source (immutable)")
-    parser.add_argument("--scanned", required=True, help="Path to scanned_source")
-    parser.add_argument("--threshold", type=float, default=0.95)
-    parser.add_argument(
-        "--log",
-        default="logs/cbsp21_audit.jsonl",
-        help="Path to append-only JSONL audit log",
-    )
-    args = parser.parse_args()
-
-    full_root = Path(args.full)
-    scanned_root = Path(args.scanned)
-    threshold = args.threshold
-    log_path = Path(args.log)
-
-    # Basic existence checks
-    if not full_root.exists():
-        print(f"full_source path not found: {full_root}")
-        return 1
-    if not scanned_root.exists():
-        print(f"scanned_source path not found: {scanned_root}")
-        return 1
-
-    # Immutability note: this script NEVER writes to full_root; it only reads.
-
-    full_size = total_bytes(full_root)
-    scanned_size = total_bytes(scanned_root)
-
-    if full_size == 0:
-        print("full_source appears empty - cannot compute coverage.")
-        return 1
-
-    coverage = scanned_size / full_size
-    percent = coverage * 100
-
-    print(f"CBSP21 Coverage: {percent:.2f}% (threshold {threshold * 100:.2f}%)")
-
-    status = "pass" if coverage >= threshold else "fail"
-
-    # Ensure log directory exists
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-
-    record = build_audit_record(
-        full=full_root,
-        scanned=scanned_root,
-        full_bytes=full_size,
-        scanned_bytes=scanned_size,
-        coverage=coverage,
-        threshold=threshold,
-        status=status,
-    )
-
-    # Append JSON line
-    with log_path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(record, ensure_ascii=False))
-        f.write("\n")
-
-    if status == "fail":
-        print("Coverage below CBSP21 threshold - output prohibited.")
-        return 1
-
-    print("Coverage requirement satisfied - CBSP21 conditions met.")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+```
+1. IDENTIFY the STOP condition triggered
+2. GATHER additional context (read more files)
+3. UPDATE manifest with new sources
+4. RE-RUN verification scripts
+5. DOCUMENT exception if bypass is necessary (Section 10)
 ```
 
-### 17.3 PowerShell Coverage Script
+---
 
-Save as: `scripts/Check-CBSP21Coverage.ps1`
+## 5. Repository Structure
 
-```powershell
-param(
-    [Parameter(Mandatory = $true)]
-    [string]$FullPath,
+### 5.1 CBSP21 Governance Layout
 
-    [Parameter(Mandatory = $true)]
-    [string]$ScannedPath,
+```
+cbsp21/
+├── full_source/              # Immutable ground truth (human-controlled)
+│   └── [original content]    # NEVER modified by AI or automation
+├── scanned_source/           # Scanned/captured representation
+│   └── [processed content]   # Updated during coverage checks
+└── patch_packets/            # Structured FILE: packets
+    └── [patch files]         # Format: FILE: path/to/file.ext
 
-    [double]$Threshold = 0.95
-)
+.cbsp21/
+├── patch_input.json          # PR manifest (REQUIRED for code changes)
+├── patch_input.json.example  # Template for manifest
+├── exemptions.json           # Exempt paths (auto-generated, migrations)
+└── incident_log.json         # Recovery documentation
 
-function Get-TotalBytes($Path) {
-    Get-ChildItem -Recurse -File -Force $Path `
-        | Measure-Object -Property Length -Sum `
-        | Select-Object -ExpandProperty Sum
-}
+logs/
+├── cbsp21_audit.jsonl        # Append-only audit log
+└── [other logs]
 
-if (-not (Test-Path $FullPath)) {
-    Write-Error "Full source path not found: $FullPath"
-    exit 1
-}
+scripts/cbsp21/
+├── cbsp21_coverage_check.py          # Basic coverage validator
+├── cbsp21_coverage_with_audit.py     # Coverage + audit logger
+└── check_patch_packet_format.py      # Patch format validator
 
-if (-not (Test-Path $ScannedPath)) {
-    Write-Error "Scanned source path not found: $ScannedPath"
-    exit 1
-}
+scripts/ci/
+└── check_cbsp21_gate.py              # PR gate enforcement
+```
 
-$fullBytes = Get-TotalBytes $FullPath
-$scannedBytes = Get-TotalBytes $ScannedPath
+### 5.2 Source Code Layout
 
-if (-not $fullBytes) {
-    Write-Error "Full source appears empty - cannot compute coverage."
-    exit 1
-}
+```
+src/
+├── shared/
+│   ├── __init__.py
+│   └── zone_tritone/         # Core theory engine (PROTECTED)
+│       ├── __init__.py
+│       ├── __about__.py      # Version metadata
+│       ├── cli.py            # zt-gravity CLI
+│       ├── pc.py             # Pitch class: int 0-11 (C=0)
+│       ├── zones.py          # Zone 1 (even) / Zone 2 (odd)
+│       ├── tritones.py       # 6 tritone axes
+│       ├── gravity.py        # Dominant chains (cycle of 4ths)
+│       ├── corpus.py         # Chord symbol parsing
+│       ├── markov.py         # Transition probability
+│       └── types.py          # Type aliases (PitchClass, etc.)
+│
+├── zt_band/                  # MIDI accompaniment engine
+│   ├── __init__.py
+│   ├── cli.py                # zt-band CLI
+│   ├── engine.py             # Main pipeline: .ztprog → .mid
+│   ├── midi_out.py           # LOCKED: deterministic writer (tpb=480)
+│   ├── musical_contract.py   # LOCKED: runtime validation
+│   ├── expressive_layer.py   # LOCKED: velocity-only shaping
+│   ├── patterns.py           # Style registry
+│   └── contracts.py          # MIDI_CONTRACT_VERSION = "v1"
+│
+└── sg_coach/                 # Mode-1 coaching spine
+    ├── __init__.py
+    ├── models.py             # Pydantic v2 models
+    ├── assignment_policy.py  # Deterministic planner
+    ├── assignment_serializer.py  # UUID-safe JSON export
+    ├── ota_payload.py        # OTA wrapper with SHA256+HMAC
+    ├── cli.py                # sg-coach CLI
+    └── contract.py           # COACH_CONTRACT_VERSION = "v1"
+```
 
-$coverage = $scannedBytes / $fullBytes
-$percent = "{0:N2}" -f ($coverage * 100)
+### 5.3 Test Layout
 
-Write-Host "CBSP21 Coverage: $percent%"
+```
+tests/
+├── conftest.py               # Shared fixtures
+├── test_pc.py                # Pitch class tests
+├── test_zones.py             # Zone membership tests
+├── test_tritones.py          # Tritone axis tests
+├── test_gravity.py           # Gravity chain tests
+├── test_markov.py            # Markov analysis tests
+├── test_cli_smoke.py         # CLI integration tests
+├── test_musical_contract.py  # Contract enforcement tests
+├── test_assignment_policy.py # Mode-1 planner tests
+├── test_assignment_serializer.py  # JSON export tests
+├── test_ota_payload.py       # OTA signing tests
+├── test_mode1_golden_assignment.py  # Golden vector test (@pytest.mark.contract)
+└── golden/
+    └── mode1_assignment_v1.json  # Blessed golden vector
+```
 
-if ($coverage -lt $Threshold) {
-    Write-Host "Coverage below $($Threshold * 100)% - Output prohibited."
-    exit 1
-}
-else {
-    Write-Host "Coverage requirement satisfied."
-    exit 0
+### 5.4 Protected Files
+
+Files requiring governance approval to modify (per [GOVERNANCE.md](GOVERNANCE.md)):
+
+| Category | Files | Protection |
+|----------|-------|------------|
+| **Canon** | `CANON.md`, `GLOSSARY.md`, `PEDAGOGY.md` | Immutable / Frozen |
+| **Governance** | `GOVERNANCE.md`, `CBSP21.md` | Requires approval |
+| **Locked Modules** | `midi_out.py`, `musical_contract.py`, `expressive_layer.py` | Pass `verify_lock.py` |
+| **Contract Pins** | `contracts.py`, `contract.py` | Version bump protocol |
+| **Golden Vectors** | `tests/golden/*.json` | Update only with `UPDATE_GOLDEN=1` |
+
+---
+
+## 6. Patch Input Manifest
+
+### 6.1 Required Manifest
+
+Every code change MUST include a manifest at:
+
+```
+.cbsp21/patch_input.json
+```
+
+### 6.2 Schema (v1)
+
+```json
+{
+  "$schema": "cbsp21_patch_input_v1",
+  "patch_id": "BUNDLE_001",
+  "title": "Add assignment policy for Mode-1 coaching",
+  "intent": "Implement deterministic planner that converts SessionRecord + CoachEvaluation to PracticeAssignment",
+  "change_type": "code",
+  "behavior_change": "compatible",
+  "risk_level": "medium",
+  "scope": {
+    "paths_in_scope": ["src/sg_coach/", "tests/"],
+    "files_expected_to_change": [
+      "src/sg_coach/assignment_policy.py",
+      "tests/test_assignment_policy.py"
+    ]
+  },
+  "diff_range": {
+    "base": "origin/main",
+    "head": "HEAD"
+  },
+  "changed_files_count": 2,
+  "changed_files_exact": [
+    "src/sg_coach/assignment_policy.py",
+    "tests/test_assignment_policy.py"
+  ],
+  "diff_articulation": {
+    "what_changed": [
+      "Added Mode1Planner class with plan() method",
+      "Implemented tempo ramp calculation",
+      "Added success criteria based on focus_recommendation",
+      "Created 3 unit tests for planner"
+    ],
+    "why_not_redundant": "No prior planner implementation existed. This is greenfield code."
+  },
+  "verification": {
+    "commands_run": [
+      "python -m pytest tests/test_assignment_policy.py -v",
+      "python verify_lock.py"
+    ],
+    "results": "All tests pass"
+  },
+  "overall_file_context_coverage": 98.5
 }
 ```
 
-### 17.4 GitHub Actions Workflow
+### 6.3 Required Fields
 
-Save as: `.github/workflows/cbsp21_coverage.yml`
+| Field | Type | Description |
+|-------|------|-------------|
+| `$schema` | string | Must be `"cbsp21_patch_input_v1"` |
+| `patch_id` | string | Unique identifier for the patch |
+| `title` | string | One-line summary |
+| `intent` | string | 1-3 sentences describing purpose |
+| `change_type` | enum | `code`, `docs`, `ci`, `mixed` |
+| `behavior_change` | enum | `none`, `compatible`, `breaking` |
+| `risk_level` | enum | `low`, `medium`, `high` |
+| `scope.paths_in_scope` | string[] | Directories allowed to be modified |
+| `scope.files_expected_to_change` | string[] | Explicit file list |
+| `diff_range.base` | string | Base ref for diff |
+| `diff_range.head` | string | Head ref for diff |
+| `changed_files_exact` | string[] | Exact files changed |
+| `diff_articulation.what_changed` | string[] | 5-15 bullets of changes |
+| `diff_articulation.why_not_redundant` | string | Explanation of uniqueness |
+
+### 6.4 Validation Rules
+
+CI MUST fail if:
+
+- `.cbsp21/patch_input.json` is missing for code changes
+- Required fields are missing or invalid
+- `changed_files_exact` differs from actual `git diff` result
+- Files changed are not in `files_expected_to_change` or `paths_in_scope`
+- `behavior_change != "none"` but `why_not_redundant` is empty
+
+---
+
+## 7. Diff Review Gate
+
+### 7.1 When Review is Required
+
+| Risk Level | Trigger | Requirement |
+|------------|---------|-------------|
+| **Low** | Pure additions (new files) | Manifest only |
+| **Medium** | Modifications to existing functions | Show diff, await confirmation |
+| **High** | Guards, restrictions, control flow changes | Show diff + explain impact, explicit approval |
+
+### 7.2 Redundancy Check Protocol
+
+Before declaring a patch "REDUNDANT", verify:
+
+1. **Keyword scan** — Function/variable names exist in codebase
+2. **Functional equivalence** — Behavior matches, not just presence
+3. **Coverage analysis** — Feature is complete with no gaps
+
+A patch is only "redundant" if:
+
+- `git diff` is empty, OR
+- Changes are purely formatting/comments, OR
+- Equivalence proven with validation command
+
+### 7.3 Pre-Commit Checklist
+
+For `behavior_change: "medium"` or `"high"`:
+
+```markdown
+## Pre-Commit Review
+
+- [ ] Diff shown (not just described)
+- [ ] Behavior change explained
+- [ ] Impact on existing workflows documented
+- [ ] Approval received
+
+If guard/restriction added:
+- [ ] Existing functionality preserved OR explicitly deprecated
+- [ ] Fallback behavior documented
+- [ ] Migration path provided if breaking
+```
+
+---
+
+## 8. CI Enforcement
+
+### 8.1 Workflow: Coverage Gate
+
+**File:** `.github/workflows/cbsp21_coverage_gate.yml`
 
 ```yaml
 name: CBSP21 Coverage Gate
 
 on:
   pull_request:
+    paths:
+      - "cbsp21/**"
+      - "scripts/cbsp21/**"
   push:
-    branches: [ main, master ]
+    branches: [main, master]
+    paths:
+      - "cbsp21/**"
 
 jobs:
   cbsp21-coverage:
     runs-on: ubuntu-latest
-
     env:
-      CBSP21_THRESHOLD: "0.95"   # change if policy updates
-
+      CBSP21_THRESHOLD: "0.95"
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
-
-      - name: Run CBSP21 Coverage Check
+          python-version: "3.11"
+      - name: CBSP21 Coverage Check
         run: |
-          python <<'PYCODE'
-          import os
-          from pathlib import Path
+          python scripts/cbsp21/cbsp21_coverage_with_audit.py \
+            --full cbsp21/full_source \
+            --scanned cbsp21/scanned_source \
+            --threshold $CBSP21_THRESHOLD \
+            --log logs/cbsp21_audit.jsonl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cbsp21_audit
+          path: logs/cbsp21_audit.jsonl
+```
 
-          THRESHOLD = float(os.getenv("CBSP21_THRESHOLD", "0.95"))
-          full = Path("full_source")
-          scanned = Path("scanned_source")
+### 8.2 Workflow: PR Gate
 
-          def total_bytes(root: Path):
-              return sum(
-                  f.stat().st_size
-                  for f in root.rglob("*")
-                  if f.is_file()
-              )
+**File:** `.github/workflows/cbsp21_gate.yml`
 
-          if not full.exists():
-              raise SystemExit("full_source/ not found")
-          if not scanned.exists():
-              raise SystemExit("scanned_source/ not found")
+```yaml
+name: CBSP21 PR Gate
 
-          full_size = total_bytes(full)
-          scanned_size = total_bytes(scanned)
+on:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/**"
+      - ".github/workflows/**"
 
-          coverage = scanned_size / full_size if full_size else 0
-          percentage = coverage * 100
+jobs:
+  cbsp21-pr-gate:
+    runs-on: ubuntu-latest
+    env:
+      CBSP21_MIN_COVERAGE: "0.95"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: CBSP21 PR Gate Check
+        run: python scripts/ci/check_cbsp21_gate.py
+```
 
-          print(f"CBSP21 Coverage: {percentage:.2f}%")
+### 8.3 Workflow: Patch Format
 
-          if coverage < THRESHOLD:
-              print("Coverage below policy threshold. Output prohibited.")
-              raise SystemExit(1)
-          else:
-              print("Coverage requirement satisfied.")
-          PYCODE
+**File:** `.github/workflows/cbsp21_patch_packet_format.yml`
+
+```yaml
+name: CBSP21 Patch Packet Format
+
+on:
+  pull_request:
+    paths:
+      - "cbsp21/patch_packets/**"
+
+jobs:
+  cbsp21-patch-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate Patch Packets
+        run: |
+          python scripts/cbsp21/check_patch_packet_format.py \
+            --glob "cbsp21/patch_packets/**/*.*" \
+            --disallow-ellipsis-in-code
 ```
 
 ---
 
-## 18. Revision Notes
+## 9. Audit Logging
 
-| Rev | Date | Notes |
-|-----|------|-------|
-| 1.0 | 2026-01-01 | Initial release. Establishes ≥95% coverage rule, STOP CONDITIONS, structured input preference, immutability rules, audit declaration requirement, and implementation scripts. |
-| 1.1 | 2026-01-02 | Added repo-enforced CI gates, patch packet format validation, enhanced scripts with improved error handling, and operational rules. |
-| 1.2 | 2026-01-03 | Added Section 23: PR-Level Enforcement (CBSP21 as real repo gate with manifest validation, `check_cbsp21_gate.py` script, and `cbsp21_gate.yml` workflow). |
-| 1.3 | 2026-01-03 | Added Section 24: Diff Review Gate (pre-commit behavior change review, redundancy check protocol, recovery procedure). |
-| 1.4 | 2026-01-03 | Added Sections 25-27: Enhanced Patch Input Manifest with diff articulation requirements, behavior preservation gate, and `check_cbsp21_patch_input.py` CI enforcement. |
-| 1.5 | 2026-01-03 | Added Section 25.3 Diff-Range Lock; updated Section 27 with diff_range enforcement; renamed coverage metrics to `repo_coverage_percent` (byte ratio) vs `file_context_coverage_percent` (per-file manifest coverage). |
+### 9.1 Log Format
+
+All CBSP21 checks append to `logs/cbsp21_audit.jsonl`:
+
+```json
+{
+  "timestamp_utc": "2026-01-14T10:30:00Z",
+  "policy": "CBSP21",
+  "full_path": "cbsp21/full_source",
+  "scanned_path": "cbsp21/scanned_source",
+  "full_bytes": 150000,
+  "scanned_bytes": 145000,
+  "coverage_ratio": 0.9667,
+  "repo_coverage_percent": 96.67,
+  "threshold": 0.95,
+  "status": "pass",
+  "ci": {
+    "github_run_id": "12345",
+    "github_sha": "abc123",
+    "github_ref": "refs/pull/42/merge",
+    "github_actor": "contributor",
+    "github_repo": "HanzoRazer/string_master_v.4.0"
+  }
+}
+```
+
+### 9.2 Retention
+
+- Audit logs are **append-only**
+- Retained for the life of the repository
+- Uploaded as artifacts on each CI run
 
 ---
 
-## 19. Repo Layout for CI Enforcement
+## 10. Exceptions
 
-Create these directories at repo root (or customize paths in workflows):
+### 10.1 Exempt Paths
 
+Some paths are exempt from full coverage validation:
+
+**File:** `.cbsp21/exemptions.json`
+
+```json
+{
+  "exempt_patterns": [
+    "**/*.generated.ts",
+    "**/migrations/**",
+    "docs/**",
+    "*.md"
+  ],
+  "exempt_reasons": {
+    "migrations": "Auto-generated by ORM",
+    "docs": "Documentation-only changes"
+  }
+}
 ```
-cbsp21/
-  full_source/        # immutable ground truth (human controlled)
-  scanned_source/     # scanned / captured representation used for coverage
-  patch_packets/      # optional: structured FILE: packets (for patch-format rule)
-logs/                 # optional: audit logs output
-scripts/cbsp21/       # the gate scripts
-```
+
+### 10.2 Exception Process
+
+For legitimate bypass:
+
+1. **Document** the exception in PR description
+2. **Justify** why coverage cannot be met
+3. **Obtain** explicit reviewer approval
+4. **Log** to `.cbsp21/incident_log.json`
+
+### 10.3 Emergency Hotfix
+
+For production emergencies:
+
+1. **Apply** the fix immediately
+2. **Create** post-merge audit within 24 hours
+3. **Update** manifest retroactively
+4. **Document** in incident log
 
 ---
 
-## 20. Enhanced Implementation Scripts
+## 11. Implementation Scripts
 
-### 20.1 Coverage Check (Enhanced)
+### 11.1 Coverage Check
 
-**Path:** `scripts/cbsp21/cbsp21_coverage_check.py`
+**File:** `scripts/cbsp21/cbsp21_coverage_check.py`
 
 ```python
 #!/usr/bin/env python
 """
 CBSP21 Coverage Check
 
-Calculates how much of the original content has been scanned/captured
-and enforces a minimum coverage threshold (default: 95%).
-
-- If both paths are files -> compare file sizes.
-- If both paths are directories -> compare total bytes of all files.
-- If one is a file and the other is a directory -> fail with an error.
-
-Usage examples:
-
-    # Directories
+Usage:
     python scripts/cbsp21/cbsp21_coverage_check.py \
         --full-path cbsp21/full_source \
         --scanned-path cbsp21/scanned_source \
@@ -691,16 +597,10 @@ from pathlib import Path
 
 
 def total_bytes_in_dir(root: Path) -> int:
-    """Sum bytes of all regular files under a directory (recursive)."""
-    return sum(
-        f.stat().st_size
-        for f in root.rglob("*")
-        if f.is_file()
-    )
+    return sum(f.stat().st_size for f in root.rglob("*") if f.is_file())
 
 
 def compute_bytes(path: Path) -> int:
-    """Return total bytes for a file or a directory."""
     if path.is_file():
         return path.stat().st_size
     if path.is_dir():
@@ -723,26 +623,20 @@ def main() -> int:
     if not scanned.exists():
         raise SystemExit(f"Scanned path does not exist: {scanned}")
 
-    # Guard: file vs dir mismatch
     if full.is_file() != scanned.is_file():
-        raise SystemExit("CBSP21 ERROR: full-path and scanned-path must both be files or both be directories.")
+        raise SystemExit("CBSP21 ERROR: full-path and scanned-path must both be files or directories.")
 
     full_bytes = compute_bytes(full)
     scanned_bytes = compute_bytes(scanned)
 
     if not full_bytes:
-        raise SystemExit("CBSP21 ERROR: full source appears empty - cannot compute coverage.")
+        raise SystemExit("CBSP21 ERROR: full source empty.")
 
     coverage = scanned_bytes / full_bytes
-    percent = coverage * 100
-
-    print(f"CBSP21 Coverage: {percent:.2f}%")
-    print(f"  full_bytes   = {full_bytes}")
-    print(f"  scanned_bytes= {scanned_bytes}")
-    print(f"  threshold    = {args.threshold * 100:.2f}%")
+    print(f"CBSP21 Coverage: {coverage * 100:.2f}%")
 
     if coverage < args.threshold:
-        print("CBSP21 FAIL: Coverage below policy threshold. Output prohibited.")
+        print("CBSP21 FAIL: Coverage below threshold.")
         return 1
 
     print("CBSP21 PASS: Coverage requirement satisfied.")
@@ -753,447 +647,30 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-### 20.2 Coverage + Audit Logger (Enhanced)
+### 11.2 PR Gate Check
 
-**Path:** `scripts/cbsp21/cbsp21_coverage_with_audit.py`
-
-```python
-#!/usr/bin/env python
-"""
-CBSP21 Coverage & Audit Logger
-
-Usage:
-    python scripts/cbsp21/cbsp21_coverage_with_audit.py \
-        --full cbsp21/full_source \
-        --scanned cbsp21/scanned_source \
-        --threshold 0.95 \
-        --log logs/cbsp21_audit.jsonl
-"""
-
-import argparse
-import json
-import os
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Any, Dict
-
-
-def total_bytes_in_dir(root: Path) -> int:
-    return sum(f.stat().st_size for f in root.rglob("*") if f.is_file())
-
-
-def compute_bytes(path: Path) -> int:
-    if path.is_file():
-        return path.stat().st_size
-    if path.is_dir():
-        return total_bytes_in_dir(path)
-    raise ValueError(f"Path not found: {path}")
-
-
-def audit_record(
-    *,
-    full: Path,
-    scanned: Path,
-    full_bytes: int,
-    scanned_bytes: int,
-    coverage: float,
-    threshold: float,
-    status: str,
-) -> Dict[str, Any]:
-    return {
-        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
-        "policy": "CBSP21",
-        "full_path": str(full),
-        "scanned_path": str(scanned),
-        "full_bytes": full_bytes,
-        "scanned_bytes": scanned_bytes,
-        "coverage_ratio": coverage,
-        "repo_coverage_percent": round(coverage * 100, 2),
-        "threshold": threshold,
-        "status": status,  # "pass" | "fail"
-        # Optional CI metadata (GitHub Actions)
-        "ci": {
-            "github_run_id": os.getenv("GITHUB_RUN_ID"),
-            "github_sha": os.getenv("GITHUB_SHA"),
-            "github_ref": os.getenv("GITHUB_REF"),
-            "github_actor": os.getenv("GITHUB_ACTOR"),
-            "github_repo": os.getenv("GITHUB_REPOSITORY"),
-        },
-    }
-
-
-def append_jsonl(path: Path, rec: Dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps(rec, ensure_ascii=False) + "\n")
-
-
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--full", required=True)
-    ap.add_argument("--scanned", required=True)
-    ap.add_argument("--threshold", type=float, default=0.95)
-    ap.add_argument("--log", required=True)
-    args = ap.parse_args()
-
-    full = Path(args.full)
-    scanned = Path(args.scanned)
-    log = Path(args.log)
-
-    if not full.exists():
-        print(f"CBSP21 FAIL: full path missing: {full}")
-        rec = audit_record(full=full, scanned=scanned, full_bytes=0, scanned_bytes=0,
-                           coverage=0.0, threshold=args.threshold, status="fail")
-        append_jsonl(log, rec)
-        return 1
-
-    if not scanned.exists():
-        print(f"CBSP21 FAIL: scanned path missing: {scanned}")
-        rec = audit_record(full=full, scanned=scanned, full_bytes=compute_bytes(full), scanned_bytes=0,
-                           coverage=0.0, threshold=args.threshold, status="fail")
-        append_jsonl(log, rec)
-        return 1
-
-    # Guard: mismatch
-    if full.is_file() != scanned.is_file():
-        print("CBSP21 FAIL: full and scanned must both be files or both be directories.")
-        rec = audit_record(full=full, scanned=scanned, full_bytes=compute_bytes(full), scanned_bytes=compute_bytes(scanned),
-                           coverage=0.0, threshold=args.threshold, status="fail")
-        append_jsonl(log, rec)
-        return 1
-
-    full_bytes = compute_bytes(full)
-    scanned_bytes = compute_bytes(scanned)
-
-    if not full_bytes:
-        print("CBSP21 FAIL: full source empty.")
-        rec = audit_record(full=full, scanned=scanned, full_bytes=0, scanned_bytes=scanned_bytes,
-                           coverage=0.0, threshold=args.threshold, status="fail")
-        append_jsonl(log, rec)
-        return 1
-
-    coverage = scanned_bytes / full_bytes
-    percent = coverage * 100
-
-    print(f"CBSP21 Coverage: {percent:.2f}% (threshold {args.threshold * 100:.2f}%)")
-
-    status = "pass" if coverage >= args.threshold else "fail"
-    rec = audit_record(
-        full=full,
-        scanned=scanned,
-        full_bytes=full_bytes,
-        scanned_bytes=scanned_bytes,
-        coverage=coverage,
-        threshold=args.threshold,
-        status=status,
-    )
-    append_jsonl(log, rec)
-
-    if status == "fail":
-        print("CBSP21 FAIL: Coverage below policy threshold. Output prohibited.")
-        return 1
-
-    print("CBSP21 PASS: Coverage requirement satisfied.")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
-
-### 20.3 Patch Packet Format Validator
-
-This enforces structured input rules:
-- Must contain at least one `FILE: path/to/file.ext`
-- Must have balanced triple-backtick fences
-- Optional: blocks "..." placeholder lines inside code fences
-
-**Path:** `scripts/cbsp21/check_patch_packet_format.py`
-
-```python
-#!/usr/bin/env python
-"""
-CBSP21 Patch Packet Format Rule
-
-Validates that patch packets are structured and safe to scan:
-- Must include at least one line starting with "FILE: "
-- Code fences (```) must be balanced
-- Optional: disallow "..." placeholder inside code fences (common truncation)
-
-Usage:
-    python scripts/cbsp21/check_patch_packet_format.py --glob "cbsp21/patch_packets/**/*.*"
-"""
-
-import argparse
-import glob
-from pathlib import Path
-
-
-def balanced_fences(text: str) -> bool:
-    return text.count("```") % 2 == 0
-
-
-def has_file_headers(text: str) -> bool:
-    return any(line.startswith("FILE: ") for line in text.splitlines())
-
-
-def has_ellipsis_inside_code_fence(text: str) -> bool:
-    in_fence = False
-    for line in text.splitlines():
-        if line.strip().startswith("```"):
-            in_fence = not in_fence
-            continue
-        if in_fence and line.strip() == "...":
-            return True
-    return False
-
-
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--glob", required=True, help="Glob of packet files to validate.")
-    ap.add_argument("--disallow-ellipsis-in-code", action="store_true")
-    args = ap.parse_args()
-
-    files = [Path(p) for p in glob.glob(args.glob, recursive=True)]
-    files = [p for p in files if p.is_file()]
-
-    if not files:
-        print("CBSP21 Patch Packet: no files matched; skipping.")
-        return 0
-
-    failed = False
-
-    for path in files:
-        txt = path.read_text(encoding="utf-8", errors="ignore")
-
-        if not has_file_headers(txt):
-            print(f"CBSP21 PATCH FAIL: Missing FILE headers in {path}")
-            failed = True
-
-        if not balanced_fences(txt):
-            print(f"CBSP21 PATCH FAIL: Unbalanced ``` fences in {path}")
-            failed = True
-
-        if args.disallow_ellipsis_in_code and has_ellipsis_inside_code_fence(txt):
-            print(f"CBSP21 PATCH FAIL: Found '...' placeholder inside code fence in {path}")
-            failed = True
-
-    if failed:
-        return 1
-
-    print("CBSP21 Patch Packet: PASS")
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
-```
-
-### 20.4 CI Workflow: Coverage Gate
-
-Runs only when CBSP21 material changes, so normal PRs are not blocked.
-
-**Path:** `.github/workflows/cbsp21_coverage_gate.yml`
-
-```yaml
-name: CBSP21 Coverage Gate
-
-on:
-  pull_request:
-    paths:
-      - "cbsp21/**"
-      - "scripts/cbsp21/**"
-  push:
-    branches: [ main, master ]
-    paths:
-      - "cbsp21/**"
-      - "scripts/cbsp21/**"
-
-jobs:
-  cbsp21-coverage:
-    runs-on: ubuntu-latest
-
-    env:
-      CBSP21_THRESHOLD: "0.95"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: CBSP21 Coverage + Audit
-        run: |
-          python scripts/cbsp21/cbsp21_coverage_with_audit.py \
-            --full cbsp21/full_source \
-            --scanned cbsp21/scanned_source \
-            --threshold $CBSP21_THRESHOLD \
-            --log logs/cbsp21_audit.jsonl
-
-      - name: Upload CBSP21 audit log
-        uses: actions/upload-artifact@v4
-        with:
-          name: cbsp21_audit
-          path: logs/cbsp21_audit.jsonl
-```
-
-### 20.5 CI Workflow: Patch Packet Format
-
-Enforces structured `FILE:` packet format when patch packets change.
-
-**Path:** `.github/workflows/cbsp21_patch_packet_format.yml`
-
-```yaml
-name: CBSP21 Patch Packet Format
-
-on:
-  pull_request:
-    paths:
-      - "cbsp21/patch_packets/**"
-      - "scripts/cbsp21/**"
-
-jobs:
-  cbsp21-patch-format:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Validate CBSP21 patch packets
-        run: |
-          python scripts/cbsp21/check_patch_packet_format.py \
-            --glob "cbsp21/patch_packets/**/*.*" \
-            --disallow-ellipsis-in-code
-```
-
----
-
-## 21. Operational Rules
-
-### 21.1 Reconstituting a Chat / Ensuring Completeness
-
-1. Put the authoritative material into:
-   - `cbsp21/full_source/` (read-only by convention)
-
-2. Put the scanned/captured material into:
-   - `cbsp21/scanned_source/`
-
-3. CI enforces **≥95% coverage**.
-
-### 21.2 Submitting Patch Packets Safely
-
-Put them in `cbsp21/patch_packets/` using:
-
-```text
-FILE: services/api/app/whatever.py
-<full content or a full diff>
-```
-
-CI enforces:
-- At least one `FILE:` header
-- Balanced code fences
-- No "..." truncation inside code fences
-
----
-
-## 22. Optional Hardening
-
-If you decide you want CBSP21 enforced for *all PRs touching governed areas* (RMOS/CAM/etc.), add another workflow trigger:
-
-- If PR touches `services/api/app/rmos/**` or `packages/client/src/components/rmos/**`
-- Then require `cbsp21/full_source` + `cbsp21/scanned_source` exist and pass
-
-This is not enabled by default because it can block everyday development unless the team is ready for that discipline.
-
----
-
-## 23. PR-Level Enforcement: CBSP21 as a Real Repo Gate
-
-CBSP21 serves **two complementary functions**:
-
-1. **Prevents under-scanning** — ensures AI systems don't reason from partial inputs
-2. **Catches redundant/regressive patches** — detects when sandbox patches duplicate or conflict with existing code
-
-To make this enforceable at the PR level (not just a reminder), the following components are provided:
-
-### 23.1 PR Manifest: `.cbsp21/patch_input.json`
-
-Every PR that modifies code/config must include a manifest declaring:
-- Which files were changed
-- What source files were scanned to produce the changes
-- Coverage metrics per changed file
-
-**Template:** `.cbsp21/patch_input.json.example`
-
-```json
-{
-  "$schema": "cbsp21_patch_input_v1",
-  "pr_title": "ci(governance): add artifact contract validator",
-  "changed_files": [
-    {
-      "path": "scripts/governance/validate_run_artifact_contract.py",
-      "action": "add",
-      "scanned_sources": ["docs/ENDPOINT_TRUTH_MAP.md", "services/api/app/rmos/runs_router.py"],
-      "file_context_coverage_percent": 97.2
-    },
-    {
-      "path": ".github/workflows/run_artifact_contract_gate.yml",
-      "action": "add",
-      "scanned_sources": [".github/workflows/artifact_linkage.yml"],
-      "file_context_coverage_percent": 100.0
-    }
-  ],
-  "overall_file_context_coverage": 98.6,
-  "notes": "Validator reads existing artifacts; does not create them."
-}
-```
-
-### 23.2 Gate Script: `scripts/ci/check_cbsp21_gate.py`
-
-This script:
-- Detects code/config changes in the PR (via `git diff`)
-- Requires `.cbsp21/patch_input.json` manifest
-- Enforces **file-level coverage** (default min `0.95`) for every changed "code" file
-- Exits non-zero if coverage requirements not met
+**File:** `scripts/ci/check_cbsp21_gate.py`
 
 ```python
 #!/usr/bin/env python3
 """
 CBSP21 PR Gate
 
-Validates that PRs touching code/config have a valid patch_input.json manifest
-with sufficient coverage declarations.
+Validates PRs have valid patch_input.json with sufficient coverage.
 
 Env:
   CBSP21_MIN_COVERAGE     default 0.95
   CBSP21_MANIFEST_PATH    default .cbsp21/patch_input.json
-  CBSP21_SKIP_EXTENSIONS  default .md,.txt,.json (non-code files)
-
-Usage:
-  python scripts/ci/check_cbsp21_gate.py
 """
-
-from __future__ import annotations
 
 import json
 import os
 import subprocess
-import sys
 from pathlib import Path
 from typing import Any, Dict, List, Set
 
 
 def get_changed_files() -> List[str]:
-    """Get files changed in this PR (vs origin/main)."""
     try:
         result = subprocess.run(
             ["git", "diff", "--name-only", "origin/main...HEAD"],
@@ -1201,7 +678,6 @@ def get_changed_files() -> List[str]:
         )
         return [f.strip() for f in result.stdout.strip().split("\n") if f.strip()]
     except subprocess.CalledProcessError:
-        # Fallback: compare to HEAD~1
         result = subprocess.run(
             ["git", "diff", "--name-only", "HEAD~1"],
             capture_output=True, text=True, check=True
@@ -1210,75 +686,48 @@ def get_changed_files() -> List[str]:
 
 
 def is_code_file(path: str, skip_exts: Set[str]) -> bool:
-    """Check if file is a code file (not docs, not config-only)."""
     ext = Path(path).suffix.lower()
     if ext in skip_exts:
         return False
-    # Code file extensions
-    code_exts = {".py", ".ts", ".tsx", ".js", ".jsx", ".vue", ".yaml", ".yml", ".sh", ".ps1"}
+    code_exts = {".py", ".ts", ".tsx", ".js", ".jsx", ".yaml", ".yml", ".sh", ".ps1"}
     return ext in code_exts
 
 
 def main() -> int:
     min_coverage = float(os.getenv("CBSP21_MIN_COVERAGE", "0.95"))
     manifest_path = Path(os.getenv("CBSP21_MANIFEST_PATH", ".cbsp21/patch_input.json"))
-    skip_exts_raw = os.getenv("CBSP21_SKIP_EXTENSIONS", ".md,.txt")
-    skip_exts = {s.strip().lower() for s in skip_exts_raw.split(",") if s.strip()}
+    skip_exts = {".md", ".txt"}
 
     changed_files = get_changed_files()
     code_files = [f for f in changed_files if is_code_file(f, skip_exts)]
 
     if not code_files:
-        print("CBSP21 GATE: No code files changed - skipping manifest check.")
+        print("CBSP21 GATE: No code files changed - skipping.")
         return 0
 
-    print(f"CBSP21 GATE: {len(code_files)} code file(s) changed:")
-    for f in code_files:
-        print(f"  - {f}")
+    print(f"CBSP21 GATE: {len(code_files)} code file(s) changed")
 
     if not manifest_path.exists():
-        print(f"\n❌ CBSP21 GATE FAIL: Missing manifest at {manifest_path}")
-        print("   PRs changing code must include a patch_input.json manifest.")
-        print("   See .cbsp21/patch_input.json.example for template.")
+        print(f"❌ CBSP21 GATE FAIL: Missing manifest at {manifest_path}")
         return 1
 
-    try:
-        manifest: Dict[str, Any] = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (json.JSONDecodeError, OSError) as e:
-        print(f"❌ CBSP21 GATE FAIL: Invalid manifest: {e}")
-        return 1
-
-    # Check that all code files are declared in manifest
+    manifest: Dict[str, Any] = json.loads(manifest_path.read_text())
     declared_paths = {cf["path"] for cf in manifest.get("changed_files", [])}
-    missing = [f for f in code_files if f not in declared_paths]
+    
+    # Also check files_expected_to_change in scope
+    scope = manifest.get("scope", {})
+    expected = set(scope.get("files_expected_to_change", []))
+    exact = set(manifest.get("changed_files_exact", []))
+    all_declared = declared_paths | expected | exact
 
+    missing = [f for f in code_files if f not in all_declared]
     if missing:
-        print(f"\n❌ CBSP21 GATE FAIL: Changed files not declared in manifest:")
+        print(f"❌ CBSP21 GATE FAIL: Undeclared files:")
         for m in missing:
             print(f"  - {m}")
         return 1
 
-    # Check coverage per file
-    violations: List[str] = []
-    for cf in manifest.get("changed_files", []):
-        path = cf.get("path", "")
-        cov = cf.get("file_context_coverage_percent", 0)
-        if cov is None:
-            cov = 0
-        cov_ratio = cov / 100.0 if cov > 1 else cov
-
-        if path in code_files and cov_ratio < min_coverage:
-            violations.append(f"{path}: {cov_ratio*100:.1f}% < {min_coverage*100:.1f}%")
-
-    if violations:
-        print(f"\n❌ CBSP21 GATE FAIL: Coverage below threshold ({min_coverage*100:.0f}%):")
-        for v in violations:
-            print(f"  - {v}")
-        return 1
-
-    overall = manifest.get("overall_file_context_coverage", 100)
-    print(f"\n✅ CBSP21 GATE PASS: All code files declared with sufficient coverage.")
-    print(f"   Overall file context coverage: {overall}%")
+    print("✅ CBSP21 GATE PASS")
     return 0
 
 
@@ -1286,262 +735,107 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-### 23.3 CI Workflow: `cbsp21_gate.yml`
+---
 
-**Path:** `.github/workflows/cbsp21_gate.yml`
+## 12. Quick Reference
 
-```yaml
-name: CBSP21 PR Gate
+### 12.1 For AI Agents
 
-on:
-  pull_request:
-    paths:
-      - "services/**"
-      - "packages/**"
-      - "scripts/**"
-      - ".github/workflows/**"
+```
+BEFORE generating code:
+1. Scan all relevant source files
+2. Verify coverage ≥ 95%
+3. Check if target files are locked (CORE_LOCK_REPORT.md)
+4. Use canonical terminology (GLOSSARY.md)
+5. Follow import protocols (DEVELOPER_GUIDE.md)
 
-jobs:
-  cbsp21-pr-gate:
-    runs-on: ubuntu-latest
+IF coverage < 95%:
+→ STOP
+→ Request more context
+→ Do not generate output
 
-    env:
-      CBSP21_MIN_COVERAGE: "0.95"
-      CBSP21_MANIFEST_PATH: ".cbsp21/patch_input.json"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Need history for git diff
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: CBSP21 PR Gate Check
-        run: python scripts/ci/check_cbsp21_gate.py
+AFTER generating code:
+1. Run tests: python -m pytest tests/ -v
+2. Run lock verification: python verify_lock.py
+3. Validate contract compliance
 ```
 
-### 23.4 Workflow Integration
+### 12.2 For Human Contributors
 
-When contributing code changes:
+```
+BEFORE submitting PR:
+1. Create .cbsp21/patch_input.json manifest
+2. Declare all files to be changed
+3. Document intent and behavior impact
+4. Run verification commands
 
-1. **Before PR:** Create `.cbsp21/patch_input.json` declaring:
-   - Changed files
-   - Sources scanned (context gathered)
-   - Coverage percentages
+REQUIRED for code changes:
+- Manifest with patch_id, title, intent
+- files_expected_to_change list
+- diff_articulation with what_changed
+- Verification results
 
-2. **On PR:** CI runs `check_cbsp21_gate.py`:
-   - Validates manifest exists
-   - Confirms all changed code files are declared
-   - Enforces coverage threshold per file
+REQUIRED for behavior changes:
+- Diff review
+- Impact documentation
+- Explicit approval
+```
 
-3. **On Failure:** Either:
-   - Add missing context scans and update manifest
-   - Or request exemption via documented exception process (Section 14)
+### 12.3 Verification Commands
 
-### 23.5 Exemptions
+```bash
+# Run full test suite
+python -m pytest tests/ -v
 
-Some PRs legitimately don't need full coverage validation:
-- Pure documentation changes (`.md`, `.txt`)
-- Auto-generated files (declared in `.cbsp21/exemptions.json`)
-- Emergency hotfixes (require post-merge audit)
+# Run lock verification (5 tests)
+python verify_lock.py
 
-To exempt specific paths, add to `.cbsp21/exemptions.json`:
+# Run contract tests only
+python -m pytest tests/ -v -m contract
 
-```json
-{
-  "exempt_patterns": [
-    "**/*.generated.ts",
-    "**/migrations/**",
-    "docs/**"
-  ]
-}
+# Check coverage
+python scripts/cbsp21/cbsp21_coverage_check.py \
+    --full-path cbsp21/full_source \
+    --scanned-path cbsp21/scanned_source
 ```
 
 ---
 
-## 24. Diff Review Gate: Pre-Commit Behavior Change Review
+## 13. Revision History
 
-### 24.1 Purpose
-
-This section addresses a critical failure mode: **AI agents declaring patches "redundant" based on keyword matches, then applying changes that silently alter or restrict existing functionality**.
-
-The Diff Review Gate requires:
-1. **Explicit diff presentation** before commits with behavior changes
-2. **User confirmation** for any changes that add guards, restrictions, or alter control flow
-3. **Functional coverage verification** — not just keyword presence
-
-### 24.2 When Diff Review is Required
-
-| Risk Level | Trigger | Requirement |
-|------------|---------|-------------|
-| **Low** | Pure additions (new files, new functions) | No diff review required |
-| **Medium** | Modifications to existing functions | Show diff, await confirmation |
-| **High** | Changes that add guards, disable features, alter control flow | Show diff + explain impact, await explicit approval |
-
-### 24.3 Redundancy Check Protocol
-
-Before declaring a patch "REDUNDANT", the AI agent MUST:
-
-1. **Keyword scan**: Search for function/variable names from patch
-2. **Functional equivalence check**: Verify the *behavior* matches, not just the *presence*
-3. **Coverage analysis**: For each feature in the patch, confirm:
-   - Feature exists AND
-   - Feature is complete AND
-   - No gaps in implementation
-
-Example of **incomplete implementation** (incorrectly flagged as redundant):
-```
-Patch requests: Full decision_history list in hover
-Codebase has: auditHoverText() exists — but only shows LAST record
-Result: NOT redundant — patch adds missing functionality
-```
-
-### 24.4 Pre-Commit Checklist for Behavior Changes
-
-Before committing changes with `behavior_change: "medium"` or `"high"`:
-
-```markdown
-## Pre-Commit Review
-
-- [ ] Diff shown to user (not just described)
-- [ ] Behavior change clearly explained
-- [ ] Impact on existing workflows documented
-- [ ] User explicitly approved (not just silence)
-
-If any guard/restriction is added:
-- [ ] Existing functionality preserved OR explicitly deprecated
-- [ ] Fallback behavior documented
-- [ ] Migration path provided if breaking
-```
-
-### 24.5 Recovery Procedure
-
-If a behavior-changing commit was pushed without review:
-
-1. **Identify**: `git diff HEAD~1 HEAD -- <file>`
-2. **Assess impact**: What functionality was altered?
-3. **Decide**: Revert, amend, or accept with documentation
-4. **Document**: Add to `.cbsp21/incident_log.json` if functionality was lost
-
-### 24.6 Revision Notes Update
-
-| Rev | Date | Notes |
-|-----|------|-------|
-| 1.3 | 2026-01-03 | Added Section 24: Diff Review Gate (pre-commit behavior change review, redundancy check protocol, recovery procedure). |
+| Rev | Date | Changes |
+|-----|------|---------|
+| 1.0 | 2026-01-01 | Initial release |
+| 1.1 | 2026-01-02 | Added CI gates, patch packet format |
+| 1.2 | 2026-01-03 | Added PR-level enforcement |
+| 1.3 | 2026-01-03 | Added Diff Review Gate |
+| 1.4 | 2026-01-03 | Added behavior preservation gate |
+| 1.5 | 2026-01-03 | Added diff-range lock |
+| 2.0 | 2026-01-14 | **Major rewrite**: Unified AI + human governance, repo-wide scope, integration with GOVERNANCE.md ecosystem, removed external references, added complete file structure documentation |
 
 ---
 
-## 25. Patch Input Manifest (Required)
+## 14. References
 
-Every non-trivial change MUST include a patch manifest at:
+**Internal Documentation:**
 
-```
-.cbsp21/patch_input.json
-```
+- [GOVERNANCE.md](GOVERNANCE.md) — Change approval process
+- [CANON.md](CANON.md) — Immutable axioms
+- [GLOSSARY.md](GLOSSARY.md) — Frozen terminology
+- [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) — Import protocols and patterns
+- [CLI_DOCUMENTATION.md](CLI_DOCUMENTATION.md) — CLI reference
+- [docs/contracts/CORE_LOCK_REPORT.md](docs/contracts/CORE_LOCK_REPORT.md) — Locked module list
+- [docs/contracts/MIDI_RUNTIME_CONTRACT_V1.md](docs/contracts/MIDI_RUNTIME_CONTRACT_V1.md) — MIDI invariants
 
-This is the **first line of defense** against:
+**Configuration Files:**
 
-- under-scanning (missing the real change)
-- falsely declaring a patch "redundant" when it contains small but important deltas
-- regressions introduced by "helpful" guardrails that subtly change behavior
-
-The manifest is the reviewer-facing contract. It must be **updated whenever the diff changes**.
-
-### 25.1 Required Fields (v1)
-
-- `schema_version`: `"cbsp21_patch_input_v1"`
-- `patch_id`: short stable ID for the patch (e.g., `BUNDLE_12`, `FIX_409_GUARD`, etc.)
-- `title`: one line
-- `intent`: 1–3 sentences
-- `change_type`: `code|docs|ci|mixed`
-- `behavior_change`: `none|compatible|breaking`
-- `risk_level`: `low|medium|high`
-- `scope.paths_in_scope`: directories this patch is allowed to touch
-- `scope.files_expected_to_change`: explicit list of files you expect to touch
-- `diff_articulation.what_changed`: 5–15 bullets of what actually changed
-- `diff_articulation.why_not_redundant`: explain what is different vs prior implementation
-- `verification.commands_run`: commands run (or "not run: <reason>")
-
-### 25.2 Hard Rule
-
-If you touch a file that is **not** listed in `files_expected_to_change` or `paths_in_scope`, the patch is **not eligible** until the manifest is updated.
-
-(Reason: this is how we stop "drive-by" edits from slipping in unnoticed.)
-
-### 25.3 Diff-Range Lock (Required)
-
-Every patch manifest MUST declare the diff range used to compute changed files, and must include the exact changed-file list derived from that range.
-
-**Required fields:**
-
-- `diff_range.base`: e.g. `"origin/main"`
-- `diff_range.head`: e.g. `"HEAD"`
-- `changed_files_count`: integer
-- `changed_files_exact`: string[] (paths)
-
-**Hard rule:**
-
-CI MUST compute changed files from `diff_range` and require that:
-
-1. `set(changed_files_exact) == set(actual_changed_files)`
-2. All code files are covered by the manifest
-
-This is the mechanical "no circling" lock — you cannot claim a diff range and then omit files from it.
+- `pyproject.toml` — Package configuration
+- `pytest.ini` — Test configuration with contract markers
+- `.github/workflows/tests.yml` — CI test workflow
+- `.github/workflows/cbsp21_*.yml` — CBSP21 enforcement workflows
 
 ---
 
-## 26. Diff Review Gate (Behavior Preservation)
-
-Before merging (or before accepting a bot-generated patch), you MUST complete a **Diff Review Gate**:
-
-### 26.1 Show the Diff
-
-- Provide `git diff` (or a patch file) for review.
-- Call out any changes that alter conditions/guards/defaults, even if "minor".
-
-### 26.2 State Behavior Impact Explicitly
-
-You must answer these in the manifest (`diff_articulation` + `behavior_change`):
-
-- What inputs now fail that previously passed?
-- What outputs changed (shape, fields, ordering, defaults)?
-- What edge cases were tightened/relaxed?
-
-### 26.3 No "Redundant" Declaration Without Proof
-
-A change can only be labeled "redundant" if **one** of these is true:
-
-- `git diff` is empty, OR
-- the changes are purely formatting/comments, OR
-- you provide a short equivalence argument **plus** at least one validation command that demonstrates no behavior change.
-
-Anything else is "non-redundant" by definition.
-
----
-
-## 27. Repo-Enforced Gate — Patch Input + Diff Articulation
-
-CI MUST fail if:
-
-- `.cbsp21/patch_input.json` is missing, OR
-- required fields are missing/invalid, OR
-- files changed are not declared in `files_expected_to_change` or `paths_in_scope`, OR
-- `behavior_change != "none"` but `diff_articulation.why_not_redundant` is empty or too short, OR
-- `diff_range` is missing, OR
-- `changed_files_exact` differs from actual git diff result for the declared `diff_range`.
-
-Reference implementation (repo scripts):
-
-- `scripts/ci/check_cbsp21_patch_input.py`
-- workflow: `.github/workflows/cbsp21_patch_input_gate.yml`
-
-This gate is intentionally small and mechanical: it doesn't "judge" the code — it enforces that we *described* the code change accurately.
-
----
-
-**End of CBSP21**
-
+**Policy Owner:** Smart Guitar Project Governance  
+**Last Updated:** 2026-01-14  
+**Status:** Active

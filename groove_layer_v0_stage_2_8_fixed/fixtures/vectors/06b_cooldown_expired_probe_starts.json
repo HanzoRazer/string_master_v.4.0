@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "name": "06b_cooldown_expired_probe_starts",
+    "window_duration_ms": 15000
+  },
+  "device_id": "SG-LOCAL-00042",
+  "session_id": "sess-06",
+  "engine_context": {
+    "tempo_bpm_target": 100,
+    "time_signature": "4/4",
+    "grid": "eighth",
+    "feel": "straight"
+  },
+  "prior_state_hint": {
+    "stable_windows": 1,
+    "probe_cooldown_windows": 1,
+    "next_probe_in_windows": 0
+  },
+  "events": [
+    {
+      "t_onset_ms": 0,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 300,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 600,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 900,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 1200,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 1500,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 1800,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 2100,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 2400,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    },
+    {
+      "t_onset_ms": 2700,
+      "event_type": "strum_onset",
+      "strength": 0.6,
+      "confidence": 0.95
+    }
+  ]
+}

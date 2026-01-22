@@ -1,0 +1,10 @@
+{
+  "controls": {
+    "loop": {
+      "policy": "loop_section"
+    },
+    "arrangement": {
+      "density_target": "medium"
+    }
+  }
+}

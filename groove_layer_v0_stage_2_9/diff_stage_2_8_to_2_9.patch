@@ -1,0 +1,82 @@
+--- stage_2_8/groove_layer/engine.py
++++ stage_2_9/groove_layer/engine.py
+@@ -172,6 +172,24 @@
+         state.probe_interval_windows = min(6, int(state.probe_interval_windows) + 1)
+         state.probe_cooldown_windows = max(state.probe_cooldown_windows, 3)
+ 
++
++
++
++def _density_probe_allowed(state: GrooveStateV0, tempo_policy: str, stable: bool) -> bool:
++    """Vector 09: Density/tempo interaction guardrail.
++
++    Rules:
++    - No probing while tempo is correcting drift
++    - No probing while unstable
++    - No probing while in micro_loop
++    """
++    if not stable:
++        return False
++    if tempo_policy == "correct_drift":
++        return False
++    if state.last_loop_policy == "micro_loop":
++        return False
++    return True
+ 
+ def compute_groove_layer_control(payload: Dict[str, Any], state: Optional[GrooveStateV0] = None) -> Dict[str, Any]:
+     """Compute Groove Layer v0 control intent.
+--- stage_2_8/tests/test_groove_layer_stage_2_3.py
++++ stage_2_9/tests/test_groove_layer_stage_2_3.py
+@@ -98,3 +98,16 @@
+     assert out["controls"]["tempo"]["policy"] == "correct_drift"
+     # correction should be stronger than single-window clamp in some cases, but still bounded
+     assert abs(out["controls"]["tempo"]["nudge_strength"]) <= 0.30
++
++
++def test_vector_09a_no_probe_during_tempo_correction():
++    payload = load("fixtures/vectors/09a_no_probe_during_tempo_correction.json")
++    state = GrooveStateV0()
++    out = compute_groove_layer_control(payload, state=state)
++    assert out["controls"]["arrangement"]["density_target"] != "dense"
++
++def test_vector_09b_no_probe_during_micro_loop():
++    payload = load("fixtures/vectors/09b_no_probe_during_micro_loop.json")
++    state = GrooveStateV0()
++    out = compute_groove_layer_control(payload, state=state)
++    assert out["controls"]["arrangement"]["density_target"] != "dense"
+--- stage_2_8/README.md
++++ stage_2_9/README.md
+@@ -1,23 +1,18 @@
+-# Groove Layer v0 – Stage 2.8 (Vector 08: Tempo Drift Clamp + Correction) — FIXED (non-regressing)
++# Groove Layer v0 – Stage 2.9 (Vector 09: Density / Tempo Guardrails)
+ 
+-This stage is **Stage 2.7 + Vector 08**. It does **not** remove prior vectors (05–07).
++Adds a hard interaction rule between **tempo correction** and **density probing**.
+ 
+-## Vector 08 behavior
+-- Estimate player tempo from onset deltas (median delta)
+-- Clamp per-window drift to **±5%**
+-- Accumulate drift across windows (`drift_accum_pct`)
+-- If accumulated drift exceeds **±3%**, emit:
+-  - `tempo.policy = "correct_drift"`
+-  - `nudge_strength` clamped to **±0.30**
+-  - reset accumulator
++## Vector 09 rules
++Density probes are **forbidden** when:
++- tempo.policy == "correct_drift"
++- system is unstable
++- last_loop_policy == "micro_loop"
+ 
+-Otherwise emit:
+-- `tempo.policy = "follow_player"`
+-- `nudge_strength = drift_pct` (±0.05 clamp)
++This prevents simultaneous adaptation along orthogonal axes.
+ 
+ ## New fixtures
+-- `fixtures/vectors/08a_small_drift_follow_player.json`
+-- `fixtures/vectors/08b_accumulated_drift_triggers_correct.json`
++- 09a_no_probe_during_tempo_correction.json
++- 09b_no_probe_during_micro_loop.json
+ 
+ ## Run
+ ```bash

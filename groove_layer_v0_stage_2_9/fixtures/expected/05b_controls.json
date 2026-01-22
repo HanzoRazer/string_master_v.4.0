@@ -1,0 +1,7 @@
+{
+  "controls": {
+    "loop": {
+      "policy": "micro_loop"
+    }
+  }
+}

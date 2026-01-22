@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "name": "08a_small_drift_follow_player",
+    "window_duration_ms": 15000
+  },
+  "device_id": "SG-LOCAL-00042",
+  "session_id": "sess-08",
+  "engine_context": {
+    "tempo_bpm_target": 100,
+    "time_signature": "4/4",
+    "grid": "eighth",
+    "feel": "straight"
+  },
+  "events": [
+    {
+      "t_onset_ms": 0,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 612,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 1224,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 1836,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 2448,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 3060,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 3672,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 4284,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 4896,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    },
+    {
+      "t_onset_ms": 5508,
+      "event_type": "strum_onset",
+      "strength": 0.8,
+      "confidence": 0.96
+    }
+  ]
+}
