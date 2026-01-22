@@ -48,7 +48,7 @@ def evaluate_session(session: SessionRecord) -> CoachEvaluation:
         findings.append(
             CoachFinding(
                 type="timing",
-                severity=Severity.YELLOW,
+                severity=Severity.secondary,
                 evidence=FindingEvidence(mean_error_ms=mean_error),
                 interpretation=f"Mean timing error of {mean_error:.1f}ms suggests room for improvement",
             )
@@ -58,8 +58,8 @@ def evaluate_session(session: SessionRecord) -> CoachEvaluation:
         findings.append(
             CoachFinding(
                 type="timing",
-                severity=Severity.RED,
-                evidence=FindingEvidence(mean_error_ms=mean_error, max_error_ms=max_error),
+                severity=Severity.primary,
+                evidence=FindingEvidence(mean_error_ms=mean_error),
                 interpretation=f"Mean timing error of {mean_error:.1f}ms requires focused practice",
             )
         )
@@ -77,7 +77,7 @@ def evaluate_session(session: SessionRecord) -> CoachEvaluation:
                 findings.append(
                     CoachFinding(
                         type="timing",
-                        severity=Severity.YELLOW,
+                        severity=Severity.secondary,
                         evidence=FindingEvidence(metric="step_error", value=error),
                         interpretation=f"Step {step} has high error ({error:.1f}ms)",
                     )
@@ -100,7 +100,7 @@ def evaluate_session(session: SessionRecord) -> CoachEvaluation:
             findings.append(
                 CoachFinding(
                     type="technique",
-                    severity=Severity.YELLOW,
+                    severity=Severity.secondary,
                     evidence=FindingEvidence(metric="note_accuracy", value=accuracy),
                     interpretation=f"Only {accuracy*100:.0f}% of expected notes were played",
                 )
