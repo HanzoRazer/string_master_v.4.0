@@ -1,12 +1,12 @@
 """
-zt_band coach_schema — re-exported from shared.coach_schemas.
+zt_band coach_schema — re-exported from sg_coach.schemas.
 
 This module is a thin wrapper for backward compatibility.
-All types are defined in shared/coach_schemas.py (single source of truth).
+All types are defined in sg_coach.schemas (single source of truth).
 
 Legacy aliases are provided for backward compatibility with existing code.
 """
-from shared.coach_schemas import (
+from sg_coach.schemas import (
     # Type aliases
     Sha256,
     # Enums
