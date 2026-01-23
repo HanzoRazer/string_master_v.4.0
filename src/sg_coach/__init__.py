@@ -76,6 +76,14 @@ from .groove_contracts import GrooveSnapshotV0, ControlIntentV0
 from .evaluation_v0_3 import EvaluationV0_3, CoachFeedbackV0
 from .evaluation_builder_v0_3 import EvaluationBuilderV0_3
 
+# v0.4: Planner consumes control_intent + flags
+from .planner_v0_4 import (
+    AssignmentV0_4,
+    CoachFeedbackCompat,
+    PlannerPolicyV0_4,
+    plan_next_v0_4,
+)
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -139,4 +147,9 @@ __all__ = [
     "EvaluationV0_3",
     "CoachFeedbackV0",
     "EvaluationBuilderV0_3",
+    # v0.4: Planner
+    "AssignmentV0_4",
+    "CoachFeedbackCompat",
+    "PlannerPolicyV0_4",
+    "plan_next_v0_4",
 ]
