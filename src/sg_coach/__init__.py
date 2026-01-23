@@ -84,6 +84,18 @@ from .planner_v0_4 import (
     plan_next_v0_4,
 )
 
+# v0.5: Structured override reasons
+from .assignment_v0_5 import (
+    OverrideReason,
+    OverrideDecisionV0,
+    CoachFeedbackV0_5,
+    AssignmentV0_5,
+)
+from .planner_v0_5 import (
+    PlannerPolicyV0_5,
+    plan_next_v0_5,
+)
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -152,4 +164,11 @@ __all__ = [
     "CoachFeedbackCompat",
     "PlannerPolicyV0_4",
     "plan_next_v0_4",
+    # v0.5: Structured override reasons
+    "OverrideReason",
+    "OverrideDecisionV0",
+    "CoachFeedbackV0_5",
+    "AssignmentV0_5",
+    "PlannerPolicyV0_5",
+    "plan_next_v0_5",
 ]

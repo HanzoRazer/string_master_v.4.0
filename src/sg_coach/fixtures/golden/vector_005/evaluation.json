@@ -1,0 +1,34 @@
+{
+  "schema_id": "sg_coach_evaluation",
+  "schema_version": "v0_3",
+  "evaluated_at_utc": "2026-01-22T22:20:01Z",
+  "session_id": "sess_005_demo",
+  "instrument_id": "SG-2026-000005",
+  "groove": {
+    "schema_id": "sg_groove_snapshot",
+    "schema_version": "v0",
+    "tempo_bpm_est": 112.0,
+    "stability": 0.58,
+    "drift_ppm": 2200.0,
+    "density": 0.86,
+    "last_update_ms": 2400
+  },
+  "control_intent": {
+    "schema_id": "sg_groove_control_intent",
+    "schema_version": "v0",
+    "target_tempo_bpm": 112,
+    "tempo_nudge_bpm": 2,
+    "density_cap": 0.72,
+    "allow_probe": true,
+    "probe_reason": "stable_high_confidence_low_density"
+  },
+  "timing_score": 0.92,
+  "consistency_score": 0.76,
+  "flags": {
+    "tempo_drift": true,
+    "overplaying": true,
+    "instability": true,
+    "low_confidence": false,
+    "inconsistent_dynamics": true
+  }
+}
