@@ -1,0 +1,21 @@
+{
+  "session_id": "00000000-0000-0000-0000-000000000001",
+  "program": {
+    "kind": "ztprog",
+    "name": "golden_vector_program"
+  },
+  "bpm": 120.0,
+  "meter": "4/4",
+  "grid": 16,
+  "bars": 8,
+  "timing_mean_error_ms": 18.0,
+  "timing_p95_error_ms": 32.0,
+  "late_events": 3,
+  "total_events": 120,
+  "notes_on_grid_ratio": 0.86,
+  "clave_hit_ratio": null,
+  "panic_used": false,
+  "underrun_detected": false,
+  "coach_contract": "v1",
+  "midi_contract": "v1"
+}

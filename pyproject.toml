@@ -24,8 +24,7 @@ classifiers = [
 dependencies = [
   "mido>=1.2.10",
   "pyyaml>=6.0",
-  "pydantic>=2.0",
-  "sg-coach @ git+https://github.com/HanzoRazer/sg-coach.git",
+  "pydantic>=2,<3",
 ]
 
 [project.optional-dependencies]
@@ -44,7 +43,7 @@ Homepage = "https://github.com/HanzoRazer/string_master_v.4.0"
 [project.scripts]
 zt-gravity = "shared.zone_tritone.cli:main"
 zt-band = "zt_band.cli:main"
-# sg-coach CLI is now provided by the sg-coach package
+sgc = "sg_coach.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -71,7 +70,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["shared", "zt_band"]
+known-first-party = ["shared", "zt_band", "sg_coach"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

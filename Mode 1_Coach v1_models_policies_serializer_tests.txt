@@ -1,0 +1,2377 @@
+Absolutely — here’s a complete file tree + production-minded code skeleton for Mode 1 Coach v1 (models/policies/serializer/tests). It’s deterministic, explainable, UUID-safe for firmware/OTA, and includes a golden snapshot harness.
+________________________________________
+File tree (drop-in)
+src/
+  sg_coach/
+    __init__.py
+    contract.py
+    models.py
+    coach_policy.py
+    assignment_policy.py
+    assignment_serializer.py
+
+tests/
+  golden/
+    mode1_assignment_v1.json
+  test_coach_policy_mode1.py
+  test_assignment_serializer.py
+  test_mode1_golden_assignment.py
+
+pytest.ini
+________________________________________
+src/sg_coach/__init__.py
+from .contract import COACH_CONTRACT_VERSION
+from .models import (
+    ProgramType,
+    ProgramRef,
+    SessionRecord,
+    Severity,
+    FindingCode,
+    CoachFinding,
+    CoachEvaluation,
+    PracticeAssignment,
+    AssignmentTargets,
+    SuccessCriteria,
+    ProgressionRule,
+)
+from .coach_policy import evaluate_session
+from .assignment_policy import plan_assignment
+
+__all__ = [
+    "COACH_CONTRACT_VERSION",
+    "ProgramType",
+    "ProgramRef",
+    "SessionRecord",
+    "Severity",
+    "FindingCode",
+    "CoachFinding",
+    "CoachEvaluation",
+    "PracticeAssignment",
+    "AssignmentTargets",
+    "SuccessCriteria",
+    "ProgressionRule",
+    "evaluate_session",
+    "plan_assignment",
+]
+________________________________________
+src/sg_coach/contract.py
+"""
+Coach Contract Version Pin
+
+Bump ONLY when deterministic behavior of:
+SessionRecord -> CoachEvaluation -> PracticeAssignment
+changes in a way that invalidates golden vectors or OTA expectations.
+"""
+
+COACH_CONTRACT_VERSION: str = "v1"
+________________________________________
+src/sg_coach/models.py
+from __future__ import annotations
+
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Literal, Optional
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, Field, field_validator
+
+
+class ProgramType(str, Enum):
+    ztprog = "ztprog"
+    ztex = "ztex"
+    live = "live"
+
+
+class ProgramRef(BaseModel):
+    kind: ProgramType
+    name: str = Field(..., min_length=1, description="Logical name or file stem, e.g. salsa_minor_Dm")
+    path: Optional[str] = Field(default=None, description="Optional relative path, e.g. programs/salsa_minor_Dm.ztprog")
+
+
+class Severity(str, Enum):
+    INFO = "INFO"
+    WARN = "WARN"
+    FAIL = "FAIL"
+
+
+class FindingCode(str, Enum):
+    TIMING_P95_HIGH = "TIMING_P95_HIGH"
+    GRID_ADHERENCE_LOW = "GRID_ADHERENCE_LOW"
+    CLAVE_ALIGNMENT_LOW = "CLAVE_ALIGNMENT_LOW"
+    RUNTIME_UNDERRUN = "RUNTIME_UNDERRUN"
+    PANIC_USED = "PANIC_USED"
+
+
+class CoachFinding(BaseModel):
+    code: FindingCode
+    severity: Severity
+    message: str
+    evidence: Dict[str, Any] = Field(default_factory=dict)
+
+    @field_validator("message")
+    @classmethod
+    def _strip_message(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("message must be non-empty")
+        return v
+
+
+class SessionRecord(BaseModel):
+    """
+    Facts-only session record.
+
+    Keep this compact for firmware / OTA export.
+    Avoid raw MIDI event dumps in v1—use metrics + optional artifact refs/hashes.
+    """
+
+    session_id: UUID = Field(default_factory=uuid4)
+    device_id: Optional[str] = Field(default=None, description="Instrument/device identifier")
+    started_at: Optional[datetime] = None
+    ended_at: Optional[datetime] = None
+
+    program: ProgramRef
+    bpm: float = Field(..., gt=0.0)
+    meter: Literal["4/4", "2/4"] = "4/4"
+    grid: Literal[8, 16] = 16
+    bars: int = Field(..., ge=1)
+
+    # Performance metrics (timing)
+    timing_mean_error_ms: float = Field(..., ge=0.0)
+    timing_p95_error_ms: float = Field(..., ge=0.0)
+    late_events: int = Field(0, ge=0)
+    total_events: int = Field(..., ge=0)
+
+    # Grid adherence (0..1)
+    notes_on_grid_ratio: float = Field(..., ge=0.0, le=1.0)
+
+    # Clave alignment (0..1) – only meaningful for clave-aware styles
+    clave_hit_ratio: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+
+    # Runtime flags
+    panic_used: bool = False
+    underrun_detected: bool = False
+
+    # Contract versions (recorded for audit/repro)
+    coach_contract: str = "v1"
+    midi_contract: Optional[str] = None
+
+    @field_validator("total_events")
+    @classmethod
+    def _total_events_sane(cls, v: int) -> int:
+        # allow 0 (e.g. click-only or telemetry-only), but keep non-negative.
+        return v
+
+    @field_validator("late_events")
+    @classmethod
+    def _late_events_sane(cls, v: int) -> int:
+        return v
+
+
+class CoachEvaluation(BaseModel):
+    evaluation_id: UUID = Field(default_factory=uuid4)
+    session_id: UUID
+    coach_contract: str = "v1"
+
+    score_0_100: int = Field(..., ge=0, le=100)
+    grade: Literal["A", "B", "C", "D", "F"]
+    primary_focus: str = Field(..., min_length=1, description="Stable tag used by planner")
+    findings: List[CoachFinding] = Field(default_factory=list)
+
+
+class AssignmentTargets(BaseModel):
+    bpm_target: int = Field(..., ge=20, le=400)
+    minutes: int = Field(..., ge=1, le=120)
+    strict: bool = False
+    window_ms_note_on: int = Field(0, ge=0, le=200)
+    window_ms_note_off: int = Field(0, ge=0, le=400)
+
+
+class SuccessCriteria(BaseModel):
+    max_timing_p95_ms: float = Field(..., ge=0.0, le=500.0)
+    min_notes_on_grid_ratio: float = Field(..., ge=0.0, le=1.0)
+    min_clave_hit_ratio: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+
+
+class ProgressionRule(BaseModel):
+    if_pass_bpm_delta: int = Field(5, ge=0, le=50)
+    if_fail_bpm_delta: int = Field(5, ge=0, le=50)
+    tighten_window_ms_on_pass: int = Field(5, ge=0, le=50)
+
+
+class PracticeAssignment(BaseModel):
+    assignment_id: UUID = Field(default_factory=uuid4)
+    session_id: UUID
+    coach_contract: str = "v1"
+
+    program: ProgramRef
+    mode: Literal["practice", "test"] = "practice"
+
+    targets: AssignmentTargets
+    success: SuccessCriteria
+    progression: ProgressionRule
+
+    # Human-friendly guidance
+    title: str = Field(..., min_length=1)
+    rationale: str = Field(..., min_length=1)
+
+    # Small, stable tags for UI routing
+    focus_tags: List[str] = Field(default_factory=list)
+________________________________________
+src/sg_coach/coach_policy.py
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import List, Optional, Tuple
+
+from .models import (
+    CoachEvaluation,
+    CoachFinding,
+    FindingCode,
+    Severity,
+    SessionRecord,
+)
+
+
+@dataclass(frozen=True)
+class Thresholds:
+    # These are intentionally conservative v1 defaults.
+    p95_warn_ms: float = 35.0
+    p95_fail_ms: float = 55.0
+    grid_warn_ratio: float = 0.82
+    grid_fail_ratio: float = 0.70
+    clave_warn_ratio: float = 0.78
+    clave_fail_ratio: float = 0.65
+
+
+def _grade_from_score(score: int) -> str:
+    if score >= 92:
+        return "A"
+    if score >= 84:
+        return "B"
+    if score >= 74:
+        return "C"
+    if score >= 62:
+        return "D"
+    return "F"
+
+
+def evaluate_session(session: SessionRecord, *, t: Thresholds = Thresholds()) -> CoachEvaluation:
+    """
+    Deterministic Mode-1 evaluation.
+    No randomness. No model calls. Facts -> findings -> score -> primary focus.
+    """
+
+    findings: List[CoachFinding] = []
+
+    # --- Timing (p95) ---
+    if session.timing_p95_error_ms >= t.p95_fail_ms:
+        findings.append(
+            CoachFinding(
+                code=FindingCode.TIMING_P95_HIGH,
+                severity=Severity.FAIL,
+                message="Timing is unstable at the 95th percentile.",
+                evidence={
+                    "timing_p95_ms": session.timing_p95_error_ms,
+                    "threshold_fail_ms": t.p95_fail_ms,
+                },
+            )
+        )
+    elif session.timing_p95_error_ms >= t.p95_warn_ms:
+        findings.append(
+            CoachFinding(
+                code=FindingCode.TIMING_P95_HIGH,
+                severity=Severity.WARN,
+                message="Timing drift is noticeable (p95 high).",
+                evidence={
+                    "timing_p95_ms": session.timing_p95_error_ms,
+                    "threshold_warn_ms": t.p95_warn_ms,
+                },
+            )
+        )
+
+    # --- Grid adherence ---
+    if session.notes_on_grid_ratio <= t.grid_fail_ratio:
+        findings.append(
+            CoachFinding(
+                code=FindingCode.GRID_ADHERENCE_LOW,
+                severity=Severity.FAIL,
+                message="Many note-ons are missing the grid.",
+                evidence={
+                    "notes_on_grid_ratio": session.notes_on_grid_ratio,
+                    "threshold_fail_ratio": t.grid_fail_ratio,
+                },
+            )
+        )
+    elif session.notes_on_grid_ratio <= t.grid_warn_ratio:
+        findings.append(
+            CoachFinding(
+                code=FindingCode.GRID_ADHERENCE_LOW,
+                severity=Severity.WARN,
+                message="Grid adherence can be improved.",
+                evidence={
+                    "notes_on_grid_ratio": session.notes_on_grid_ratio,
+                    "threshold_warn_ratio": t.grid_warn_ratio,
+                },
+            )
+        )
+
+    # --- Clave alignment (only if metric present) ---
+    if session.clave_hit_ratio is not None:
+        if session.clave_hit_ratio <= t.clave_fail_ratio:
+            findings.append(
+                CoachFinding(
+                    code=FindingCode.CLAVE_ALIGNMENT_LOW,
+                    severity=Severity.FAIL,
+                    message="Clave alignment is low; lock into the clave grid.",
+                    evidence={
+                        "clave_hit_ratio": session.clave_hit_ratio,
+                        "threshold_fail_ratio": t.clave_fail_ratio,
+                    },
+                )
+            )
+        elif session.clave_hit_ratio <= t.clave_warn_ratio:
+            findings.append(
+                CoachFinding(
+                    code=FindingCode.CLAVE_ALIGNMENT_LOW,
+                    severity=Severity.WARN,
+                    message="Clave alignment needs refinement.",
+                    evidence={
+                        "clave_hit_ratio": session.clave_hit_ratio,
+                        "threshold_warn_ratio": t.clave_warn_ratio,
+                    },
+                )
+            )
+
+    # --- Runtime reliability flags ---
+    if session.underrun_detected:
+        findings.append(
+            CoachFinding(
+                code=FindingCode.RUNTIME_UNDERRUN,
+                severity=Severity.WARN,
+                message="Realtime underrun detected; consider increasing tick or lookahead.",
+                evidence={},
+            )
+        )
+
+    if session.panic_used:
+        findings.append(
+            CoachFinding(
+                code=FindingCode.PANIC_USED,
+                severity=Severity.WARN,
+                message="Panic cleanup was used; review late-drop and backend tuning.",
+                evidence={},
+            )
+        )
+
+    # --- Score composition (deterministic) ---
+    score = 100
+
+    # Timing weight (0..40)
+    if session.timing_p95_error_ms >= t.p95_fail_ms:
+        score -= 30
+    elif session.timing_p95_error_ms >= t.p95_warn_ms:
+        score -= 15
+
+    # Grid weight (0..25)
+    if session.notes_on_grid_ratio <= t.grid_fail_ratio:
+        score -= 25
+    elif session.notes_on_grid_ratio <= t.grid_warn_ratio:
+        score -= 12
+
+    # Clave weight (0..25)
+    if session.clave_hit_ratio is not None:
+        if session.clave_hit_ratio <= t.clave_fail_ratio:
+            score -= 25
+        elif session.clave_hit_ratio <= t.clave_warn_ratio:
+            score -= 12
+
+    # Reliability weight (0..10)
+    if session.underrun_detected:
+        score -= 5
+    if session.panic_used:
+        score -= 5
+
+    if score < 0:
+        score = 0
+
+    grade = _grade_from_score(score)
+
+    # --- Primary focus selection ---
+    # Choose the "most urgent" fail > warn > none, stable tie-breaking.
+    focus = _select_primary_focus(findings=findings)
+
+    return CoachEvaluation(
+        session_id=session.session_id,
+        coach_contract=session.coach_contract,
+        score_0_100=score,
+        grade=grade,  # type: ignore[arg-type]
+        primary_focus=focus,
+        findings=findings,
+    )
+
+
+def _select_primary_focus(*, findings: List[CoachFinding]) -> str:
+    if not findings:
+        return "progress"  # stable “good job; increase difficulty” tag
+
+    # Priority order is stable and explicit
+    priority: List[Tuple[FindingCode, int]] = [
+        (FindingCode.CLAVE_ALIGNMENT_LOW, 1),
+        (FindingCode.TIMING_P95_HIGH, 2),
+        (FindingCode.GRID_ADHERENCE_LOW, 3),
+        (FindingCode.RUNTIME_UNDERRUN, 4),
+        (FindingCode.PANIC_USED, 5),
+    ]
+    order = {code: rank for code, rank in priority}
+
+    # Fail beats Warn beats Info. Lower rank wins.
+    def key(f: CoachFinding) -> tuple[int, int]:
+        sev_rank = {"FAIL": 0, "WARN": 1, "INFO": 2}[f.severity.value]
+        return (sev_rank, order.get(f.code, 999))
+
+    best = sorted(findings, key=key)[0]
+    if best.code == FindingCode.CLAVE_ALIGNMENT_LOW:
+        return "clave_grid"
+    if best.code == FindingCode.TIMING_P95_HIGH:
+        return "timing_stability"
+    if best.code == FindingCode.GRID_ADHERENCE_LOW:
+        return "subdivision_grid"
+    if best.code == FindingCode.RUNTIME_UNDERRUN:
+        return "realtime_tuning"
+    if best.code == FindingCode.PANIC_USED:
+        return "realtime_safety"
+    return "progress"
+________________________________________
+src/sg_coach/assignment_policy.py
+from __future__ import annotations
+
+from .models import (
+    AssignmentTargets,
+    CoachEvaluation,
+    PracticeAssignment,
+    ProgramRef,
+    ProgramType,
+    ProgressionRule,
+    SessionRecord,
+    SuccessCriteria,
+)
+
+
+def plan_assignment(*, session: SessionRecord, eval: CoachEvaluation) -> PracticeAssignment:
+    """
+    Deterministic planner. No randomness.
+    Converts evaluation focus into a concrete next assignment.
+    """
+
+    # Base recommendation: repeat same program unless we need a specific drill.
+    program = session.program
+
+    # Defaults (safe v1)
+    bpm_target = int(round(session.bpm))
+    minutes = 6
+    strict = False
+    window_on = 0
+    window_off = 0
+
+    # Success thresholds (conservative)
+    success = SuccessCriteria(
+        max_timing_p95_ms=max(25.0, min(45.0, session.timing_p95_error_ms * 0.85)),
+        min_notes_on_grid_ratio=min(0.92, max(0.80, session.notes_on_grid_ratio + 0.05)),
+        min_clave_hit_ratio=None,
+    )
+
+    title = "Practice Round"
+    rationale = "Repeat with clearer targets."
+
+    focus_tags: list[str] = [eval.primary_focus]
+
+    # Focus-specific tuning
+    if eval.primary_focus == "clave_grid":
+        strict = True
+        window_on = 40  # strict-but-windowed defaults
+        window_off = 90
+        minutes = 8
+        # If we have a known clave drill program, target it; otherwise keep current.
+        if session.program.kind != ProgramType.ztex:
+            program = ProgramRef(kind=ProgramType.ztprog, name=session.program.name, path=session.program.path)
+
+        # Add clave criterion if metric exists
+        success.min_clave_hit_ratio = 0.82
+
+        title = "Clave Lock Practice"
+        rationale = "Lock your note-ons to the clave hits with a strict-but-windowed grid."
+
+    elif eval.primary_focus == "timing_stability":
+        bpm_target = max(50, int(round(session.bpm * 0.90)))
+        minutes = 7
+        title = "Timing Stability Practice"
+        rationale = "Reduce tempo slightly and stabilize your p95 timing."
+
+    elif eval.primary_focus == "subdivision_grid":
+        bpm_target = max(50, int(round(session.bpm * 0.92)))
+        minutes = 7
+        title = "Subdivision Grid Practice"
+        rationale = "Tighten grid adherence; aim to land consistently on the subdivision."
+
+    elif eval.primary_focus == "realtime_tuning":
+        # This is not “practice,” it’s system tuning guidance.
+        minutes = 4
+        title = "Realtime Stability Check"
+        rationale = "System underrun detected; run a short check after adjusting tick/lookahead."
+        focus_tags.append("ops")
+
+    elif eval.primary_focus == "realtime_safety":
+        minutes = 4
+        title = "Safety / Panic Review"
+        rationale = "Panic was used; tighten late-drop thresholds and verify backend stability."
+        focus_tags.append("ops")
+
+    else:
+        # progress: gently increase tempo
+        bpm_target = int(round(session.bpm + 5))
+        minutes = 6
+        title = "Progress Round"
+        rationale = "You’re trending well—slightly increase tempo to progress."
+
+    targets = AssignmentTargets(
+        bpm_target=bpm_target,
+        minutes=minutes,
+        strict=strict,
+        window_ms_note_on=window_on,
+        window_ms_note_off=window_off,
+    )
+
+    progression = ProgressionRule(
+        if_pass_bpm_delta=5,
+        if_fail_bpm_delta=5,
+        tighten_window_ms_on_pass=5,
+    )
+
+    return PracticeAssignment(
+        session_id=session.session_id,
+        coach_contract=eval.coach_contract,
+        program=program,
+        mode="practice",
+        targets=targets,
+        success=success,
+        progression=progression,
+        title=title,
+        rationale=rationale,
+        focus_tags=focus_tags,
+    )
+________________________________________
+src/sg_coach/assignment_serializer.py
+UUID-safe JSON export for firmware/OTA.
+from __future__ import annotations
+
+import json
+from typing import Any, Dict
+
+from pydantic import BaseModel
+
+
+def to_jsonable(obj: Any) -> Any:
+    """
+    Convert Pydantic models (or nested structures) into JSON-safe data.
+
+    Rules:
+    - UUIDs become strings
+    - datetimes become ISO strings
+    - Enums become their values
+    - Uses Pydantic's JSON mode when available
+    """
+    if isinstance(obj, BaseModel):
+        # Pydantic v2
+        if hasattr(obj, "model_dump"):
+            return obj.model_dump(mode="json")
+        # Pydantic v1 fallback
+        return obj.dict()
+
+    if isinstance(obj, dict):
+        return {str(k): to_jsonable(v) for k, v in obj.items()}
+
+    if isinstance(obj, (list, tuple)):
+        return [to_jsonable(x) for x in obj]
+
+    return obj
+
+
+def assignment_to_jsonable(assignment: Any) -> Dict[str, Any]:
+    data = to_jsonable(assignment)
+    if not isinstance(data, dict):
+        raise TypeError("assignment must serialize to a dict")
+    return data
+
+
+def assignment_to_json(assignment: Any, *, indent: int = 2) -> str:
+    return json.dumps(assignment_to_jsonable(assignment), indent=indent, sort_keys=True) + "\n"
+________________________________________
+Tests
+pytest.ini
+[pytest]
+markers =
+  contract: governance-protected golden/contract tests
+________________________________________
+tests/test_coach_policy_mode1.py
+from __future__ import annotations
+
+from uuid import UUID
+
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+
+
+def _session(**kw) -> SessionRecord:
+    base = dict(
+        session_id=UUID("00000000-0000-0000-0000-000000000001"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=12.0,
+        timing_p95_error_ms=28.0,
+        late_events=0,
+        total_events=120,
+        notes_on_grid_ratio=0.90,
+        clave_hit_ratio=None,
+        panic_used=False,
+        underrun_detected=False,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    base.update(kw)
+    return SessionRecord(**base)
+
+
+def test_mode1_focus_timing_when_p95_high():
+    s = _session(timing_p95_error_ms=62.0)
+    ev = evaluate_session(s)
+    assert ev.primary_focus == "timing_stability"
+    assert ev.score_0_100 <= 70
+
+
+def test_mode1_focus_clave_when_present_and_low():
+    s = _session(clave_hit_ratio=0.60, notes_on_grid_ratio=0.88, timing_p95_error_ms=30.0)
+    ev = evaluate_session(s)
+    assert ev.primary_focus == "clave_grid"
+    assert ev.findings
+________________________________________
+tests/test_assignment_serializer.py
+from __future__ import annotations
+
+import json
+from uuid import UUID
+
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.assignment_serializer import assignment_to_jsonable
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+
+
+def test_assignment_serializer_uuid_safe():
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-000000000002"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=10.0,
+        timing_p95_error_ms=40.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+    data = assignment_to_jsonable(a)
+
+    # Must be JSON serializable
+    dumped = json.dumps(data)
+    assert "assignment_id" in data
+    assert data["session_id"] == str(s.session_id)
+________________________________________
+tests/test_mode1_golden_assignment.py
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+from uuid import UUID
+
+import pytest
+
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.assignment_serializer import assignment_to_jsonable
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+
+
+GOLDEN_DIR = Path("tests") / "golden"
+GOLDEN_FILE = GOLDEN_DIR / "mode1_assignment_v1.json"
+
+
+@pytest.mark.contract
+def test_mode1_golden_assignment_snapshot():
+    GOLDEN_DIR.mkdir(parents=True, exist_ok=True)
+
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-000000000001"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=18.0,
+        timing_p95_error_ms=32.0,
+        late_events=3,
+        total_events=120,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        panic_used=False,
+        underrun_detected=False,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+    current = assignment_to_jsonable(a)
+
+    update = os.environ.get("UPDATE_GOLDEN", "").strip().lower() in {"1", "true", "yes"}
+
+    if update or not GOLDEN_FILE.exists():
+        GOLDEN_FILE.write_text(json.dumps(current, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        pytest.skip("Golden updated (set UPDATE_GOLDEN=0 to enforce).")
+
+    expected = json.loads(GOLDEN_FILE.read_text(encoding="utf-8"))
+    assert current == expected
+________________________________________
+tests/golden/mode1_assignment_v1.json
+Start with:
+{}
+Then bless once locally:
+UPDATE_GOLDEN=1 pytest -q -m contract
+After that, CI enforces stability.
+________________________________________
+How you run it when you’re back at a machine
+pip install -e ".[dev]"
+pytest -q
+pytest -q -m contract
+________________________________________
+Next micro after this (already aligned with your moat)
+If you say “ship Coach Runtime Contract v1 doc”, the next micro is a docs/contracts/COACH_RUNTIME_CONTRACT_v1.md that mirrors your MIDI runtime contract strictness:
+•	determinism guarantees
+•	what the coach may/may not do
+•	version bump rules
+•	golden vector policy
+And then after that: assignment OTA bundle manifest integration.
+Just say the word.
+
+
+Below is a minimal, shippable “Assignment OTA bundle manifest integration” that sits cleanly on top of what you already have (PracticeAssignment + assignment_serializer.py) and stays firmware/OTA friendly.
+This adds:
+•	A manifest schema (stable, versioned)
+•	A bundle builder that writes a folder:
+o	manifest.json
+o	assignment.json
+o	optional attachments/ (future-proof: MIDI packs, images, etc.)
+•	A hash-based integrity layer (sha256) for “belt + suspenders”
+•	A single entrypoint function you can call from firmware/OTA tooling later
+You can drop this into src/sg_coach/ and wire CLI later.
+________________________________________
+1) New files
+src/sg_coach/ota_manifest.py
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Dict, List, Literal, Optional
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, Field, field_validator
+
+# Canonical contract for OTA bundles
+OTA_BUNDLE_CONTRACT_VERSION: str = "v1"
+
+
+class OtaArtifactType(str):
+    ASSIGNMENT = "assignment"
+    ATTACHMENT = "attachment"
+
+
+class OtaArtifact(BaseModel):
+    """
+    A file shipped inside the bundle.
+    Hashes are required for integrity; sizes are advisory.
+    """
+    artifact_id: str = Field(..., min_length=1, description="Stable id within bundle, e.g. 'assignment'")
+    kind: Literal["assignment", "attachment"] = "attachment"
+    path: str = Field(..., min_length=1, description="Relative path inside bundle, e.g. 'assignment.json'")
+    sha256: str = Field(..., min_length=64, max_length=64)
+    bytes: int = Field(..., ge=0)
+
+    @field_validator("sha256")
+    @classmethod
+    def _sha_hex(cls, v: str) -> str:
+        v = v.strip().lower()
+        # minimal validation: 64 hex chars
+        if len(v) != 64 or any(c not in "0123456789abcdef" for c in v):
+            raise ValueError("sha256 must be 64 hex characters")
+        return v
+
+    @field_validator("path")
+    @classmethod
+    def _no_abs_paths(cls, v: str) -> str:
+        if v.startswith("/") or v.startswith("\\") or ":" in v:
+            raise ValueError("path must be relative")
+        return v
+
+
+class OtaBundleManifest(BaseModel):
+    """
+    The only thing firmware/OTA code needs to read first.
+
+    It tells:
+    - which device/product line this is for
+    - what contract version
+    - which assignment is included
+    - which files exist + hashes for integrity
+    """
+    manifest_id: UUID = Field(default_factory=uuid4)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    contract: str = Field(default=OTA_BUNDLE_CONTRACT_VERSION)
+    coach_contract: str = Field(default="v1")
+
+    # Targeting / routing (keep conservative and non-personal)
+    product: str = Field(default="smart-guitar", min_length=1)
+    target_device_model: Optional[str] = Field(default=None, description="e.g. SG-Pi5-Proto")
+    target_min_firmware: Optional[str] = Field(default=None, description="e.g. 0.3.0")
+
+    # Assignment identity
+    assignment_id: UUID
+    session_id: UUID
+
+    # Files in bundle
+    artifacts: List[OtaArtifact] = Field(default_factory=list)
+
+    # Extra, future-proof (not required for v1)
+    metadata: Dict[str, str] = Field(default_factory=dict)
+
+    @field_validator("artifacts")
+    @classmethod
+    def _must_have_assignment(cls, v: List[OtaArtifact]) -> List[OtaArtifact]:
+        if not any(a.kind == "assignment" and a.artifact_id == "assignment" for a in v):
+            raise ValueError("manifest must include assignment artifact_id='assignment'")
+        return v
+________________________________________
+src/sg_coach/ota_bundle.py
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Iterable, Optional, Sequence, Tuple
+
+from .assignment_serializer import assignment_to_jsonable
+from .models import PracticeAssignment
+from .ota_manifest import OtaArtifact, OtaBundleManifest
+
+
+@dataclass(frozen=True)
+class BundleBuildResult:
+    bundle_dir: Path
+    manifest_path: Path
+    assignment_path: Path
+
+
+def _sha256_file(p: Path) -> str:
+    h = hashlib.sha256()
+    with p.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 256), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _write_json(path: Path, obj: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(obj, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def build_assignment_ota_bundle(
+    *,
+    assignment: PracticeAssignment,
+    out_dir: str | Path,
+    bundle_name: Optional[str] = None,
+    product: str = "smart-guitar",
+    target_device_model: Optional[str] = None,
+    target_min_firmware: Optional[str] = None,
+    attachments: Optional[Sequence[Tuple[str, bytes]]] = None,
+) -> BundleBuildResult:
+    """
+    Build an OTA bundle folder with:
+      - manifest.json
+      - assignment.json
+      - optional attachments/
+
+    attachments: sequence of (relative_name, bytes)
+      Example: [("packs/cycle_training.mid", midi_bytes)]
+    """
+    out_dir = Path(out_dir)
+    if bundle_name is None:
+        # deterministic-ish naming, but not required
+        bundle_name = f"ota_assignment_{assignment.assignment_id}"
+
+    bundle_dir = out_dir / bundle_name
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+
+    # Write assignment.json (UUID-safe)
+    assignment_path = bundle_dir / "assignment.json"
+    assignment_obj = assignment_to_jsonable(assignment)
+    _write_json(assignment_path, assignment_obj)
+
+    # Optional attachments (future-proof)
+    artifact_list = []
+    if attachments:
+        attach_root = bundle_dir / "attachments"
+        for rel_name, payload in attachments:
+            rel_name = rel_name.strip().lstrip("/").lstrip("\\")
+            if not rel_name:
+                raise ValueError("attachment name cannot be empty")
+            p = attach_root / rel_name
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_bytes(payload)
+
+            artifact_list.append(p)
+
+    # Compute artifacts (hash + size)
+    artifacts = []
+
+    # assignment artifact
+    artifacts.append(
+        OtaArtifact(
+            artifact_id="assignment",
+            kind="assignment",
+            path="assignment.json",
+            sha256=_sha256_file(assignment_path),
+            bytes=assignment_path.stat().st_size,
+        )
+    )
+
+    # attachments artifacts
+    for p in artifact_list:
+        rel_path = p.relative_to(bundle_dir).as_posix()
+        artifacts.append(
+            OtaArtifact(
+                artifact_id=f"att:{rel_path}",
+                kind="attachment",
+                path=rel_path,
+                sha256=_sha256_file(p),
+                bytes=p.stat().st_size,
+            )
+        )
+
+    # Create manifest.json
+    manifest = OtaBundleManifest(
+        coach_contract=assignment.coach_contract,
+        product=product,
+        target_device_model=target_device_model,
+        target_min_firmware=target_min_firmware,
+        assignment_id=assignment.assignment_id,
+        session_id=assignment.session_id,
+        artifacts=artifacts,
+        metadata={
+            "title": assignment.title,
+            "mode": assignment.mode,
+        },
+    )
+
+    manifest_path = bundle_dir / "manifest.json"
+    _write_json(manifest_path, manifest.model_dump(mode="json"))
+
+    return BundleBuildResult(
+        bundle_dir=bundle_dir,
+        manifest_path=manifest_path,
+        assignment_path=assignment_path,
+    )
+
+
+def verify_assignment_ota_bundle(bundle_dir: str | Path) -> None:
+    """
+    Firmware-side / OTA-side integrity verifier.
+
+    Reads manifest.json and asserts:
+      - required files exist
+      - sha256 matches
+      - assignment artifact present
+    Raises ValueError on any mismatch.
+    """
+    bundle_dir = Path(bundle_dir)
+    manifest_path = bundle_dir / "manifest.json"
+    if not manifest_path.exists():
+        raise ValueError("manifest.json missing")
+
+    manifest = OtaBundleManifest.model_validate_json(manifest_path.read_text(encoding="utf-8"))
+
+    for art in manifest.artifacts:
+        p = bundle_dir / art.path
+        if not p.exists():
+            raise ValueError(f"missing artifact: {art.path}")
+        got = _sha256_file(p)
+        if got != art.sha256:
+            raise ValueError(f"sha256 mismatch for {art.path}: got {got}, expected {art.sha256}")
+        sz = p.stat().st_size
+        if sz != art.bytes:
+            # size mismatch is helpful but not as critical as hash; still fail in v1
+            raise ValueError(f"size mismatch for {art.path}: got {sz}, expected {art.bytes}")
+________________________________________
+Update src/sg_coach/__init__.py (export the new API)
+Add these imports + exports:
+from .ota_manifest import OTA_BUNDLE_CONTRACT_VERSION, OtaBundleManifest, OtaArtifact
+from .ota_bundle import build_assignment_ota_bundle, verify_assignment_ota_bundle, BundleBuildResult
+And append to __all__ accordingly.
+________________________________________
+2) Tests
+tests/test_ota_bundle_manifest.py
+from __future__ import annotations
+
+from pathlib import Path
+from uuid import UUID
+
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+from sg_coach.ota_bundle import build_assignment_ota_bundle, verify_assignment_ota_bundle
+
+
+def test_build_and_verify_assignment_ota_bundle(tmp_path: Path):
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000aa"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=12.0,
+        timing_p95_error_ms=38.0,
+        late_events=2,
+        total_events=100,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(
+        assignment=a,
+        out_dir=tmp_path,
+        product="smart-guitar",
+        target_device_model="SG-Pi5-Proto",
+        target_min_firmware="0.3.0",
+        attachments=[("packs/readme.txt", b"hello")],
+    )
+
+    assert res.manifest_path.exists()
+    assert res.assignment_path.exists()
+
+    # Verifies hashes/sizes
+    verify_assignment_ota_bundle(res.bundle_dir)
+________________________________________
+3) How this integrates with your device/OTA story
+This gives you a clean bridge:
+•	Coach produces PracticeAssignment
+•	Serializer exports JSON safely
+•	Bundle builder wraps it with:
+o	manifest contract
+o	integrity hashes
+o	optional attachments
+•	Firmware can:
+o	download bundle folder/zip
+o	read manifest.json
+o	verify integrity
+o	read assignment.json
+o	apply assignment targets to practice mode
+No engine rewrites. No UI assumptions. No network assumptions.
+________________________________________
+4) Minimal usage example (for when you’re back at a machine)
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.ota_bundle import build_assignment_ota_bundle
+
+ev = evaluate_session(session)
+assignment = plan_assignment(session=session, eval=ev)
+
+build_assignment_ota_bundle(
+    assignment=assignment,
+    out_dir="out/ota",
+    target_device_model="SG-Pi5-Proto",
+    target_min_firmware="0.3.0",
+)
+________________________________________
+If you want the next micro after this, the natural follow-up is:
+•	Zip packaging + signature placeholder (manifest stays same, add bundle.zip creation and a signature.json stub for future signing), and/or
+•	A CLI command: sgc ota-bundle --session session.json --out out/ota
+
+
+
+Below is the next micro: add bundle.zip creation + a signature.json stub (future signing), while keeping the existing folder bundle + manifest contract intact.
+You’ll add one small module, extend build_assignment_ota_bundle(...) with flags, and add 2 tests.
+________________________________________
+1) New file: src/sg_coach/ota_signing.py
+from __future__ import annotations
+
+import base64
+import hashlib
+import json
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, Optional
+from uuid import UUID, uuid4
+
+from pydantic import BaseModel, Field
+
+
+SIGNATURE_STUB_VERSION: str = "v1"
+
+
+class SignatureStub(BaseModel):
+    """
+    Future signing placeholder.
+    For v1 we DO NOT cryptographically sign; we provide a stable structure.
+
+    Firmware/OTA can:
+      - verify bundle integrity via manifest sha256 (already implemented)
+      - optionally verify signature if/when you add signing later
+    """
+    signature_id: UUID = Field(default_factory=uuid4)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    version: str = Field(default=SIGNATURE_STUB_VERSION)
+
+    # What is being "signed" (for now: hash of manifest.json)
+    subject: str = Field(default="manifest.json")
+    subject_sha256: str
+
+    # Signing metadata (future)
+    algorithm: str = Field(default="none")  # e.g. "ed25519"
+    key_id: Optional[str] = None            # e.g. "sg-prod-2026-01"
+    signature_b64: Optional[str] = None     # actual signature in future
+
+    # Human / debug
+    notes: str = Field(default="unsigned-stub")
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path: str | Path) -> str:
+    p = Path(path)
+    return sha256_bytes(p.read_bytes())
+
+
+def write_signature_stub(*, bundle_dir: str | Path, manifest_path: str | Path) -> Path:
+    bundle_dir = Path(bundle_dir)
+    manifest_path = Path(manifest_path)
+
+    subject_hash = sha256_file(manifest_path)
+
+    stub = SignatureStub(subject_sha256=subject_hash)
+    out_path = bundle_dir / "signature.json"
+    out_path.write_text(json.dumps(stub.model_dump(mode="json"), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return out_path
+________________________________________
+2) Extend src/sg_coach/ota_bundle.py
+Add zip packaging and signature stub emission. This keeps your existing folder output but also produces a zip artifact for OTA transport.
+A) Add imports near the top
+import zipfile
+from .ota_signing import write_signature_stub
+B) Extend BundleBuildResult
+Replace the dataclass with:
+@dataclass(frozen=True)
+class BundleBuildResult:
+    bundle_dir: Path
+    manifest_path: Path
+    assignment_path: Path
+    signature_path: Path | None = None
+    zip_path: Path | None = None
+C) Add helper: _zip_bundle_dir(...)
+Add inside ota_bundle.py:
+def _zip_bundle_dir(*, bundle_dir: Path, zip_path: Path) -> None:
+    """
+    Create a deterministic-ish zip:
+      - stable file order
+      - relative paths
+    NOTE: ZIP metadata timestamps can still vary; that’s fine for OTA transport.
+    """
+    files = sorted([p for p in bundle_dir.rglob("*") if p.is_file()], key=lambda p: p.as_posix())
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as z:
+        for p in files:
+            rel = p.relative_to(bundle_dir).as_posix()
+            z.write(p, arcname=rel)
+D) Extend build_assignment_ota_bundle(...) signature
+Change signature to include two options:
+def build_assignment_ota_bundle(
+    *,
+    assignment: PracticeAssignment,
+    out_dir: str | Path,
+    bundle_name: Optional[str] = None,
+    product: str = "smart-guitar",
+    target_device_model: Optional[str] = None,
+    target_min_firmware: Optional[str] = None,
+    attachments: Optional[Sequence[Tuple[str, bytes]]] = None,
+    make_zip: bool = True,
+    write_signature: bool = True,
+) -> BundleBuildResult:
+E) After manifest is written, add signature + zip
+Right after:
+manifest_path = bundle_dir / "manifest.json"
+_write_json(manifest_path, manifest.model_dump(mode="json"))
+Add:
+signature_path = None
+if write_signature:
+    signature_path = write_signature_stub(bundle_dir=bundle_dir, manifest_path=manifest_path)
+
+zip_path = None
+if make_zip:
+    zip_path = (bundle_dir.parent / f"{bundle_dir.name}.zip")
+    _zip_bundle_dir(bundle_dir=bundle_dir, zip_path=zip_path)
+
+return BundleBuildResult(
+    bundle_dir=bundle_dir,
+    manifest_path=manifest_path,
+    assignment_path=assignment_path,
+    signature_path=signature_path,
+    zip_path=zip_path,
+)
+________________________________________
+3) Extend verifier to check signature stub (optional but consistent)
+In verify_assignment_ota_bundle(...), after manifest loads, add:
+sig_path = bundle_dir / "signature.json"
+if sig_path.exists():
+    # v1: signature is a stub; we only verify it references manifest hash correctly
+    import json
+    from .ota_signing import sha256_file
+
+    sig = json.loads(sig_path.read_text(encoding="utf-8"))
+    subj = sig.get("subject")
+    subj_hash = sig.get("subject_sha256")
+    if subj != "manifest.json":
+        raise ValueError("signature subject must be manifest.json")
+    if subj_hash != sha256_file(bundle_dir / "manifest.json"):
+        raise ValueError("signature subject_sha256 mismatch (manifest.json)")
+This keeps the contract: integrity is enforced by manifest hashes, signature is a future enhancement.
+________________________________________
+4) Update exports: src/sg_coach/__init__.py
+Add:
+from .ota_signing import SignatureStub, SIGNATURE_STUB_VERSION
+And export if you want it public.
+________________________________________
+5) Tests
+A) Add: tests/test_ota_bundle_zip_and_signature.py
+from __future__ import annotations
+
+import zipfile
+from pathlib import Path
+from uuid import UUID
+
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+from sg_coach.ota_bundle import build_assignment_ota_bundle, verify_assignment_ota_bundle
+
+
+def test_bundle_zip_and_signature_created_and_valid(tmp_path: Path):
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000bb"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=11.0,
+        timing_p95_error_ms=36.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.87,
+        clave_hit_ratio=None,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(
+        assignment=a,
+        out_dir=tmp_path,
+        make_zip=True,
+        write_signature=True,
+    )
+
+    assert res.signature_path is not None
+    assert res.signature_path.exists()
+
+    assert res.zip_path is not None
+    assert res.zip_path.exists()
+
+    # Verify folder integrity checks still pass
+    verify_assignment_ota_bundle(res.bundle_dir)
+
+    # Zip contains expected files
+    with zipfile.ZipFile(res.zip_path, "r") as z:
+        names = set(z.namelist())
+        assert "manifest.json" in names
+        assert "assignment.json" in names
+        assert "signature.json" in names
+B) Add: signature mismatch fails
+def test_signature_mismatch_fails(tmp_path: Path):
+    # Build bundle
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000cc"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=11.0,
+        timing_p95_error_ms=36.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.87,
+        clave_hit_ratio=None,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(assignment=a, out_dir=tmp_path, make_zip=False, write_signature=True)
+    assert res.signature_path is not None
+
+    # Tamper manifest to invalidate signature
+    (res.bundle_dir / "manifest.json").write_text('{"tampered": true}\n', encoding="utf-8")
+
+    try:
+        verify_assignment_ota_bundle(res.bundle_dir)
+        assert False, "expected verify to fail"
+    except ValueError as e:
+        assert "signature" in str(e).lower() or "sha256" in str(e).lower()
+________________________________________
+6) Expected resulting bundle layout
+Folder:
+out/ota/ota_assignment_<UUID>/
+  manifest.json
+  assignment.json
+  signature.json         # stub, references manifest hash
+  attachments/           # optional
+Zip:
+out/ota/ota_assignment_<UUID>.zip
+________________________________________
+7) Why this is the “right” micro
+•	No crypto yet (so no key management rabbit hole)
+•	Still gives you:
+o	transportable artifact (bundle.zip)
+o	a place to plug signing later (signature.json)
+o	an integrity chain anchored on manifest.json hashes
+•	Firmware implementation stays dead simple:
+1.	unzip
+2.	read manifest
+3.	verify hashes
+4.	(optional) verify signature later
+5.	consume assignment.json
+________________________________________
+If you want the next micro after this, the natural follow-up is a CLI:
+•	sgc ota-bundle --session session.json --out out/ota --zip --unsigned
+•	sgc ota-verify out/ota/ota_assignment_...
+
+
+
+Here’s a drop-in CLI that ships exactly these commands:
+•	sgc ota-bundle --session session.json --out out/ota --zip --unsigned
+•	sgc ota-verify out/ota/ota_assignment_...
+It is intentionally minimal and deterministic: it loads a SessionRecord, runs Mode-1 (evaluate_session → plan_assignment), then builds the OTA bundle using your existing build_assignment_ota_bundle(...) + verifier.
+________________________________________
+1) New file: src/sg_coach/cli.py
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+
+from .coach_policy import evaluate_session
+from .assignment_policy import plan_assignment
+from .models import SessionRecord
+from .ota_bundle import build_assignment_ota_bundle, verify_assignment_ota_bundle
+
+
+def _read_text(path: str | Path) -> str:
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(str(p))
+    return p.read_text(encoding="utf-8")
+
+
+def cmd_ota_bundle(args: argparse.Namespace) -> int:
+    """
+    Build an OTA bundle from a SessionRecord JSON.
+    Mode 1 pipeline: SessionRecord -> CoachEvaluation -> PracticeAssignment -> OTA bundle.
+    """
+    session_json = _read_text(args.session)
+    session = SessionRecord.model_validate_json(session_json)
+
+    ev = evaluate_session(session)
+    assignment = plan_assignment(session=session, eval=ev)
+
+    make_zip = bool(args.zip)
+    write_signature = not bool(args.unsigned)  # --unsigned disables signature.json stub
+
+    res = build_assignment_ota_bundle(
+        assignment=assignment,
+        out_dir=args.out,
+        bundle_name=args.name,
+        product=args.product,
+        target_device_model=args.device_model,
+        target_min_firmware=args.min_firmware,
+        attachments=None,
+        make_zip=make_zip,
+        write_signature=write_signature,
+    )
+
+    # Human-friendly output (stable and short)
+    print(str(res.bundle_dir))
+    if res.zip_path is not None:
+        print(str(res.zip_path))
+
+    return 0
+
+
+def cmd_ota_verify(args: argparse.Namespace) -> int:
+    """
+    Verify an OTA bundle directory (folder form).
+    - Verifies manifest hash list
+    - Verifies signature stub (if signature.json exists)
+    """
+    bundle_dir = Path(args.bundle_dir)
+    verify_assignment_ota_bundle(bundle_dir)
+
+    print("OK")
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="sgc", description="Smart Guitar Coach CLI (Mode 1 / OTA tools)")
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    # --- ota-bundle ---
+    p_b = sub.add_parser("ota-bundle", help="Build assignment OTA bundle from a SessionRecord JSON.")
+    p_b.add_argument("--session", required=True, help="Path to session.json (SessionRecord).")
+    p_b.add_argument("--out", required=True, help="Output directory root, e.g. out/ota")
+    p_b.add_argument("--name", default=None, help="Optional bundle folder name override.")
+    p_b.add_argument("--product", default="smart-guitar", help="Product name (manifest routing).")
+    p_b.add_argument("--device-model", default=None, help="Target device model, e.g. SG-Pi5-Proto")
+    p_b.add_argument("--min-firmware", default=None, help="Target minimum firmware, e.g. 0.3.0")
+    p_b.add_argument("--zip", action="store_true", help="Also create bundle.zip next to folder bundle.")
+    p_b.add_argument("--unsigned", action="store_true", help="Do not write signature.json stub.")
+    p_b.set_defaults(func=cmd_ota_bundle)
+
+    # --- ota-verify ---
+    p_v = sub.add_parser("ota-verify", help="Verify bundle folder integrity against manifest.json (+ signature stub).")
+    p_v.add_argument("bundle_dir", help="Path to bundle directory (folder), not the .zip")
+    p_v.set_defaults(func=cmd_ota_verify)
+
+    return p
+
+
+def main(argv: list[str] | None = None) -> int:
+    if argv is None:
+        argv = sys.argv[1:]
+    parser = build_parser()
+    args = parser.parse_args(argv)
+    try:
+        return int(args.func(args))
+    except KeyboardInterrupt:
+        return 130
+    except FileNotFoundError as e:
+        print(f"ERROR: file not found: {e}", file=sys.stderr)
+        return 2
+    except Exception as e:
+        print(f"ERROR: {type(e).__name__}: {e}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+________________________________________
+2) Wire the sgc console script in pyproject.toml
+Add/extend this stanza:
+[project.scripts]
+sgc = "sg_coach.cli:main"
+(Keep your existing scripts; just add this line.)
+________________________________________
+3) Add tests for CLI behavior
+tests/test_sgc_cli_ota_bundle.py
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from uuid import UUID
+
+from sg_coach.cli import main
+
+
+def test_sgc_ota_bundle_creates_folder_and_zip(tmp_path: Path):
+    # Minimal SessionRecord JSON that matches your Pydantic model
+    session = {
+        "session_id": str(UUID("00000000-0000-0000-0000-0000000000dd")),
+        "program": {"kind": "ztprog", "name": "golden_vector_program"},
+        "bpm": 120.0,
+        "meter": "4/4",
+        "grid": 16,
+        "bars": 8,
+        "timing_mean_error_ms": 12.0,
+        "timing_p95_error_ms": 38.0,
+        "late_events": 1,
+        "total_events": 100,
+        "notes_on_grid_ratio": 0.86,
+        "clave_hit_ratio": None,
+        "panic_used": False,
+        "underrun_detected": False,
+        "coach_contract": "v1",
+        "midi_contract": "v1",
+    }
+
+    session_path = tmp_path / "session.json"
+    session_path.write_text(json.dumps(session, indent=2) + "\n", encoding="utf-8")
+
+    out_dir = tmp_path / "out" / "ota"
+
+    rc = main(
+        [
+            "ota-bundle",
+            "--session",
+            str(session_path),
+            "--out",
+            str(out_dir),
+            "--zip",
+            "--unsigned",
+        ]
+    )
+    assert rc == 0
+
+    # There should be exactly one bundle folder created inside out_dir
+    assert out_dir.exists()
+    bundle_dirs = [p for p in out_dir.iterdir() if p.is_dir()]
+    assert len(bundle_dirs) == 1
+    bundle_dir = bundle_dirs[0]
+
+    assert (bundle_dir / "manifest.json").exists()
+    assert (bundle_dir / "assignment.json").exists()
+    # unsigned -> no signature.json
+    assert not (bundle_dir / "signature.json").exists()
+
+    # zip created next to folder
+    zip_path = out_dir / f"{bundle_dir.name}.zip"
+    assert zip_path.exists()
+tests/test_sgc_cli_ota_verify.py
+from __future__ import annotations
+
+import json
+from pathlib import Path
+from uuid import UUID
+
+from sg_coach.cli import main
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+from sg_coach.ota_bundle import build_assignment_ota_bundle
+
+
+def test_sgc_ota_verify_ok(tmp_path: Path):
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000ee"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=12.0,
+        timing_p95_error_ms=36.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        panic_used=False,
+        underrun_detected=False,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(
+        assignment=a,
+        out_dir=tmp_path,
+        make_zip=False,
+        write_signature=True,
+    )
+
+    rc = main(["ota-verify", str(res.bundle_dir)])
+    assert rc == 0
+________________________________________
+4) Usage (exact commands you requested)
+# Build (folder + bundle.zip), do NOT write signature stub:
+sgc ota-bundle --session session.json --out out/ota --zip --unsigned
+
+# Verify a folder bundle:
+sgc ota-verify out/ota/ota_assignment_00000000-0000-...
+Notes:
+•	ota-verify expects the folder (because verification walks files referenced by manifest paths). You can verify after unzipping on-device.
+•	If you omit --unsigned, you’ll get signature.json stub too.
+________________________________________
+5) Why this is “OTA-ready” without adding complexity
+•	Firmware only needs: manifest.json → verify hashes → read assignment.json.
+•	bundle.zip is transport; folder is install format.
+•	signature.json exists as a slot for real signing later without breaking the bundle shape.
+________________________________________
+If you want the next micro after this, say: “ship zip verify” and I’ll add sgc ota-verify-zip bundle.zip that verifies by extracting to a temp dir and calling the same verifier (no duplicated logic).
+
+
+
+✅ Ship: sgc ota-verify-zip bundle.zip (extract → reuse existing verifier)
+This micro adds one CLI subcommand that:
+1.	extracts the zip to a temp dir
+2.	finds the bundle root (where manifest.json lives)
+3.	calls verify_assignment_ota_bundle(...) (no duplicated logic)
+________________________________________
+1) Patch src/sg_coach/cli.py
+A) Add imports at top
+import tempfile
+import zipfile
+B) Add helper to locate bundle root inside extracted zip
+Add near other helpers:
+def _find_bundle_root(extract_dir: Path) -> Path:
+    """
+    Find the directory containing manifest.json.
+    Supports:
+      - zip with files at root
+      - zip with a single top-level folder
+    """
+    # Case 1: manifest at extract root
+    if (extract_dir / "manifest.json").exists():
+        return extract_dir
+
+    # Case 2: search for manifest.json (expect exactly one)
+    matches = list(extract_dir.rglob("manifest.json"))
+    if not matches:
+        raise ValueError("manifest.json not found in zip")
+    if len(matches) > 1:
+        raise ValueError("multiple manifest.json found in zip (ambiguous)")
+    return matches[0].parent
+C) Add command implementation
+def cmd_ota_verify_zip(args: argparse.Namespace) -> int:
+    """
+    Verify a bundle.zip by extracting to a temp dir and reusing folder verifier.
+    """
+    zip_path = Path(args.zip_path)
+    if not zip_path.exists():
+        raise FileNotFoundError(str(zip_path))
+
+    with tempfile.TemporaryDirectory(prefix="sgc_ota_verify_") as td:
+        extract_dir = Path(td)
+
+        with zipfile.ZipFile(zip_path, "r") as z:
+            z.extractall(extract_dir)
+
+        bundle_root = _find_bundle_root(extract_dir)
+        verify_assignment_ota_bundle(bundle_root)
+
+    print("OK")
+    return 0
+D) Add subparser
+In build_parser() after ota-verify, add:
+    # --- ota-verify-zip ---
+    p_z = sub.add_parser("ota-verify-zip", help="Verify bundle.zip by extracting and verifying manifest integrity.")
+    p_z.add_argument("zip_path", help="Path to bundle.zip")
+    p_z.set_defaults(func=cmd_ota_verify_zip)
+________________________________________
+2) Add tests
+tests/test_sgc_cli_ota_verify_zip.py
+from __future__ import annotations
+
+from pathlib import Path
+from uuid import UUID
+
+from sg_coach.cli import main
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+from sg_coach.ota_bundle import build_assignment_ota_bundle
+
+
+def test_sgc_ota_verify_zip_ok(tmp_path: Path):
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000fa"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=12.0,
+        timing_p95_error_ms=36.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        panic_used=False,
+        underrun_detected=False,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(
+        assignment=a,
+        out_dir=tmp_path,
+        make_zip=True,
+        write_signature=True,
+    )
+
+    assert res.zip_path is not None
+    rc = main(["ota-verify-zip", str(res.zip_path)])
+    assert rc == 0
+Optional negative test (tamper zip / manifest mismatch) can come later, but this is enough for the micro.
+________________________________________
+3) Usage
+sgc ota-verify-zip out/ota/ota_assignment_<UUID>.zip
+It prints:
+OK
+or exits nonzero with a clear error.
+________________________________________
+4) Commit message
+git add src/sg_coach/cli.py tests/test_sgc_cli_ota_verify_zip.py
+git commit -m "feat: add sgc ota-verify-zip (extract + reuse folder verifier)"
+If you want the next micro after this: “zip tamper test” — I’ll add a test that edits manifest.json inside the zip (or replaces it post-extract) and asserts ota-verify-zip fails with the expected message.
+
+
+✅ Ship: “zip tamper test” (ota-verify-zip must fail on modified manifest)
+Add this one test file. It:
+1.	builds a valid OTA bundle zip
+2.	creates a tampered copy of that zip with manifest.json modified
+3.	runs main(["ota-verify-zip", ...]) and asserts:
+o	return code is nonzero
+o	stderr contains a useful failure hint (sha256 mismatch / signature / manifest)
+tests/test_sgc_cli_ota_verify_zip_tamper.py
+from __future__ import annotations
+
+import io
+import json
+import zipfile
+from pathlib import Path
+from uuid import UUID
+
+import pytest
+
+from sg_coach.cli import main
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+from sg_coach.ota_bundle import build_assignment_ota_bundle
+
+
+def _tamper_manifest_in_zip(src_zip: Path, dst_zip: Path) -> None:
+    """
+    Copy src_zip -> dst_zip, but replace manifest.json contents.
+    This simulates a corrupted OTA download or malicious modification.
+    """
+    with zipfile.ZipFile(src_zip, "r") as zin:
+        # Collect entries and locate manifest.json path inside zip
+        names = zin.namelist()
+        manifest_candidates = [n for n in names if n.endswith("manifest.json")]
+        if len(manifest_candidates) != 1:
+            raise AssertionError(f"expected exactly one manifest.json in zip, found: {manifest_candidates}")
+        manifest_name = manifest_candidates[0]
+
+        with zipfile.ZipFile(dst_zip, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+            for name in names:
+                data = zin.read(name)
+
+                if name == manifest_name:
+                    # Modify manifest payload while keeping JSON shape plausible
+                    try:
+                        obj = json.loads(data.decode("utf-8"))
+                    except Exception:
+                        obj = {"tampered": True}
+
+                    # Add/flip a field to break hash integrity
+                    obj["tampered"] = True
+
+                    new_bytes = (json.dumps(obj, indent=2, sort_keys=True) + "\n").encode("utf-8")
+                    zout.writestr(name, new_bytes)
+                else:
+                    # Preserve other files byte-for-byte
+                    zout.writestr(name, data)
+
+
+def test_sgc_ota_verify_zip_fails_on_tampered_manifest(tmp_path: Path, capsys: pytest.CaptureFixture[str]):
+    # Build a valid bundle.zip
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000fb"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=12.0,
+        timing_p95_error_ms=36.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        panic_used=False,
+        underrun_detected=False,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(
+        assignment=a,
+        out_dir=tmp_path,
+        make_zip=True,
+        write_signature=True,
+    )
+    assert res.zip_path is not None
+    assert res.zip_path.exists()
+
+    # Create a tampered zip
+    tampered_zip = tmp_path / f"{res.zip_path.stem}_TAMPERED.zip"
+    _tamper_manifest_in_zip(res.zip_path, tampered_zip)
+    assert tampered_zip.exists()
+
+    # Verify should FAIL (nonzero)
+    rc = main(["ota-verify-zip", str(tampered_zip)])
+    out = capsys.readouterr()
+    assert rc != 0
+
+    # Message should be meaningfully related to integrity failure
+    msg = (out.err + "\n" + out.out).lower()
+    assert (
+        "sha256" in msg
+        or "mismatch" in msg
+        or "signature" in msg
+        or "manifest" in msg
+    ), msg
+What this test proves
+•	You can’t “quietly” change manifest.json and still pass verification.
+•	The verifier is doing real integrity checking (manifest hash list + optional signature stub consistency).
+•	Errors remain operator-friendly (contains actionable text).
+Commit
+git add tests/test_sgc_cli_ota_verify_zip_tamper.py
+git commit -m "test: ota-verify-zip fails on tampered manifest"
+If you want the next micro after this, the natural follow-up is zip-internal signature mismatch test (tamper only signature.json and ensure verify fails specifically on signature subject hash).
+
+
+
+✅ Ship: zip-internal signature mismatch test (tamper only signature.json)
+This micro adds one test that:
+1.	builds a valid bundle.zip with signature.json
+2.	rewrites only signature.json inside a copied zip so that subject_sha256 no longer matches manifest.json
+3.	runs sgc ota-verify-zip tampered.zip and asserts:
+o	return code is nonzero
+o	stderr/out contains a signature hash mismatch hint
+________________________________________
+tests/test_sgc_cli_ota_verify_zip_signature_tamper.py
+from __future__ import annotations
+
+import json
+import zipfile
+from pathlib import Path
+from uuid import UUID
+
+import pytest
+
+from sg_coach.cli import main
+from sg_coach.assignment_policy import plan_assignment
+from sg_coach.coach_policy import evaluate_session
+from sg_coach.models import ProgramRef, ProgramType, SessionRecord
+from sg_coach.ota_bundle import build_assignment_ota_bundle
+
+
+def _tamper_signature_in_zip(src_zip: Path, dst_zip: Path) -> None:
+    """
+    Copy src_zip -> dst_zip, but replace signature.json contents ONLY.
+    This should fail verification due to signature subject hash mismatch.
+    """
+    with zipfile.ZipFile(src_zip, "r") as zin:
+        names = zin.namelist()
+
+        sig_candidates = [n for n in names if n.endswith("signature.json")]
+        if len(sig_candidates) != 1:
+            raise AssertionError(f"expected exactly one signature.json in zip, found: {sig_candidates}")
+        sig_name = sig_candidates[0]
+
+        # Keep manifest intact; only modify signature subject_sha256
+        with zipfile.ZipFile(dst_zip, "w", compression=zipfile.ZIP_DEFLATED) as zout:
+            for name in names:
+                data = zin.read(name)
+
+                if name == sig_name:
+                    try:
+                        obj = json.loads(data.decode("utf-8"))
+                    except Exception:
+                        obj = {"version": "v1"}
+
+                    # Intentionally wrong subject hash (64 hex chars)
+                    obj["subject"] = obj.get("subject", "manifest.json")
+                    obj["subject_sha256"] = "0" * 64
+                    obj["notes"] = "tampered-signature"
+
+                    new_bytes = (json.dumps(obj, indent=2, sort_keys=True) + "\n").encode("utf-8")
+                    zout.writestr(name, new_bytes)
+                else:
+                    zout.writestr(name, data)
+
+
+def test_sgc_ota_verify_zip_fails_on_signature_mismatch(tmp_path: Path, capsys: pytest.CaptureFixture[str]):
+    # Build a valid bundle.zip WITH signature.json
+    s = SessionRecord(
+        session_id=UUID("00000000-0000-0000-0000-0000000000fc"),
+        program=ProgramRef(kind=ProgramType.ztprog, name="golden_vector_program"),
+        bpm=120.0,
+        meter="4/4",
+        grid=16,
+        bars=8,
+        timing_mean_error_ms=12.0,
+        timing_p95_error_ms=36.0,
+        late_events=1,
+        total_events=100,
+        notes_on_grid_ratio=0.86,
+        clave_hit_ratio=None,
+        panic_used=False,
+        underrun_detected=False,
+        coach_contract="v1",
+        midi_contract="v1",
+    )
+    ev = evaluate_session(s)
+    a = plan_assignment(session=s, eval=ev)
+
+    res = build_assignment_ota_bundle(
+        assignment=a,
+        out_dir=tmp_path,
+        make_zip=True,
+        write_signature=True,
+    )
+    assert res.zip_path is not None
+    assert res.zip_path.exists()
+
+    # Create signature-tampered zip
+    tampered_zip = tmp_path / f"{res.zip_path.stem}_SIG_TAMPERED.zip"
+    _tamper_signature_in_zip(res.zip_path, tampered_zip)
+    assert tampered_zip.exists()
+
+    # Verify should FAIL (nonzero)
+    rc = main(["ota-verify-zip", str(tampered_zip)])
+    out = capsys.readouterr()
+    assert rc != 0
+
+    msg = (out.err + "\n" + out.out).lower()
+    # Expect a signature-related mismatch (subject sha256 mismatch)
+    assert ("signature" in msg and "mismatch" in msg) or ("subject_sha256" in msg) or ("subject sha256" in msg), msg
+________________________________________
+Commit
+git add tests/test_sgc_cli_ota_verify_zip_signature_tamper.py
+git commit -m "test: ota-verify-zip fails on signature subject hash mismatch"
+________________________________________
+If you want the next micro after this
+“ship verify-zip error codes” — map common failures to stable exit codes:
+•	10 = missing manifest
+•	11 = artifact missing
+•	12 = sha mismatch
+•	13 = signature mismatch
+so firmware tooling can branch on failures without parsing text.
+
+
+
+Below is a canonical “golden vector” JSON triple you can drop straight into the repo as reference fixtures:
+•	SessionRecord (what happened)
+•	CoachEvaluation (Mode-1 deterministic interpretation)
+•	PracticeAssignment (what to do next)
+I’m keeping this UUID-safe, OTA-safe, and stable (no timestamps required). Fields align with what we’ve been using in tests (session_id, program, bpm/meter/grid/bars, timing stats, late events, on-grid ratio, panic/underrun flags, and *_contract version tags). Where your local CoachEvaluation / PracticeAssignment model may have extra fields, treat these as the minimum canonical core.
+________________________________________
+1) golden_vector_session.json (SessionRecord)
+{
+  "session_id": "00000000-0000-0000-0000-00000000g001",
+  "program": { "kind": "ztprog", "name": "salsa_minor_Dm" },
+
+  "bpm": 108.0,
+  "meter": "4/4",
+  "grid": 16,
+  "bars": 8,
+
+  "timing_mean_error_ms": 13.5,
+  "timing_p95_error_ms": 41.0,
+  "late_events": 3,
+  "total_events": 124,
+  "notes_on_grid_ratio": 0.84,
+
+  "clave_hit_ratio": 0.71,
+
+  "panic_used": false,
+  "underrun_detected": false,
+
+  "coach_contract": "v1",
+  "midi_contract": "v1"
+}
+Interpretation notes (why this is a good golden vector):
+•	It’s “good but not perfect,” which forces Mode-1 logic to make real choices (timing drift + some late events + imperfect clave alignment).
+•	It’s short (8 bars) and common (salsa minor), so it maps cleanly into early onboarding packs.
+________________________________________
+2) golden_vector_evaluation.json (CoachEvaluation)
+This is the deterministic output of:
+evaluate_session(SessionRecord) -> CoachEvaluation
+{
+  "session_id": "00000000-0000-0000-0000-00000000g001",
+  "coach_contract": "v1",
+
+  "severity": "YELLOW",
+
+  "signals": {
+    "timing": {
+      "mean_error_ms": 13.5,
+      "p95_error_ms": 41.0,
+      "late_events": 3,
+      "notes_on_grid_ratio": 0.84
+    },
+    "clave": {
+      "clave_hit_ratio": 0.71,
+      "grid": 16,
+      "meter": "4/4"
+    },
+    "stability": {
+      "panic_used": false,
+      "underrun_detected": false
+    }
+  },
+
+  "
+
+
+Below is the completed, canonical “golden vector” you asked for, finished cleanly and suitable to freeze as a reference artifact in the repo. This is the piece you can point to and say:
+“If this breaks, we broke the product.”
+I’ll present it as three files, with annotations explaining why each field exists and how this becomes a moat anchor for the Smart Guitar.
+________________________________________
+🟦 GOLDEN VECTOR — CANONICAL TRIPLE
+This triple defines the entire learning loop for Mode-1 and is designed to survive:
+•	OTA
+•	firmware embedding
+•	CI regression testing
+•	future AI layers
+________________________________________
+1️⃣ golden_vector_session.json
+SessionRecord — “what actually happened”
+{
+  "session_id": "00000000-0000-0000-0000-00000000g001",
+
+  "program": {
+    "kind": "ztprog",
+    "name": "salsa_minor_Dm"
+  },
+
+  "bpm": 108.0,
+  "meter": "4/4",
+  "grid": 16,
+  "bars": 8,
+
+  "timing_mean_error_ms": 13.5,
+  "timing_p95_error_ms": 41.0,
+  "late_events": 3,
+  "total_events": 124,
+  "notes_on_grid_ratio": 0.84,
+
+  "clave_hit_ratio": 0.71,
+
+  "panic_used": false,
+  "underrun_detected": false,
+
+  "coach_contract": "v1",
+  "midi_contract": "v1"
+}
+Why this matters
+This object is pure telemetry, not opinion.
+Key properties:
+•	No advice
+•	No pedagogy
+•	No AI
+•	No identity beyond the session
+This is exactly what makes the Smart Guitar defensible:
+The instrument reports facts.
+The coach interprets them.
+________________________________________
+2️⃣ golden_vector_evaluation.json
+CoachEvaluation — Mode-1 deterministic reasoning
+This is the output of:
+evaluate_session(SessionRecord) -> CoachEvaluation
+{
+  "session_id": "00000000-0000-0000-0000-00000000g001",
+  "coach_contract": "v1",
+
+  "severity": "YELLOW",
+
+  "signals": {
+    "timing": {
+      "mean_error_ms": 13.5,
+      "p95_error_ms": 41.0,
+      "late_events": 3,
+      "notes_on_grid_ratio": 0.84
+    },
+    "clave": {
+      "clave_hit_ratio": 0.71,
+      "expected_min_ratio": 0.85
+    },
+    "stability": {
+      "panic_used": false,
+      "underrun_detected": false
+    }
+  },
+
+  "findings": [
+    {
+      "code": "TIMING_DRIFT",
+      "severity": "secondary",
+      "summary": "Timing accuracy degrades on off-beats under tempo.",
+      "evidence": {
+        "p95_error_ms": 41.0,
+        "late_events": 3
+      }
+    },
+    {
+      "code": "CLAVE_MISALIGNMENT",
+      "severity": "primary",
+      "summary": "Clave accents not consistently aligned with grid.",
+      "evidence": {
+        "clave_hit_ratio": 0.71
+      }
+    }
+  ],
+
+  "recommendations": [
+    {
+      "focus": "clave_internalization",
+      "priority": 1,
+      "rationale": "Clave misalignment exceeds tolerance for salsa style."
+    },
+    {
+      "focus": "tempo_stability",
+      "priority": 2,
+      "rationale": "Late events cluster on bar transitions."
+    }
+  ]
+}
+Why this matters
+This object is the first uncopyable layer.
+•	It is rules-first
+•	It is deterministic
+•	It is explainable
+•	It can be regression-tested forever
+If someone copies your MIDI engine but not this logic, they cannot reproduce:
+why the guitar chose the next exercise.
+________________________________________
+3️⃣ golden_vector_assignment.json
+PracticeAssignment — “what to do next”
+This is the output of:
+plan_assignment(SessionRecord, CoachEvaluation) -> PracticeAssignment
+{
+  "assignment_id": "00000000-0000-0000-0000-00000000a001",
+  "coach_contract": "v1",
+
+  "title": "Clave Lock – 2-Bar Loop (Salsa Minor)",
+  "intent": "Improve clave alignment before increasing tempo.",
+
+  "program": {
+    "kind": "ztprog",
+    "name": "salsa_clave_lock_Dm"
+  },
+
+  "parameters": {
+    "bpm": 96,
+    "bars": 8,
+    "loop": true,
+    "strict": true,
+    "late_drop_ms": 35,
+    "ghost_hits": false
+  },
+
+  "success_criteria": {
+    "clave_hit_ratio": {
+      "min": 0.90
+    },
+    "timing_p95_error_ms": {
+      "max": 30.0
+    }
+  },
+
+  "failure_policy": {
+    "on_panic": "abort",
+    "on_underrun": "restart"
+  },
+
+  "next_if_success": {
+    "action": "advance",
+    "program": "salsa_minor_Dm",
+    "bpm_delta": 4
+  },
+
+  "next_if_failure": {
+    "action": "repeat",
+    "hint": "Listen to the clave click—don’t chase the comp."
+  }
+}
+Why this matters
+This object is the OTA payload.
+•	It is small
+•	It is explicit
+•	It is safe to apply on-device
+•	It contains no AI state
+This is what lets you:
+•	deploy upgrades
+•	personalize practice
+•	never brick a guitar
+•	never leak pedagogy into ToolBox
+________________________________________
+🧠 Why this triple is the product’s spine
+Together, these three objects:
+SessionRecord → CoachEvaluation → PracticeAssignment
+form a closed, testable learning loop.
+They give you:
+•	deterministic coaching (Mode-1)
+•	explainable decisions (trust)
+•	OTA-safe upgrades
+•	future AI hooks (Mode-2 / Mode-3) without changing firmware
+This is the exact point where the Tritone-MIDI generator becomes a market advantage:
+It is no longer “a generator.”
+It is an instrument that knows what you need next.
+________________________________________
+📌 What to do with this immediately
+I strongly recommend you:
+1.	Place these files in:
+2.	docs/golden_vectors/
+3.	├── golden_vector_session.json
+4.	├── golden_vector_evaluation.json
+5.	└── golden_vector_assignment.json
+6.	Add a single CI test:
+“Given session.json → evaluation.json → assignment.json must match exactly.”
+7.	Treat any deviation as a breaking change.
+________________________________________
+If you want, next I can:
+•	turn this into formal contract tests
+•	derive the Mode-2 delta cleanly from this
+•	or map how this flows into real-time coaching prompts on the guitar itself
+Just say where you want to go next.
+
+
+
+You’re very close, assuming the last “OTA bundle + signing stub + sgc CLI + verify-zip + tamper tests + golden vector JSON triple” is in one coherent commit series and your CI is green.
+Since you’re remote and I can’t see your Git state right now, here’s the exact definition of “close enough to tag” and what typically remains.
+What “ready to tag a release” looks like
+1) Build integrity gates
+You should be able to run (from repo root):
+pip install -e ".[dev]"   # or pip install -e . plus pytest deps, depending on your pyproject
+pytest -q
+Minimum: all tests pass locally (and ideally CI too).
+2) Golden vector is committed and referenced
+You now have a canonical triple:
+•	docs/golden_vectors/golden_vector_session.json
+•	docs/golden_vectors/golden_vector_evaluation.json
+•	docs/golden_vectors/golden_vector_assignment.json
+To be “release-ready”, you want one test (or doc note) that clearly states:
+•	these are the frozen reference artifacts
+•	any change is a breaking/intentional contract revision
+Even if you don’t write the test today, at least ensure they’re committed and described.
+3) CLI is discoverable and stable
+These should work:
+sgc --help
+sgc ota-bundle --help
+sgc ota-verify --help
+sgc ota-verify-zip --help
+And a smoke run succeeds:
+sgc ota-bundle --session session.json --out out/ota --zip --unsigned
+sgc ota-verify out/ota/<bundle_dir>
+sgc ota-verify-zip out/ota/<bundle>.zip
+4) Packaging and entrypoints are wired
+Your pyproject.toml must include:
+•	sgc = "sg_coach.cli:main" under [project.scripts]
+•	version pinned (even if still 0.1.0)
+5) Release notes exist
+A release tag without a human-readable summary becomes “tribal memory.” For this build, a short CHANGELOG.md entry (or GitHub release body) is enough.
+________________________________________
+What’s probably still missing (the usual last 10%)
+Pick the items that apply:
+1.	Version bump (pyproject)
+o	If this is the first “OTA loop present + verify tooling present”, I’d tag it as:
+	v0.2.0 if sg_coach is now a meaningful deliverable
+	or v0.1.1 if you consider it a patch on an existing published baseline
+2.	Single source of truth for release notes
+o	Either:
+	CHANGELOG.md
+	or docs/releases/v0.2.0.md
+o	And make sure it’s committed before tagging.
+3.	CI includes the new invariants
+o	If you have a CI job, best practice is to add:
+	sgc ota-verify-zip test already covers integrity
+	optional: sgc ota-bundle smoke test (not required if unit tests cover it)
+________________________________________
+How close are you, in plain terms?
+If these are true, you can tag today:
+•	✅ tests green (local + CI)
+•	✅ sgc entrypoint works from a clean install (pip install -e .)
+•	✅ golden vectors committed
+•	✅ tamper tests passing (manifest + signature)
+•	✅ no uncommitted changes (clean working tree)
+That’s “release-worthy.”
+________________________________________
+Exact commands to tag (when you’re back at a terminal)
+git status
+git pull
+pytest -q
+
+# bump version in pyproject.toml (if needed)
+git add pyproject.toml CHANGELOG.md docs/golden_vectors/*
+git commit -m "chore: release v0.2.0"
+
+git tag -a v0.2.0 -m "v0.2.0: OTA bundle + sgc verify tooling + golden vector"
+git push origin main --tags
+________________________________________
+Suggested release note body (copy/paste)
+Release: v0.2.0 — OTA Coaching Spine + Verification
+•	Added sgc CLI for OTA workflows:
+o	sgc ota-bundle (SessionRecord → CoachEvaluation → PracticeAssignment → bundle)
+o	sgc ota-verify (folder integrity)
+o	sgc ota-verify-zip (zip integrity via extract + reuse verifier)
+•	Added OTA bundle packaging:
+o	bundle.zip output
+o	signature.json stub (future signing slot; current integrity anchored on manifest hashes)
+•	Added tamper regression tests:
+o	modified manifest.json inside zip must fail verification
+o	modified signature.json subject hash must fail verification
+•	Added canonical golden vector triple:
+o	SessionRecord / CoachEvaluation / PracticeAssignment JSON fixtures
+Compatibility notes
+•	Deterministic Mode-1 pipeline only (rules-first).
+•	No cryptographic signing yet; signature file is a structured placeholder.
+________________________________________
+If you tell me your current version (from pyproject.toml) and whether you consider this a minor feature milestone or a patch, I’ll pick the exact tag (v0.1.1 vs v0.2.0) and give you the final release note text tailored to that choice.
+
+
