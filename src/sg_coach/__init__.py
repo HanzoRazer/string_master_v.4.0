@@ -71,6 +71,11 @@ from .ota_payload import (
 )
 from .cli import main
 
+# v0.3: Groove-aware evaluation
+from .groove_contracts import GrooveSnapshotV0, ControlIntentV0
+from .evaluation_v0_3 import EvaluationV0_3, CoachFeedbackV0
+from .evaluation_builder_v0_3 import EvaluationBuilderV0_3
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -128,4 +133,10 @@ __all__ = [
     "BundleBuildResult",
     # CLI
     "main",
+    # v0.3: Groove-aware evaluation
+    "GrooveSnapshotV0",
+    "ControlIntentV0",
+    "EvaluationV0_3",
+    "CoachFeedbackV0",
+    "EvaluationBuilderV0_3",
 ]
