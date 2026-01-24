@@ -43,6 +43,11 @@ class MidiControlPlan:
     recovery_enabled: bool
     grace_beats: float
 
+    # --- Fields with defaults (must come after non-defaults) ---
+    # Humanizer seed and enable flag
+    humanize_seed: str = "default"
+    humanize_enabled: bool = True
+
     # MIDI control messages to send (CC etc.)
     cc_messages: List[MidiMessage] = field(default_factory=list)
 
@@ -57,6 +62,8 @@ class MidiControlPlan:
             "clock_mode": self.clock_mode,
             "target_bpm": self.target_bpm,
             "humanize_ms": self.humanize_ms,
+            "humanize_seed": self.humanize_seed,
+            "humanize_enabled": self.humanize_enabled,
             "global_microshift_ms": self.global_microshift_ms,
             "assist_gain": self.assist_gain,
             "expression_window": self.expression_window,

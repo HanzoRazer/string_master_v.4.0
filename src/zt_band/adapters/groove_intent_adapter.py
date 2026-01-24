@@ -120,6 +120,14 @@ def build_midi_control_plan(
     # global microshift bounded (separate from CC encoding)
     global_microshift_ms = _clamp(microshift_ms, -max_microshift_ms, max_microshift_ms)
 
+    # --- Derive humanize seed and enable flag ---
+    # Stable seed from profile_id (consistent jitter across intents for same player)
+    profile_id = str(intent.get("profile_id", "gp_unknown"))
+    humanize_seed = profile_id
+
+    # Auto-disable humanize when hard locked (lock_strength >= 0.95)
+    humanize_enabled = lock_strength < 0.95
+
     # --- Emit CC messages ---
     st = control_map.status_cc()
     cc_msgs: List[Tuple[int, int, int]] = []
@@ -152,6 +160,8 @@ def build_midi_control_plan(
         clock_mode=clock_mode,
         target_bpm=target_bpm,
         humanize_ms=humanize_ms,
+        humanize_seed=humanize_seed,
+        humanize_enabled=humanize_enabled,
         global_microshift_ms=global_microshift_ms,
         assist_gain=assist_gain,
         expression_window=expression_window,
