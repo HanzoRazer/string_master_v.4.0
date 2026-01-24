@@ -1,0 +1,16 @@
+{
+  "schema_id": "groove_control_intent",
+  "schema_version": "v1",
+  "intent_id": "gci_000003",
+  "profile_id": "gp_challenge_003",
+  "generated_at_utc": "2026-01-24T11:00:00Z",
+  "horizon_ms": 2000,
+  "confidence": 0.88,
+  "control_modes": ["challenge"],
+  "tempo": { "target_bpm": 126, "lock_strength": 0.5, "drift_correction": "aggressive" },
+  "timing": { "microshift_ms": 8.0, "anticipation_bias": "ahead" },
+  "dynamics": { "assist_gain": 0.85, "expression_window": 0.7 },
+  "recovery": { "enabled": false, "grace_beats": 1.0 },
+  "reason_codes": ["push_tempo"],
+  "extensions": {}
+}

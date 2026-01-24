@@ -1,0 +1,10 @@
+{
+  "mode": "challenge",
+  "density": "dense",
+  "energy": "high",
+  "pattern_family": "shuffle",
+  "tightness": 0.5,
+  "expression_window": 0.7,
+  "assist_gain": 0.85,
+  "anticipation_bias": "ahead"
+}
