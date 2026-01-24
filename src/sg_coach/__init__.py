@@ -111,6 +111,10 @@ from .planner_v0_6 import (
 from .commit_state_reducer_v0_7 import reduce_commit_state
 from .store_shim_v0_7 import InMemoryCoachStoreV0_7, SessionStateV0_7
 
+# v0.8: SQLite adapter + replay gate
+from .sqlite_store_v0_8 import SQLiteCoachStoreV0_8, SqliteStoreConfigV0_8
+from .replay_gate_v0_8 import replay_vector_dir, ReplayResultV0_8
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -196,4 +200,9 @@ __all__ = [
     "reduce_commit_state",
     "InMemoryCoachStoreV0_7",
     "SessionStateV0_7",
+    # v0.8: SQLite adapter + replay gate
+    "SQLiteCoachStoreV0_8",
+    "SqliteStoreConfigV0_8",
+    "replay_vector_dir",
+    "ReplayResultV0_8",
 ]
