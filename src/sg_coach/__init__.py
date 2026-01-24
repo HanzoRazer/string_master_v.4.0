@@ -129,6 +129,8 @@ from .golden_meta_v1_1 import VectorMetaV1_1, read_vector_meta, ensure_vector_me
 # v1.2: Meta-required gate + fixture provenance policy
 from .versioning_v1_2 import CURRENT_GENERATOR_VERSION
 from .meta_gate_v1_2 import run_gates, GateFailureV1_2
+from .meta_autofill_v1_2 import autofill_meta, AutofillReportV1_2
+from .meta_gate_v1_2 import run_gates, GateFailureV1_2
 
 __all__ = [
     # Contract
@@ -239,4 +241,7 @@ __all__ = [
     "CURRENT_GENERATOR_VERSION",
     "run_gates",
     "GateFailureV1_2",
+    # v1.2: Meta autofill (non-CI utility)
+    "autofill_meta",
+    "AutofillReportV1_2",
 ]
