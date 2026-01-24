@@ -126,6 +126,10 @@ from .fixture_generator_v1_0 import generate_assignment_fixture
 # v1.1: Golden metadata + per-vector seeds + fixture provenance
 from .golden_meta_v1_1 import VectorMetaV1_1, read_vector_meta, ensure_vector_meta
 
+# v1.2: Meta-required gate + fixture provenance policy
+from .versioning_v1_2 import CURRENT_GENERATOR_VERSION
+from .meta_gate_v1_2 import run_gates, GateFailureV1_2
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -231,4 +235,8 @@ __all__ = [
     "VectorMetaV1_1",
     "read_vector_meta",
     "ensure_vector_meta",
+    # v1.2: Meta-required gate + fixture provenance policy
+    "CURRENT_GENERATOR_VERSION",
+    "run_gates",
+    "GateFailureV1_2",
 ]

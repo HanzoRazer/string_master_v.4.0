@@ -6,6 +6,7 @@ import json
 
 from sg_coach.golden_meta_v1_1 import META_FILENAME, read_vector_meta, ensure_vector_meta
 from sg_coach.golden_update_v1_0 import update_goldens
+from sg_coach.versioning_v1_2 import CURRENT_GENERATOR_VERSION
 
 
 def test_vector_meta_created_and_provenance_stamped(tmp_path: Path):
@@ -44,7 +45,7 @@ def test_vector_meta_created_and_provenance_stamped(tmp_path: Path):
     data = json.loads(af.read_text(encoding="utf-8"))
     assert "_fixture" in data
     assert data["_fixture"]["generator"] == "sg-coach"
-    assert data["_fixture"]["generator_version"] == "1.1"
+    assert data["_fixture"]["generator_version"] == CURRENT_GENERATOR_VERSION
     # Seed should be from vector_meta (777), not CLI seed (123)
     assert data["_fixture"]["seed_used"] == 777
     # The _force_mismatch key should be gone (regenerated)

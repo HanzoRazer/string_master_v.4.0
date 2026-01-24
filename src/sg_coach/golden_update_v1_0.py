@@ -27,6 +27,7 @@ from typing import Any, Dict, List, Optional
 from .replay_gate_v0_8 import replay_vector_dir
 from .replay_utils_v0_9 import normalize_assignment_for_compare, seeded_utc_iso
 from .golden_meta_v1_1 import ensure_vector_meta, read_vector_meta
+from .versioning_v1_2 import CURRENT_GENERATOR_VERSION
 
 
 @dataclass
@@ -51,7 +52,7 @@ def _fixture_provenance(seed: int | None, now_utc: str) -> Dict[str, Any]:
     git_sha = os.getenv("GIT_SHA", "") or os.getenv("SG_AI_GIT_SHA", "") or ""
     return {
         "generator": "sg-coach",
-        "generator_version": "1.1",
+        "generator_version": CURRENT_GENERATOR_VERSION,
         "seed_used": seed,
         "generated_at_utc": now_utc,
         "git_sha": git_sha,
