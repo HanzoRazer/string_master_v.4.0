@@ -27,7 +27,7 @@ def test_replay_gate_vector_006_sqlite(tmp_path: Path):
     db = tmp_path / "coach.db"
     res = replay_vector_dir(vec, db_path=str(db))
 
-    assert res.ok, res.message
+    assert res.ok, res.reason
 
 
 def test_replay_gate_vector_006_memory():
@@ -36,7 +36,7 @@ def test_replay_gate_vector_006_memory():
 
     res = replay_vector_dir(vec, db_path=":memory:")
 
-    assert res.ok, res.message
+    assert res.ok, res.reason
 
 
 def test_replay_gate_missing_fixture(tmp_path: Path):
@@ -48,4 +48,4 @@ def test_replay_gate_missing_fixture(tmp_path: Path):
     res = replay_vector_dir(vec, db_path=":memory:")
 
     assert not res.ok
-    assert "Missing required fixture" in res.message
+    assert "Missing required fixture" in res.reason

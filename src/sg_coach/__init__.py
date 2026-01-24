@@ -115,6 +115,10 @@ from .store_shim_v0_7 import InMemoryCoachStoreV0_7, SessionStateV0_7
 from .sqlite_store_v0_8 import SQLiteCoachStoreV0_8, SqliteStoreConfigV0_8
 from .replay_gate_v0_8 import replay_vector_dir, ReplayResultV0_8
 
+# v0.9: Replay-all + diff printer + seedable timestamps
+from .replay_utils_v0_9 import ReplayDiffV0_9, json_diff, seeded_utc_iso, normalize_assignment_for_compare
+from .replay_all_v0_9 import replay_all, ReplayAllResultV0_9
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -205,4 +209,11 @@ __all__ = [
     "SqliteStoreConfigV0_8",
     "replay_vector_dir",
     "ReplayResultV0_8",
+    # v0.9: Replay-all + diff printer + seedable timestamps
+    "ReplayDiffV0_9",
+    "json_diff",
+    "seeded_utc_iso",
+    "normalize_assignment_for_compare",
+    "replay_all",
+    "ReplayAllResultV0_9",
 ]
