@@ -96,6 +96,17 @@ from .planner_v0_5 import (
     plan_next_v0_5,
 )
 
+# v0.6: History-aware + anti-oscillation
+from .assignment_v0_6 import (
+    CommitMode,
+    CommitStateV0,
+    AssignmentV0_6,
+)
+from .planner_v0_6 import (
+    PlannerPolicyV0_6,
+    plan_next_v0_6,
+)
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -171,4 +182,10 @@ __all__ = [
     "AssignmentV0_5",
     "PlannerPolicyV0_5",
     "plan_next_v0_5",
+    # v0.6: History-aware + anti-oscillation
+    "CommitMode",
+    "CommitStateV0",
+    "AssignmentV0_6",
+    "PlannerPolicyV0_6",
+    "plan_next_v0_6",
 ]
