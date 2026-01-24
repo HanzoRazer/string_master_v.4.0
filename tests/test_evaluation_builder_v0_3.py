@@ -2,18 +2,20 @@
 Tests for EvaluationBuilderV0_3 with groove-aware evaluation.
 """
 from __future__ import annotations
+import pathlib
 
 import json
 from pathlib import Path
 
-from sg_coach.evaluation_builder_v0_3 import EvaluationBuilderV0_3
-from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
-from sg_coach.schemas import SessionRecord
+from sg_spec.ai.coach.evaluation_builder_v0_3 import EvaluationBuilderV0_3
+from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+from sg_spec.ai.coach.schemas import SessionRecord
 
 
 def _fixtures_root() -> Path:
     """Return the path to the fixtures directory."""
-    return Path(__file__).resolve().parent.parent / "src" / "sg_coach" / "fixtures" / "golden" / "vector_003"
+    import sg_spec.ai.coach.fixtures as _fx
+    return pathlib.Path(_fx.__file__).parent / "golden" / "vector_003"
 
 
 def test_vector_003_groove_aware_eval_and_feedback():
@@ -61,7 +63,7 @@ def test_evaluation_builder_detects_instability():
     """Test that low stability triggers instability flags."""
     from uuid import uuid4
 
-    from sg_coach.schemas import (
+    from sg_spec.ai.coach.schemas import (
         PerformanceSummary,
         ProgramRef,
         ProgramType,
@@ -108,7 +110,7 @@ def test_evaluation_builder_good_session():
     """Test that good session produces positive feedback."""
     from uuid import uuid4
 
-    from sg_coach.schemas import (
+    from sg_spec.ai.coach.schemas import (
         PerformanceSummary,
         ProgramRef,
         ProgramType,

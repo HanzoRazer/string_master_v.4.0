@@ -6,21 +6,15 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from sg_coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
-from sg_coach.planner_v0_5 import plan_next_v0_5
-from sg_coach.assignment_v0_5 import OverrideReason
+from sg_spec.ai.coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
+from sg_spec.ai.coach.planner_v0_5 import plan_next_v0_5
+from sg_spec.ai.coach.assignment_v0_5 import OverrideReason
 
 
 def _fixtures_root() -> Path:
     """Return the path to the fixtures directory."""
-    return (
-        Path(__file__).resolve().parent.parent
-        / "src"
-        / "sg_coach"
-        / "fixtures"
-        / "golden"
-        / "vector_005"
-    )
+    import sg_spec.ai.coach.fixtures as _fx
+    return Path(_fx.__file__).parent / "golden" / "vector_005"
 
 
 def test_vector_005_structured_overrides_and_reasons():
@@ -47,7 +41,7 @@ def test_vector_005_structured_overrides_and_reasons():
 
 def test_planner_v0_5_no_flags_no_overrides():
     """Test that no flags means no overrides (clean intent passthrough)."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,
@@ -97,7 +91,7 @@ def test_planner_v0_5_no_flags_no_overrides():
 
 def test_planner_v0_5_records_all_overrides():
     """Test that all flag-triggered changes are recorded."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,
@@ -159,7 +153,7 @@ def test_planner_v0_5_records_all_overrides():
 
 def test_planner_v0_5_soft_reasons_recorded():
     """Test that soft reasons (no knob change) are still recorded."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,

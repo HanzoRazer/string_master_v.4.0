@@ -6,21 +6,15 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from sg_coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
-from sg_coach.planner_v0_6 import plan_next_v0_6
-from sg_coach.assignment_v0_6 import CommitMode, CommitStateV0
+from sg_spec.ai.coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
+from sg_spec.ai.coach.planner_v0_6 import plan_next_v0_6
+from sg_spec.ai.coach.assignment_v0_6 import CommitMode, CommitStateV0
 
 
 def _fixtures_root() -> Path:
-    """Return the path to the vector_006 fixtures directory."""
-    return (
-        Path(__file__).resolve().parent.parent
-        / "src"
-        / "sg_coach"
-        / "fixtures"
-        / "golden"
-        / "vector_006"
-    )
+    """Return the path to the fixtures directory."""
+    import sg_spec.ai.coach.fixtures as _fx
+    return Path(_fx.__file__).parent / "golden" / "vector_006"
 
 
 def test_vector_006_history_anti_oscillation_commit_window():
@@ -58,7 +52,7 @@ def test_vector_006_history_anti_oscillation_commit_window():
 
 def test_planner_v0_6_no_history_no_commit():
     """Test that without history, no commit window is triggered."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,
@@ -104,7 +98,7 @@ def test_planner_v0_6_no_history_no_commit():
 
 def test_planner_v0_6_commit_window_decrements():
     """Test that commit window decrements each cycle."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,
@@ -154,7 +148,7 @@ def test_planner_v0_6_commit_window_decrements():
 
 def test_planner_v0_6_commit_resets_when_zero():
     """Test that commit state resets when cycles reach zero."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,
@@ -204,7 +198,7 @@ def test_planner_v0_6_commit_resets_when_zero():
 
 def test_planner_v0_6_safety_override_triggers_cooldown():
     """Test that safety overrides trigger probe cooldown."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,

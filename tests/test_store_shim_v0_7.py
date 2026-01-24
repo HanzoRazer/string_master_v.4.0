@@ -7,20 +7,14 @@ import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from sg_coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
-from sg_coach.store_shim_v0_7 import InMemoryCoachStoreV0_7
+from sg_spec.ai.coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
+from sg_spec.ai.coach.store_shim_v0_7 import InMemoryCoachStoreV0_7
 
 
 def _fixtures_root() -> Path:
-    """Return the path to the vector_006 fixtures directory."""
-    return (
-        Path(__file__).resolve().parent.parent
-        / "src"
-        / "sg_coach"
-        / "fixtures"
-        / "golden"
-        / "vector_006"
-    )
+    """Return the path to the fixtures directory."""
+    import sg_spec.ai.coach.fixtures as _fx
+    return Path(_fx.__file__).parent / "golden" / "vector_006"
 
 
 def test_store_shim_vector_006_produces_assignment_and_persists_commit_state():
@@ -58,7 +52,7 @@ def test_store_shim_vector_006_produces_assignment_and_persists_commit_state():
 
 def test_store_shim_empty_history_works():
     """Test that store shim works with no prior history."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
     groove = GrooveSnapshotV0(
         tempo_bpm_est=100.0,
@@ -105,8 +99,8 @@ def test_store_shim_empty_history_works():
 
 def test_store_shim_multiple_cycles_persist_state():
     """Test that store shim persists state across multiple cycles."""
-    from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
-    from sg_coach.assignment_v0_6 import CommitMode
+    from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+    from sg_spec.ai.coach.assignment_v0_6 import CommitMode
 
     store = InMemoryCoachStoreV0_7()
 

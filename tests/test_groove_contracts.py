@@ -6,7 +6,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
 
 
 def test_groove_snapshot_valid():

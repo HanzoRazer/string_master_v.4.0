@@ -4,8 +4,8 @@ Tests for v1.2 meta gate and fixture provenance policy.
 from pathlib import Path
 import json
 
-from sg_coach.meta_gate_v1_2 import run_gates, check_meta_required, check_fixture_provenance
-from sg_coach.versioning_v1_2 import CURRENT_GENERATOR_VERSION
+from sg_spec.ai.coach.meta_gate_v1_2 import run_gates, check_meta_required, check_fixture_provenance
+from sg_spec.ai.coach.versioning_v1_2 import CURRENT_GENERATOR_VERSION
 
 
 def test_meta_gate_fails_missing_meta(tmp_path: Path):

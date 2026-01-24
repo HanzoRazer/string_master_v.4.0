@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from uuid import uuid4
 
-from sg_coach.schemas import (
+from sg_spec.ai.coach.schemas import (
     SessionRecord,
     SessionTiming,
     PerformanceSummary,
@@ -15,7 +15,7 @@ from sg_coach.schemas import (
     ProgramType,
     Severity,
 )
-from sg_coach.coach_policy import evaluate_session, STEP_ERROR_THRESHOLD_MS
+from sg_spec.ai.coach.coach_policy import evaluate_session, STEP_ERROR_THRESHOLD_MS
 
 
 def _session(

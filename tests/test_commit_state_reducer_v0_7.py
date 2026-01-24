@@ -1,8 +1,8 @@
 """
 Tests for v0.7 commit state reducer.
 """
-from sg_coach.assignment_v0_6 import CommitMode, CommitStateV0
-from sg_coach.commit_state_reducer_v0_7 import reduce_commit_state
+from sg_spec.ai.coach.assignment_v0_6 import CommitMode, CommitStateV0
+from sg_spec.ai.coach.commit_state_reducer_v0_7 import reduce_commit_state
 
 
 def test_reduce_commit_state_none_noop():

@@ -5,10 +5,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from sg_coach.assignment_v0_6 import CommitMode, CommitStateV0
-from sg_coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
-from sg_coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
-from sg_coach.sqlite_store_v0_8 import SQLiteCoachStoreV0_8, SqliteStoreConfigV0_8
+from sg_spec.ai.coach.assignment_v0_6 import CommitMode, CommitStateV0
+from sg_spec.ai.coach.evaluation_v0_3 import CoachFeedbackV0, EvaluationV0_3
+from sg_spec.ai.coach.groove_contracts import ControlIntentV0, GrooveSnapshotV0
+from sg_spec.ai.coach.sqlite_store_v0_8 import SQLiteCoachStoreV0_8, SqliteStoreConfigV0_8
 
 
 def test_sqlite_store_creates_tables(tmp_path: Path):

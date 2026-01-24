@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from uuid import UUID
 
-from sg_coach.cli import main
+from sg_spec.ai.coach.cli import main
 
 
 def _make_session_record(session_id: str = "00000000-0000-0000-0000-0000000000dd") -> dict:

@@ -7,8 +7,8 @@ import json
 from pathlib import Path
 from uuid import uuid4
 
-from sg_coach.cli import main
-from sg_coach.schemas import (
+from sg_spec.ai.coach.cli import main
+from sg_spec.ai.coach.schemas import (
     SessionRecord,
     SessionTiming,
     PerformanceSummary,
@@ -17,9 +17,9 @@ from sg_coach.schemas import (
     ProgramRef,
     ProgramType,
 )
-from sg_coach.coach_policy import evaluate_session
-from sg_coach.assignment_policy import plan_assignment
-from sg_coach.ota_payload import build_assignment_ota_bundle
+from sg_spec.ai.coach.coach_policy import evaluate_session
+from sg_spec.ai.coach.assignment_policy import plan_assignment
+from sg_spec.ai.coach.ota_payload import build_assignment_ota_bundle
 
 
 def _make_session() -> SessionRecord:
