@@ -1,8 +1,0 @@
-{
-  "schema_id": "sg_coach_feedback",
-  "schema_version": "v0",
-  "created_at_utc": "2026-01-22T22:30:02Z",
-  "severity": "info",
-  "message": "Good control. Next step: maintain consistency while gradually increasing challenge.",
-  "hints": ["Keep the groove steady for a full minute before changing anything."]
-}

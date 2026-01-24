@@ -25,6 +25,7 @@ dependencies = [
   "mido>=1.2.10",
   "pyyaml>=6.0",
   "pydantic>=2,<3",
+  "sg-spec @ git+https://github.com/HanzoRazer/sg-spec.git",
 ]
 
 [project.optional-dependencies]
@@ -43,7 +44,7 @@ Homepage = "https://github.com/HanzoRazer/string_master_v.4.0"
 [project.scripts]
 zt-gravity = "shared.zone_tritone.cli:main"
 zt-band = "zt_band.cli:main"
-sgc = "sg_coach.cli:main"
+sgc = "sg_spec.ai.coach.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -70,7 +71,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["shared", "zt_band", "sg_coach"]
+known-first-party = ["shared", "zt_band"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
