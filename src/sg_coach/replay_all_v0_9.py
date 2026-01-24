@@ -17,6 +17,7 @@ from typing import List
 
 from .replay_gate_v0_8 import replay_vector_dir
 from .replay_utils_v0_9 import ReplayDiffV0_9
+from .golden_meta_v1_1 import read_vector_meta
 
 
 @dataclass
@@ -46,6 +47,11 @@ def replay_all(
 
     failures: List[str] = []
     for vd in vec_dirs:
+        # v1.1: warn if vector_meta missing
+        m = read_vector_meta(vd)
+        if m is None:
+            print(f"[replay-all] WARN {vd.name}: missing vector_meta_v1.json (seed will come from CLI/default)")
+
         db_path = ":memory:"
         if db_dir is not None:
             db_dir.mkdir(parents=True, exist_ok=True)

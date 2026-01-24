@@ -123,6 +123,9 @@ from .replay_all_v0_9 import replay_all, ReplayAllResultV0_9
 from .golden_update_v1_0 import update_goldens, GoldenUpdateResultV1_0
 from .fixture_generator_v1_0 import generate_assignment_fixture
 
+# v1.1: Golden metadata + per-vector seeds + fixture provenance
+from .golden_meta_v1_1 import VectorMetaV1_1, read_vector_meta, ensure_vector_meta
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -224,4 +227,8 @@ __all__ = [
     "update_goldens",
     "GoldenUpdateResultV1_0",
     "generate_assignment_fixture",
+    # v1.1: Golden metadata + per-vector seeds + fixture provenance
+    "VectorMetaV1_1",
+    "read_vector_meta",
+    "ensure_vector_meta",
 ]

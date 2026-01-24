@@ -72,6 +72,9 @@ def normalize_assignment_for_compare(
     Rules:
       - If expected includes created_at_utc: force produced to match it (fixture-authoritative)
       - Else if seed is provided: stamp produced.created_at_utc deterministically
+
+    Provenance rule (v1.1):
+      - If expected includes _fixture, copy it into produced so provenance stamps never fail gates.
     """
     out = dict(produced)
 
@@ -79,6 +82,9 @@ def normalize_assignment_for_compare(
         out["created_at_utc"] = expected["created_at_utc"]
     elif seed is not None:
         out["created_at_utc"] = seeded_utc_iso(seed)
+
+    if "_fixture" in expected:
+        out["_fixture"] = expected["_fixture"]
 
     return out
 

@@ -17,6 +17,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import datetime as _dt
 import json
 import os
 from dataclasses import dataclass
@@ -24,7 +25,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from .replay_gate_v0_8 import replay_vector_dir
-from .replay_utils_v0_9 import normalize_assignment_for_compare
+from .replay_utils_v0_9 import normalize_assignment_for_compare, seeded_utc_iso
+from .golden_meta_v1_1 import ensure_vector_meta, read_vector_meta
 
 
 @dataclass
@@ -35,6 +37,25 @@ class GoldenUpdateResultV1_0:
     updated: int
     total: int
     failures: List[str]
+
+
+def _now_utc_iso() -> str:
+    """Current UTC timestamp in ISO format."""
+    return _dt.datetime.now(tz=_dt.timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _fixture_provenance(seed: int | None, now_utc: str) -> Dict[str, Any]:
+    """
+    Provenance stamp stored inside assignment fixture as _fixture (non-functional).
+    """
+    git_sha = os.getenv("GIT_SHA", "") or os.getenv("SG_AI_GIT_SHA", "") or ""
+    return {
+        "generator": "sg-coach",
+        "generator_version": "1.1",
+        "seed_used": seed,
+        "generated_at_utc": now_utc,
+        "git_sha": git_sha,
+    }
 
 
 def _load_json(p: Path) -> Dict[str, Any]:
@@ -51,33 +72,43 @@ def _vector_dirs(golden_root: Path) -> List[Path]:
 
 def _produce_assignment_json(vector_dir: Path, *, seed: int | None) -> Optional[Dict[str, Any]]:
     """
-    Runs replay once and returns the produced assignment JSON (normalized for deterministic compare).
-    Requires existing expected fixture to normalize created_at_utc if present.
+    v1.1:
+      - Uses per-vector seed if vector_meta_v1.json exists (overrides CLI seed)
+      - Adds _fixture provenance to the written assignment fixture
+      - Still normalizes created_at_utc deterministically
     
     Returns None if the vector doesn't have required fixtures to produce an assignment.
     """
+    meta = read_vector_meta(vector_dir)
+    effective_seed = int(meta.seed) if meta is not None else seed
+
     expected_path = vector_dir / "assignment_v0_6.json"
     expected = _load_json(expected_path) if expected_path.exists() else {}
 
-    res = replay_vector_dir(vector_dir, db_path=":memory:", seed=seed, print_diff_on_fail=False)
+    res = replay_vector_dir(vector_dir, db_path=":memory:", seed=effective_seed, print_diff_on_fail=False)
 
-    # replay_vector_dir returns ReplayDiffV0_9; on mismatch it contains produced/expected.
     if res.ok:
-        # When OK, res doesn't include produced; we re-run mismatch-producing path by forcing expected empty is messy.
-        # Instead: use the already-defined invariant: produced matches expected; just load expected.
-        # This still supports "refresh formatting" if needed by rewrite.
-        produced_norm = normalize_assignment_for_compare(expected, expected, seed=seed)
-        return produced_norm
+        # produced == expected; re-emit expected (but we will stamp provenance on write)
+        out = dict(expected)
+    else:
+        if res.produced is None:
+            # Missing required fixtures - can't produce assignment
+            return None
+        out = dict(res.produced)
 
-    if res.produced is None:
-        # Missing required fixtures (e.g., evaluation.json, feedback.json) - skip this vector
-        return None
-
-    # If expected didn't exist, res.expected will be None; just use produced as-is.
-    prod = res.produced
+    # Ensure deterministic created_at_utc:
     if expected:
-        prod = normalize_assignment_for_compare(prod, expected, seed=seed)
-    return prod
+        out = normalize_assignment_for_compare(out, expected, seed=effective_seed)
+    else:
+        # no expected: seed-stamp created_at_utc if provided
+        if effective_seed is not None:
+            out["created_at_utc"] = out.get("created_at_utc") or seeded_utc_iso(effective_seed)
+
+    # Add/overwrite provenance stamp (non-functional)
+    now_utc = _now_utc_iso()
+    out["_fixture"] = _fixture_provenance(effective_seed, now_utc)
+
+    return out
 
 
 def update_goldens(
@@ -99,13 +130,22 @@ def update_goldens(
     updated = 0
 
     for vd in vecs:
-        res = replay_vector_dir(vd, db_path=":memory:", seed=seed, print_diff_on_fail=False)
+        # v1.1: use per-vector seed if available
+        meta = read_vector_meta(vd)
+        effective_seed = int(meta.seed) if meta is not None else seed
+
+        res = replay_vector_dir(vd, db_path=":memory:", seed=effective_seed, print_diff_on_fail=False)
         if res.ok:
             continue
 
         failures.append(vd.name)
         if not allow_update:
             continue
+
+        # Ensure per-vector meta exists (v1.1)
+        now_utc = _now_utc_iso()
+        seed_for_meta = seed if seed is not None else 123
+        ensure_vector_meta(vd, seed=seed_for_meta, now_utc_iso=now_utc)
 
         # Generate produced assignment JSON and write expected fixture
         produced = _produce_assignment_json(vd, seed=seed)
