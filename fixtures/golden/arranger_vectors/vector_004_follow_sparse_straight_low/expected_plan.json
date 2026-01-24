@@ -1,0 +1,10 @@
+{
+  "mode": "follow",
+  "density": "sparse",
+  "energy": "mid",
+  "pattern_family": "straight",
+  "tightness": 0.35,
+  "expression_window": 0.2,
+  "assist_gain": 0.2,
+  "anticipation_bias": "neutral"
+}
