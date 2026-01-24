@@ -1,0 +1,10 @@
+{
+  "anticipation_bias": "neutral",
+  "assist_gain": 0.4,
+  "density": "sparse",
+  "energy": "low",
+  "expression_window": 0.3,
+  "mode": "recover",
+  "pattern_family": "free",
+  "tightness": 0.8
+}
