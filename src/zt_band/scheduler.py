@@ -13,7 +13,10 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass
-from typing import Callable, Iterable, Protocol
+from typing import TYPE_CHECKING, Callable, Iterable, Protocol
+
+if TYPE_CHECKING:
+    from zt_band.midi.humanizer import DeterministicHumanizer
 
 try:
     import mido
@@ -123,6 +126,9 @@ class RealtimeScheduler:
     now_fn: Callable[[], float] = time.monotonic
     # If we're late by more than this (seconds), we still send immediately
     max_late_s: float = 0.020  # 20ms hard max per REALTIME_MIDI_CONTRACT
+    # Humanizer for deterministic jitter (optional)
+    humanizer: "DeterministicHumanizer | None" = None
+    humanize_ms: float = 0.0
 
     def run(
         self,
@@ -148,8 +154,22 @@ class RealtimeScheduler:
         ev = normalize_tick_events(events)
         start = self.now_fn()
 
-        for abs_tick, msg in ev:
+        for tick_index, (abs_tick, msg) in enumerate(ev):
             target = start + ticks_to_seconds(int(abs_tick), bpm, ticks_per_beat)
+
+            # Apply humanize jitter BEFORE sleep-until-target loop
+            if self.humanizer and self.humanize_ms > 0.0:
+                mtype = getattr(msg, "type", None)
+                channel = "note" if mtype in ("note_on", "note_off") else "cc"
+                target += self.humanizer.jitter_ms(
+                    tick_index=tick_index,
+                    humanize_ms=self.humanize_ms,
+                    channel=channel,
+                ) / 1000.0
+                # Prevent jitter into the past from creating unnecessary late flags
+                now = self.now_fn()
+                if target < now:
+                    target = now
 
             # Sleep-until-target loop
             while True:
