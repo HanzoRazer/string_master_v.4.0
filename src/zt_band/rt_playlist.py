@@ -11,6 +11,7 @@ from typing import Any
 
 import yaml
 
+from .arranger.runtime import select_pattern_from_intent
 from .engine import generate_accompaniment
 from .patterns import STYLE_REGISTRY
 from .realtime import RtSpec, rt_play_cycle
@@ -86,6 +87,34 @@ def _load_ztprog(path: str, playlist_dir: Path) -> dict:
         raise ValueError(f"Invalid .ztprog YAML: {prog_path}")
 
     return data
+
+
+def _maybe_override_style_with_intent(
+    *,
+    prog_style: str,
+    intent: dict | None,
+) -> str:
+    """
+    If an intent is available, use arranger selection to override style.
+    Otherwise, return prog_style unchanged.
+
+    Never raises — falls back silently on any error to avoid breaking playback.
+    """
+    if not intent:
+        return prog_style
+    try:
+        chosen = select_pattern_from_intent(
+            intent,
+            patterns=list(STYLE_REGISTRY.values()),
+            seed=str(intent.get("profile_id", "default")),
+        )
+        chosen_id = getattr(chosen, "id", None)
+        if isinstance(chosen_id, str) and chosen_id in STYLE_REGISTRY:
+            return chosen_id
+    except Exception as e:
+        # Never break playback
+        print(f"[rt_playlist] arranger selection failed; using '{prog_style}' ({e})")
+    return prog_style
 
 
 def rt_play_playlist(
@@ -172,6 +201,22 @@ def rt_play_playlist(
             if prog_style not in STYLE_REGISTRY:
                 print(f"  [{item_idx + 1}] {prog_name}: unknown style '{prog_style}', using swing_basic")
                 prog_style = "swing_basic"
+
+            # --- Intent-driven style selection (governed) ---
+            # Uses _maybe_override_style_with_intent helper for clean fallback
+            default_intent: dict | None = {
+                "profile_id": "rt_playlist",
+                "control_modes": ["follow"],
+                "tempo": {"lock_strength": 0.6},
+                "dynamics": {"assist_gain": 0.6, "expression_window": 0.5},
+                "timing": {"anticipation_bias": "neutral"},
+            }
+            # Allow external intent to override default (if passed via locals)
+            intent = locals().get("intent") or default_intent
+            prog_style = _maybe_override_style_with_intent(
+                prog_style=prog_style,
+                intent=intent,
+            )
 
             # Generate events for this program
             comp_events, bass_events = generate_accompaniment(
