@@ -107,6 +107,10 @@ from .planner_v0_6 import (
     plan_next_v0_6,
 )
 
+# v0.7: Commit-state reducer + store shim
+from .commit_state_reducer_v0_7 import reduce_commit_state
+from .store_shim_v0_7 import InMemoryCoachStoreV0_7, SessionStateV0_7
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -188,4 +192,8 @@ __all__ = [
     "AssignmentV0_6",
     "PlannerPolicyV0_6",
     "plan_next_v0_6",
+    # v0.7: Commit-state reducer + store shim
+    "reduce_commit_state",
+    "InMemoryCoachStoreV0_7",
+    "SessionStateV0_7",
 ]
