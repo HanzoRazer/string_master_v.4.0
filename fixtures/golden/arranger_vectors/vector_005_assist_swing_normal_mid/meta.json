@@ -1,0 +1,3 @@
+{
+  "notes": "Assist mode + expression_window >= 0.5 should map to swing. Density should remain normal when assist_gain is not low."
+}

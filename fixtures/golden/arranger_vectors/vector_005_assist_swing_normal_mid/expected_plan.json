@@ -1,0 +1,10 @@
+{
+  "mode": "assist",
+  "density": "normal",
+  "energy": "mid",
+  "pattern_family": "swing",
+  "tightness": 0.6,
+  "expression_window": 0.6,
+  "assist_gain": 0.65,
+  "anticipation_bias": "behind"
+}
