@@ -67,6 +67,8 @@ def replay_all(
         print(f"[replay-all] PASS ({total}/{total})")
     else:
         print(f"[replay-all] FAIL ({total - failed}/{total}) failures={failures}")
+        print("[replay-all] Hint: to regenerate goldens locally:")
+        print("  python -m sg_coach.golden_update_v1_0 <fixtures/golden> --seed 123 --update-golden")
 
     return ReplayAllResultV0_9(ok=ok, total=total, failed=failed, failures=failures)
 

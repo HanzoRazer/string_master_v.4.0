@@ -119,6 +119,10 @@ from .replay_gate_v0_8 import replay_vector_dir, ReplayResultV0_8
 from .replay_utils_v0_9 import ReplayDiffV0_9, json_diff, seeded_utc_iso, normalize_assignment_for_compare
 from .replay_all_v0_9 import replay_all, ReplayAllResultV0_9
 
+# v1.0: Fixture generator + golden-update guard
+from .golden_update_v1_0 import update_goldens, GoldenUpdateResultV1_0
+from .fixture_generator_v1_0 import generate_assignment_fixture
+
 __all__ = [
     # Contract
     "COACH_CONTRACT_VERSION",
@@ -216,4 +220,8 @@ __all__ = [
     "normalize_assignment_for_compare",
     "replay_all",
     "ReplayAllResultV0_9",
+    # v1.0: Fixture generator + golden-update guard
+    "update_goldens",
+    "GoldenUpdateResultV1_0",
+    "generate_assignment_fixture",
 ]
