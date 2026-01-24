@@ -1,0 +1,3 @@
+{
+  "notes": "Follow mode + expression_window >= 0.5 should map to swing. Density remains normal when assist_gain >= 0.35."
+}

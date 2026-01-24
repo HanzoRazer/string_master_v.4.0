@@ -1,0 +1,10 @@
+{
+  "mode": "follow",
+  "density": "normal",
+  "energy": "mid",
+  "pattern_family": "swing",
+  "tightness": 0.45,
+  "expression_window": 0.55,
+  "assist_gain": 0.5,
+  "anticipation_bias": "behind"
+}
