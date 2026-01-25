@@ -379,3 +379,27 @@ class TestPresets:
         # Overridden
         assert controls.humanize_ms == 12.0
         assert controls.tightness == 0.3
+
+    def test_list_presets_exits(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+        import pytest
+
+        with pytest.raises(SystemExit) as exc_info:
+            _manual_controls_from_cli(["--list-presets"])
+
+        assert exc_info.value.code == 0
+
+    def test_list_presets_prints_all_presets(self, capsys):
+        from zt_band.rt_playlist import _print_presets_and_exit
+        import pytest
+
+        with pytest.raises(SystemExit):
+            _print_presets_and_exit()
+
+        captured = capsys.readouterr()
+        assert "tight" in captured.out
+        assert "loose" in captured.out
+        assert "challenge" in captured.out
+        assert "recover" in captured.out
+        assert "mode:" in captured.out
+        assert "tightness:" in captured.out

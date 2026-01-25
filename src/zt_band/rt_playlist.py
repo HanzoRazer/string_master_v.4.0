@@ -192,6 +192,30 @@ _PRESETS: dict[str, dict[str, object]] = {
 }
 
 
+def _print_presets_and_exit() -> None:
+    """Print available presets and exit."""
+    print("Available presets:\n")
+    for name, cfg in _PRESETS.items():
+        mode = cfg.get("mode", "")
+        tightness = cfg.get("tightness", "")
+        expression = cfg.get("expression", "")
+        assist = cfg.get("assist", "")
+        humanize_ms = cfg.get("humanize_ms", "")
+        bias = cfg.get("bias", "")
+        print(f"  {name}")
+        print(f"    mode:        {mode}")
+        print(f"    tightness:   {tightness}")
+        print(f"    expression:  {expression}")
+        print(f"    assist:      {assist}")
+        print(f"    humanize-ms: {humanize_ms}")
+        print(f"    bias:        {bias}")
+        print()
+    print("Examples:")
+    print("  python -m zt_band.rt_playlist song.yaml --preset tight")
+    print("  python -m zt_band.rt_playlist song.yaml --preset loose --humanize-ms 12")
+    raise SystemExit(0)
+
+
 def _parse_band_control_args(argv=None):
     """
     Tiny CLI layer for manual band controls.
@@ -199,6 +223,7 @@ def _parse_band_control_args(argv=None):
     """
     parser = argparse.ArgumentParser(add_help=False)
 
+    parser.add_argument("--list-presets", action="store_true", dest="list_presets")
     parser.add_argument("--preset", choices=["tight", "loose", "challenge", "recover"])
     parser.add_argument("--mode", choices=["follow", "assist", "stabilize", "challenge", "recover"])
     parser.add_argument("--tightness", type=float)
@@ -226,6 +251,11 @@ def _manual_controls_from_cli(argv=None) -> ManualBandControls:
         ManualBandControls with values merged in priority order
     """
     args = _parse_band_control_args(argv)
+
+    # Handle --list-presets early exit
+    if getattr(args, "list_presets", False):
+        _print_presets_and_exit()
+
     env_controls = _manual_controls_from_env()
 
     # Start with preset if specified
