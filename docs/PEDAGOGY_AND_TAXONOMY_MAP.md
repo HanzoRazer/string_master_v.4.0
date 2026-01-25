@@ -353,8 +353,28 @@ sgc dance-pack-set-show groove_foundations_v1 --json
 sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles
 sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles --zip
 
+# Build combined multi-pack bundle (pack-of-packs)
+sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles --multi-pack
+sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles --multi-pack --zip
+
 # Build OTA bundle from custom pack set file
 sgc ota-bundle --dance-pack-set-path my_set.yaml --out ./bundles
+
+# Custom manifest path
+sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles --manifest ./my_manifest.json
+```
+
+**Manifest contract** (`ota_manifest.json`):
+```json
+{
+  "schema_id": "ota_bundle_manifest",
+  "schema_version": "v1",
+  "mode": "per-pack",
+  "generated_at_unix": 1760000000,
+  "elapsed_s": 1.234,
+  "set": {"id": "groove_foundations_v1", "pack_ids": ["..."], "summary": {}},
+  "outputs": [{"dance_pack_id": "...", "bundle_dir": "...", "zip_path": "..."}]
+}
 ```
 
 ### Python API
@@ -382,6 +402,7 @@ cd sg-spec && python -m pytest sg_spec/tests/test_dance_pack*.py sg_spec/tests/t
 
 | Date | Change |
 |------|--------|
+| 2025-01-25 | Add `--multi-pack` mode + `--manifest` flag + versioned manifest contract. |
 | 2025-01-25 | Add `--dance-pack-set` and `--dance-pack-set-path` to `sgc ota-bundle`. |
 | 2025-01-25 | Add sgc CLI commands for pack sets (list, validate, show). |
 | 2025-01-25 | Initial creation. 13 packs, 3 sets, full taxonomy index. |
