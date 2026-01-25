@@ -1,9 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "id": "barry_harris_7th_scale_dom7_v1",
-  "title": "Barry Harris 7th Scale — Dominant 7th (6th Diminished)",
-  "summary": "The Barry Harris 7th scale adds a diminished passing tone between the 5th and 6th degrees of a Mixolydian scale, creating an 8-note scale where chord tones always fall on downbeats when played as continuous 8th notes. This is the foundation of bebop line construction.",
-
+  "id": "barry_harris_7th_scale_dom7_expanded_v1",
+  "title": "Barry Harris 7th Scale \u2014 Dominant 7th (Expanded Inference)",
+  "summary": "EXPANDED INFERENCE: Includes 6th-diminished scale, enclosures, guide-tone targeting \u2014 common Barry Harris pedagogy but NOT explicitly stated in source transcript. Use maj7_v1 for source-grounded minimal rules. Adds b6 passing tone between 5 and 6, creating 8-note scale where chord tones land on downbeats.",
   "pedagogy_intent": {
     "primary_goal": "rhythm_training_disguised_as_harmony",
     "secondary_goals": [
@@ -14,41 +13,62 @@
     ],
     "why_it_works": "By adding a chromatic passing tone, the scale has 8 notes instead of 7. When played as continuous 8th notes starting on a downbeat, all 4 chord tones (1-3-5-b7) land on downbeats and all non-chord tones land on upbeats. This forces rhythmic discipline: the player cannot 'cheat' timing because wrong notes on strong beats are immediately audible. The constraint makes timing errors self-correcting."
   },
-
   "harmonic_context": {
     "tonal_center_model": "chord_centered",
-    "chord_quality_targets": ["dom7"]
+    "chord_quality_targets": [
+      "dom7"
+    ]
   },
-
   "pitch_model": {
     "representation": "scale_degree",
     "degree_system": "diatonic_1_7",
     "scale_template": {
       "base_scale": "dominant",
-      "degrees": ["1", "2", "3", "4", "5", "b6", "6", "b7"]
+      "degrees": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "b6",
+        "6",
+        "b7"
+      ]
     }
   },
-
   "degree_groups": {
-    "chord_tones": ["1", "3", "5", "b7"],
-    "non_chord_tones": ["2", "4", "6"],
+    "chord_tones": [
+      "1",
+      "3",
+      "5",
+      "b7"
+    ],
+    "non_chord_tones": [
+      "2",
+      "4",
+      "6"
+    ],
     "special_passing_tones": [
       {
-        "between": ["5", "6"],
+        "between": [
+          "5",
+          "6"
+        ],
         "degree": "b6",
-        "reason": "The Barry Harris 'extra note' — a diminished passing tone that makes the scale 8 notes, ensuring chord tones land on downbeats in continuous 8th note lines."
+        "reason": "The Barry Harris 'extra note' \u00e2\u20ac\u201d a diminished passing tone that makes the scale 8 notes, ensuring chord tones land on downbeats in continuous 8th note lines."
       }
     ]
   },
-
   "constraints": {
     "interval_rules": [
       {
-        "applies_to": { "group": "chord_tones" },
+        "applies_to": {
+          "group": "chord_tones"
+        },
         "rule_type": "prefer_semitones_between",
         "value": 2,
         "priority": 7,
-        "note": "Chord tones are separated by whole steps or larger — never adjacent in the scale."
+        "note": "Chord tones are separated by whole steps or larger \u00e2\u20ac\u201d never adjacent in the scale."
       },
       {
         "applies_to": {
@@ -73,11 +93,13 @@
         "note": "Whole step from b7 to root. The dominant 7th resolves up by whole step, not half step."
       },
       {
-        "applies_to": { "group": "mixed" },
+        "applies_to": {
+          "group": "mixed"
+        },
         "rule_type": "avoid_semitones_between",
         "value": 6,
         "priority": 5,
-        "note": "Avoid tritone leaps within lines — they disrupt the scalar flow and are hard to execute cleanly."
+        "note": "Avoid tritone leaps within lines \u00e2\u20ac\u201d they disrupt the scalar flow and are hard to execute cleanly."
       }
     ],
     "motion_rules": [
@@ -113,7 +135,6 @@
       }
     ]
   },
-
   "practice_protocol": {
     "time_grid": {
       "meter": "4/4",

@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "id": "barry_harris_7th_scale_maj7_v1",
+  "title": "Barry Harris 7th Scale — Major 7th (Source-Grounded Minimal)",
+  "summary": "Minimal ruleset extracted directly from Barry Harris audio/transcript. Chord tones (1-3-5-7) vs non-chord tones (2-4-6). One mandatory half-step: 7↔1. No half-steps among 2/4/6. Rhythm training disguised as harmony.",
+
+  "pedagogy_intent": {
+    "primary_goal": "rhythm_training_disguised_as_harmony",
+    "secondary_goals": [
+      "evenness_of_eighths",
+      "avoid_rushing",
+      "chord_tone_targeting"
+    ],
+    "why_it_works": "The only reason we put these half steps in is so we can practice rhythm. By enforcing predictable interval spacing, the player achieves stable subdivision without conscious effort. Constraint compliance forces rhythmic discipline."
+  },
+
+  "harmonic_context": {
+    "tonal_center_model": "chord_centered",
+    "chord_quality_targets": ["maj7"]
+  },
+
+  "pitch_model": {
+    "representation": "scale_degree",
+    "degree_system": "diatonic_1_7",
+    "scale_template": {
+      "base_scale": "major",
+      "degrees": ["1", "2", "3", "4", "5", "6", "7"]
+    }
+  },
+
+  "degree_groups": {
+    "chord_tones": ["1", "3", "5", "7"],
+    "non_chord_tones": ["2", "4", "6"],
+    "special_passing_tones": []
+  },
+
+  "constraints": {
+    "interval_rules": [
+      {
+        "applies_to": {
+          "group": "chord_tones",
+          "from_degree": "7",
+          "to_degree": "1"
+        },
+        "rule_type": "exact_semitones_between",
+        "value": 1,
+        "priority": 9,
+        "note": "EXPLICIT: 'One step between tonic and seventh.' Half-step resolution 7↔1 is structural, not stylistic."
+      },
+      {
+        "applies_to": { "group": "non_chord_tones" },
+        "rule_type": "avoid_semitones_between",
+        "value": 1,
+        "priority": 8,
+        "note": "EXPLICIT: 'Second, fourth and sixth — the first rule is no half steps.' Prevents rhythmic collapse via clustering."
+      }
+    ],
+    "motion_rules": [
+      {
+        "name": "default_motion",
+        "rule": "stepwise_only",
+        "scope": "global",
+        "note": "IMPLIED: Demonstration shows continuous scalar motion. 'I went through a whole scale. Just like that.'"
+      }
+    ]
+  },
+
+  "practice_protocol": {
+    "time_grid": {
+      "meter": "4/4",
+      "subdivision": "eighths",
+      "accent_model": "2_and_4"
+    },
+    "tempo_plan": {
+      "start_bpm": 60,
+      "target_bpm": 160,
+      "increment_bpm": 10
+    },
+    "loop_plan": {
+      "bars_per_loop": 4,
+      "repetitions": 8,
+      "progression_mode": "single_chord"
+    },
+    "assessment": {
+      "what_to_measure": [
+        "timing_consistency_ms",
+        "note_density_evenness",
+        "error_rate_rule_violations"
+      ],
+      "pass_criteria": {
+        "max_timing_deviation_ms": 25,
+        "max_rule_violation_rate": 0.05
+      }
+    }
+  }
+}
