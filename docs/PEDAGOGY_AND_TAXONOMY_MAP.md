@@ -349,6 +349,13 @@ sgc dance-pack-set-validate --path custom_set.yaml
 sgc dance-pack-set-show groove_foundations_v1
 sgc dance-pack-set-show groove_foundations_v1 --json
 
+# Build OTA bundle from a single dance pack (by ID)
+sgc ota-bundle --dance-pack rock_straight_v1 --out ./bundles
+sgc ota-bundle --dance-pack rock_straight_v1 --out ./bundles --zip
+
+# Build OTA bundle from a single dance pack (from file)
+sgc ota-bundle --dance-pack-path ./my_pack.yaml --out ./bundles
+
 # Build OTA bundles from a pack set (one bundle per pack)
 sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles
 sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles --zip
@@ -402,6 +409,7 @@ cd sg-spec && python -m pytest sg_spec/tests/test_dance_pack*.py sg_spec/tests/t
 
 | Date | Change |
 |------|--------|
+| 2025-01-25 | Add `--dance-pack` and `--dance-pack-path` for single-pack bundle generation. |
 | 2025-01-25 | Add `--multi-pack` mode + `--manifest` flag + versioned manifest contract. |
 | 2025-01-25 | Add `--dance-pack-set` and `--dance-pack-set-path` to `sgc ota-bundle`. |
 | 2025-01-25 | Add sgc CLI commands for pack sets (list, validate, show). |
