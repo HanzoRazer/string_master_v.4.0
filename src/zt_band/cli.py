@@ -27,6 +27,11 @@ from .rt_bridge import (
     truncate_events_to_cycle,
 )
 from .validate import format_issues_json, format_issues_text, validate_ztprog_file
+from .dance_pack import DancePackV1, DancePackLoadError, load_dance_pack
+
+
+# Default bundled packs directory (relative to repo root)
+_DEFAULT_PACKS_DIR = Path(__file__).parent.parent.parent / "packs"
 
 
 def _bounded_int(name: str, lo: int, hi: int):
@@ -309,6 +314,30 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     p_styles.set_defaults(func=cmd_styles)
 
+    # ---- dance-packs subcommand ----
+    p_dpacks = subparsers.add_parser(
+        "dance-packs",
+        help="List available Dance Packs (bundled + external).",
+    )
+    p_dpacks.add_argument(
+        "--packs-dir",
+        type=str,
+        default=None,
+        help="External directory to scan for .dpack.json files. If not provided, uses bundled packs.",
+    )
+    p_dpacks.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="Output format: text (default) or json.",
+    )
+    p_dpacks.add_argument(
+        "--validate",
+        action="store_true",
+        help="Validate each pack against the schema (slower but catches errors).",
+    )
+    p_dpacks.set_defaults(func=cmd_dance_packs)
+
     # ---- programs subcommand ----
     p_programs = subparsers.add_parser(
         "programs",
@@ -440,8 +469,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p_rt.add_argument(
         "--midi-out",
         type=str,
-        required=True,
-        help="MIDI output port name (use 'zt-band midi-ports' to list).",
+        required=False,
+        default=None,
+        help="MIDI output port name (use 'zt-band midi-ports' to list). Required unless --list-presets.",
     )
     p_rt.add_argument(
         "--chords",
@@ -546,6 +576,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         type=int,
         default=22,
         help="CC number for section/item marker at program start (default: 22).",
+    )
+    p_rt.add_argument(
+        "--list-presets",
+        action="store_true",
+        dest="list_presets",
+        help="List available band control presets and exit.",
     )
     p_rt.set_defaults(func=cmd_rt_play)
 
@@ -1035,6 +1071,83 @@ def cmd_styles(args: argparse.Namespace) -> int:
 
 
 # ------------------------
+# dance-packs command
+# ------------------------
+
+
+def cmd_dance_packs(args: argparse.Namespace) -> int:
+    """List available Dance Packs from bundled or external directory."""
+    packs_dir = Path(args.packs_dir) if args.packs_dir else _DEFAULT_PACKS_DIR
+
+    if not packs_dir.exists():
+        print(f"error: packs directory not found: {packs_dir}", file=sys.stderr)
+        return 1
+
+    # Find all .dpack.json files
+    pack_files = sorted(packs_dir.glob("*.dpack.json"))
+
+    if not pack_files:
+        print(f"No .dpack.json files found in: {packs_dir}")
+        return 0
+
+    results = []
+    errors = []
+
+    for pf in pack_files:
+        if args.validate:
+            try:
+                pack = load_dance_pack(pf)
+                results.append({
+                    "path": str(pf.name),
+                    "id": pack.metadata.id,
+                    "display_name": pack.metadata.display_name,
+                    "family": pack.metadata.dance_family.value,
+                    "difficulty": pack.practice_mapping.difficulty_rating.value,
+                    "valid": True,
+                })
+            except DancePackLoadError as e:
+                errors.append({"path": str(pf.name), "error": str(e)})
+        else:
+            # Quick load without full validation (just parse JSON)
+            import json as _json
+            try:
+                with open(pf, "r", encoding="utf-8") as f:
+                    data = _json.load(f)
+                meta = data.get("metadata", {})
+                pm = data.get("practice_mapping", {})
+                results.append({
+                    "path": str(pf.name),
+                    "id": meta.get("id", "?"),
+                    "display_name": meta.get("display_name", "?"),
+                    "family": meta.get("dance_family", "?"),
+                    "difficulty": pm.get("difficulty_rating", "?"),
+                    "valid": None,  # Not validated
+                })
+            except Exception as e:
+                errors.append({"path": str(pf.name), "error": str(e)})
+
+    if args.format == "json":
+        import json as _json
+        output = {"packs": results, "errors": errors, "packs_dir": str(packs_dir)}
+        print(_json.dumps(output, indent=2))
+    else:
+        print(f"Dance Packs in: {packs_dir}")
+        print()
+        print("file                              | id                            | family           | difficulty")
+        print("----------------------------------+-------------------------------+------------------+-----------")
+        for r in results:
+            print(f"{r['path']:<33} | {r['id']:<29} | {r['family']:<16} | {r['difficulty']}")
+
+        if errors:
+            print()
+            print("Errors:")
+            for e in errors:
+                print(f"  {e['path']}: {e['error']}")
+
+    return 1 if errors else 0
+
+
+# ------------------------
 # programs command
 # ------------------------
 
@@ -1189,6 +1302,16 @@ def cmd_midi_ports(args: argparse.Namespace) -> int:
 
 
 def cmd_rt_play(args: argparse.Namespace) -> int:
+    # Handle --list-presets early exit
+    if getattr(args, "list_presets", False):
+        from .rt_playlist import _print_presets_and_exit
+        _print_presets_and_exit()
+        return 0  # unreachable, _print_presets_and_exit calls SystemExit
+
+    # Require --midi-out for normal operation
+    if not getattr(args, "midi_out", None):
+        raise SystemExit("rt-play: --midi-out is required (use 'zt-band midi-ports' to list)")
+
     # Handle --playlist mode (live rotation)
     if getattr(args, "playlist", None):
         from .rt_playlist import rt_play_playlist
