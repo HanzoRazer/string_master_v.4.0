@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/pedagogy/barry_harris_7th_scale_expanded.schema.json",
+  "title": "PedagogyRuleSet — Barry Harris 7th Scale (Expanded Rule Support)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "id", "title", "pedagogy_intent",
+    "harmonic_context", "pitch_model", "degree_groups",
+    "constraints", "practice_protocol"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "pattern": "^1\\.[0-9]+\\.[0-9]+$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9_\\-.]{6,80}$" },
+    "title": { "type": "string", "minLength": 3 },
+    "summary": { "type": "string", "maxLength": 2000 },
+
+    "pedagogy_intent": {
+      "type": "object",
+      "required": ["primary_goal", "secondary_goals", "why_it_works"],
+      "properties": {
+        "primary_goal": {
+          "type": "string",
+          "enum": [
+            "rhythm_training_disguised_as_harmony",
+            "time_feel_subdivision",
+            "voice_leading",
+            "bebop_line_construction",
+            "ear_training",
+            "fretboard_mapping",
+            "comping_coordination"
+          ]
+        },
+        "secondary_goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "swing_consistency", "evenness_of_eighths",
+              "guide_tone_awareness", "chord_tone_targeting",
+              "phrase_length_control", "avoid_rushing", "avoid_dragging"
+            ]
+          }
+        },
+        "why_it_works": { "type": "string", "maxLength": 2000 }
+      }
+    },
+
+    "harmonic_context": {
+      "type": "object",
+      "required": ["tonal_center_model", "chord_quality_targets"],
+      "properties": {
+        "tonal_center_model": {
+          "type": "string",
+          "enum": ["key_centered", "chord_centered", "cycle_centered", "modal_centered"]
+        },
+        "chord_quality_targets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["maj7", "min7", "dom7", "m6", "ø7", "dim7", "sus7", "alt7"]
+          }
+        }
+      }
+    },
+
+    "pitch_model": {
+      "type": "object",
+      "required": ["representation", "degree_system"],
+      "properties": {
+        "representation": {
+          "type": "string",
+          "enum": ["scale_degree", "midi_note_number", "pitch_class_0_11", "note_name"]
+        },
+        "degree_system": {
+          "type": "string",
+          "enum": ["diatonic_1_7", "chromatic_degree", "intervals_from_root"]
+        },
+        "scale_template": {
+          "type": "object",
+          "properties": {
+            "base_scale": {
+              "type": "string",
+              "enum": ["major", "dominant", "custom"]
+            },
+            "degrees": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "degree_groups": {
+      "type": "object",
+      "required": ["chord_tones", "non_chord_tones"],
+      "properties": {
+        "chord_tones": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3
+        },
+        "non_chord_tones": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 2
+        },
+        "special_passing_tones": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["between", "degree"],
+            "properties": {
+              "between": {
+                "type": "array",
+                "items": { "type": "string" },
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "degree": { "type": "string" },
+              "reason": { "type": "string", "maxLength": 200 }
+            }
+          }
+        }
+      }
+    },
+
+    "constraints": {
+      "type": "object",
+      "required": ["interval_rules", "motion_rules"],
+      "properties": {
+        "interval_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["applies_to", "rule_type", "value"],
+            "properties": {
+              "applies_to": {
+                "type": "object",
+                "required": ["group"],
+                "properties": {
+                  "group": {
+                    "type": "string",
+                    "enum": ["chord_tones", "non_chord_tones", "mixed", "custom"]
+                  },
+                  "from_degree": { "type": "string" },
+                  "to_degree": { "type": "string" }
+                }
+              },
+              "rule_type": {
+                "type": "string",
+                "enum": [
+                  "exact_semitones_between",
+                  "avoid_semitones_between",
+                  "prefer_semitones_between",
+                  "min_semitones_between",
+                  "max_semitones_between"
+                ]
+              },
+              "value": { "type": "integer", "minimum": 0, "maximum": 12 },
+              "priority": { "type": "integer", "minimum": 0, "maximum": 9 },
+              "note": { "type": "string" }
+            }
+          }
+        },
+        "motion_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "rule"],
+            "properties": {
+              "name": { "type": "string" },
+              "rule": {
+                "type": "string",
+                "enum": [
+                  "stepwise_only",
+                  "enclosure_allowed",
+                  "target_guide_tones_on_strong_beats",
+                  "approach_chord_tones_by_half_step",
+                  "resolve_tendency_tones"
+                ]
+              },
+              "scope": {
+                "type": "string",
+                "enum": ["global", "within_bar", "across_bar", "across_chord_change"]
+              },
+              "note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "practice_protocol": {
+      "type": "object",
+      "required": ["time_grid", "tempo_plan", "loop_plan", "assessment"],
+      "properties": {
+        "time_grid": {
+          "type": "object",
+          "required": ["meter", "subdivision"],
+          "properties": {
+            "meter": { "type": "string" },
+            "subdivision": {
+              "type": "string",
+              "enum": ["eighths", "swing_eighths", "triplets"]
+            },
+            "accent_model": {
+              "type": "string",
+              "enum": ["2_and_4", "clave", "none"]
+            }
+          }
+        },
+        "tempo_plan": {
+          "type": "object",
+          "required": ["start_bpm", "target_bpm", "increment_bpm"],
+          "properties": {
+            "start_bpm": { "type": "integer" },
+            "target_bpm": { "type": "integer" },
+            "increment_bpm": { "type": "integer" }
+          }
+        },
+        "loop_plan": {
+          "type": "object",
+          "required": ["bars_per_loop", "repetitions"],
+          "properties": {
+            "bars_per_loop": { "type": "integer" },
+            "repetitions": { "type": "integer" },
+            "progression_mode": {
+              "type": "string",
+              "enum": ["single_chord", "ii_v_i", "cycle"]
+            }
+          }
+        },
+        "assessment": {
+          "type": "object",
+          "required": ["what_to_measure", "pass_criteria"],
+          "properties": {
+            "what_to_measure": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "timing_consistency_ms",
+                  "error_rate_rule_violations",
+                  "note_density_evenness",
+                  "chord_tone_on_strong_beats"
+                ]
+              }
+            },
+            "pass_criteria": {
+              "type": "object",
+              "properties": {
+                "max_timing_deviation_ms": { "type": "integer" },
+                "max_rule_violation_rate": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
