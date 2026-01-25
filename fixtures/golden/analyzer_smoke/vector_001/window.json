@@ -1,0 +1,9 @@
+{
+  "horizon_ms": 2000,
+  "features": {
+    "timing": { "mean_offset_ms": -8.0, "stddev_ms": 6.0, "direction": "ahead" },
+    "tempo": { "bpm_estimate": 98.0, "drift_slope": 0.15 },
+    "dynamics": { "assist_pressure": 0.5 },
+    "events": { "recent_note_onsets_ms": [0, 510, 1020], "recent_iois_ms": [510, 510] }
+  }
+}

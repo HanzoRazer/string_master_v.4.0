@@ -1,0 +1,3 @@
+{
+  "notes": "E2E canary #2: stabilize + high tightness + low expression -> straight selection; deterministic jitter schedule on same event list."
+}

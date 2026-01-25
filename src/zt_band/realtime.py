@@ -57,6 +57,9 @@ class RtSpec:
     bar_cc_section: int = 22  # CC number for section/item marker
     bars_limit: int | None = None  # total bars for countdown calculation
 
+    # Performance controls (E2E wiring)
+    velocity_mul: float = 1.0  # Note-on velocity scaling from arranger
+
 
 def _now() -> float:
     return time.monotonic()
@@ -218,7 +221,15 @@ def rt_play_cycle(
     events_sorted = sorted(((s % steps_per_cycle), msg) for s, msg in events)
 
     # Use sender factory for backend abstraction (mido or rtmidi)
-    sender = create_sender(backend=backend, port_name=spec.midi_out)
+    raw_sender = create_sender(backend=backend, port_name=spec.midi_out)
+
+    # Wrap with VelocityAssistSender if velocity_mul != 1.0
+    if spec.velocity_mul != 1.0:
+        from .midi.velocity_assist_sender import VelocityAssistSender
+        sender = VelocityAssistSender(sender=raw_sender, velocity_mul=spec.velocity_mul)
+    else:
+        sender = raw_sender
+
     try:
         t0 = _now()
         next_cycle_start = t0
@@ -326,10 +337,11 @@ def rt_play_cycle(
         print("\nStopped.")
     finally:
         # PANIC CLEANUP FIRST (if enabled), then close the port.
+        # Use raw_sender for cleanup since it owns the MIDI port.
         if panic:
-            _panic_cleanup(sender)
+            _panic_cleanup(raw_sender)
         try:
-            sender.close()
+            raw_sender.close()
         except Exception:
             pass
 

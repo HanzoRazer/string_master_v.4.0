@@ -1,0 +1,16 @@
+{
+  "schema_id": "groove_control_intent",
+  "schema_version": "v1",
+  "intent_id": "gci_e2e_001",
+  "profile_id": "gp_e2e_loose_001",
+  "generated_at_utc": "2026-01-24T00:00:00Z",
+  "horizon_ms": 2000,
+  "confidence": 0.85,
+  "control_modes": ["follow"],
+  "tempo": { "target_bpm": 96, "lock_strength": 0.45, "drift_correction": "soft" },
+  "timing": { "microshift_ms": 0.0, "anticipation_bias": "neutral" },
+  "dynamics": { "assist_gain": 0.5, "expression_window": 0.6 },
+  "recovery": { "enabled": false, "grace_beats": 2.0 },
+  "reason_codes": ["e2e_canary"],
+  "extensions": {}
+}

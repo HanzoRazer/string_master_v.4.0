@@ -1,0 +1,3 @@
+{
+  "notes": "E2E canary #5: verifies VelocityAssistSender scales note_on velocity deterministically based on intent-derived perf controls."
+}

@@ -1,0 +1,56 @@
+# E2E Vectors Governance Gate
+#
+# This workflow ensures deterministic E2E replay passes for all golden vectors.
+# Triggered on push/PR when e2e-related files change.
+
+name: E2E Vectors Gate
+
+on:
+  push:
+    paths:
+      - "fixtures/golden/e2e_vectors/**"
+      - "src/zt_band/e2e/**"
+      - "src/zt_band/adapters/**"
+      - "src/zt_band/arranger/**"
+      - "src/zt_band/midi/humanizer.py"
+      - "scripts/ci/check_e2e_*.py"
+      - ".github/workflows/e2e_vectors_gate.yml"
+  pull_request:
+    paths:
+      - "fixtures/golden/e2e_vectors/**"
+      - "src/zt_band/e2e/**"
+      - "src/zt_band/adapters/**"
+      - "src/zt_band/arranger/**"
+      - "src/zt_band/midi/humanizer.py"
+      - "scripts/ci/check_e2e_*.py"
+      - ".github/workflows/e2e_vectors_gate.yml"
+
+jobs:
+  e2e-vectors-gate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Check E2E vectors complete
+        run: python scripts/ci/check_e2e_vectors_complete.py fixtures/golden/e2e_vectors
+
+      - name: Check E2E replay determinism
+        run: python scripts/ci/check_e2e_replay_determinism.py fixtures/golden/e2e_vectors
+
+      - name: Run E2E replay gate test
+        run: python -m pytest tests/test_e2e_replay_gate_v1.py -v

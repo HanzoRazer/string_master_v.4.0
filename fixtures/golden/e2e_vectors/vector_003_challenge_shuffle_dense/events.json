@@ -1,0 +1,16 @@
+{
+  "bpm": 96.0,
+  "ticks_per_beat": 480,
+  "events": [
+    { "abs_tick": 0,   "msg": { "type": "note_on",  "data": "N1" } },
+    { "abs_tick": 120, "msg": { "type": "cc",       "data": "C1" } },
+    { "abs_tick": 240, "msg": { "type": "note_off", "data": "N2" } },
+    { "abs_tick": 480, "msg": { "type": "note_on",  "data": "N3" } },
+    { "abs_tick": 600, "msg": { "type": "cc",       "data": "C2" } },
+    { "abs_tick": 720, "msg": { "type": "note_off", "data": "N4" } },
+    { "abs_tick": 960, "msg": { "type": "note_on",  "data": "N5" } },
+    { "abs_tick": 1080,"msg": { "type": "cc",       "data": "C3" } },
+    { "abs_tick": 1200,"msg": { "type": "note_off", "data": "N6" } },
+    { "abs_tick": 1440,"msg": { "type": "note_on",  "data": "N7" } }
+  ]
+}

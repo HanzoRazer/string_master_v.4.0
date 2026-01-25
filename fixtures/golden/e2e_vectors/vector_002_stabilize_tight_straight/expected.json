@@ -1,0 +1,18 @@
+{
+  "chosen_pattern_id": "straight_basic",
+  "effective_humanize_ms": 2.2406,
+  "note_bias_ms": -2.7,
+  "target_offsets_s_first10": [
+    -0.001002256,
+    0.15758488,
+    0.314118212,
+    0.62382693,
+    0.782389609,
+    0.93876845,
+    1.248412096,
+    1.407052323,
+    1.563272275,
+    1.872899654
+  ],
+  "velocity_mul": 1.093
+}

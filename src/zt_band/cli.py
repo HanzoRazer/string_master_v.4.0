@@ -472,6 +472,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p_rt = subparsers.add_parser(
         "rt-play",
         help="Real-time playback aligned to clave grid (loop until Ctrl+C).",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     p_rt.add_argument(
         "--backend",
@@ -612,12 +613,106 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=22,
         help="CC number for section/item marker at program start (default: 22).",
     )
-    p_rt.add_argument(
+
+    # ---- Band / Groove Controls (argument group) ----
+    band = p_rt.add_argument_group(
+        "Band / Groove Controls",
+        "Control how the band responds to your playing. "
+        "Presets are shortcuts; explicit flags override them."
+    )
+    band.add_argument(
+        "--preset",
+        choices=["tight", "loose", "challenge", "recover"],
+        help="Named practice preset. Ignored if explicit flags are provided.",
+    )
+    band.add_argument(
         "--list-presets",
         action="store_true",
         dest="list_presets",
-        help="List available band control presets and exit.",
+        help="List available presets and exit.",
     )
+    band.add_argument(
+        "--mode",
+        choices=["follow", "assist", "stabilize", "challenge", "recover"],
+        help="Groove mode (maps to control_modes). Overrides preset.",
+    )
+    band.add_argument(
+        "--tightness",
+        type=float,
+        metavar="0..1",
+        help="Timing lock. Higher = tighter, less humanize.",
+    )
+    band.add_argument(
+        "--expression",
+        dest="expression_window",
+        type=float,
+        metavar="0..1",
+        help="Expressive looseness. Higher = more swing/humanize.",
+    )
+    band.add_argument(
+        "--assist",
+        dest="assist_gain",
+        type=float,
+        metavar="0..1",
+        help="Assist strength (velocity support, guidance).",
+    )
+    band.add_argument(
+        "--humanize-ms",
+        type=float,
+        metavar="MS",
+        help="Base humanize in ms before policy scaling (advanced).",
+    )
+    band.add_argument(
+        "--bias",
+        choices=["ahead", "behind", "neutral"],
+        help="Anticipation bias (note-on micro push/layback).",
+    )
+    band.add_argument(
+        "--intent-source",
+        choices=["manual", "analyzer", "none"],
+        default="manual",
+        help="Where groove intent comes from (default: manual).",
+    )
+    band.add_argument(
+        "--profile-id",
+        default="rt_playlist_manual",
+        metavar="ID",
+        help="Groove profile id (used by analyzer + deterministic feel).",
+    )
+    band.add_argument(
+        "--profile-store-dir",
+        default=".sg_profiles",
+        metavar="DIR",
+        help="Directory for device-local groove profiles (default: .sg_profiles).",
+    )
+    band.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print resolved intent + derived plans/controls, then exit (no playback).",
+    )
+    band.add_argument(
+        "--all-programs",
+        action="store_true",
+        help="With --dry-run: print resolution for every program in the YAML, then exit.",
+    )
+    band.add_argument(
+        "--compact",
+        action="store_true",
+        help="With --dry-run --all-programs: print one line per program; expand details only on errors.",
+    )
+
+    # Epilog with examples
+    p_rt.epilog = (
+        "Examples:\n"
+        "  zt-band rt-play song.yaml --preset tight --midi-out LoopBe\n"
+        "  zt-band rt-play song.yaml --preset loose --bias ahead --midi-out LoopBe\n"
+        "  zt-band rt-play --playlist set.ztplay --midi-out LoopBe\n"
+        "  zt-band rt-play --list-presets\n"
+        "  zt-band rt-play song.yaml --preset tight --dry-run\n"
+        "  zt-band rt-play --playlist set.ztplay --dry-run --all-programs\n"
+        "  zt-band rt-play --playlist set.ztplay --dry-run --all-programs --compact\n"
+    )
+
     p_rt.set_defaults(func=cmd_rt_play)
 
     # ---- practice subcommand ----

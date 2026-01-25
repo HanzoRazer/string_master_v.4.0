@@ -1,0 +1,3 @@
+{
+  "notes": "Canary e2e: manual intent (loose follow swing) -> arranger -> deterministic choose -> jittered schedule offsets."
+}

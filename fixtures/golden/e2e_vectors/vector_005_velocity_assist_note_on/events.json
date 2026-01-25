@@ -1,0 +1,6 @@
+{
+  "notes": [
+    { "type": "note_on", "velocity": 80 },
+    { "type": "note_on", "velocity": 127 }
+  ]
+}

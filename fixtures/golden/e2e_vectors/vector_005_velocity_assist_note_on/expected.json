@@ -1,0 +1,13 @@
+{
+  "cases": [
+    {
+      "original_velocity": 80,
+      "scaled_velocity": 97
+    },
+    {
+      "original_velocity": 127,
+      "scaled_velocity": 127
+    }
+  ],
+  "velocity_mul": 1.2185
+}

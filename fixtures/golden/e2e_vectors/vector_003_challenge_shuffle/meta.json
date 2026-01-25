@@ -1,0 +1,3 @@
+{
+  "notes": "E2E canary #3: challenge should select shuffle; same event list to spotlight pattern selection + deterministic jitter stream differences."
+}
