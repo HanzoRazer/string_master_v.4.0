@@ -5,11 +5,14 @@ Orchestrates sequential playback of .ztplay items, switching
 programs at bar boundaries without engine rewrite.
 """
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+from .ui.manual_intent import ManualBandControls, build_groove_intent_from_controls
 
 from .arranger.runtime import select_pattern_from_intent
 from .engine import generate_accompaniment
@@ -87,6 +90,53 @@ def _load_ztprog(path: str, playlist_dir: Path) -> dict:
         raise ValueError(f"Invalid .ztprog YAML: {prog_path}")
 
     return data
+
+
+def _manual_controls_from_env() -> ManualBandControls:
+    """
+    Read manual band controls from environment variables.
+
+    All optional: if absent, defaults apply.
+
+    Env vars:
+        SG_MODE: follow|assist|stabilize|challenge|recover
+        SG_TIGHTNESS: 0.0-1.0
+        SG_ASSIST: 0.0-1.0
+        SG_EXPRESSION: 0.0-1.0
+        SG_HUMANIZE_MS: float (e.g., 7.5)
+        SG_BIAS: ahead|behind|neutral
+        SG_HORIZON_MS: int (e.g., 2000)
+        SG_CONFIDENCE: 0.0-1.0
+    """
+    mode = os.getenv("SG_MODE", "follow").strip().lower()
+    if mode not in ("follow", "assist", "stabilize", "challenge", "recover"):
+        mode = "follow"
+
+    def f(name: str, default: float) -> float:
+        try:
+            return float(os.getenv(name, str(default)))
+        except Exception:
+            return default
+
+    bias = os.getenv("SG_BIAS", "neutral").strip().lower()
+    if bias not in ("ahead", "behind", "neutral"):
+        bias = "neutral"
+
+    try:
+        horizon = int(float(os.getenv("SG_HORIZON_MS", "2000")))
+    except Exception:
+        horizon = 2000
+
+    return ManualBandControls(
+        mode=mode,  # type: ignore[arg-type]
+        tightness=f("SG_TIGHTNESS", 0.6),
+        assist=f("SG_ASSIST", 0.6),
+        expression=f("SG_EXPRESSION", 0.5),
+        humanize_ms=f("SG_HUMANIZE_MS", 7.5),
+        anticipation_bias=bias,  # type: ignore[arg-type]
+        horizon_ms=horizon,
+        confidence=f("SG_CONFIDENCE", 0.85),
+    )
 
 
 def _maybe_override_style_with_intent(
@@ -203,16 +253,14 @@ def rt_play_playlist(
                 prog_style = "swing_basic"
 
             # --- Intent-driven style selection (governed) ---
-            # Uses _maybe_override_style_with_intent helper for clean fallback
-            default_intent: dict | None = {
-                "profile_id": "rt_playlist",
-                "control_modes": ["follow"],
-                "tempo": {"lock_strength": 0.6},
-                "dynamics": {"assist_gain": 0.6, "expression_window": 0.5},
-                "timing": {"anticipation_bias": "neutral"},
-            }
-            # Allow external intent to override default (if passed via locals)
-            intent = locals().get("intent") or default_intent
+            # Build intent from manual UI controls (env vars)
+            # This can later be swapped for analyzer-generated intent
+            controls = _manual_controls_from_env()
+            intent = build_groove_intent_from_controls(
+                controls=controls,
+                profile_id="rt_playlist_manual",
+                target_bpm=float(effective_bpm),
+            )
             prog_style = _maybe_override_style_with_intent(
                 prog_style=prog_style,
                 intent=intent,
