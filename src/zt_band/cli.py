@@ -28,6 +28,7 @@ from .rt_bridge import (
 )
 from .validate import format_issues_json, format_issues_text, validate_ztprog_file
 from .dance_pack import DancePackV1, DancePackLoadError, load_dance_pack
+from .dance_pack_tools import validate_pack, build_dpack_json, iter_pack_sources
 
 
 # Default bundled packs directory (relative to repo root)
@@ -337,6 +338,40 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Validate each pack against the schema (slower but catches errors).",
     )
     p_dpacks.set_defaults(func=cmd_dance_packs)
+
+    # ---- dance-pack-validate subcommand ----
+    p_dpv = subparsers.add_parser(
+        "dance-pack-validate",
+        help="Validate dance pack YAML/JSON via strict schema.",
+    )
+    p_dpv.add_argument(
+        "path",
+        type=str,
+        help="File or directory to validate.",
+    )
+    p_dpv.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Only print errors, not OK lines.",
+    )
+    p_dpv.set_defaults(func=cmd_dance_pack_validate)
+
+    # ---- dance-pack-build-json subcommand ----
+    p_dpb = subparsers.add_parser(
+        "dance-pack-build-json",
+        help="Validate and emit canonical .dpack.json files.",
+    )
+    p_dpb.add_argument(
+        "path",
+        type=str,
+        help="File or directory to build.",
+    )
+    p_dpb.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Only print errors, not OK lines.",
+    )
+    p_dpb.set_defaults(func=cmd_dance_pack_build_json)
 
     # ---- programs subcommand ----
     p_programs = subparsers.add_parser(
@@ -1145,6 +1180,78 @@ def cmd_dance_packs(args: argparse.Namespace) -> int:
                 print(f"  {e['path']}: {e['error']}")
 
     return 1 if errors else 0
+
+
+# ------------------------
+# dance-pack-validate command
+# ------------------------
+
+
+def cmd_dance_pack_validate(args: argparse.Namespace) -> int:
+    """Validate dance pack files against the strict schema."""
+    root = Path(args.path)
+
+    if not root.exists():
+        print(f"error: path not found: {root}", file=sys.stderr)
+        return 1
+
+    failures = 0
+    count = 0
+    for src in iter_pack_sources(root, include_built=True):
+        count += 1
+        try:
+            validate_pack(src)
+            if not args.quiet:
+                print(f"OK  {src}")
+        except Exception as e:
+            failures += 1
+            print(f"ERR {src}")
+            print(f"    {e}")
+
+    if count == 0:
+        print("No pack files found.")
+        return 0
+
+    if failures == 0:
+        print()
+        print(f"All {count} pack(s) valid.")
+    else:
+        print()
+        print(f"{failures} pack(s) failed validation.")
+
+    return 0 if failures == 0 else 2
+
+
+# ------------------------
+# dance-pack-build-json command
+# ------------------------
+
+
+def cmd_dance_pack_build_json(args: argparse.Namespace) -> int:
+    """Validate and emit canonical .dpack.json files."""
+    root = Path(args.path)
+
+    if not root.exists():
+        print(f"error: path not found: {root}", file=sys.stderr)
+        return 1
+
+    failures = 0
+    successes = 0
+    for src in iter_pack_sources(root):
+        res = build_dpack_json(src, None)
+        if res.ok:
+            successes += 1
+            if not args.quiet:
+                print(f"OK  {res.source} -> {res.output}")
+        else:
+            failures += 1
+            print(f"ERR {res.source}")
+            print(f"    {res.error}")
+
+    print()
+    print(f"Built {successes} pack(s), {failures} failed.")
+
+    return 0 if failures == 0 else 2
 
 
 # ------------------------
