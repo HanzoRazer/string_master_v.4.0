@@ -348,6 +348,13 @@ sgc dance-pack-set-validate --path custom_set.yaml
 # Show detailed pack set summary
 sgc dance-pack-set-show groove_foundations_v1
 sgc dance-pack-set-show groove_foundations_v1 --json
+
+# Build OTA bundles from a pack set (one bundle per pack)
+sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles
+sgc ota-bundle --dance-pack-set groove_foundations_v1 --out ./bundles --zip
+
+# Build OTA bundle from custom pack set file
+sgc ota-bundle --dance-pack-set-path my_set.yaml --out ./bundles
 ```
 
 ### Python API
@@ -375,5 +382,6 @@ cd sg-spec && python -m pytest sg_spec/tests/test_dance_pack*.py sg_spec/tests/t
 
 | Date | Change |
 |------|--------|
+| 2025-01-25 | Add `--dance-pack-set` and `--dance-pack-set-path` to `sgc ota-bundle`. |
 | 2025-01-25 | Add sgc CLI commands for pack sets (list, validate, show). |
 | 2025-01-25 | Initial creation. 13 packs, 3 sets, full taxonomy index. |
