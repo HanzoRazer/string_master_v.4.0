@@ -1,0 +1,520 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zone-tritone.dev/schemas/dance_pack_v1.schema.json",
+  "title": "Dance Pack v1",
+  "description": "A declarative, executable bundle encoding a dance-derived musical form as groove, harmonic constraints, behavioral nuance, and practice intelligence.",
+  "type": "object",
+  "required": ["schema_id", "schema_version", "metadata", "groove", "harmony_constraints", "performance_profile", "practice_mapping"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "dance_pack",
+      "description": "Schema identifier for validation routing."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "v1",
+      "description": "Schema version for compatibility checks."
+    },
+
+    "metadata": {
+      "type": "object",
+      "description": "Identity, versioning, and packaging information. Never affects musical behavior.",
+      "required": ["id", "display_name", "dance_family", "version", "engine_compatibility"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*_v[0-9]+$",
+          "description": "Immutable identifier once released (e.g., 'samba_traditional_v1')."
+        },
+        "display_name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "Human-readable name for UI display."
+        },
+        "dance_family": {
+          "type": "string",
+          "enum": [
+            "afro_brazilian",
+            "afro_cuban",
+            "caribbean",
+            "jazz_american",
+            "european_ballroom",
+            "latin_american",
+            "african",
+            "blues_american",
+            "rock_american",
+            "country_american",
+            "fusion"
+          ],
+          "description": "Dance family for grouping and discovery."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Semantic version of this pack (MAJOR.MINOR.PATCH)."
+        },
+        "author": {
+          "type": "string",
+          "default": "system",
+          "description": "Pack author identifier."
+        },
+        "license": {
+          "type": "string",
+          "enum": ["core", "premium", "community", "custom"],
+          "default": "core",
+          "description": "License tier for monetization."
+        },
+        "engine_compatibility": {
+          "type": "string",
+          "pattern": "^(>=|>|=|<|<=)?[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Engine version constraint (e.g., '>=0.2.0')."
+        },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 32 },
+          "maxItems": 10,
+          "description": "Optional discovery tags."
+        }
+      }
+    },
+
+    "groove": {
+      "type": "object",
+      "description": "Primary identity of the dance form. If the groove is wrong, nothing else matters.",
+      "required": ["meter", "cycle_bars", "subdivision", "tempo_range_bpm", "accent_grid"],
+      "additionalProperties": false,
+      "properties": {
+        "meter": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*/[124816]$",
+          "description": "Time signature (e.g., '2/4', '4/4', '6/8')."
+        },
+        "cycle_bars": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16,
+          "description": "Number of bars forming one complete groove cycle."
+        },
+        "subdivision": {
+          "type": "string",
+          "enum": ["binary", "ternary", "compound"],
+          "description": "Base subdivision type for timing quantization."
+        },
+        "tempo_range_bpm": {
+          "type": "array",
+          "items": { "type": "number", "minimum": 20, "maximum": 300 },
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Acceptable tempo bounds [min, max] in BPM."
+        },
+        "swing_ratio": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "default": 0.0,
+          "description": "Swing ratio (0.0 = straight, 0.5 = triplet, 1.0 = max swing). Must be numeric, not 'feel'."
+        },
+        "accent_grid": {
+          "type": "object",
+          "description": "Defines where musical weight lives within the cycle.",
+          "required": ["strong_beats", "secondary_beats"],
+          "additionalProperties": false,
+          "properties": {
+            "strong_beats": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 1 },
+              "minItems": 1,
+              "description": "Beat numbers with primary accent (1-indexed)."
+            },
+            "secondary_beats": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 1 },
+              "description": "Beat numbers with secondary accent."
+            },
+            "ghost_allowed": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether low-velocity ghost notes are permitted."
+            },
+            "offbeat_emphasis": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.0,
+              "description": "Relative weight of offbeat emphasis (0=none, 1=max)."
+            }
+          }
+        },
+        "clave": {
+          "type": "object",
+          "description": "Clave pattern definition. May be explicit, implicit, or absent.",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["explicit", "implicit", "none"],
+              "description": "How clave operates in this form."
+            },
+            "pattern": {
+              "type": "array",
+              "items": { "type": "integer", "enum": [0, 1] },
+              "description": "Binary clave pattern (1=strike, 0=rest). Must be explicit if type is 'explicit'."
+            },
+            "direction": {
+              "type": "string",
+              "enum": ["forward", "reverse", "either"],
+              "default": "forward",
+              "description": "Clave direction constraint."
+            }
+          }
+        }
+      }
+    },
+
+    "harmony_constraints": {
+      "type": "object",
+      "description": "Constraints on harmonic motion. Dance Packs never define chords, only motion rules.",
+      "required": ["harmonic_rhythm"],
+      "additionalProperties": false,
+      "properties": {
+        "harmonic_rhythm": {
+          "type": "object",
+          "description": "Timing constraints on chord changes.",
+          "required": ["max_changes_per_cycle"],
+          "additionalProperties": false,
+          "properties": {
+            "max_changes_per_cycle": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16,
+              "description": "Maximum chord changes allowed per groove cycle."
+            },
+            "min_beats_between_changes": {
+              "type": "number",
+              "minimum": 0.5,
+              "maximum": 16,
+              "default": 1,
+              "description": "Minimum beats before next chord change."
+            },
+            "change_on_strong_beat": {
+              "type": "string",
+              "enum": ["required", "preferred", "allowed", "forbidden"],
+              "default": "preferred",
+              "description": "Whether chord changes must align with strong beats."
+            }
+          }
+        },
+        "dominant_behavior": {
+          "type": "object",
+          "description": "Rules for dominant chord usage and resolution.",
+          "additionalProperties": false,
+          "properties": {
+            "allowed": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether dominant chords are permitted."
+            },
+            "resolution_strength": {
+              "type": "string",
+              "enum": ["strong", "medium", "weak", "none"],
+              "default": "medium",
+              "description": "Expected resolution strength (V-I pull)."
+            },
+            "secondary_dominants": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether secondary dominants (V/x) are encouraged."
+            }
+          }
+        },
+        "tritone_usage": {
+          "type": "object",
+          "description": "Tritone substitution behavior constraints.",
+          "additionalProperties": false,
+          "properties": {
+            "allowed": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether tritone substitution is permitted."
+            },
+            "weight": {
+              "type": "string",
+              "enum": ["none", "light", "moderate", "heavy"],
+              "default": "none",
+              "description": "How aggressively to apply substitutions."
+            },
+            "forbidden_on_beats": {
+              "type": "array",
+              "items": { "type": "integer", "minimum": 1 },
+              "description": "Beat numbers where tritone subs are forbidden."
+            }
+          }
+        },
+        "chromatic_drift": {
+          "type": "object",
+          "description": "Rules for chromatic voice movement.",
+          "additionalProperties": false,
+          "properties": {
+            "allowed": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether chromatic passing motion is permitted."
+            },
+            "max_semitones": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4,
+              "default": 0,
+              "description": "Maximum chromatic drift in semitones."
+            }
+          }
+        },
+        "modal_constraints": {
+          "type": "object",
+          "description": "Modal mixture and interchange rules.",
+          "additionalProperties": false,
+          "properties": {
+            "parallel_minor_allowed": {
+              "type": "boolean",
+              "default": false,
+              "description": "Whether parallel minor borrowing is allowed."
+            },
+            "modal_interchange_level": {
+              "type": "string",
+              "enum": ["none", "diatonic_only", "common_tones", "free"],
+              "default": "diatonic_only",
+              "description": "How freely modes can interchange."
+            }
+          }
+        }
+      }
+    },
+
+    "performance_profile": {
+      "type": "object",
+      "description": "How notes are played, not which notes are chosen. Nuance without semantic weight.",
+      "required": ["velocity_range"],
+      "additionalProperties": false,
+      "properties": {
+        "velocity_range": {
+          "type": "object",
+          "description": "MIDI velocity bounds for dynamics.",
+          "required": ["min", "max"],
+          "additionalProperties": false,
+          "properties": {
+            "min": { "type": "integer", "minimum": 1, "maximum": 127 },
+            "max": { "type": "integer", "minimum": 1, "maximum": 127 },
+            "ghost_max": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 64,
+              "default": 24,
+              "description": "Maximum velocity for ghost notes."
+            },
+            "accent_min": {
+              "type": "integer",
+              "minimum": 64,
+              "maximum": 127,
+              "default": 78,
+              "description": "Minimum velocity for accented notes."
+            }
+          }
+        },
+        "pickup_bias": {
+          "type": "object",
+          "description": "Anticipation/pickup note behavior.",
+          "additionalProperties": false,
+          "properties": {
+            "probability": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.0,
+              "description": "Probability of generating pickup notes."
+            },
+            "max_offset_beats": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.25,
+              "description": "Maximum pickup anticipation in beats."
+            }
+          }
+        },
+        "contour_preference": {
+          "type": "object",
+          "description": "Melodic contour tendencies.",
+          "additionalProperties": false,
+          "properties": {
+            "stepwise_weight": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.6,
+              "description": "Preference for stepwise motion (0-1)."
+            },
+            "leap_weight": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.4,
+              "description": "Preference for leaps (0-1)."
+            },
+            "max_leap_interval": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 12,
+              "default": 7,
+              "description": "Maximum leap size in semitones."
+            }
+          }
+        },
+        "ornament_density": {
+          "type": "string",
+          "enum": ["none", "sparse", "low", "moderate", "high"],
+          "default": "low",
+          "description": "Density of ornamental figures."
+        },
+        "register_bias": {
+          "type": "string",
+          "enum": ["low", "mid_low", "mid", "mid_high", "high"],
+          "default": "mid",
+          "description": "Preferred pitch register."
+        },
+        "articulation": {
+          "type": "object",
+          "description": "Note length and separation.",
+          "additionalProperties": false,
+          "properties": {
+            "default_duration_ratio": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 1.0,
+              "default": 0.8,
+              "description": "Default note duration as ratio of grid slot."
+            },
+            "staccato_probability": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.0,
+              "description": "Probability of staccato articulation."
+            },
+            "legato_probability": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.0,
+              "description": "Probability of legato articulation."
+            }
+          }
+        }
+      }
+    },
+
+    "practice_mapping": {
+      "type": "object",
+      "description": "Bridge to Coach Mode. Practice intelligence emerges from form definition.",
+      "required": ["primary_focus", "evaluation_weights", "difficulty_rating"],
+      "additionalProperties": false,
+      "properties": {
+        "primary_focus": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "groove_lock",
+              "timing_accuracy",
+              "dynamic_control",
+              "harmonic_awareness",
+              "secondary_dominants",
+              "tritone_substitution",
+              "rhythmic_variation",
+              "call_response",
+              "syncopation",
+              "ghost_notes",
+              "swing_feel",
+              "clave_alignment"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 4,
+          "description": "Primary practice objectives for this form."
+        },
+        "evaluation_weights": {
+          "type": "object",
+          "description": "Weights for scoring (must sum to 1.0).",
+          "required": ["timing_accuracy", "harmonic_choice", "dynamic_control"],
+          "additionalProperties": false,
+          "properties": {
+            "timing_accuracy": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Weight for timing precision."
+            },
+            "harmonic_choice": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Weight for harmonic decisions."
+            },
+            "dynamic_control": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "description": "Weight for velocity/dynamics."
+            },
+            "groove_feel": {
+              "type": "number",
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "default": 0.0,
+              "description": "Weight for overall groove adherence."
+            }
+          }
+        },
+        "common_errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "late_resolution",
+              "early_resolution",
+              "tritone_on_strong_beat",
+              "rushed_tempo",
+              "dragged_tempo",
+              "ghost_too_loud",
+              "accent_too_soft",
+              "wrong_clave_side",
+              "missed_pickup",
+              "over_ornamentation",
+              "lost_pulse"
+            ]
+          },
+          "description": "Common errors to detect and coach."
+        },
+        "difficulty_rating": {
+          "type": "string",
+          "enum": ["beginner", "easy", "medium", "hard", "advanced", "expert"],
+          "description": "Overall difficulty for curriculum placement."
+        },
+        "prerequisite_forms": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Pack IDs recommended before this form."
+        }
+      }
+    },
+
+    "extensions": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Forward-compatible extension namespace for additive fields."
+    }
+  }
+}
