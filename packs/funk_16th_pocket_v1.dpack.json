@@ -1,0 +1,132 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+  "metadata": {
+    "id": "funk_16th_pocket_v1",
+    "display_name": "Funk (16th Pocket)",
+    "dance_family": "blues_american",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": [
+      "funk",
+      "pocket",
+      "16th",
+      "ghost_notes",
+      "syncopation"
+    ]
+  },
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 4,
+    "subdivision": "binary",
+    "tempo_range_bpm": [
+      90,
+      115
+    ],
+    "swing_ratio": 0.0,
+    "accent_grid": {
+      "strong_beats": [
+        1
+      ],
+      "secondary_beats": [
+        2,
+        3,
+        4
+      ],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.7
+    },
+    "clave": {
+      "type": "implicit",
+      "pattern": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "direction": "forward"
+    }
+  },
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 2,
+      "min_beats_between_changes": 4,
+      "change_on_strong_beat": "preferred"
+    },
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "medium",
+      "secondary_dominants": false
+    },
+    "tritone_usage": {
+      "allowed": true,
+      "weight": "moderate",
+      "forbidden_on_beats": [
+        1,
+        3
+      ]
+    },
+    "chromatic_drift": {
+      "allowed": true,
+      "max_semitones": 2
+    },
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "common_tones"
+    }
+  },
+  "performance_profile": {
+    "velocity_range": {
+      "min": 35,
+      "max": 110,
+      "ghost_max": 30,
+      "accent_min": 90
+    },
+    "pickup_bias": {
+      "probability": 0.4,
+      "max_offset_beats": 0.0625
+    },
+    "contour_preference": {
+      "stepwise_weight": 0.7,
+      "leap_weight": 0.3,
+      "max_leap_interval": 4
+    },
+    "ornament_density": "moderate",
+    "register_bias": "low",
+    "articulation": {
+      "default_duration_ratio": 0.6,
+      "staccato_probability": 0.35,
+      "legato_probability": 0.05
+    }
+  },
+  "practice_mapping": {
+    "primary_focus": [
+      "timing_accuracy",
+      "ghost_notes",
+      "syncopation"
+    ],
+    "evaluation_weights": {
+      "timing_accuracy": 0.45,
+      "harmonic_choice": 0.15,
+      "dynamic_control": 0.25,
+      "groove_feel": 0.15
+    },
+    "common_errors": [
+      "ghost_too_loud",
+      "accent_too_soft",
+      "rushed_tempo",
+      "lost_pulse"
+    ],
+    "difficulty_rating": "hard",
+    "prerequisite_forms": [
+      "rock_straight_v1"
+    ]
+  },
+  "extensions": {}
+}

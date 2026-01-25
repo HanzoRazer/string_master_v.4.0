@@ -1,0 +1,126 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+  "metadata": {
+    "id": "gospel_shout_shuffle_v1",
+    "display_name": "Gospel (Shout Shuffle)",
+    "dance_family": "blues_american",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": [
+      "gospel",
+      "shout",
+      "shuffle",
+      "ternary",
+      "church"
+    ]
+  },
+  "groove": {
+    "meter": "12/8",
+    "cycle_bars": 4,
+    "subdivision": "ternary",
+    "tempo_range_bpm": [
+      70,
+      110
+    ],
+    "swing_ratio": 0.6,
+    "accent_grid": {
+      "strong_beats": [
+        1,
+        4,
+        7,
+        10
+      ],
+      "secondary_beats": [
+        3,
+        6,
+        9,
+        12
+      ],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.5
+    },
+    "clave": {
+      "type": "none",
+      "pattern": [],
+      "direction": "forward"
+    }
+  },
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 8,
+      "min_beats_between_changes": 3,
+      "change_on_strong_beat": "preferred"
+    },
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "strong",
+      "secondary_dominants": true
+    },
+    "tritone_usage": {
+      "allowed": true,
+      "weight": "moderate",
+      "forbidden_on_beats": [
+        1
+      ]
+    },
+    "chromatic_drift": {
+      "allowed": true,
+      "max_semitones": 2
+    },
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "common_tones"
+    }
+  },
+  "performance_profile": {
+    "velocity_range": {
+      "min": 55,
+      "max": 120,
+      "ghost_max": 30,
+      "accent_min": 90
+    },
+    "pickup_bias": {
+      "probability": 0.5,
+      "max_offset_beats": 0.33
+    },
+    "contour_preference": {
+      "stepwise_weight": 0.4,
+      "leap_weight": 0.6,
+      "max_leap_interval": 10
+    },
+    "ornament_density": "moderate",
+    "register_bias": "high",
+    "articulation": {
+      "default_duration_ratio": 0.75,
+      "staccato_probability": 0.1,
+      "legato_probability": 0.4
+    }
+  },
+  "practice_mapping": {
+    "primary_focus": [
+      "swing_feel",
+      "harmonic_awareness",
+      "tritone_substitution"
+    ],
+    "evaluation_weights": {
+      "timing_accuracy": 0.3,
+      "harmonic_choice": 0.4,
+      "dynamic_control": 0.15,
+      "groove_feel": 0.15
+    },
+    "common_errors": [
+      "dragged_tempo",
+      "tritone_on_strong_beat",
+      "early_resolution",
+      "ghost_too_loud"
+    ],
+    "difficulty_rating": "hard",
+    "prerequisite_forms": [
+      "jazz_blues_12bar_v1"
+    ]
+  },
+  "extensions": {}
+}

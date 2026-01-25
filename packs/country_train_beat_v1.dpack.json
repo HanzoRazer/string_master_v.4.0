@@ -1,0 +1,121 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+  "metadata": {
+    "id": "country_train_beat_v1",
+    "display_name": "Country (Train Beat)",
+    "dance_family": "country_american",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": [
+      "country",
+      "train_beat",
+      "steady",
+      "nashville"
+    ]
+  },
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 4,
+    "subdivision": "binary",
+    "tempo_range_bpm": [
+      100,
+      140
+    ],
+    "swing_ratio": 0.0,
+    "accent_grid": {
+      "strong_beats": [
+        1,
+        3
+      ],
+      "secondary_beats": [
+        2,
+        4
+      ],
+      "ghost_allowed": false,
+      "offbeat_emphasis": 0.1
+    },
+    "clave": {
+      "type": "none",
+      "pattern": [],
+      "direction": "forward"
+    }
+  },
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 4,
+      "min_beats_between_changes": 4,
+      "change_on_strong_beat": "required"
+    },
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "strong",
+      "secondary_dominants": true
+    },
+    "tritone_usage": {
+      "allowed": false,
+      "weight": "none",
+      "forbidden_on_beats": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "chromatic_drift": {
+      "allowed": false,
+      "max_semitones": 0
+    },
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "diatonic_only"
+    }
+  },
+  "performance_profile": {
+    "velocity_range": {
+      "min": 65,
+      "max": 100,
+      "ghost_max": 20,
+      "accent_min": 85
+    },
+    "pickup_bias": {
+      "probability": 0.15,
+      "max_offset_beats": 0.125
+    },
+    "contour_preference": {
+      "stepwise_weight": 0.6,
+      "leap_weight": 0.4,
+      "max_leap_interval": 5
+    },
+    "ornament_density": "low",
+    "register_bias": "mid",
+    "articulation": {
+      "default_duration_ratio": 0.85,
+      "staccato_probability": 0.1,
+      "legato_probability": 0.2
+    }
+  },
+  "practice_mapping": {
+    "primary_focus": [
+      "timing_accuracy",
+      "dynamic_control",
+      "groove_lock"
+    ],
+    "evaluation_weights": {
+      "timing_accuracy": 0.5,
+      "harmonic_choice": 0.2,
+      "dynamic_control": 0.2,
+      "groove_feel": 0.1
+    },
+    "common_errors": [
+      "rushed_tempo",
+      "dragged_tempo",
+      "ghost_too_loud"
+    ],
+    "difficulty_rating": "beginner",
+    "prerequisite_forms": []
+  },
+  "extensions": {}
+}

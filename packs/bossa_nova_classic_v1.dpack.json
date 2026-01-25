@@ -1,0 +1,121 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+
+  "metadata": {
+    "id": "bossa_nova_classic_v1",
+    "display_name": "Bossa Nova (Classic)",
+    "dance_family": "afro_brazilian",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": ["brazilian", "cool", "intimate", "jobim"]
+  },
+
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 2,
+    "subdivision": "binary",
+    "tempo_range_bpm": [120, 145],
+    "swing_ratio": 0.0,
+
+    "accent_grid": {
+      "strong_beats": [1, 3],
+      "secondary_beats": [2, 4],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.4
+    },
+
+    "clave": {
+      "type": "implicit",
+      "pattern": [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0],
+      "direction": "either"
+    }
+  },
+
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 4,
+      "min_beats_between_changes": 2,
+      "change_on_strong_beat": "allowed"
+    },
+
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "weak",
+      "secondary_dominants": true
+    },
+
+    "tritone_usage": {
+      "allowed": true,
+      "weight": "moderate",
+      "forbidden_on_beats": []
+    },
+
+    "chromatic_drift": {
+      "allowed": true,
+      "max_semitones": 2
+    },
+
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "common_tones"
+    }
+  },
+
+  "performance_profile": {
+    "velocity_range": {
+      "min": 35,
+      "max": 85,
+      "ghost_max": 20,
+      "accent_min": 70
+    },
+
+    "pickup_bias": {
+      "probability": 0.4,
+      "max_offset_beats": 0.5
+    },
+
+    "contour_preference": {
+      "stepwise_weight": 0.75,
+      "leap_weight": 0.25,
+      "max_leap_interval": 4
+    },
+
+    "ornament_density": "sparse",
+    "register_bias": "mid_low",
+
+    "articulation": {
+      "default_duration_ratio": 0.85,
+      "staccato_probability": 0.05,
+      "legato_probability": 0.25
+    }
+  },
+
+  "practice_mapping": {
+    "primary_focus": [
+      "harmonic_awareness",
+      "tritone_substitution",
+      "dynamic_control"
+    ],
+
+    "evaluation_weights": {
+      "timing_accuracy": 0.30,
+      "harmonic_choice": 0.40,
+      "dynamic_control": 0.30,
+      "groove_feel": 0.00
+    },
+
+    "common_errors": [
+      "ghost_too_loud",
+      "accent_too_soft",
+      "over_ornamentation"
+    ],
+
+    "difficulty_rating": "hard",
+    "prerequisite_forms": ["samba_traditional_v1"]
+  },
+
+  "extensions": {}
+}

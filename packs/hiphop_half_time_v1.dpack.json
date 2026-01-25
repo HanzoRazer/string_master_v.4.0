@@ -1,0 +1,121 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+  "metadata": {
+    "id": "hiphop_half_time_v1",
+    "display_name": "Hip-Hop (Half-Time)",
+    "dance_family": "fusion",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": [
+      "hiphop",
+      "half_time",
+      "pocket",
+      "boom_bap"
+    ]
+  },
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 4,
+    "subdivision": "binary",
+    "tempo_range_bpm": [
+      70,
+      95
+    ],
+    "swing_ratio": 0.0,
+    "accent_grid": {
+      "strong_beats": [
+        1,
+        3
+      ],
+      "secondary_beats": [
+        2,
+        4
+      ],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.3
+    },
+    "clave": {
+      "type": "none",
+      "pattern": [],
+      "direction": "forward"
+    }
+  },
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 2,
+      "min_beats_between_changes": 8,
+      "change_on_strong_beat": "preferred"
+    },
+    "dominant_behavior": {
+      "allowed": false,
+      "resolution_strength": "none",
+      "secondary_dominants": false
+    },
+    "tritone_usage": {
+      "allowed": false,
+      "weight": "none",
+      "forbidden_on_beats": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "chromatic_drift": {
+      "allowed": false,
+      "max_semitones": 0
+    },
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "diatonic_only"
+    }
+  },
+  "performance_profile": {
+    "velocity_range": {
+      "min": 50,
+      "max": 100,
+      "ghost_max": 25,
+      "accent_min": 85
+    },
+    "pickup_bias": {
+      "probability": 0.2,
+      "max_offset_beats": 0.25
+    },
+    "contour_preference": {
+      "stepwise_weight": 0.5,
+      "leap_weight": 0.5,
+      "max_leap_interval": 7
+    },
+    "ornament_density": "low",
+    "register_bias": "low",
+    "articulation": {
+      "default_duration_ratio": 0.7,
+      "staccato_probability": 0.15,
+      "legato_probability": 0.2
+    }
+  },
+  "practice_mapping": {
+    "primary_focus": [
+      "rhythmic_variation",
+      "timing_accuracy",
+      "groove_lock"
+    ],
+    "evaluation_weights": {
+      "timing_accuracy": 0.4,
+      "harmonic_choice": 0.15,
+      "dynamic_control": 0.25,
+      "groove_feel": 0.2
+    },
+    "common_errors": [
+      "rushed_tempo",
+      "over_ornamentation",
+      "lost_pulse"
+    ],
+    "difficulty_rating": "medium",
+    "prerequisite_forms": []
+  },
+  "extensions": {}
+}

@@ -1,0 +1,122 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+
+  "metadata": {
+    "id": "samba_traditional_v1",
+    "display_name": "Samba (Traditional)",
+    "dance_family": "afro_brazilian",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": ["brazilian", "carnival", "partido_alto", "batucada"]
+  },
+
+  "groove": {
+    "meter": "2/4",
+    "cycle_bars": 2,
+    "subdivision": "binary",
+    "tempo_range_bpm": [88, 104],
+    "swing_ratio": 0.0,
+
+    "accent_grid": {
+      "strong_beats": [1],
+      "secondary_beats": [2],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.6
+    },
+
+    "clave": {
+      "type": "implicit",
+      "pattern": [1, 0, 1, 0, 0, 1, 0, 1],
+      "direction": "forward"
+    }
+  },
+
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 2,
+      "min_beats_between_changes": 2,
+      "change_on_strong_beat": "preferred"
+    },
+
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "medium",
+      "secondary_dominants": true
+    },
+
+    "tritone_usage": {
+      "allowed": true,
+      "weight": "light",
+      "forbidden_on_beats": [1]
+    },
+
+    "chromatic_drift": {
+      "allowed": false,
+      "max_semitones": 0
+    },
+
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "common_tones"
+    }
+  },
+
+  "performance_profile": {
+    "velocity_range": {
+      "min": 45,
+      "max": 110,
+      "ghost_max": 24,
+      "accent_min": 78
+    },
+
+    "pickup_bias": {
+      "probability": 0.6,
+      "max_offset_beats": 0.25
+    },
+
+    "contour_preference": {
+      "stepwise_weight": 0.7,
+      "leap_weight": 0.3,
+      "max_leap_interval": 5
+    },
+
+    "ornament_density": "low",
+    "register_bias": "mid",
+
+    "articulation": {
+      "default_duration_ratio": 0.75,
+      "staccato_probability": 0.15,
+      "legato_probability": 0.05
+    }
+  },
+
+  "practice_mapping": {
+    "primary_focus": [
+      "groove_lock",
+      "syncopation",
+      "ghost_notes"
+    ],
+
+    "evaluation_weights": {
+      "timing_accuracy": 0.45,
+      "harmonic_choice": 0.25,
+      "dynamic_control": 0.20,
+      "groove_feel": 0.10
+    },
+
+    "common_errors": [
+      "late_resolution",
+      "ghost_too_loud",
+      "rushed_tempo",
+      "tritone_on_strong_beat"
+    ],
+
+    "difficulty_rating": "medium",
+    "prerequisite_forms": []
+  },
+
+  "extensions": {}
+}
