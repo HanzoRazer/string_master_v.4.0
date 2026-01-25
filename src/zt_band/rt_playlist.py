@@ -140,6 +140,58 @@ def _manual_controls_from_env() -> ManualBandControls:
     )
 
 
+# =============================================================================
+# PRESETS
+# =============================================================================
+
+_PRESETS: dict[str, dict[str, object]] = {
+    # A tight practice pocket
+    "tight": {
+        "mode": "stabilize",
+        "tightness": 0.95,
+        "expression": 0.30,
+        "assist": 0.60,
+        "humanize_ms": 2.0,
+        "bias": "neutral",
+        "confidence": 0.85,
+        "horizon_ms": 2000,
+    },
+    # A looser jam feel
+    "loose": {
+        "mode": "follow",
+        "tightness": 0.45,
+        "expression": 0.60,
+        "assist": 0.50,
+        "humanize_ms": 9.0,
+        "bias": "neutral",
+        "confidence": 0.85,
+        "horizon_ms": 2000,
+    },
+    # High energy / density
+    "challenge": {
+        "mode": "challenge",
+        "tightness": 0.20,
+        "expression": 0.85,
+        "assist": 0.95,
+        "humanize_ms": 6.0,
+        "bias": "neutral",
+        "confidence": 0.85,
+        "horizon_ms": 2000,
+    },
+    # Simplify + give space
+    "recover": {
+        "mode": "recover",
+        "tightness": 0.70,
+        "expression": 0.20,
+        "assist": 0.80,
+        "humanize_ms": 4.0,
+        "bias": "neutral",
+        "confidence": 0.85,
+        "horizon_ms": 2000,
+    },
+}
+
+
 def _parse_band_control_args(argv=None):
     """
     Tiny CLI layer for manual band controls.
@@ -147,6 +199,7 @@ def _parse_band_control_args(argv=None):
     """
     parser = argparse.ArgumentParser(add_help=False)
 
+    parser.add_argument("--preset", choices=["tight", "loose", "challenge", "recover"])
     parser.add_argument("--mode", choices=["follow", "assist", "stabilize", "challenge", "recover"])
     parser.add_argument("--tightness", type=float)
     parser.add_argument("--assist", type=float)
@@ -164,29 +217,40 @@ def _manual_controls_from_cli(argv=None) -> ManualBandControls:
     """
     Build ManualBandControls from CLI arguments.
 
-    CLI args take precedence; env vars are used as fallback for unspecified args.
+    Priority: CLI flag > preset > env var > default
 
     Args:
         argv: Command line arguments (defaults to sys.argv)
 
     Returns:
-        ManualBandControls with CLI values merged over env var defaults
+        ManualBandControls with values merged in priority order
     """
     args = _parse_band_control_args(argv)
     env_controls = _manual_controls_from_env()
 
-    def val(cli_val, env_val):
-        return env_val if cli_val is None else cli_val
+    # Start with preset if specified
+    base: dict[str, object] = {}
+    if getattr(args, "preset", None):
+        base = dict(_PRESETS[args.preset])
+
+    def pick(cli_name: str, env_val):
+        # CLI flag overrides preset; preset overrides env
+        cli_val = getattr(args, cli_name, None)
+        if cli_val is not None:
+            return cli_val
+        if cli_name in base:
+            return base[cli_name]
+        return env_val
 
     return ManualBandControls(
-        mode=val(args.mode, env_controls.mode),  # type: ignore[arg-type]
-        tightness=val(args.tightness, env_controls.tightness),
-        assist=val(args.assist, env_controls.assist),
-        expression=val(args.expression, env_controls.expression),
-        humanize_ms=val(args.humanize_ms, env_controls.humanize_ms),
-        anticipation_bias=val(args.bias, env_controls.anticipation_bias),  # type: ignore[arg-type]
-        horizon_ms=val(args.horizon_ms, env_controls.horizon_ms),
-        confidence=val(args.confidence, env_controls.confidence),
+        mode=pick("mode", env_controls.mode),  # type: ignore[arg-type]
+        tightness=float(pick("tightness", env_controls.tightness)),
+        assist=float(pick("assist", env_controls.assist)),
+        expression=float(pick("expression", env_controls.expression)),
+        humanize_ms=float(pick("humanize_ms", env_controls.humanize_ms)),
+        anticipation_bias=pick("bias", env_controls.anticipation_bias),  # type: ignore[arg-type]
+        horizon_ms=int(pick("horizon_ms", env_controls.horizon_ms)),
+        confidence=float(pick("confidence", env_controls.confidence)),
     )
 
 

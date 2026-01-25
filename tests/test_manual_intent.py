@@ -304,3 +304,78 @@ class TestCLIParsing:
         assert controls.mode == "follow"
         assert controls.tightness == 0.6
         assert controls.expression == 0.5
+
+
+class TestPresets:
+    """Test preset expansion and override behavior."""
+
+    def test_preset_tight(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        controls = _manual_controls_from_cli(["--preset", "tight"])
+
+        assert controls.mode == "stabilize"
+        assert controls.tightness == 0.95
+        assert controls.expression == 0.30
+        assert controls.humanize_ms == 2.0
+
+    def test_preset_loose(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        controls = _manual_controls_from_cli(["--preset", "loose"])
+
+        assert controls.mode == "follow"
+        assert controls.tightness == 0.45
+        assert controls.expression == 0.60
+        assert controls.humanize_ms == 9.0
+
+    def test_preset_challenge(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        controls = _manual_controls_from_cli(["--preset", "challenge"])
+
+        assert controls.mode == "challenge"
+        assert controls.tightness == 0.20
+        assert controls.expression == 0.85
+        assert controls.assist == 0.95
+
+    def test_preset_recover(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        controls = _manual_controls_from_cli(["--preset", "recover"])
+
+        assert controls.mode == "recover"
+        assert controls.tightness == 0.70
+        assert controls.expression == 0.20
+        assert controls.assist == 0.80
+
+    def test_preset_with_override(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        # Preset + explicit override: override wins
+        controls = _manual_controls_from_cli([
+            "--preset", "tight",
+            "--expression", "0.55",
+        ])
+
+        # From preset
+        assert controls.mode == "stabilize"
+        assert controls.tightness == 0.95
+        # Overridden
+        assert controls.expression == 0.55
+
+    def test_preset_with_multiple_overrides(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        controls = _manual_controls_from_cli([
+            "--preset", "loose",
+            "--humanize-ms", "12.0",
+            "--tightness", "0.3",
+        ])
+
+        # From preset
+        assert controls.mode == "follow"
+        assert controls.expression == 0.60
+        # Overridden
+        assert controls.humanize_ms == 12.0
+        assert controls.tightness == 0.3
