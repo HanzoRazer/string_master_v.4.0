@@ -5,6 +5,7 @@ Orchestrates sequential playback of .ztplay items, switching
 programs at bar boundaries without engine rewrite.
 """
 
+import argparse
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -139,6 +140,56 @@ def _manual_controls_from_env() -> ManualBandControls:
     )
 
 
+def _parse_band_control_args(argv=None):
+    """
+    Tiny CLI layer for manual band controls.
+    Unknown args are ignored so existing CLI behavior is preserved.
+    """
+    parser = argparse.ArgumentParser(add_help=False)
+
+    parser.add_argument("--mode", choices=["follow", "assist", "stabilize", "challenge", "recover"])
+    parser.add_argument("--tightness", type=float)
+    parser.add_argument("--assist", type=float)
+    parser.add_argument("--expression", type=float)
+    parser.add_argument("--humanize-ms", type=float, dest="humanize_ms")
+    parser.add_argument("--bias", choices=["ahead", "behind", "neutral"])
+    parser.add_argument("--confidence", type=float)
+    parser.add_argument("--horizon-ms", type=int, dest="horizon_ms")
+
+    args, _ = parser.parse_known_args(argv)
+    return args
+
+
+def _manual_controls_from_cli(argv=None) -> ManualBandControls:
+    """
+    Build ManualBandControls from CLI arguments.
+
+    CLI args take precedence; env vars are used as fallback for unspecified args.
+
+    Args:
+        argv: Command line arguments (defaults to sys.argv)
+
+    Returns:
+        ManualBandControls with CLI values merged over env var defaults
+    """
+    args = _parse_band_control_args(argv)
+    env_controls = _manual_controls_from_env()
+
+    def val(cli_val, env_val):
+        return env_val if cli_val is None else cli_val
+
+    return ManualBandControls(
+        mode=val(args.mode, env_controls.mode),  # type: ignore[arg-type]
+        tightness=val(args.tightness, env_controls.tightness),
+        assist=val(args.assist, env_controls.assist),
+        expression=val(args.expression, env_controls.expression),
+        humanize_ms=val(args.humanize_ms, env_controls.humanize_ms),
+        anticipation_bias=val(args.bias, env_controls.anticipation_bias),  # type: ignore[arg-type]
+        horizon_ms=val(args.horizon_ms, env_controls.horizon_ms),
+        confidence=val(args.confidence, env_controls.confidence),
+    )
+
+
 def _maybe_override_style_with_intent(
     *,
     prog_style: str,
@@ -253,9 +304,9 @@ def rt_play_playlist(
                 prog_style = "swing_basic"
 
             # --- Intent-driven style selection (governed) ---
-            # Build intent from manual UI controls (env vars)
+            # Build intent from manual UI controls (CLI args > env vars > defaults)
             # This can later be swapped for analyzer-generated intent
-            controls = _manual_controls_from_env()
+            controls = _manual_controls_from_cli()
             intent = build_groove_intent_from_controls(
                 controls=controls,
                 profile_id="rt_playlist_manual",

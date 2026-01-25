@@ -234,3 +234,73 @@ class TestIntentCompatibility:
             )
             plan = build_arranger_control_plan(intent)
             assert plan.mode == mode, f"Expected mode={mode}, got {plan.mode}"
+
+
+class TestCLIParsing:
+    """Test CLI argument parsing for band controls."""
+
+    def test_parse_mode(self):
+        from zt_band.rt_playlist import _parse_band_control_args
+
+        args = _parse_band_control_args(["--mode", "challenge"])
+        assert args.mode == "challenge"
+
+    def test_parse_tightness(self):
+        from zt_band.rt_playlist import _parse_band_control_args
+
+        args = _parse_band_control_args(["--tightness", "0.95"])
+        assert args.tightness == 0.95
+
+    def test_parse_humanize_ms(self):
+        from zt_band.rt_playlist import _parse_band_control_args
+
+        args = _parse_band_control_args(["--humanize-ms", "3.5"])
+        assert args.humanize_ms == 3.5
+
+    def test_parse_multiple_args(self):
+        from zt_band.rt_playlist import _parse_band_control_args
+
+        args = _parse_band_control_args([
+            "--mode", "stabilize",
+            "--tightness", "0.9",
+            "--expression", "0.3",
+            "--assist", "0.7",
+        ])
+        assert args.mode == "stabilize"
+        assert args.tightness == 0.9
+        assert args.expression == 0.3
+        assert args.assist == 0.7
+
+    def test_unknown_args_ignored(self):
+        from zt_band.rt_playlist import _parse_band_control_args
+
+        # Should not raise
+        args = _parse_band_control_args(["playlist.yaml", "--unknown-flag", "value", "--mode", "follow"])
+        assert args.mode == "follow"
+
+    def test_cli_controls_from_args(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        controls = _manual_controls_from_cli([
+            "--mode", "challenge",
+            "--tightness", "0.2",
+            "--expression", "0.85",
+            "--assist", "0.95",
+            "--humanize-ms", "6.0",
+        ])
+
+        assert controls.mode == "challenge"
+        assert controls.tightness == 0.2
+        assert controls.expression == 0.85
+        assert controls.assist == 0.95
+        assert controls.humanize_ms == 6.0
+
+    def test_cli_defaults(self):
+        from zt_band.rt_playlist import _manual_controls_from_cli
+
+        # With no args, should get defaults
+        controls = _manual_controls_from_cli([])
+
+        assert controls.mode == "follow"
+        assert controls.tightness == 0.6
+        assert controls.expression == 0.5
