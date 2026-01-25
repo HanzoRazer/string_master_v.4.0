@@ -188,6 +188,71 @@ def pattern_stepwise_chord_tone_targets(exercise: MajorScaleExercise) -> List[in
     return notes
 
 
+def pattern_7_to_1_approach(exercise: MajorScaleExercise, octaves: int = 2) -> List[int]:
+    """
+    7→1 approach drill (EXPLICIT from audio).
+
+    Emphasizes the half-step resolution from leading tone to tonic.
+    Pattern per octave: 5-6-7-1 | 5-6-7-1 (repeated approach)
+
+    Rule enforced: "7 resolves to 1 by half step"
+    """
+    notes = []
+    scale = exercise.scale_notes
+
+    for octave in range(octaves):
+        offset = octave * 12
+        # Approach sequence: 5 -> 6 -> 7 -> 1
+        notes.append(scale[4] + offset)  # 5
+        notes.append(scale[5] + offset)  # 6
+        notes.append(scale[6] + offset)  # 7
+        notes.append(scale[0] + offset + 12)  # 1 (resolution)
+
+        # Repeat with slight variation: 3 -> 4 -> 5 -> 6 -> 7 -> 1
+        notes.append(scale[2] + offset)  # 3
+        notes.append(scale[3] + offset)  # 4
+        notes.append(scale[4] + offset)  # 5
+        notes.append(scale[5] + offset)  # 6
+        notes.append(scale[6] + offset)  # 7
+        notes.append(scale[0] + offset + 12)  # 1 (resolution)
+
+    return notes
+
+
+def pattern_resolution_drill(exercise: MajorScaleExercise) -> List[int]:
+    """
+    Resolution drill: approach each chord tone by step.
+
+    Enforces stepwise motion + chord tone targeting.
+    Pattern: 2→1, 4→3, 6→5, 7→1(8ve)
+    """
+    notes = []
+    scale = exercise.scale_notes
+
+    # 2 -> 1 (step down to root)
+    notes.extend([scale[1], scale[0]])
+    # 4 -> 3 (step down to 3rd)
+    notes.extend([scale[3], scale[2]])
+    # 6 -> 5 (step down to 5th)
+    notes.extend([scale[5], scale[4]])
+    # 7 -> 1 (EXPLICIT: half-step up to root)
+    notes.extend([scale[6], scale[0] + 12])
+
+    # Reverse: approach from below
+    # 7 -> 1 (leading tone resolution)
+    notes.extend([scale[6], scale[0] + 12])
+    # 2 -> 3 (step up to 3rd)
+    notes.extend([scale[1], scale[2]])
+    # 4 -> 5 (step up to 5th)
+    notes.extend([scale[3], scale[4]])
+    # 6 -> 7 (step up to 7th)
+    notes.extend([scale[5], scale[6]])
+    # 7 -> 1 (final resolution)
+    notes.extend([scale[6], scale[0] + 12])
+
+    return notes
+
+
 # =============================================================================
 # MIDI Builders
 # =============================================================================
@@ -284,6 +349,10 @@ def generate_exercise_midi(
         notes = pattern_chord_tones_only(exercise)
     elif pattern == "targets":
         notes = pattern_stepwise_chord_tone_targets(exercise)
+    elif pattern == "7_to_1":
+        notes = pattern_7_to_1_approach(exercise)
+    elif pattern == "resolution":
+        notes = pattern_resolution_drill(exercise)
     else:
         notes = pattern_up_down(exercise)
 
@@ -386,9 +455,9 @@ def main():
     )
     parser.add_argument(
         "--pattern",
-        choices=["ascending", "descending", "up_down", "chord_tones", "targets"],
+        choices=["ascending", "descending", "up_down", "chord_tones", "targets", "7_to_1", "resolution"],
         default="up_down",
-        help="Exercise pattern (default: up_down)"
+        help="Exercise pattern: up_down, 7_to_1 (approach drill), resolution (default: up_down)"
     )
     parser.add_argument(
         "--all-keys",

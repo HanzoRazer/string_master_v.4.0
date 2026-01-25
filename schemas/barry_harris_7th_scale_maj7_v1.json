@@ -1,9 +1,8 @@
 {
   "schema_version": "1.0.0",
   "id": "barry_harris_7th_scale_maj7_v1",
-  "title": "Barry Harris 7th Scale — Major 7th (Source-Grounded Minimal)",
-  "summary": "Minimal ruleset extracted directly from Barry Harris audio/transcript. Chord tones (1-3-5-7) vs non-chord tones (2-4-6). One mandatory half-step: 7↔1. No half-steps among 2/4/6. Rhythm training disguised as harmony.",
-
+  "title": "Barry Harris 7th Scale \u00e2\u20ac\u201d Major 7th (Source-Grounded Minimal)",
+  "summary": "Minimal ruleset extracted directly from Barry Harris audio/transcript. Chord tones (1-3-5-7) vs non-chord tones (2-4-6). One mandatory half-step: 7\u00e2\u2020\u201d1. No half-steps among 2/4/6. Rhythm training disguised as harmony.",
   "pedagogy_intent": {
     "primary_goal": "rhythm_training_disguised_as_harmony",
     "secondary_goals": [
@@ -13,27 +12,42 @@
     ],
     "why_it_works": "The only reason we put these half steps in is so we can practice rhythm. By enforcing predictable interval spacing, the player achieves stable subdivision without conscious effort. Constraint compliance forces rhythmic discipline."
   },
-
   "harmonic_context": {
     "tonal_center_model": "chord_centered",
-    "chord_quality_targets": ["maj7"]
+    "chord_quality_targets": [
+      "maj7"
+    ]
   },
-
   "pitch_model": {
     "representation": "scale_degree",
     "degree_system": "diatonic_1_7",
     "scale_template": {
       "base_scale": "major",
-      "degrees": ["1", "2", "3", "4", "5", "6", "7"]
+      "degrees": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
     }
   },
-
   "degree_groups": {
-    "chord_tones": ["1", "3", "5", "7"],
-    "non_chord_tones": ["2", "4", "6"],
+    "chord_tones": [
+      "1",
+      "3",
+      "5",
+      "7"
+    ],
+    "non_chord_tones": [
+      "2",
+      "4",
+      "6"
+    ],
     "special_passing_tones": []
   },
-
   "constraints": {
     "interval_rules": [
       {
@@ -45,14 +59,16 @@
         "rule_type": "exact_semitones_between",
         "value": 1,
         "priority": 9,
-        "note": "EXPLICIT: 'One step between tonic and seventh.' Half-step resolution 7↔1 is structural, not stylistic."
+        "note": "EXPLICIT: 'One step between tonic and seventh.' Half-step resolution 7\u00e2\u2020\u201d1 is structural, not stylistic."
       },
       {
-        "applies_to": { "group": "non_chord_tones" },
+        "applies_to": {
+          "group": "non_chord_tones"
+        },
         "rule_type": "avoid_semitones_between",
         "value": 1,
         "priority": 8,
-        "note": "EXPLICIT: 'Second, fourth and sixth — the first rule is no half steps.' Prevents rhythmic collapse via clustering."
+        "note": "EXPLICIT: 'Second, fourth and sixth \u00e2\u20ac\u201d the first rule is no half steps.' Prevents rhythmic collapse via clustering."
       }
     ],
     "motion_rules": [
@@ -61,10 +77,15 @@
         "rule": "stepwise_only",
         "scope": "global",
         "note": "IMPLIED: Demonstration shows continuous scalar motion. 'I went through a whole scale. Just like that.'"
+      },
+      {
+        "name": "approach_tonic_by_half_step",
+        "rule": "approach_chord_tones_by_half_step",
+        "scope": "within_bar",
+        "note": "EXPLICIT (audio): 7 resolves to 1 by half step. Demonstrated and verbally reinforced. Central to phrasing model."
       }
     ]
   },
-
   "practice_protocol": {
     "time_grid": {
       "meter": "4/4",
