@@ -320,17 +320,40 @@ The following are **frozen**:
 
 ## 7. Quick Commands
 
+### zt-band CLI (authoring)
+
 ```bash
 # Validate all packs
 zt-band dance-pack-validate sg_spec/ai/coach/dance_packs/
 
 # Build canonical JSON for all packs
 zt-band dance-pack-build-json sg_spec/ai/coach/dance_packs/
+```
 
-# Run pack tests
-cd sg-spec && python -m pytest sg_spec/tests/test_dance_pack*.py -v
+### sgc CLI (sg-spec)
 
-# List all pack IDs (Python)
+```bash
+# List all dance packs
+sgc dance-pack-list
+sgc dance-pack-list --json
+
+# List all pack sets
+sgc dance-pack-set-list
+sgc dance-pack-set-list --json
+
+# Validate a pack set (checks all pack IDs exist)
+sgc dance-pack-set-validate groove_foundations_v1
+sgc dance-pack-set-validate --path custom_set.yaml
+
+# Show detailed pack set summary
+sgc dance-pack-set-show groove_foundations_v1
+sgc dance-pack-set-show groove_foundations_v1 --json
+```
+
+### Python API
+
+```python
+# List all pack IDs
 from sg_spec.ai.coach.dance_pack import list_pack_ids
 print(list_pack_ids())
 
@@ -339,10 +362,18 @@ from sg_spec.ai.coach.pack_set_policy import summarize_pack_set
 print(summarize_pack_set("groove_foundations_v1"))
 ```
 
+### Tests
+
+```bash
+# Run all dance pack tests
+cd sg-spec && python -m pytest sg_spec/tests/test_dance_pack*.py sg_spec/tests/test_pack_set_policy.py -v
+```
+
 ---
 
 ## Changelog
 
 | Date | Change |
 |------|--------|
+| 2025-01-25 | Add sgc CLI commands for pack sets (list, validate, show). |
 | 2025-01-25 | Initial creation. 13 packs, 3 sets, full taxonomy index. |
