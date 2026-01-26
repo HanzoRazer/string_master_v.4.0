@@ -1,7 +1,20 @@
 id: v6_contrary_top4
-title: "Metronome for Drop-2 Top-4 Voicing Motion"
-instruments:
-  - type: drum_tick
-    pattern: "1---2---3---4---"
+title: "Drop-2 Top 4 Motion: C6 → E° → Ebm6"
 tempo_bpm: 75
-loop_bars: 2
+loop_bars: 3
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: ballad
+    comping: whole_notes
+    chords:
+      - C6
+      - Edim7
+      - Ebm6
+  - type: bass_pedal
+    roots: [C, E, Eb]
+    pattern: whole_notes

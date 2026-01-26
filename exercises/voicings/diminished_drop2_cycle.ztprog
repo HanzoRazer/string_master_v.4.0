@@ -1,0 +1,21 @@
+id: diminished_drop2_cycle
+title: "Diminished Drop-2 Cycle – 12 Keys"
+tempo_bpm: 80
+loop_bars: 4
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - Dm7
+      - G7
+      - Cmaj7
+      - Cmaj7
+  - type: walking_bass
+    outline_chords: true
+    cycle: fifths
