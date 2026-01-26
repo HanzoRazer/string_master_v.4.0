@@ -1,0 +1,30 @@
+id: amazing_grace_etude
+title: "Amazing Grace – 8-Bar Melody Etude"
+program_ref: amazing_grace_backing.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Play the melody cleanly in G major"
+  - "Develop tone control on slower ballad lines"
+  - "Maintain rhythmic precision and phrasing"
+
+practice_steps:
+  - "Play with shell + bass backing at 80 BPM"
+  - "Focus on sustaining longer tones"
+  - "Loop 4x and gradually shape dynamics"
+
+tags:
+  style: traditional
+  key: G
+  meter: 3/4
+  technique: melody_picking
+  phrase_type: ballad
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - sustain_accuracy
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 40
+    sustain_accuracy_min: 0.85

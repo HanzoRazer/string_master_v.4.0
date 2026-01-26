@@ -1,0 +1,30 @@
+id: olde_joe_clark_etude
+title: "Old Joe Clark – 8-Bar Etude"
+program_ref: olde_joe_clark_backing.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Master alternate picking in A major"
+  - "Emphasize string skipping accuracy"
+  - "Balance melodic phrasing with rhythmic drive"
+
+practice_steps:
+  - "Loop the phrase slowly, focusing on bar transitions"
+  - "Gradually increase speed while maintaining clarity"
+  - "Try transposing to D or E for variation"
+
+tags:
+  style: old_time
+  key: A
+  meter: 4/4
+  technique: flatpicking
+  phrase_type: fiddle_tune
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - articulation_consistency
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 35
+    articulation_score_min: 0.85
