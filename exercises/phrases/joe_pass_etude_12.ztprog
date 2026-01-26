@@ -1,7 +1,13 @@
 id: joe_pass_etude_12
-title: "Backing for Joe Pass Etude 12"
+title: "Joe Pass Etude 12 – Minor ii-V-i"
+tempo_bpm: 68
+loop_bars: 4
 instruments:
   - type: metronome
     pattern: "1---2---3---4---"
-tempo_bpm: 72
-loop_bars: 4
+  - type: shell_voicings
+    chords:
+      - Dm7b5
+      - G7alt
+      - Cm7
+      - Cm7

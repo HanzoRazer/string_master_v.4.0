@@ -1,7 +1,13 @@
 id: joe_pass_etude_13
-title: "Backing for Joe Pass Etude 13"
+title: "Joe Pass Etude 13 – Tritone Subs"
+tempo_bpm: 80
+loop_bars: 4
 instruments:
   - type: metronome
     pattern: "1---2---3---4---"
-tempo_bpm: 72
-loop_bars: 4
+  - type: shell_voicings
+    chords:
+      - Dm7
+      - Db7
+      - Cmaj7
+      - Cmaj7

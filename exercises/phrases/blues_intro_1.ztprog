@@ -1,7 +1,13 @@
 id: blues_intro_1
-title: "Backing for Blues Intro 1"
+title: "Blues Intro 1 – SRV Style"
+tempo_bpm: 85
+loop_bars: 2
 instruments:
   - type: drum_tick
     pattern: "1---2---3---4---"
-tempo_bpm: 80
-loop_bars: 2
+  - type: shell_voicings
+    chords:
+      - E7
+      - A7
+      - E7
+      - B7

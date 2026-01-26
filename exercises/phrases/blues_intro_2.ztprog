@@ -1,7 +1,14 @@
 id: blues_intro_2
-title: "Backing for Blues Intro 2"
+title: "Blues Intro 2 – Texas Shuffle"
+tempo_bpm: 90
+loop_bars: 2
+meter: "12/8"
 instruments:
   - type: drum_tick
-    pattern: "1---2---3---4---"
-tempo_bpm: 80
-loop_bars: 2
+    pattern: "1--2--3--4--5--6--"
+  - type: shell_voicings
+    chords:
+      - G7
+      - C7
+      - G7
+      - D7
