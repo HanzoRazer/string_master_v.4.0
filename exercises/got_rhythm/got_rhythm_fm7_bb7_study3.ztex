@@ -1,0 +1,28 @@
+id: got_rhythm_fm7_bb7_study3
+title: "Study 3 – Chromatic Motion Fm7 → Bb7"
+program_ref: got_rhythm_fm7_bb7_study3.ztprog
+exercise_type: melodic_motion
+
+goals:
+  - "Connect Fm7 to Bb7 using chromatic and triplet motion"
+  - "Target 3rd of Bb7 (D) by beat 4 of bar 6"
+  - "Build continuity from earlier enclosure studies"
+
+practice_steps:
+  - "Loop at 100 BPM"
+  - "Emphasize smooth finger transitions"
+  - "Apply articulation to highlight target note"
+
+tags:
+  origin: barry_harris_expansion
+  harmonic_motion: Fm7_to_Bb7
+  resolution_target: D
+  phrase_type: transition
+  technique: chromatic_motion
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30

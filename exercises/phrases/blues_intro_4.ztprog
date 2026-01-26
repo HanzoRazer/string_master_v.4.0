@@ -1,0 +1,7 @@
+id: blues_intro_4
+title: "Backing for Blues Intro 4"
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+tempo_bpm: 80
+loop_bars: 2

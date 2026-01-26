@@ -1,0 +1,7 @@
+id: got_rhythm_ebmaj7_ab7_study4
+title: "Metronome for Study 4 – Ebmaj7 to Ab7"
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+tempo_bpm: 100
+loop_bars: 2

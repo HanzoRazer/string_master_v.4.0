@@ -1,0 +1,7 @@
+id: v6_contrary_top4
+title: "Metronome for Drop-2 Top-4 Voicing Motion"
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+tempo_bpm: 75
+loop_bars: 2

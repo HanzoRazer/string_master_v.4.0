@@ -1,0 +1,28 @@
+id: got_rhythm_ebmaj7_ab7_study4
+title: "Study 4 – Ebmaj7 to Ab7 with Chromatic Enclosure"
+program_ref: got_rhythm_ebmaj7_ab7_study4.ztprog
+exercise_type: melodic_enclosure
+
+goals:
+  - "Use chromatic motion through Eb major to set up resolution"
+  - "Target 3rd of Ab7 (C) using Barry Harris-style enclosure"
+  - "Practice enclosure and swing timing in 2-bar phrase"
+
+practice_steps:
+  - "Loop slowly and feel pull into target note"
+  - "Hear chromatic descent vs. scale ascent"
+  - "Maintain phrasing through harmonic transition"
+
+tags:
+  harmonic_motion: Ebmaj7_to_Ab7
+  resolution_target: C
+  enclosure_type: chromatic_above_below
+  technique: chromatic_motion
+  origin: barry_harris_method
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - target_chord_tone_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 30

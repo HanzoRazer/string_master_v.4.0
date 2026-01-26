@@ -1,0 +1,29 @@
+id: pivot_enclosure_to_root
+title: "Pivot Enclosure to Root"
+program_ref: pivot_enclosure_to_root.ztprog
+exercise_type: melodic_motion
+
+goals:
+  - "Demonstrate pivot from neighbor tone into root resolution"
+  - "Internalize motion: 2 → 3 → 2 → 1"
+
+practice_steps:
+  - "Play slowly at 80 BPM"
+  - "Feel pivot at 3"
+  - "Resolve clearly to tonic"
+
+motion_rules:
+  - rule: pivot_from_neighbor
+    scope: within_bar
+    note: "3 is pivot; returns to 2 before resolving to 1"
+
+tags:
+  harmony_type: major
+  motion_type: pivot_enclosure
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

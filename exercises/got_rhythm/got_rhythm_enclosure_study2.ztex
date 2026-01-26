@@ -1,0 +1,27 @@
+id: got_rhythm_enclosure_study2
+title: "Study 2 – Triplet Enclosure Targeting 3rd of Bb7"
+program_ref: got_rhythm_enclosure_study2.ztprog
+exercise_type: melodic_enclosure
+
+goals:
+  - "Practice Barry Harris triplet enclosures targeting chord tones"
+  - "Resolve to 3rd of Bb7 (D)"
+  - "Hear chromatic above/below contour"
+
+practice_steps:
+  - "Play slowly with triplet articulation"
+  - "Loop 4x and resolve cleanly"
+  - "Focus on pitch control and rhythmic flow"
+
+tags:
+  technique: triplet_enclosure
+  target_tone: D
+  chord: Bb7
+  origin: barry_harris_class
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - target_chord_tone_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 28

@@ -1,0 +1,26 @@
+id: turnaround_contrary_motion
+title: "Contrary motion line into I chord"
+program_ref: turnaround_contrary_motion.ztprog
+exercise_type: turnaround_phrase
+
+goals:
+  - "Master turnaround phrasing: contrary_motion"
+  - "Lock into 12/8 swing time feel"
+
+practice_steps:
+  - "Loop phrase in 12/8 groove"
+  - "Target clean landing on beat 1"
+  - "Increase tempo gradually"
+
+tags:
+  turnaround_type: contrary_motion
+  feel: Texas
+  meter: 12/8
+  key: E
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 40

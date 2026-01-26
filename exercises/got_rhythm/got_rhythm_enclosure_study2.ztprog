@@ -1,0 +1,7 @@
+id: got_rhythm_enclosure_study2
+title: "Metronome for Study 2 – Triplet Enclosure"
+instruments:
+  - type: drum_tick
+    pattern: "1--a2--a3--a4--a"
+tempo_bpm: 100
+loop_bars: 1

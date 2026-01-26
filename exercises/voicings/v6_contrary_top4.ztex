@@ -1,0 +1,26 @@
+id: v6_contrary_top4
+title: "Drop-2 Top 4 Motion: C6 → E° → Ebm6"
+program_ref: v6_contrary_top4.ztprog
+exercise_type: voicing_motion
+
+goals:
+  - "Track tenor & alto contrary motion across drop-2 top string set"
+  - "Hear smooth transitions from C6 to E° to Ebm6"
+
+practice_steps:
+  - "Loop slowly with groove"
+  - "Visualize string set movement"
+  - "Target even tone spacing"
+
+tags:
+  voicing_type: drop2
+  motion_type: contrary
+  string_set: top_four
+  voicing_progression: ["C6", "E°", "Ebm6"]
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - voicing_change_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 40

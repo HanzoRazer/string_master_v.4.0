@@ -1,0 +1,28 @@
+id: got_rhythm_bb7_eb7_study1
+title: "Study 1 – Barry Harris Bb7 → Eb7 Phrase"
+program_ref: got_rhythm_bb7_eb7_study1.ztprog
+exercise_type: melodic_motion
+
+goals:
+  - "Internalize Barry Harris-style dominant to IV movement"
+  - "Target 3rd of Eb7 (G) as resolution"
+  - "Connect phrase rhythmically with triplet-feel swing"
+
+practice_steps:
+  - "Play slowly at 100 BPM"
+  - "Loop 4 times"
+  - "Focus on clean resolution on beat 1 of bar 2"
+
+tags:
+  phrase_source: barry_harris_class
+  harmonic_motion: Bb7_to_Eb7
+  resolution_target: G
+  technique: chromatic_triplet
+  enclosure_type: half_step_below
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - target_chord_tone_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 30

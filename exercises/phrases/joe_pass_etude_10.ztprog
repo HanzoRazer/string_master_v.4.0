@@ -1,0 +1,7 @@
+id: joe_pass_etude_10
+title: "Backing for Joe Pass Etude 10"
+instruments:
+  - type: metronome
+    pattern: "1---2---3---4---"
+tempo_bpm: 72
+loop_bars: 4
