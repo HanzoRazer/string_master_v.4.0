@@ -1,0 +1,6 @@
+name: "Voicing Workout Session"
+tempo: 80
+outfile: "voicing_workout_session.mid"
+programs:
+  - config: "../programs/voicing_diminished_drop2_cycle.ztprog"
+    repeat: 4

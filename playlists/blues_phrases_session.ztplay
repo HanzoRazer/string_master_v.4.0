@@ -1,0 +1,8 @@
+name: "Blues Phrases Practice Session"
+tempo: 80
+outfile: "blues_phrases_session.mid"
+programs:
+  - config: "../programs/blues_albertking_intro_G.ztprog"
+    repeat: 4
+  - config: "../programs/blues_srv_outro_E.ztprog"
+    repeat: 4

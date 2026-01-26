@@ -1,0 +1,7 @@
+name: "Diminished Drop-2 Cycle (Metronome)"
+chords: "Cmaj7"
+style: "swing_basic"
+tempo: 80
+bars_per_chord: 4
+tritone_mode: "none"
+outfile: "voicing_diminished_drop2_cycle_backing.mid"

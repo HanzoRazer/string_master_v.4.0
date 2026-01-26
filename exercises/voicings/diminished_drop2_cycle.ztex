@@ -1,0 +1,20 @@
+id: diminished_drop2_cycle
+title: "Diminished Drop-2 Cycle (12 Keys)"
+program_ref: ../../programs/voicing_diminished_drop2_cycle.ztprog
+exercise_type: voicing_memory
+
+goals:
+  - "Smooth transitions between root-position chords"
+  - "Internalize minor → dominant cycling across keys"
+
+practice_steps:
+  - "Start at 80 BPM"
+  - "Play each voicing twice"
+  - "Increase tempo gradually"
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - loop_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 40

@@ -1,0 +1,7 @@
+name: "Blues Backing: Albert King Intro (G)"
+chords: "G7 G7 C7 G7 D7 G7"
+style: "swing_basic"
+tempo: 80
+bars_per_chord: 2
+tritone_mode: "none"
+outfile: "blues_albertking_intro_G_backing.mid"

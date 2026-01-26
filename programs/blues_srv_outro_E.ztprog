@@ -1,0 +1,7 @@
+name: "Blues Backing: SRV Outro (E)"
+chords: "E7 E7 A7 E7 B7 E7"
+style: "swing_basic"
+tempo: 80
+bars_per_chord: 2
+tritone_mode: "none"
+outfile: "blues_srv_outro_E_backing.mid"

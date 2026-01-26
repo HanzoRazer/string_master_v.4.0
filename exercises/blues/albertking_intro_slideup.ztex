@@ -1,0 +1,25 @@
+id: albertking_intro_slideup
+title: "Albert King Intro Slide-Up"
+program_ref: ../../programs/blues_albertking_intro_G.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "slide into tonic"
+  - "Practice blues phrasing in key of G"
+
+practice_steps:
+  - "Play at 80 BPM"
+  - "Loop 4 times"
+  - "Focus on phrasing and articulation"
+
+tags:
+  style: Chicago Blues
+  difficulty: easy
+  phrase_type: intro
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35
