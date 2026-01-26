@@ -1,0 +1,20 @@
+id: ii_v_i_to_7th_diatonic
+title: "ii-V-I Enclosure – Diatonic to 7th"
+tempo_bpm: 68
+loop_bars: 4
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: whole_notes
+    chords:
+      - Dm7
+      - G7
+      - Cmaj7
+      - Cmaj7
+  - type: walking_bass
+    outline_chords: true

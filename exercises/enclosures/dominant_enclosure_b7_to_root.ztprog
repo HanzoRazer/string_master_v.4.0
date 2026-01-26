@@ -1,0 +1,20 @@
+id: dominant_enclosure_b7_to_root
+title: "Dominant Enclosure – ♭7 to Root Resolution"
+tempo_bpm: 72
+loop_bars: 2
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - G7
+      - G7
+      - Cmaj7
+      - Cmaj7
+  - type: walking_bass
+    outline_chords: true
