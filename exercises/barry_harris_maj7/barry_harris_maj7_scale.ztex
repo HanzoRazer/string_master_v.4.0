@@ -1,0 +1,34 @@
+id: barry_harris_maj7_scale
+title: "Barry Harris Major 6 Bebop Scale"
+program_ref: barry_harris_maj7_scale.ztprog
+exercise_type: scale_fluency
+
+goals:
+  - "Master the major 6 bebop scale (8 notes) in all 12 keys"
+  - "Internalize the added passing tone (#5) between 5 and 6"
+  - "Play ascending and descending with even 8th notes"
+
+practice_steps:
+  - "Start with C6 bebop scale at 96 BPM"
+  - "Play up and down, landing chord tones on downbeats"
+  - "Move through circle of fifths: C → G → D → A..."
+  - "Then chromatic: C → Db → D → Eb..."
+
+scale_formula:
+  intervals: [1, 2, 3, 4, 5, "#5", 6, 7]
+  passing_tone: "#5 between 5 and 6"
+
+tags:
+  harmony_type: major
+  scale_type: bebop_major
+  keys: all_12
+  technique: scale_runs
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_placement
+    - transposition_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 25
+    keys_completed: 12

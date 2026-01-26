@@ -1,0 +1,34 @@
+id: barry_harris_dom7_bebop
+title: "Barry Harris Dominant 7 Bebop Scale"
+program_ref: barry_harris_dom7_bebop.ztprog
+exercise_type: scale_fluency
+
+goals:
+  - "Master the dominant bebop scale (8 notes) in all 12 keys"
+  - "Internalize the added passing tone between root and ♭7"
+  - "Play ascending and descending with even 8th notes"
+
+practice_steps:
+  - "Start with C7 bebop scale at 100 BPM"
+  - "Play up and down, landing chord tones on downbeats"
+  - "Move through circle of fifths: C → G → D → A..."
+  - "Then chromatic: C → Db → D → Eb..."
+
+scale_formula:
+  intervals: [1, 2, 3, 4, 5, 6, b7, 7]
+  passing_tone: "natural 7 between b7 and root"
+
+tags:
+  harmony_type: dominant
+  scale_type: bebop_dominant
+  keys: all_12
+  technique: scale_runs
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_placement
+    - transposition_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 25
+    keys_completed: 12

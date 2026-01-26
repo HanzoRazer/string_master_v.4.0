@@ -1,0 +1,19 @@
+id: barry_harris_maj7_scale
+title: "Barry Harris Major 6 Bebop Scale – All Keys"
+tempo_bpm: 96
+loop_bars: 2
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - maj6
+      - maj6
+  - type: bass_pedal
+    root: tonic
+    pattern: half_notes
