@@ -1,0 +1,28 @@
+id: muleskinner_intro_phrase
+title: "Muleskinner Blues – Intro Phrase"
+program_ref: muleskinner_intro_phrase.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Master the classic bluegrass intro lick in G"
+  - "Develop clean alternate picking technique"
+  - "Lock timing with the I-IV-I progression"
+
+practice_steps:
+  - "Play phrase at 92 BPM with backing"
+  - "Focus on downbeat accents and pick direction"
+  - "Loop 4x cleanly before increasing tempo"
+
+tags:
+  style: bluegrass
+  key: G
+  meter: 4/4
+  technique: flatpicking
+  phrase_type: intro_lick
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - articulation_consistency
+  pass_criteria:
+    max_timing_deviation_ms: 30

@@ -1,0 +1,32 @@
+id: blackberry_blossom_a1
+title: "Blackberry Blossom – A Section Phrase (Bars 8–12)"
+program_ref: blackberry_blossom_study.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Master scalar and arpeggiated motion over G major"
+  - "Emphasize downbeat clarity and alternate picking"
+  - "Target strong resolution tones in bars 11–12"
+
+practice_steps:
+  - "Play phrase at 100 BPM with backing"
+  - "Isolate tricky string skips (e.g., bar 10)"
+  - "Loop phrase twice per rep, then vary articulation"
+
+tags:
+  style: bluegrass
+  key: G
+  meter: 4/4
+  technique: flatpicking
+  phrase_type: fiddle_phrase
+  fretboard_position: open
+  bars: [8, 9, 10, 11, 12]
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - articulation_consistency
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    articulation_score_min: 0.9

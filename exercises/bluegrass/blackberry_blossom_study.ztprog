@@ -1,0 +1,38 @@
+id: blackberry_blossom_study
+title: "Blackberry Blossom – Fiddle Tune Study"
+tempo_bpm: 100
+tempo_range: [70, 140]
+root: G
+loop_bars: 8
+
+levels:
+  beginner:
+    tempo_bpm: 70
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 100
+    comping: on_beats
+  advanced:
+    tempo_bpm: 140
+    comping: rhythmic
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1", "2", "3", "4"]
+  - type: shell_voicings
+    groove: straight
+    comping: on_beats
+    chords:
+      - I
+      - I
+      - IV
+      - IV
+      - V
+      - V
+      - I
+      - I
+  - type: walking_bass
+    outline_chords: true

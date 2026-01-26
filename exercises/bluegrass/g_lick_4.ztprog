@@ -1,0 +1,33 @@
+id: g_lick_4
+title: "G Bluegrass Lick 4"
+tempo_bpm: 90
+tempo_range: [60, 130]
+root: G
+loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 60
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 90
+    comping: on_beats
+  advanced:
+    tempo_bpm: 130
+    comping: rhythmic
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1", "2", "3", "4"]
+  - type: shell_voicings
+    groove: straight
+    comping: on_beats
+    chords:
+      - I
+      - I
+  - type: bass_pedal
+    root: tonic
+    pattern: half_notes

@@ -1,0 +1,31 @@
+id: blackberry_blossom_b1
+title: "Blackberry Blossom – B Section Phrase (Bars 10–13)"
+program_ref: blackberry_blossom_study.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Execute phrasing shift at bar 10 in the B section"
+  - "Focus on rhythmic transition into downbeat target"
+  - "Strengthen time feel through subdivisions"
+
+practice_steps:
+  - "Play phrase slowly to feel the bar 10 entry point"
+  - "Loop bars 10–13 focusing on rhythmic accuracy"
+  - "Sync timing with backing shells"
+
+tags:
+  style: bluegrass
+  key: G
+  meter: 4/4
+  technique: timing_shift
+  phrase_type: b_section
+  bars: [10, 11, 12, 13]
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - beat_alignment_shift
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 25
+    beat_shift_tolerance_ms: 30

@@ -1,0 +1,24 @@
+id: g_lick_1
+title: "Bluegrass G Lick"
+program_ref: g_lick_1.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Internalize G flatpicking phrasing"
+  - "Focus on syncopated resolution and hammer-ons"
+  - "Practice alternate picking patterns"
+
+tags:
+  style: bluegrass
+  key: G
+  meter: 4/4
+  technique: flatpicking
+  phrase_type: lick
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 35
+    chord_tone_hit_rate: 0.85
