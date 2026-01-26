@@ -29,6 +29,14 @@ from .rt_bridge import (
 from .validate import format_issues_json, format_issues_text, validate_ztprog_file
 from .dance_pack import DancePackV1, DancePackLoadError, load_dance_pack
 from .dance_pack_tools import validate_pack, build_dpack_json, iter_pack_sources
+from .phrase_validate import validate_phrase, analyze_phrase_stats
+from .enclosure_generator import (
+    generate_enclosure_midi,
+    generate_all_exercises,
+    list_examples,
+    ENCLOSURE_EXAMPLES,
+    MIDO_AVAILABLE as ENCLOSURE_MIDO_AVAILABLE,
+)
 
 
 # Default bundled packs directory (relative to repo root)
@@ -876,6 +884,93 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Suppress OK lines; only print failures.",
     )
     p_va.set_defaults(func=cmd_validate_all)
+
+
+    # ---- phrase-check subcommand ----
+    p_phrase = subparsers.add_parser(
+        "phrase-check",
+        help="Validate MIDI phrase against pedagogy rules (intervals, motion, tendency tones).",
+    )
+    p_phrase.add_argument(
+        "midi_file",
+        type=str,
+        help="Path to MIDI file to validate.",
+    )
+    p_phrase.add_argument(
+        "--stats",
+        action="store_true",
+        help="Show phrase statistics (note count, step ratio, degree distribution).",
+    )
+    p_phrase.add_argument(
+        "--melody",
+        action="store_true",
+        help="Extract melody line only (highest note at each time point).",
+    )
+    p_phrase.add_argument(
+        "--pitch-class",
+        action="store_true",
+        help="Use octave-normalized intervals (mod 12).",
+    )
+    p_phrase.add_argument(
+        "--rules",
+        type=str,
+        default=None,
+        help="Path to pedagogy ruleset JSON file.",
+    )
+    p_phrase.add_argument(
+        "--guide-tones",
+        action="store_true",
+        help="Check that guide tones (3rds/7ths) fall on strong beats.",
+    )
+    p_phrase.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="Output format: text (default) or json.",
+    )
+    p_phrase.set_defaults(func=cmd_phrase_check)
+
+    # ---- enclosure-gen subcommand ----
+    p_encl = subparsers.add_parser(
+        "enclosure-gen",
+        help="Generate Barry Harris-style enclosure practice MIDI examples.",
+    )
+    p_encl.add_argument(
+        "--output",
+        type=str,
+        default="barry_harris_enclosure_examples.mid",
+        help="Output MIDI file path (default: barry_harris_enclosure_examples.mid).",
+    )
+    p_encl.add_argument(
+        "--tempo",
+        type=int,
+        default=80,
+        help="Tempo in BPM (default: 80).",
+    )
+    p_encl.add_argument(
+        "--list",
+        action="store_true",
+        help="List available enclosure examples without generating.",
+    )
+    p_encl.add_argument(
+        "--all-exercises",
+        action="store_true",
+        help="Generate individual exercise files in exercises/enclosures/.",
+    )
+    p_encl.add_argument(
+        "--exercise-dir",
+        type=str,
+        default="exercises/enclosures",
+        help="Directory for individual exercise files (default: exercises/enclosures).",
+    )
+    p_encl.add_argument(
+        "--base-midi",
+        type=int,
+        default=60,
+        help="MIDI note for scale degree 1 (default: 60 = C4).",
+    )
+    p_encl.set_defaults(func=cmd_enclosure_gen)
+
 
     return parser
 
@@ -1811,6 +1906,183 @@ def cmd_validate_all(args: argparse.Namespace) -> int:
     if args.warn_only:
         return 0
     return 0 if not any_fail else 2
+
+
+
+
+# ------------------------
+# phrase-check command
+# ------------------------
+
+
+def cmd_phrase_check(args: argparse.Namespace) -> int:
+    """Validate MIDI phrase against pedagogy rules."""
+    midi_file = args.midi_file
+
+    # Default bebop rules
+    interval_rules = [
+        {
+            "applies_to": {"group": "custom", "from_degree": "7", "to_degree": "1"},
+            "rule_type": "prefer_semitones_between",
+            "value": 1,
+            "note": "Leading tone resolution"
+        },
+        {
+            "applies_to": {"group": "non_chord_tones"},
+            "rule_type": "avoid_semitones_between",
+            "value": 6,
+            "note": "Avoid tritone between non-chord tones"
+        },
+    ]
+
+    motion_rules = [
+        {"name": "stepwise_preferred", "rule": "stepwise_only", "scope": "global", "note": "Bebop lines should be stepwise"},
+        {"name": "tendency_resolution", "rule": "resolve_tendency_tones", "scope": "global", "note": "7->1, 4->3"},
+        {"name": "half_step_approach", "rule": "approach_chord_tones_by_half_step", "scope": "global", "note": "Approach chord tones by step"},
+    ]
+
+    if args.guide_tones:
+        motion_rules.append({
+            "name": "guide_tone_placement",
+            "rule": "target_guide_tones_on_strong_beats",
+            "scope": "global",
+            "note": "Guide tones on strong beats"
+        })
+
+    # Load custom rules if provided
+    if args.rules:
+        import json as json_mod
+        with open(args.rules, 'r') as f:
+            ruleset = json_mod.load(f)
+            constraints = ruleset.get('constraints', {})
+            interval_rules = constraints.get('interval_rules', interval_rules)
+            motion_rules = constraints.get('motion_rules', motion_rules)
+
+    melody_mode = args.melody
+    use_pitch_class = getattr(args, 'pitch_class', False)
+
+    # Run validation
+    passed, violations = validate_phrase(
+        midi_file,
+        interval_rules,
+        motion_rules,
+        melody_mode=melody_mode,
+        use_pitch_class=use_pitch_class
+    )
+
+    errors = [v for v in violations if v.severity == "error"]
+    warnings = [v for v in violations if v.severity == "warning"]
+
+    if args.format == "json":
+        import json as json_mod
+        stats = analyze_phrase_stats(midi_file, melody_mode=melody_mode) if args.stats else {}
+        payload = {
+            "file": midi_file,
+            "ok": passed,
+            "errors": len(errors),
+            "warnings": len(warnings),
+            "violations": [
+                {"type": v.rule_type, "message": v.message, "severity": v.severity}
+                for v in violations
+            ],
+            "stats": stats if args.stats else None,
+        }
+        print(json_mod.dumps(payload, indent=2))
+        return 0 if passed else 1
+
+    # Text output
+    mode_flags = []
+    if melody_mode:
+        mode_flags.append("melody")
+    if use_pitch_class:
+        mode_flags.append("pitch-class")
+
+    print("")
+    print(f"=== Phrase Validation: {midi_file} ===")
+    if mode_flags:
+        print(f"Mode: {', '.join(mode_flags)}")
+    print()
+
+    if args.stats:
+        stats = analyze_phrase_stats(midi_file, melody_mode=melody_mode)
+        print("Statistics:")
+        print(f"  Notes: {stats['note_count']}")
+        print(f"  Tracks: {stats['tracks']}, Channels: {stats['channels']}")
+        print(f"  Pitch range: {stats['pitch_range']} semitones (MIDI {stats['lowest_note']}-{stats['highest_note']})")
+        print(f"  Intervals: {stats['interval_count']} total, {stats['melodic_intervals']} melodic, {stats['octave_jumps']} octave jumps")
+        print(f"  Motion: {stats['steps']} steps, {stats['skips']} skips, {stats['leaps']} leaps")
+        print(f"  Step ratio: {stats['step_ratio']:.1%}")
+        print(f"  Degrees: {stats['degree_distribution']}")
+        print()
+
+    if not violations:
+        print("PASS - No violations found")
+    else:
+        status = "PASS" if passed else "FAIL"
+        print(f"{status} - {len(errors)} errors, {len(warnings)} warnings")
+        print("")
+
+        if errors:
+            print("ERRORS:")
+            for v in errors[:20]:
+                print(f"  [{v.rule_type}] {v.message}")
+            if len(errors) > 20:
+                print(f"  ... and {len(errors) - 20} more errors")
+
+        if warnings:
+            print("")
+            print("WARNINGS:")
+            for v in warnings[:20]:
+                print(f"  [{v.rule_type}] {v.message}")
+            if len(warnings) > 20:
+                print(f"  ... and {len(warnings) - 20} more warnings")
+
+    return 0 if passed else 1
+
+
+
+# ------------------------
+# enclosure-gen command
+# ------------------------
+
+
+def cmd_enclosure_gen(args: argparse.Namespace) -> int:
+    """Generate Barry Harris-style enclosure practice MIDI examples."""
+    if not ENCLOSURE_MIDO_AVAILABLE:
+        print("error: mido is required for MIDI generation. Install with: pip install mido", file=sys.stderr)
+        return 1
+
+    # List mode
+    if args.list:
+        print("Available enclosure examples:")
+        print()
+        print("id                                   | degrees              | chord     | target")
+        print("-------------------------------------+----------------------+-----------+--------")
+        for ex in list_examples():
+            degrees_str = " ".join(ex["degrees"])
+            print(f"{ex['id']:<36} | {degrees_str:<20} | {ex['chord']:<9} | {ex['target_degree']}")
+        return 0
+
+    # Generate all individual exercises
+    if getattr(args, "all_exercises", False):
+        output_dir = args.exercise_dir
+        paths = generate_all_exercises(output_dir=output_dir, tempo_bpm=args.tempo)
+        print(f"Generated {len(paths)} enclosure exercise files in: {output_dir}")
+        for p in paths:
+            print(f"  {p.name}")
+        return 0
+
+    # Generate combined file
+    output_path = generate_enclosure_midi(
+        output_path=args.output,
+        tempo_bpm=args.tempo,
+        base_midi=args.base_midi,
+    )
+    print(f"Generated enclosure examples: {output_path}")
+    print(f"  Tempo: {args.tempo} BPM")
+    print(f"  Base MIDI: {args.base_midi} (degree 1)")
+    print(f"  Examples: {len(ENCLOSURE_EXAMPLES)}")
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
