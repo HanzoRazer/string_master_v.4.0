@@ -36,3 +36,4 @@ Thumbs.db
 *.msi
 *.dmg
 string_master_v4.0_patched/
+.claude_session_bookmark.md
