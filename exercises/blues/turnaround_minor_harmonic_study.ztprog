@@ -1,0 +1,24 @@
+id: turnaround_minor_harmonic_study
+title: "8-Bar Minor Turnaround with Harmonic Minor Resolution"
+tempo_bpm: 80
+loop_bars: 8
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: syncopated
+    chords:
+      - Dm7b5
+      - G7alt
+      - Cm7
+      - Ab7
+      - Dm7b5
+      - G7alt
+      - Cm7
+      - G7alt
+  - type: walking_bass
+    outline_chords: true

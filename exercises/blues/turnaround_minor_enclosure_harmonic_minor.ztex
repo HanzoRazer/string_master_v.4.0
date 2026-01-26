@@ -1,0 +1,31 @@
+id: turnaround_minor_enclosure_harmonic_minor
+title: "8-Bar Minor Turnaround – Harmonic Minor Line"
+program_ref: turnaround_expanding_intervals_minor.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Use harmonic minor over dominant → tonic in minor"
+  - "Integrate chromatic motion from A harmonic minor scale"
+  - "Build toward strong resolution over 8 bars"
+
+practice_steps:
+  - "Loop slowly to internalize dominant tension"
+  - "Feel the pull from ♭6–7–1 in resolution"
+  - "Maintain expressive legato phrasing"
+
+tags:
+  harmonic_context: minor_turnaround
+  phrase_type: harmonic_minor_resolution
+  resolution_target: Cm7
+  technique: chromatic_line
+  meter: 4/4
+  form: 8-bar
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.85
