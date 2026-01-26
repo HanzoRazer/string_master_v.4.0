@@ -401,5 +401,5 @@ class TestPresets:
         assert "loose" in captured.out
         assert "challenge" in captured.out
         assert "recover" in captured.out
-        assert "mode:" in captured.out
-        assert "tightness:" in captured.out
+        assert "mode=" in captured.out
+        assert "tightness=" in captured.out
