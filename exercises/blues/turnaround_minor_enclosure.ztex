@@ -1,0 +1,30 @@
+id: turnaround_minor_enclosure
+title: "Minor Turnaround – Chromatic Phrase"
+program_ref: turnaround_expanding_intervals_minor.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Outline Dm7b5 → G7alt → Cm7 → Ab7"
+  - "Use chromatic motion and enclosures to target chord tones"
+  - "Emphasize 8th-note timing and triplet feel in context"
+
+practice_steps:
+  - "Loop at 80 BPM using the .ztprog backing"
+  - "Land strong tones on beats 1 and 3"
+  - "Try phrasing with legato + swing articulation"
+
+tags:
+  harmonic_context: minor_turnaround
+  phrase_type: chromatic_line
+  resolution_target: Cm7
+  technique: enclosure
+  meter: 4/4
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+    - error_rate_rule_violations
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.85
