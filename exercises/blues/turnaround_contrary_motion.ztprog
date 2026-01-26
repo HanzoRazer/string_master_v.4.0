@@ -1,8 +1,13 @@
 id: turnaround_contrary_motion
-title: "Backing for Contrary Motion Turnaround"
+title: "Turnaround – Contrary Motion"
+tempo_bpm: 90
+loop_bars: 2
 instruments:
   - type: drum_tick
-    pattern: "1--2--3--4--5--6--"
-tempo_bpm: 80
-loop_bars: 2
-meter: "12/8"
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    chords:
+      - Bb7
+      - G7
+      - Cm7
+      - F7

@@ -1,0 +1,13 @@
+id: turnaround_expanding_intervals_minor
+title: "Minor Key Turnaround – Expanding Intervals"
+tempo_bpm: 80
+loop_bars: 2
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    chords:
+      - Dm7b5
+      - G7alt
+      - Cm7
+      - Ab7

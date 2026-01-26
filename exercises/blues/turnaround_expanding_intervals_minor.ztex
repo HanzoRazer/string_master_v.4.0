@@ -1,0 +1,30 @@
+id: turnaround_expanding_intervals_minor
+title: "Minor Key Turnaround – Expanding Intervals"
+program_ref: turnaround_expanding_intervals_minor.ztprog
+exercise_type: turnaround_phrase
+
+goals:
+  - "Master minor key turnaround phrasing"
+  - "Navigate ii-V-i with bVI substitution"
+  - "Target altered tensions on G7alt"
+
+practice_steps:
+  - "Loop phrase at 80 BPM"
+  - "Focus on b9/b13 sounds over G7alt"
+  - "Land cleanly on Cm7 root or 3rd"
+  - "Increase tempo gradually"
+
+tags:
+  turnaround_type: expanding
+  feel: jazz
+  meter: 4/4
+  key: Cm
+  harmonic_context: minor_ii_v_i
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+    - altered_tension_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 35

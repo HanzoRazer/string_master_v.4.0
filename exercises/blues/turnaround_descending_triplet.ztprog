@@ -1,8 +1,13 @@
 id: turnaround_descending_triplet
-title: "Backing for Descending Triplet Turnaround"
+title: "Turnaround – Descending Triplet"
+tempo_bpm: 95
+loop_bars: 2
 instruments:
   - type: drum_tick
-    pattern: "1--2--3--4--5--6--"
-tempo_bpm: 80
-loop_bars: 2
-meter: "12/8"
+    pattern: "1--a2--a3--a4--a"  # Triplet feel
+  - type: shell_voicings
+    chords:
+      - F7
+      - E7
+      - Eb7
+      - D7
