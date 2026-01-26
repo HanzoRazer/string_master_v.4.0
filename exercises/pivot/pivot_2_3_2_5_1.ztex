@@ -1,0 +1,35 @@
+id: pivot_2_3_2_5_1
+title: "Pivot Pattern 2-3-2-5-1"
+program_ref: pivot_2_3_2_5_1.ztprog
+exercise_type: melodic_motion
+
+goals:
+  - "Master the 2-3-2-5-1 melodic pivot pattern"
+  - "Internalize resolution: 2 → 3 (pivot) → 2 → 5 → 1"
+  - "Practice in all 12 keys for transposition fluency"
+
+practice_steps:
+  - "Start with C major at 92 BPM"
+  - "Feel the pivot on scale degree 3"
+  - "Move through circle of fifths: C → G → D → A..."
+  - "Then chromatic: C → Db → D → Eb..."
+
+motion_rules:
+  - rule: pivot_from_neighbor
+    scope: within_bar
+    note: "3 is pivot point; 5→1 is strong resolution"
+
+tags:
+  harmony_type: major
+  motion_type: pivot_pattern
+  keys: all_12
+  technique: transposition
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - transposition_accuracy
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    keys_completed: 12

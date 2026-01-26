@@ -1,7 +1,21 @@
 id: pivot_enclosure_to_root
-title: "Metronome Groove - Pivot Enclosure"
-instruments:
-  - type: drum_tick
-    pattern: "1---2---3---4---"
+title: "Pivot Enclosure to Root – Neighbor Resolution"
 tempo_bpm: 80
-loop_bars: 1
+loop_bars: 2
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: straight
+    comping: whole_notes
+    chords:
+      - Cmaj7
+      - Cmaj7
+      - Cmaj7
+      - Cmaj7
+  - type: bass_pedal
+    root: C
+    pattern: whole_notes
