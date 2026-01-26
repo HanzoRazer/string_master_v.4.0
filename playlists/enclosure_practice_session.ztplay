@@ -1,0 +1,10 @@
+name: "Barry Harris Enclosure Practice Session"
+tempo: 80
+outfile: "enclosure_practice_session.mid"
+programs:
+  - config: "../programs/enclosure_ii_v_i_to_3rd_chromatic.ztprog"
+    repeat: 4
+  - config: "../programs/enclosure_ii_v_i_to_7th_diatonic.ztprog"
+    repeat: 4
+  - config: "../programs/enclosure_dominant_b7_to_root.ztprog"
+    repeat: 4

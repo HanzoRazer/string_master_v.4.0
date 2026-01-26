@@ -1,0 +1,7 @@
+name: "Enclosure: Dominant b7 to Root"
+chords: "G7 Cmaj7"
+style: "swing_basic"
+tempo: 80
+bars_per_chord: 2
+tritone_mode: "none"
+outfile: "enclosure_dominant_b7_to_root_backing.mid"

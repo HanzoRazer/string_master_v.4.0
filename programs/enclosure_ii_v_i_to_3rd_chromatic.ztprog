@@ -1,0 +1,7 @@
+name: "Enclosure: ii-V-I to 3rd (Chromatic)"
+chords: "Dm7 G7 Cmaj7"
+style: "swing_basic"
+tempo: 80
+bars_per_chord: 2
+tritone_mode: "none"
+outfile: "enclosure_ii_v_i_to_3rd_chromatic_backing.mid"

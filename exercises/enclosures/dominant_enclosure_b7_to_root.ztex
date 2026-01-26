@@ -1,0 +1,21 @@
+id: dominant_enclosure_b7_to_root
+title: "Dominant Enclosure B7 To Root"
+program_ref: ../../programs/enclosure_dominant_b7_to_root.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on chord tone (1) on beat 1"
+  - "Enclosure type: double chromatic"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9

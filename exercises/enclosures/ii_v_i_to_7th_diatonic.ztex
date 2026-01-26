@@ -1,0 +1,21 @@
+id: ii_v_i_to_7th_diatonic
+title: "Ii V I To 7Th Diatonic"
+program_ref: ../../programs/enclosure_ii_v_i_to_7th_diatonic.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on chord tone (7) on beat 1"
+  - "Enclosure type: diatonic"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9

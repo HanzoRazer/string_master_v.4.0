@@ -1,0 +1,21 @@
+id: ii_v_i_to_3rd_chromatic
+title: "Ii V I To 3Rd Chromatic"
+program_ref: ../../programs/enclosure_ii_v_i_to_3rd_chromatic.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on chord tone (3) on beat 1"
+  - "Enclosure type: chromatic above below"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9
