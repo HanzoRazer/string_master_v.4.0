@@ -1,7 +1,20 @@
 id: got_rhythm_bb7_eb7_study1
-title: "Backing for Study 1 – Barry Harris Bb7 → Eb7"
-instruments:
-  - type: drum_tick
-    pattern: "1---2---3---4---"
-tempo_bpm: 100
+title: "Got Rhythm Study 1 – Bb7 → Eb7 (I-IV)"
+tempo_bpm: 140
 loop_bars: 2
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - Bb7
+      - Bb7
+      - Eb7
+      - Bb7
+  - type: walking_bass
+    outline_chords: true
