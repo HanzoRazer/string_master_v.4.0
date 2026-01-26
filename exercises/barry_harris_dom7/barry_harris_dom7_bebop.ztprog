@@ -1,7 +1,21 @@
 id: barry_harris_dom7_bebop
 title: "Barry Harris Dominant 7 Bebop Scale – All Keys"
 tempo_bpm: 100
+tempo_range: [66, 160]
+root: C
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 66
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 160
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,8 +26,8 @@ instruments:
     groove: swing
     comping: rhythmic
     chords:
-      - dom7
-      - dom7
+      - I7
+      - I7
   - type: bass_pedal
     root: tonic
     pattern: half_notes

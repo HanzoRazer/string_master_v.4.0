@@ -1,13 +1,31 @@
 id: joe_pass_etude_13
 title: "Joe Pass Etude 13 – Tritone Subs"
 tempo_bpm: 80
+tempo_range: [52, 120]
+root: C
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 120
+    comping: syncopated
+
 instruments:
   - type: metronome
     pattern: "1---2---3---4---"
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - Dm7
-      - Db7
-      - Cmaj7
-      - Cmaj7
+      - ii7
+      - subV7
+      - Imaj7
+      - Imaj7
+  - type: walking_bass
+    outline_chords: true

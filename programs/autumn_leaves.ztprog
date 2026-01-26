@@ -1,16 +1,29 @@
-name: "Autumn Leaves - Ballad with Tritone Subs"
+name: Autumn Leaves - Ballad with Tritone Subs
 chords:
-  - Cm7
-  - F7
-  - Bbmaj7
-  - Ebmaj7
-  - Am7b5
-  - D7
-  - Gm7
-style: "ballad_basic"
-tempo: 70
+- Cm7
+- F7
+- Bbmaj7
+- Ebmaj7
+- Am7b5
+- D7
+- Gm7
+style: ballad_basic
 bars_per_chord: 2
-tritone_mode: "probabilistic"
+tritone_mode: probabilistic
 tritone_strength: 0.7
 tritone_seed: 1337
-outfile: "autumn_leaves_ballad.mid"
+outfile: autumn_leaves_ballad.mid
+tempo_bpm: 70
+tempo_range:
+- 45
+- 105
+levels:
+  beginner:
+    tempo_bpm: 45
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 70
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 105
+    comping: syncopated

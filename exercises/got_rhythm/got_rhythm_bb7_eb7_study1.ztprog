@@ -1,7 +1,21 @@
 id: got_rhythm_bb7_eb7_study1
-title: "Got Rhythm Study 1 – Bb7 → Eb7 (I-IV)"
+title: "Got Rhythm Study 1 – I7 → IV7"
 tempo_bpm: 140
+tempo_range: [90, 200]
+root: Bb
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 90
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 140
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 200
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,9 +26,9 @@ instruments:
     groove: swing
     comping: rhythmic
     chords:
-      - Bb7
-      - Bb7
-      - Eb7
-      - Bb7
+      - I7
+      - I7
+      - IV7
+      - I7
   - type: walking_bass
     outline_chords: true

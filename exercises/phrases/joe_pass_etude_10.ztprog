@@ -1,13 +1,31 @@
 id: joe_pass_etude_10
 title: "Joe Pass Etude 10 – ii-V-I Cycle"
 tempo_bpm: 72
+tempo_range: [48, 110]
+root: C
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 48
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 110
+    comping: syncopated
+
 instruments:
   - type: metronome
     pattern: "1---2---3---4---"
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - Dm7
-      - G7
-      - Cmaj7
-      - Cmaj7
+      - ii7
+      - V7
+      - Imaj7
+      - Imaj7
+  - type: walking_bass
+    outline_chords: true

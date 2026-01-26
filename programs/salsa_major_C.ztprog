@@ -1,22 +1,32 @@
 name: salsa_major_C
 description: Salsa major cadence in C (dance-oriented Latin groove)
-tempo: 104
 time_signature: 4/4
 bars_per_chord: 2
-
 chords:
-  - C
-  - F
-  - G7
-  - C
-  - G7
-  - C
-
+- C
+- F
+- G7
+- C
+- G7
+- C
 style:
   comp: salsa_clave_3_2
   bass: tumbao_major
-
 expressive:
   swing: 0.0
   humanize_ms: 4
   humanize_vel: 5
+tempo_bpm: 104
+tempo_range:
+- 67
+- 156
+levels:
+  beginner:
+    tempo_bpm: 67
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 104
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 156
+    comping: syncopated

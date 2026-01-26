@@ -1,9 +1,22 @@
-name: "Cycle of Fifths -- Roots"
-tempo: 120
-style: "swing_basic"
+name: Cycle of Fifths -- Roots
+style: swing_basic
 bars_per_chord: 1
-chords: "C F Bb Eb Ab Db Gb B E A D G"
-tritone_mode: "none"
+chords: C F Bb Eb Ab Db Gb B E A D G
+tritone_mode: none
 tritone_strength: 0.6
 tritone_seed: null
-outfile: "cycle_fifths_roots.mid"
+outfile: cycle_fifths_roots.mid
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

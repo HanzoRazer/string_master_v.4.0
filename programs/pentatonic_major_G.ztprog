@@ -1,22 +1,32 @@
 name: pentatonic_major_G
 description: G major pentatonic harmony (open, consonant, loop-friendly)
-tempo: 100
 time_signature: 4/4
 bars_per_chord: 2
-
 chords:
-  - G
-  - D
-  - A
-  - G
-  - D
-  - G
-
+- G
+- D
+- A
+- G
+- D
+- G
 style:
   comp: open_shells
   bass: root_fifth
-
 expressive:
   swing: 0.0
   humanize_ms: 0
   humanize_vel: 0
+tempo_bpm: 100
+tempo_range:
+- 65
+- 150
+levels:
+  beginner:
+    tempo_bpm: 65
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 150
+    comping: syncopated

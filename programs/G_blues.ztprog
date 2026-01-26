@@ -1,29 +1,39 @@
 name: G_blues
 description: Jazz blues in G (12-bar dominant blues with turnaround)
-tempo: 120
 time_signature: 4/4
 bars_per_chord: 1
-
 chords:
-  - G7
-  - C7
-  - G7
-  - G7
-  - C7
-  - C7
-  - G7
-  - E7
-  - Am7
-  - D7
-  - G7
-  - D7
-  - G7
-
+- G7
+- C7
+- G7
+- G7
+- C7
+- C7
+- G7
+- E7
+- Am7
+- D7
+- G7
+- D7
+- G7
 style:
   comp: jazz_blues
   bass: walking_blues
-
 expressive:
   swing: 0.2
   humanize_ms: 6
   humanize_vel: 4
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

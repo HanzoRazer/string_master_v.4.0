@@ -1,7 +1,24 @@
 id: got_rhythm_enclosure_study2
 title: "Got Rhythm Study 2 – Triplet Enclosures"
 tempo_bpm: 120
+tempo_range: [80, 180]
+root: Bb
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 80
+    comping: whole_notes
+    feel: straight
+  intermediate:
+    tempo_bpm: 120
+    comping: syncopated
+    feel: triplet
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated
+    feel: triplet
+
 instruments:
   - type: drum_kit
     feel: triplet
@@ -13,9 +30,9 @@ instruments:
     groove: swing
     comping: syncopated
     chords:
-      - Bb7
-      - G7
-      - Cm7
-      - F7
+      - I7
+      - VI7
+      - ii7
+      - V7
   - type: walking_bass
     outline_chords: true

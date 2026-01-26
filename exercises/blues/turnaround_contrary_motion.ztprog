@@ -1,13 +1,34 @@
 id: turnaround_contrary_motion
 title: "Turnaround – Contrary Motion"
 tempo_bpm: 90
+tempo_range: [60, 130]
+root: Bb
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 60
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 90
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 130
+    comping: syncopated
+
 instruments:
-  - type: drum_tick
-    pattern: "1---2---3---4---"
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - Bb7
-      - G7
-      - Cm7
-      - F7
+      - I7
+      - VI7
+      - ii7
+      - V7
+  - type: walking_bass
+    outline_chords: true

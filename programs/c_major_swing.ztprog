@@ -1,11 +1,22 @@
-{
-  "name": "C major swing demo",
-  "chords": "Cmaj7 Dm7 G7 Cmaj7",
-  "style": "swing_basic",
-  "tempo": 120,
-  "bars_per_chord": 1,
-  "tritone_mode": "none",
-  "tritone_strength": 1.0,
-  "tritone_seed": null,
-  "outfile": "c_major_swing.mid"
-}
+name: C major swing demo
+chords: Cmaj7 Dm7 G7 Cmaj7
+style: swing_basic
+bars_per_chord: 1
+tritone_mode: none
+tritone_strength: 1.0
+tritone_seed: null
+outfile: c_major_swing.mid
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

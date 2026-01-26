@@ -1,57 +1,57 @@
-name: "Minor Gravity -- Melodic Minor ii-V-i (Cycle by 4ths)"
+name: Minor Gravity -- Melodic Minor ii-V-i (Cycle by 4ths)
 chords:
-  - Dm7b5
-  - G7alt
-  - Cm6
-
-  - Gm7b5
-  - C7alt
-  - Fm6
-
-  - Cm7b5
-  - F7alt
-  - Bbm6
-
-  - Fm7b5
-  - Bb7alt
-  - Ebm6
-
-  - Bbm7b5
-  - Eb7alt
-  - Abm6
-
-  - Ebm7b5
-  - Ab7alt
-  - Dbm6
-
-  - Abm7b5
-  - Db7alt
-  - Gbm6
-
-  - Dbm7b5
-  - Gb7alt
-  - Bm6
-
-  - F#m7b5
-  - B7alt
-  - Em6
-
-  - Bm7b5
-  - E7alt
-  - Am6
-
-  - Em7b5
-  - A7alt
-  - Dm6
-
-  - Am7b5
-  - D7alt
-  - Gm6
-
-style: "swing_basic"
-tempo: 120
+- Dm7b5
+- G7alt
+- Cm6
+- Gm7b5
+- C7alt
+- Fm6
+- Cm7b5
+- F7alt
+- Bbm6
+- Fm7b5
+- Bb7alt
+- Ebm6
+- Bbm7b5
+- Eb7alt
+- Abm6
+- Ebm7b5
+- Ab7alt
+- Dbm6
+- Abm7b5
+- Db7alt
+- Gbm6
+- Dbm7b5
+- Gb7alt
+- Bm6
+- F#m7b5
+- B7alt
+- Em6
+- Bm7b5
+- E7alt
+- Am6
+- Em7b5
+- A7alt
+- Dm6
+- Am7b5
+- D7alt
+- Gm6
+style: swing_basic
 bars_per_chord: 1
-
-tritone_mode: "probabilistic"
+tritone_mode: probabilistic
 tritone_strength: 0.35
 tritone_seed: 77
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

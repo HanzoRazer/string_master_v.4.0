@@ -1,13 +1,32 @@
 id: joe_pass_etude_12
 title: "Joe Pass Etude 12 – Minor ii-V-i"
 tempo_bpm: 68
+tempo_range: [45, 100]
+root: C
+mode: minor
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 45
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 68
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 100
+    comping: syncopated
+
 instruments:
   - type: metronome
     pattern: "1---2---3---4---"
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - Dm7b5
-      - G7alt
-      - Cm7
-      - Cm7
+      - iiø7
+      - V7alt
+      - i7
+      - i7
+  - type: walking_bass
+    outline_chords: true

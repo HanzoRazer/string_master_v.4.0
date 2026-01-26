@@ -1,13 +1,31 @@
 id: joe_pass_etude_11
 title: "Joe Pass Etude 11 – Descending ii-V"
 tempo_bpm: 76
+tempo_range: [50, 115]
+root: C
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 76
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 115
+    comping: syncopated
+
 instruments:
   - type: metronome
     pattern: "1---2---3---4---"
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - Em7
-      - A7
-      - Dm7
-      - G7
+      - iii7
+      - VI7
+      - ii7
+      - V7
+  - type: walking_bass
+    outline_chords: true

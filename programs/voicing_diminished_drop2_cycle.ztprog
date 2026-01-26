@@ -1,7 +1,20 @@
-name: "Diminished Drop-2 Cycle (Metronome)"
-chords: "Cmaj7"
-style: "swing_basic"
-tempo: 80
+name: Diminished Drop-2 Cycle (Metronome)
+chords: Cmaj7
+style: swing_basic
 bars_per_chord: 4
-tritone_mode: "none"
-outfile: "voicing_diminished_drop2_cycle_backing.mid"
+tritone_mode: none
+outfile: voicing_diminished_drop2_cycle_backing.mid
+tempo_bpm: 80
+tempo_range:
+- 52
+- 120
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 120
+    comping: syncopated

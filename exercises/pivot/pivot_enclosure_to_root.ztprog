@@ -1,7 +1,21 @@
 id: pivot_enclosure_to_root
 title: "Pivot Enclosure to Root – Neighbor Resolution"
 tempo_bpm: 80
+tempo_range: [50, 120]
+root: C
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: whole_notes
+  advanced:
+    tempo_bpm: 120
+    comping: rhythmic
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,10 +26,10 @@ instruments:
     groove: straight
     comping: whole_notes
     chords:
-      - Cmaj7
-      - Cmaj7
-      - Cmaj7
-      - Cmaj7
+      - Imaj7
+      - Imaj7
+      - Imaj7
+      - Imaj7
   - type: bass_pedal
-    root: C
+    root: tonic
     pattern: whole_notes

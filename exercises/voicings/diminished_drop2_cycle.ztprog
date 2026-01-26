@@ -1,7 +1,21 @@
 id: diminished_drop2_cycle
 title: "Diminished Drop-2 Cycle – 12 Keys"
 tempo_bpm: 80
+tempo_range: [52, 120]
+root: C
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 120
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,10 +26,10 @@ instruments:
     groove: swing
     comping: rhythmic
     chords:
-      - Dm7
-      - G7
-      - Cmaj7
-      - Cmaj7
+      - ii7
+      - V7
+      - Imaj7
+      - Imaj7
   - type: walking_bass
     outline_chords: true
     cycle: fifths

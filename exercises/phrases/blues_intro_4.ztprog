@@ -1,13 +1,34 @@
 id: blues_intro_4
-title: "Blues Intro 4 – Classic Blues"
+title: "Blues Intro 4 – Classic 12-Bar"
 tempo_bpm: 80
+tempo_range: [55, 120]
+root: G
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 55
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 120
+    comping: syncopated
+
 instruments:
-  - type: drum_tick
-    pattern: "1---2---3---4---"
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - A7
-      - D7
-      - A7
-      - E7
+      - I7
+      - IV7
+      - I7
+      - V7
+  - type: walking_bass
+    outline_chords: true

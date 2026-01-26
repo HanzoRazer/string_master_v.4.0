@@ -1,39 +1,43 @@
 name: minor_iiv_chain_4keys_desc5ths
-description: Minor iiø-V7alt-i through 4 keys descending 5ths (Dm->Gm->Cm->Fm), 16 bars
-tempo: 128
+description: Minor iiø-V7alt-i through 4 keys descending 5ths (Dm->Gm->Cm->Fm), 16
+  bars
 time_signature: 4/4
 bars_per_chord: 1
-
 chords:
-  # Dm (4 bars)
-  - Em7b5
-  - A7alt
-  - Dm6
-  - Dm6
-
-  # Gm (4 bars)
-  - Am7b5
-  - D7alt
-  - Gm6
-  - Gm6
-
-  # Cm (4 bars)
-  - Dm7b5
-  - G7alt
-  - Cm6
-  - Cm6
-
-  # Fm (4 bars)
-  - Gm7b5
-  - C7alt
-  - Fm6
-  - Fm6
-
+- Em7b5
+- A7alt
+- Dm6
+- Dm6
+- Am7b5
+- D7alt
+- Gm6
+- Gm6
+- Dm7b5
+- G7alt
+- Cm6
+- Cm6
+- Gm7b5
+- C7alt
+- Fm6
+- Fm6
 style:
   comp: jazz_minor
   bass: walking_minor
-
 expressive:
   swing: 0.25
   humanize_ms: 6
   humanize_vel: 4
+tempo_bpm: 128
+tempo_range:
+- 83
+- 192
+levels:
+  beginner:
+    tempo_bpm: 83
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 128
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 192
+    comping: syncopated

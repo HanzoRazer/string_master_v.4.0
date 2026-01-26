@@ -1,38 +1,44 @@
-# Bucket A -- Basic Samba in G Major (4/4 Full Brazilian Feel)
-# Purpose: full Brazilian groove with pickup + ghost + velocity contour
-
 name: samba_basic_G_4_4_brazil_full
-tempo: 104
 time_signature: 4/4
 bars_per_chord: 1
-
 style:
   comp: samba_brazil_full
   bass: samba_four_feel_pickup
-
 chords:
-  - Gmaj7
-  - A7
-  - D7
-  - Bm7
-  - E7
-  - Am7
-  - D7
-  - Gmaj7
-
+- Gmaj7
+- A7
+- D7
+- Bm7
+- E7
+- Am7
+- D7
+- Gmaj7
 notes:
-  - "Full Brazilian feel = pickup + ghost taps + velocity contour (breathing)."
-  - "Ghost taps at velocity 14 on steps 1, 5, 9, 13 (the 'e' of each beat)."
-  - "Velocity contour: beat 1/3 soft (0.80x), &2/&4 strong (1.08x)."
-  - "Pickup anticipation on &4 creates forward motion into chord changes."
-  - "The 'breathing' effect comes from alternating soft/strong dynamics per bar."
-
+- Full Brazilian feel = pickup + ghost taps + velocity contour (breathing).
+- Ghost taps at velocity 14 on steps 1, 5, 9, 13 (the 'e' of each beat).
+- 'Velocity contour: beat 1/3 soft (0.80x), &2/&4 strong (1.08x).'
+- Pickup anticipation on &4 creates forward motion into chord changes.
+- The 'breathing' effect comes from alternating soft/strong dynamics per bar.
 tags:
-  - bucket_a
-  - samba
-  - brazil
-  - pickup
-  - ghost
-  - contour
-  - groove
-  - key_G
+- bucket_a
+- samba
+- brazil
+- pickup
+- ghost
+- contour
+- groove
+- key_G
+tempo_bpm: 104
+tempo_range:
+- 67
+- 156
+levels:
+  beginner:
+    tempo_bpm: 67
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 104
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 156
+    comping: syncopated

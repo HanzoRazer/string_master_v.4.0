@@ -1,7 +1,21 @@
 id: dominant_enclosure_b7_to_root
 title: "Dominant Enclosure – ♭7 to Root Resolution"
 tempo_bpm: 72
+tempo_range: [48, 110]
+root: C
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 48
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 110
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,9 +26,9 @@ instruments:
     groove: swing
     comping: rhythmic
     chords:
-      - G7
-      - G7
-      - Cmaj7
-      - Cmaj7
+      - V7
+      - V7
+      - Imaj7
+      - Imaj7
   - type: walking_bass
     outline_chords: true

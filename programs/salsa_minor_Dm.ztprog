@@ -1,21 +1,31 @@
 name: salsa_minor_Dm
 description: Salsa minor vamp in D (Afro-Cuban / Latin jazz feel)
-tempo: 100
 time_signature: 4/4
 bars_per_chord: 2
-
 chords:
-  - Dm7
-  - Gm7
-  - Dm7
-  - A7
-  - Dm7
-
+- Dm7
+- Gm7
+- Dm7
+- A7
+- Dm7
 style:
   comp: salsa_clave_2_3
   bass: tumbao_minor
-
 expressive:
   swing: 0.0
   humanize_ms: 4
   humanize_vel: 5
+tempo_bpm: 100
+tempo_range:
+- 65
+- 150
+levels:
+  beginner:
+    tempo_bpm: 65
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 150
+    comping: syncopated

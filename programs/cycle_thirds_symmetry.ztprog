@@ -1,9 +1,22 @@
-name: "Cycle of Thirds -- Dominant Symmetry"
-tempo: 120
-style: "swing_basic"
+name: Cycle of Thirds -- Dominant Symmetry
+style: swing_basic
 bars_per_chord: 2
-chords: "C7 Eb7 Gb7 A7"
-tritone_mode: "all_doms"
+chords: C7 Eb7 Gb7 A7
+tritone_mode: all_doms
 tritone_strength: 0.8
 tritone_seed: null
-outfile: "cycle_thirds_symmetry.mid"
+outfile: cycle_thirds_symmetry.mid
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

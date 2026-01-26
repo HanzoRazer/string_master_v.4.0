@@ -1,9 +1,22 @@
-name: "Cycle of Thirds -- Dominant Chain"
-chords: "C7 Eb7 F#7 A7 C7"
-style: "swing_basic"
-tempo: 110
+name: Cycle of Thirds -- Dominant Chain
+chords: C7 Eb7 F#7 A7 C7
+style: swing_basic
 bars_per_chord: 2
-tritone_mode: "none"
+tritone_mode: none
 tritone_strength: 1.0
 tritone_seed: null
-outfile: "cycle_thirds_dominant.mid"
+outfile: cycle_thirds_dominant.mid
+tempo_bpm: 110
+tempo_range:
+- 71
+- 165
+levels:
+  beginner:
+    tempo_bpm: 71
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 110
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 165
+    comping: syncopated

@@ -1,13 +1,38 @@
 id: turnaround_descending_triplet
 title: "Turnaround – Descending Triplet"
 tempo_bpm: 95
+tempo_range: [65, 140]
+root: F
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 65
+    comping: whole_notes
+    feel: straight
+  intermediate:
+    tempo_bpm: 95
+    comping: rhythmic
+    feel: triplet
+  advanced:
+    tempo_bpm: 140
+    comping: syncopated
+    feel: triplet
+
 instruments:
-  - type: drum_tick
-    pattern: "1--a2--a3--a4--a"  # Triplet feel
+  - type: drum_kit
+    feel: triplet
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1a", "2a", "3a", "4a"]
   - type: shell_voicings
+    groove: swing
+    comping: rhythmic
     chords:
-      - F7
-      - E7
-      - Eb7
-      - D7
+      - I7
+      - VII7
+      - bVII7
+      - VI7
+  - type: walking_bass
+    outline_chords: true

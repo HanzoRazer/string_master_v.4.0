@@ -1,35 +1,38 @@
-# samba_basic_G_4_4_brazil_knobs.ztprog
-# Canonical example demonstrating Brazilian feel knobs in 4/4 meter
-#
-# This program shows nested knob shape (recommended YAML form):
-#   ghost_hits: { enabled, steps }
-#   vel_contour: { enabled, preset }
-#
-# Zone-Tritone Context:
-#   G7 is the tonal anchor with tritone B-F
-#   4-bar vamp for practicing Brazilian syncopation awareness
-
-name: "Samba Basic G - 4/4 Brazil Knobs"
-tempo: 120
-time_signature: "4/4"
+name: Samba Basic G - 4/4 Brazil Knobs
+time_signature: 4/4
 bars_per_chord: 1
-
 chords:
-  - G7
-  - G7
-  - G7
-  - G7
-
+- G7
+- G7
+- G7
+- G7
 style:
-  name: "bossa"
-  swing_ratio: 0.5          # straight 8ths for bossa feel
-  bar_steps: 16             # 16 steps per bar in 4/4 (sixteenth notes)
+  name: bossa
+  swing_ratio: 0.5
+  bar_steps: 16
   ghost_hits:
     enabled: true
-    steps: [1, 5, 9, 13]    # ghost on weak sixteenths (upbeats)
+    steps:
+    - 1
+    - 5
+    - 9
+    - 13
   vel_contour:
     enabled: true
-    preset: brazil_samba    # characteristic Brazil accent pattern
-
-tritone_mode: "off"
-outfile: "samba_basic_G_4_4_brazil_knobs.mid"
+    preset: brazil_samba
+tritone_mode: 'off'
+outfile: samba_basic_G_4_4_brazil_knobs.mid
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

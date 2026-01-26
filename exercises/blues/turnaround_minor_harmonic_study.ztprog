@@ -1,7 +1,22 @@
 id: turnaround_minor_harmonic_study
 title: "8-Bar Minor Turnaround with Harmonic Minor Resolution"
 tempo_bpm: 80
+tempo_range: [50, 120]
+root: C
+mode: minor
 loop_bars: 8
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: syncopated
+  advanced:
+    tempo_bpm: 120
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,13 +27,13 @@ instruments:
     groove: swing
     comping: syncopated
     chords:
-      - Dm7b5
-      - G7alt
-      - Cm7
-      - Ab7
-      - Dm7b5
-      - G7alt
-      - Cm7
-      - G7alt
+      - iiø7
+      - V7alt
+      - i7
+      - bVI7
+      - iiø7
+      - V7alt
+      - i7
+      - V7alt
   - type: walking_bass
     outline_chords: true

@@ -1,20 +1,38 @@
-# Test program with style dict overrides
-# Verifies the bridge layer consumes YAML knobs at runtime
-
-name: "Test Style Overrides"
-time_signature: "4/4"
-tempo: 120
+name: Test Style Overrides
+time_signature: 4/4
 bars_per_chord: 1
-chords: ["Gmaj7", "Am7", "D7", "Gmaj7"]
+chords:
+- Gmaj7
+- Am7
+- D7
+- Gmaj7
 style:
   comp: samba_basic
   ghost_hits:
     enabled: true
     vel: 20
-    steps: [3, 7, 11, 15]
+    steps:
+    - 3
+    - 7
+    - 11
+    - 15
   vel_contour:
     enabled: true
     preset: brazil_samba
   pickup_beat: 3.5
   pickup_vel: 50
-outfile: "test_override_output.mid"
+outfile: test_override_output.mid
+tempo_bpm: 120
+tempo_range:
+- 78
+- 180
+levels:
+  beginner:
+    tempo_bpm: 78
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 120
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 180
+    comping: syncopated

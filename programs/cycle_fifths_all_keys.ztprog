@@ -1,9 +1,22 @@
-name: "Cycle of Fifths -- All 12 Keys"
-chords: "Cmaj7 Fmaj7 Bbmaj7 Ebmaj7 Abmaj7 Dbmaj7 F#maj7 Bmaj7 Emaj7 Amaj7 Dmaj7 Gmaj7"
-style: "swing_basic"
-tempo: 100
+name: Cycle of Fifths -- All 12 Keys
+chords: Cmaj7 Fmaj7 Bbmaj7 Ebmaj7 Abmaj7 Dbmaj7 F#maj7 Bmaj7 Emaj7 Amaj7 Dmaj7 Gmaj7
+style: swing_basic
 bars_per_chord: 2
-tritone_mode: "none"
+tritone_mode: none
 tritone_strength: 1.0
 tritone_seed: null
-outfile: "cycle_fifths_all_keys.mid"
+outfile: cycle_fifths_all_keys.mid
+tempo_bpm: 100
+tempo_range:
+- 65
+- 150
+levels:
+  beginner:
+    tempo_bpm: 65
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 150
+    comping: syncopated

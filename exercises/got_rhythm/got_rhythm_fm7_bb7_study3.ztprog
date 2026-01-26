@@ -1,7 +1,21 @@
 id: got_rhythm_fm7_bb7_study3
-title: "Got Rhythm Study 3 – Fm7 → Bb7 (ii-V)"
+title: "Got Rhythm Study 3 – ii7 → V7"
 tempo_bpm: 132
+tempo_range: [88, 190]
+root: Eb
 loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 88
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 132
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 190
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,9 +26,9 @@ instruments:
     groove: swing
     comping: rhythmic
     chords:
-      - Fm7
-      - Bb7
-      - Fm7
-      - Bb7
+      - ii7
+      - V7
+      - ii7
+      - V7
   - type: walking_bass
     outline_chords: true

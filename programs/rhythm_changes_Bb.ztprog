@@ -1,55 +1,58 @@
 name: rhythm_changes_Bb
 description: Rhythm Changes in Bb (AABA, canonical jazz form)
-tempo: 140
 time_signature: 4/4
 bars_per_chord: 1
-
 chords:
-  # A1
-  - Bb6
-  - G7
-  - Cm7
-  - F7
-  - Bb6
-  - G7
-  - Cm7
-  - F7
-
-  # A2
-  - Bb6
-  - Bdim
-  - Cm7
-  - F7
-  - D7
-  - G7
-  - Cm7
-  - F7
-
-  # B (Bridge - Circle of Dominants)
-  - D7
-  - G7
-  - C7
-  - F7
-  - Bb7
-  - Eb7
-  - A7
-  - D7
-
-  # A3
-  - Bb6
-  - G7
-  - Cm7
-  - F7
-  - Bb6
-  - Cm7
-  - F7
-  - Bb6
-
+- Bb6
+- G7
+- Cm7
+- F7
+- Bb6
+- G7
+- Cm7
+- F7
+- Bb6
+- Bdim
+- Cm7
+- F7
+- D7
+- G7
+- Cm7
+- F7
+- D7
+- G7
+- C7
+- F7
+- Bb7
+- Eb7
+- A7
+- D7
+- Bb6
+- G7
+- Cm7
+- F7
+- Bb6
+- Cm7
+- F7
+- Bb6
 style:
   comp: rhythm_changes
   bass: walking_bop
-
 expressive:
   swing: 0.25
   humanize_ms: 6
   humanize_vel: 4
+tempo_bpm: 140
+tempo_range:
+- 91
+- 210
+levels:
+  beginner:
+    tempo_bpm: 91
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 140
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 210
+    comping: syncopated

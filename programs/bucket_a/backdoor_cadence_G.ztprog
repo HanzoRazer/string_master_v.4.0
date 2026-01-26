@@ -1,21 +1,34 @@
-# Bucket A -- Backdoor Cadence (IV -> bVII7 -> I) in G
-# Backdoor in G: C -> F7 -> G
-
 name: backdoor_cadence_G
-tempo: 88
-time_signature: "4/4"
+time_signature: 4/4
 bars_per_chord: 2
-
 style: ballad_basic
-
 chords:
-  - Cmaj9
-  - F9
-  - Gmaj9
-  - D13
-  - G6
-
+- Cmaj9
+- F9
+- Gmaj9
+- D13
+- G6
 notes:
-  - "Backdoor in G = C -> F7 -> G"
-  - "Color: F9/F13 or F7#11; land on Gmaj9 or G6."
-tags: [bucket_a, backdoor, gospel, jazz, cadence, key_G]
+- Backdoor in G = C -> F7 -> G
+- 'Color: F9/F13 or F7#11; land on Gmaj9 or G6.'
+tags:
+- bucket_a
+- backdoor
+- gospel
+- jazz
+- cadence
+- key_G
+tempo_bpm: 88
+tempo_range:
+- 57
+- 132
+levels:
+  beginner:
+    tempo_bpm: 57
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 88
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 132
+    comping: syncopated

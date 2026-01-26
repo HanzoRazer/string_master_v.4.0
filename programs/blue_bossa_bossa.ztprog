@@ -1,14 +1,27 @@
-name: "Blue Bossa bossa demo"
+name: Blue Bossa bossa demo
 chords:
-  - Cm7
-  - Fm7
-  - Dm7b5
-  - G7
-  - Cm7
-style: "bossa_basic"
-tempo: 132
+- Cm7
+- Fm7
+- Dm7b5
+- G7
+- Cm7
+style: bossa_basic
 bars_per_chord: 1
-tritone_mode: "probabilistic"
+tritone_mode: probabilistic
 tritone_strength: 0.5
 tritone_seed: 42
-outfile: "blue_bossa_bossa.mid"
+outfile: blue_bossa_bossa.mid
+tempo_bpm: 132
+tempo_range:
+- 85
+- 198
+levels:
+  beginner:
+    tempo_bpm: 85
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 132
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 198
+    comping: syncopated

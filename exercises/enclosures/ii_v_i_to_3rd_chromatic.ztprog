@@ -1,7 +1,21 @@
 id: ii_v_i_to_3rd_chromatic
 title: "ii-V-I Enclosure – Chromatic to 3rd"
 tempo_bpm: 76
+tempo_range: [50, 115]
+root: C
 loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 76
+    comping: syncopated
+  advanced:
+    tempo_bpm: 115
+    comping: syncopated
+
 instruments:
   - type: drum_kit
     pattern:
@@ -12,9 +26,9 @@ instruments:
     groove: swing
     comping: syncopated
     chords:
-      - Dm7
-      - G7
-      - Cmaj7
-      - Cmaj7
+      - ii7
+      - V7
+      - Imaj7
+      - Imaj7
   - type: walking_bass
     outline_chords: true
