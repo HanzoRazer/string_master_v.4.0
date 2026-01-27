@@ -64,6 +64,14 @@ programs:
   - config: "../exercises/flamenco/bulerias_falseta_etude.ztex"
     repeat: 2
 
-  # --- 9. Cooldown: Andalusian Cadence cycle (all 12 keys) ---
+  # --- 9. Phrygian Gravity (Zone-Tritone theory applied to flamenco) ---
+  - config: "../exercises/phrygian_gravity/phrygian_gravity_bII_resolution.ztex"
+    repeat: 2
+  - config: "../exercises/phrygian_gravity/phrygian_gravity_tritone_to_parent.ztex"
+    repeat: 2
+  - config: "../programs/phrygian_gravity_bII_to_I_cycle.ztprog"
+    repeat: 1
+
+  # --- 10. Cooldown: Andalusian Cadence cycle (all 12 keys) ---
   - config: "../programs/andalusian_cadence_all_keys.ztprog"
     repeat: 1
