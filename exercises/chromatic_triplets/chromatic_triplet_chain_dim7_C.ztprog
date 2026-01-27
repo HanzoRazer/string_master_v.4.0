@@ -1,0 +1,43 @@
+id: chromatic_triplet_chain_dim7_C
+title: "Chromatic Triplet Chain -- Cdim7 Backing"
+tempo_bpm: 72
+tempo_range: [50, 120]
+root: C
+loop_bars: 2
+time_signature: 4/4
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: whole_notes
+    feel: straight
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+    feel: triplet
+  advanced:
+    tempo_bpm: 120
+    comping: syncopated
+    feel: triplet
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: bass_pedal
+    note: C
+    octave: 2
+    pattern: [1, 3]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - dim7
+      - dim7
+notes:
+  - "Static Cdim7 vamp -- the chain IS the melody."
+  - "Beginner: straight feel to isolate the triplet cells."
+  - "Intermediate/advanced: triplet feel to embed the cells in swing."
+  - "Cdim7 = Ebdim7 = Gbdim7 = Adim7 (symmetric -- only 3 unique dim chords)."

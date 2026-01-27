@@ -51,18 +51,16 @@
   - .ztprog slow shuffle backing (drum + bass + shell voicings)
 - **Priority**: Quick win — .mid already committed
 
-### 4. Chromatic Triplet Chain Exercises (Barry Harris)
-- **Status**: Not started — identified as a gap in the redundancy analysis
-- **Source**: Barry Harris Jazz Workshop PDF (pages on triplet articulation)
-- **Concept**: Chromatic triplet cells that connect chord tones through
-  diminished passing tones
-- **What's needed**:
-  - Define `phrase_type: "chromatic_cells"` or `"triplet_resolution_chain"`
-  - Create 2-3 example phrases in .mid + .ztex
-  - Add to `data/enclosure_examples.yaml` (or new `data/chromatic_cells.yaml`)
-  - .ztprog backing (static chord, metronome)
-- **Related to**: Existing enclosure exercises, pivot_from_neighbor rule
-- **Priority**: Medium — fills a gap in Barry Harris coverage
+### 4. ~~Chromatic Triplet Chain Exercises (Barry Harris)~~ DONE
+- **Status**: Complete — 3 exercises + playlist created (2026-01-27)
+- **Location**: `exercises/chromatic_triplets/`
+- **Files created**:
+  - `chromatic_triplet_chain_dim7_C.ztex` + `.ztprog` (pure diminished chain)
+  - `chromatic_triplet_chain_maj6_C.ztex` + `.ztprog` (6th diminished scale chain)
+  - `chromatic_triplet_chain_ii_V_I_C.ztex` + `.ztprog` (applied over ii-V-I)
+  - `playlists/chromatic_triplet_session.ztplay` (5-phase practice session)
+- **Phrase types used**: `chromatic_cells` and `triplet_resolution_chain`
+- **MIDI**: Not yet generated (needs sandbox with mido)
 
 ### 5. Drop-2 Voice Motion Tagging (v6/b6 labels)
 - **Status**: Not started — identified from Drop-2 Exercises PDF

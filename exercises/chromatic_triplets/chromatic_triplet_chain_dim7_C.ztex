@@ -1,0 +1,109 @@
+# Barry Harris -- Chromatic Triplet Chain over Cdim7
+# Source: Barry Harris Jazz Workshop (triplet articulation concept)
+# Purpose: Pure diminished triplet chain -- all minor 3rds, perfect triplet alignment
+#
+# This is THE foundational exercise. Diminished chord tones are all minor 3rds
+# apart, so every chord tone connects to the next via exactly 2 chromatic
+# passing tones -- one triplet group per connection. No adjustments needed.
+
+id: chromatic_triplet_chain_dim7_C
+title: "Chromatic Triplet Chain -- Cdim7 (Pure Diminished)"
+program_ref: chromatic_triplet_chain_dim7_C.ztprog
+exercise_type: melodic_motion
+
+phrase_type: chromatic_cells
+
+goals:
+  - "Connect diminished chord tones using chromatic triplet cells."
+  - "Land every chord tone on a strong beat -- triplet groups fill the gaps."
+  - "Hear the diminished chord emerge from the chromatic motion."
+  - "Build the muscle memory for 3-note chromatic cells."
+
+context:
+  - "Cdim7 = C-Eb-Gb-A. All intervals are minor 3rds (3 semitones)."
+  - "3 semitones = 1 chord tone + 2 chromatic passing tones = exactly 1 triplet group."
+  - "This makes diminished the PERFECT chord for triplet chain practice."
+  - "Barry Harris: 'The diminished chord is the key to everything.'"
+  - "Once this pattern is internalized, apply it to major 6th and ii-V-I contexts."
+
+chain:
+  chord: "Cdim7"
+  chord_tones: ["C", "Eb", "Gb", "A"]
+  interval_between_tones: "minor 3rd (3 semitones)"
+
+  descending:
+    name: "Descending chromatic triplet chain"
+    description: "Start on A (highest chord tone), descend chromatically through each chord tone."
+    cells:
+      - group: 1
+        notes: "A - Ab - G"
+        degrees: "6 - b6 - 5"
+        target: "Gb (next chord tone)"
+      - group: 2
+        notes: "Gb - F - E"
+        degrees: "b5 - 4 - 3"
+        target: "Eb (next chord tone)"
+      - group: 3
+        notes: "Eb - D - Db"
+        degrees: "b3 - 2 - b2"
+        target: "C (root)"
+    full_sequence: "A - Ab - G | Gb - F - E | Eb - D - Db | C"
+    beat_map: "A lands beat 1, Gb lands beat 2, Eb lands beat 3, C lands beat 4"
+
+  ascending:
+    name: "Ascending chromatic triplet chain"
+    description: "Start on C (root), ascend chromatically through each chord tone."
+    cells:
+      - group: 1
+        notes: "C - Db - D"
+        degrees: "1 - b2 - 2"
+        target: "Eb (next chord tone)"
+      - group: 2
+        notes: "Eb - E - F"
+        degrees: "b3 - 3 - 4"
+        target: "Gb (next chord tone)"
+      - group: 3
+        notes: "Gb - G - Ab"
+        degrees: "b5 - 5 - b6"
+        target: "A (next chord tone)"
+    full_sequence: "C - Db - D | Eb - E - F | Gb - G - Ab | A"
+    beat_map: "C lands beat 1, Eb lands beat 2, Gb lands beat 3, A lands beat 4"
+
+  turnaround:
+    name: "Ascending + descending turnaround"
+    description: "Ascend through the chain, then descend back. 2-bar loop."
+    full_sequence: "C - Db - D | Eb - E - F | Gb - G - Ab | A - Ab - G | Gb - F - E | Eb - D - Db | C"
+
+practice_steps:
+  - "Step 1: Play the descending chain slowly (triplet eighths at 60 BPM). Accent each chord tone."
+  - "Step 2: Play the ascending chain. Feel the chromatic pull toward each target."
+  - "Step 3: Combine -- ascend then descend as a 2-bar turnaround loop."
+  - "Step 4: Speed up in 10 BPM increments. Keep chord tones on strong beats."
+  - "Step 5: Transpose to Dbdim7, Ddim7, Ebdim7 (only 3 unique diminished chords exist)."
+  - "Step 6: Close your eyes. Can you hear the diminished chord inside the chromatic line?"
+
+tags:
+  style: bebop
+  key: C
+  technique: chromatic_triplet_chain
+  phrase_type: chromatic_cells
+  chord_quality: dim7
+  origin: barry_harris_class
+  related:
+    - barry_harris_enclosure_examples
+    - bebop_enclosure_descending
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+    - note_density_evenness
+  pass_criteria:
+    max_timing_deviation_ms: 25
+    chord_tone_hit_rate: 0.95
+    max_rule_violation_rate: 0.05
+  pass_condition:
+    - "Every chord tone (C, Eb, Gb, A) lands on a strong beat."
+    - "Chromatic passing tones are even -- no rushing or dragging."
+    - "Descending and ascending chains played without hesitation."
+    - "At least one transposition attempted (Dbdim7 or Ddim7)."

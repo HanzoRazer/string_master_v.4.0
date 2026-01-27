@@ -1,0 +1,44 @@
+id: chromatic_triplet_chain_ii_V_I_C
+title: "Chromatic Triplet Chain -- ii-V-I in C Backing"
+tempo_bpm: 80
+tempo_range: [50, 130]
+root: C
+loop_bars: 4
+time_signature: 4/4
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: whole_notes
+    feel: straight
+  intermediate:
+    tempo_bpm: 80
+    comping: rhythmic
+    feel: swing
+  advanced:
+    tempo_bpm: 130
+    comping: syncopated
+    feel: swing
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - ii7
+      - V7
+      - Imaj7
+      - Imaj7
+  - type: walking_bass
+    outline_chords: true
+notes:
+  - "Standard ii-V-I in C: Dm7 - G7 - Cmaj7 - Cmaj7."
+  - "4-bar cycle: 1 bar per chord, Imaj7 gets 2 bars for resolution."
+  - "Triplet chain targets: Dm7→B (3rd of G7), G7→E (3rd of Cmaj7), Cmaj7→C (root)."
+  - "Voice-leading principle: b7 resolves down by half-step to 3rd of next chord."
+  - "This is the same ii-V-I used in enclosure_ii_v_i_chain -- compare approaches."

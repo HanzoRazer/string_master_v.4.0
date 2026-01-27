@@ -1,0 +1,161 @@
+# Barry Harris -- Chromatic Triplet Chain over ii-V-I in C
+# Source: Barry Harris Jazz Workshop (applied triplet articulation over changes)
+# Purpose: Connect the chromatic triplet chain concept to real harmonic motion.
+#
+# This exercise takes the triplet cell technique from the dim7 and maj6 exercises
+# and applies it over a ii-V-I progression. Each chord gets a descending triplet
+# chain that resolves to a target tone in the NEXT chord -- creating a continuous
+# chromatic line that outlines the harmony.
+#
+# The resolution targets follow Barry Harris's voice-leading priorities:
+#   Dm7 chain → targets B (3rd of G7, half-step from C)
+#   G7 chain  → targets E (3rd of Cmaj7, half-step from F)
+#   Cmaj7 chain → targets C (root, home)
+
+id: chromatic_triplet_chain_ii_V_I_C
+title: "Chromatic Triplet Chain -- ii-V-I in C (Applied)"
+program_ref: chromatic_triplet_chain_ii_V_I_C.ztprog
+exercise_type: melodic_motion
+
+phrase_type: triplet_resolution_chain
+
+goals:
+  - "Apply chromatic triplet cells over moving harmony (ii-V-I)."
+  - "Target the 3rd of each resolution chord using half-step voice-leading."
+  - "Hear how chromatic triplet cells outline chord changes without arpeggios."
+  - "Connect this to existing enclosure ii-V-I exercises."
+
+context:
+  - "ii-V-I in C: Dm7 - G7 - Cmaj7."
+  - "Barry Harris teaches that lines should CONNECT chords, not just outline them."
+  - "Each triplet chain descends from a chord tone and lands on a target in the next chord."
+  - "The 3rd is the strongest resolution target -- it defines the chord quality."
+  - "This is the practical payoff of the dim7 and maj6 chain exercises."
+
+progression:
+  key: C
+  chords:
+    - symbol: "Dm7"
+      chord_tones: ["D", "F", "A", "C"]
+      role: "ii"
+    - symbol: "G7"
+      chord_tones: ["G", "B", "D", "F"]
+      role: "V"
+    - symbol: "Cmaj7"
+      chord_tones: ["C", "E", "G", "B"]
+      role: "I"
+
+chain:
+  over_Dm7:
+    name: "Dm7 chain targeting B (3rd of G7)"
+    description: "Descend from C (b7 of Dm7) through chromatic cells to land on B."
+    cells:
+      - group: 1
+        notes: "C - B - Bb"
+        analysis: "b7 of Dm7 → chromatic descent"
+      - group: 2
+        notes: "A - Ab - G"
+        analysis: "5th of Dm7 → chromatic to resolution zone"
+    resolution: "Land on B (beat 1 of G7 bar)"
+    full_sequence: "C - B - Bb | A - Ab - G | ... → B"
+    voice_leading: "C (b7 of Dm7) → B (3rd of G7) = half-step resolution"
+
+  over_G7:
+    name: "G7 chain targeting E (3rd of Cmaj7)"
+    description: "Descend from F (b7 of G7) through chromatic cells to land on E."
+    cells:
+      - group: 1
+        notes: "F - E - Eb"
+        analysis: "b7 of G7 → passing through 3rd of Cmaj7"
+      - group: 2
+        notes: "D - Db - C"
+        analysis: "5th of G7 → chromatic to root zone"
+    resolution: "Land on E (beat 1 of Cmaj7 bar)"
+    full_sequence: "F - E - Eb | D - Db - C | ... → E"
+    voice_leading: "F (b7 of G7) → E (3rd of Cmaj7) = half-step resolution"
+
+  over_Cmaj7:
+    name: "Cmaj7 chain resolving to root"
+    description: "Descend from B (7th of Cmaj7) to confirm the arrival."
+    cells:
+      - group: 1
+        notes: "B - Bb - A"
+        analysis: "7th → chromatic → 6th"
+      - group: 2
+        notes: "Ab - G - F"
+        analysis: "passing → 5th → passing"
+      - group: 3
+        notes: "E - D - C"
+        analysis: "3rd → passing → root (home)"
+    full_sequence: "B - Bb - A | Ab - G - F | E - D - C"
+
+  complete_line:
+    name: "Full ii-V-I triplet chain (4 bars)"
+    bars:
+      - bar: 1
+        chord: "Dm7"
+        line: "C - B - Bb | A - Ab - G"
+      - bar: 2
+        chord: "G7"
+        line: "F - E - Eb | D - Db - C"
+      - bar: 3
+        chord: "Cmaj7"
+        line: "B - Bb - A | Ab - G - F"
+      - bar: 4
+        chord: "Cmaj7"
+        line: "E - D - C (resolve and rest)"
+    voice_leading_summary:
+      - "Dm7 b7 (C) → G7 3rd (B): half-step down"
+      - "G7 b7 (F) → Cmaj7 3rd (E): half-step down"
+      - "Cmaj7 resolves to root (C): home"
+
+variations:
+  - name: "Ascending chain"
+    description: "Reverse direction -- ascend from chord tone to resolution target."
+    Dm7_line: "D - Eb - E | F - F# - G | ... → B"
+    note: "Ascending cells feel more energetic -- good for building tension."
+  - name: "Mixed direction"
+    description: "Descend over ii, ascend over V, descend to resolve on I."
+    note: "Creates contour variety. Barry Harris mixes direction constantly."
+  - name: "Tritone substitution"
+    description: "Replace G7 with Db7. Chain targets same resolution (E) from Db7 tones."
+    Db7_line: "Cb - Bb - A | Ab - G - Gb | ... → E"
+    note: "Connects to tritone gravity model in dorian_gospel_backdoor_Cm."
+
+practice_steps:
+  - "Step 1: Play each chord's chain separately. Master Dm7 chain first."
+  - "Step 2: Connect Dm7 → G7 chains. Land B on beat 1 of bar 2."
+  - "Step 3: Add the Cmaj7 chain. Play the full 4-bar line."
+  - "Step 4: Loop the complete ii-V-I chain at 60 BPM. No hesitation at chord changes."
+  - "Step 5: Speed up in 10 BPM increments to 100 BPM."
+  - "Step 6: Transpose to ii-V-I in F (Gm7 - C7 - Fmaj7), then Bb."
+  - "Step 7: Try the mixed-direction variation for contour interest."
+
+tags:
+  style: bebop
+  key: C
+  technique: chromatic_triplet_chain
+  phrase_type: triplet_resolution_chain
+  harmonic_motion: ii_V_I
+  origin: barry_harris_class
+  related:
+    - chromatic_triplet_chain_dim7_C
+    - chromatic_triplet_chain_maj6_C
+    - enclosure_ii_v_i_chain
+    - ii_v_i_to_3rd_chromatic
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+    - target_chord_tone_accuracy
+    - note_density_evenness
+  pass_criteria:
+    max_timing_deviation_ms: 28
+    chord_tone_hit_rate: 0.9
+    max_rule_violation_rate: 0.05
+  pass_condition:
+    - "B lands on beat 1 of G7 bar -- clean resolution from Dm7 chain."
+    - "E lands on beat 1 of Cmaj7 bar -- clean resolution from G7 chain."
+    - "Full 4-bar line played without stopping at chord boundaries."
+    - "At least one transposition attempted (ii-V-I in F or Bb)."

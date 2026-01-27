@@ -1,0 +1,125 @@
+# Barry Harris -- Chromatic Triplet Chain over C6 (6th Diminished Scale)
+# Source: Barry Harris Jazz Workshop (6th diminished scale + triplet articulation)
+# Purpose: Apply triplet chain concept to major 6th chord using the interleaved
+#          diminished passing tones -- the "Barry Harris 6th Diminished Scale"
+#
+# The C6 diminished scale interleaves C6 chord tones (C-E-G-A) with the
+# diminished passing tones (D-F-Ab-B), producing an 8-note scale:
+# C - D - E - F - G - Ab - A - B
+#
+# In continuous 8th notes, chord tones land on downbeats automatically.
+# In TRIPLET groups, the 8-note scale creates 2 complete passes plus
+# a 2-note remainder -- so we group in 3s to create the chain effect.
+
+id: chromatic_triplet_chain_maj6_C
+title: "Chromatic Triplet Chain -- C6 (6th Diminished Scale)"
+program_ref: chromatic_triplet_chain_maj6_C.ztprog
+exercise_type: melodic_motion
+
+phrase_type: triplet_resolution_chain
+
+goals:
+  - "Play the 6th diminished scale in triplet groups."
+  - "Hear the C6 chord tones emerge from the diminished passing tones."
+  - "Understand how the 8-note scale creates rhythmic alignment."
+  - "Connect this to the pure diminished chain (chromatic_triplet_chain_dim7_C)."
+
+context:
+  - "C6 = C-E-G-A. Interleaved diminished = B-D-F-Ab."
+  - "Combined scale (ascending): C - D - E - F - G - Ab - A - B."
+  - "Combined scale (descending): C - B - A - Ab - G - F - E - D."
+  - "Barry Harris: 'Every major chord has a diminished chord living inside it.'"
+  - "The dim passing tones are NOT chromatic filler -- they are the diminished chord."
+  - "This is why Barry Harris says diminished is the key to everything."
+
+scale:
+  name: "C6 Diminished Scale"
+  chord_tones: ["C", "E", "G", "A"]
+  diminished_passing_tones: ["B", "D", "F", "Ab"]
+  ascending: ["C", "D", "E", "F", "G", "Ab", "A", "B"]
+  descending: ["C", "B", "A", "Ab", "G", "F", "E", "D"]
+
+chain:
+  descending:
+    name: "Descending 6th diminished triplet chain"
+    description: "Group the descending scale in triplets. Chord tones shift through beat positions."
+    cells:
+      - group: 1
+        notes: "C - B - A"
+        analysis: "root (CT) - passing - 6th (CT)"
+      - group: 2
+        notes: "Ab - G - F"
+        analysis: "passing - 5th (CT) - passing"
+      - group: 3
+        notes: "E - D - C"
+        analysis: "3rd (CT) - passing - root (CT)"
+    full_sequence: "C - B - A | Ab - G - F | E - D - C"
+    chord_tone_positions: "beat 1 (C), beat 1+ (A), beat 2+ (G), beat 3 (E), beat 3++ (C)"
+
+  ascending:
+    name: "Ascending 6th diminished triplet chain"
+    cells:
+      - group: 1
+        notes: "C - D - E"
+        analysis: "root (CT) - passing - 3rd (CT)"
+      - group: 2
+        notes: "F - G - Ab"
+        analysis: "passing - 5th (CT) - passing"
+      - group: 3
+        notes: "A - B - C"
+        analysis: "6th (CT) - passing - root (CT)"
+    full_sequence: "C - D - E | F - G - Ab | A - B - C"
+    chord_tone_positions: "beat 1 (C), beat 1++ (E), beat 2+ (G), beat 3 (A), beat 3++ (C)"
+
+  comparison_to_eighths:
+    name: "Same scale in straight 8ths (standard Barry Harris approach)"
+    sequence: "C - D - E - F - G - Ab - A - B"
+    note: "In 8ths over 4/4, chord tones land on beats 1-2-3-4. Triplet grouping shifts the alignment -- both are valid practice."
+
+variations:
+  - name: "Skip-a-cell"
+    description: "Play cell 1, skip cell 2, play cell 3. Forces leaps between groups."
+    sequence: "C - B - A | (skip) | E - D - C"
+  - name: "Reverse-cell direction"
+    description: "Ascending cells over descending scale. Chromatic enclosure effect."
+    sequence: "D - E - F | Ab - A - B | (resolve to C)"
+  - name: "Octave displacement"
+    description: "Play each cell in alternating octaves. Builds intervallic hearing."
+
+practice_steps:
+  - "Step 1: Play the C6 diminished scale ascending and descending in straight 8ths first."
+  - "Step 2: Now group in triplets -- descending: C-B-A | Ab-G-F | E-D-C. Accent beat 1 of each group."
+  - "Step 3: Play ascending triplets: C-D-E | F-G-Ab | A-B-C."
+  - "Step 4: Alternate descending and ascending as a continuous loop."
+  - "Step 5: Identify which notes are C6 chord tones vs diminished passing tones as you play."
+  - "Step 6: Transpose to F6, G6 diminished scales."
+  - "Step 7: Compare to the dim7 chain exercise -- hear the family resemblance."
+
+tags:
+  style: bebop
+  key: C
+  technique: chromatic_triplet_chain
+  phrase_type: triplet_resolution_chain
+  chord_quality: maj6
+  scale_type: sixth_diminished
+  origin: barry_harris_class
+  related:
+    - chromatic_triplet_chain_dim7_C
+    - barry_harris_maj7_scale
+    - barry_harris_enclosure_examples
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+    - note_density_evenness
+    - error_rate_rule_violations
+  pass_criteria:
+    max_timing_deviation_ms: 25
+    chord_tone_hit_rate: 0.9
+    max_rule_violation_rate: 0.05
+  pass_condition:
+    - "Triplet groups are rhythmically even -- no rushing through passing tones."
+    - "Can name which notes are chord tones vs passing tones while playing."
+    - "Descending and ascending chains played without stops."
+    - "At least one transposition attempted."

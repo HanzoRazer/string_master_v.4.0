@@ -1,0 +1,33 @@
+name: "Barry Harris Chromatic Triplet Chain Session"
+tempo: 72
+outfile: "chromatic_triplet_session.mid"
+
+# Progressive session: pure diminished → major 6th → applied ii-V-I
+# Each phase builds on the previous -- dim7 is the skeleton,
+# maj6 adds tonal context, ii-V-I applies it to real changes.
+
+programs:
+  # Phase 1: Pure diminished chain (warm-up, isolate the cell mechanics)
+  - config: "../exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.ztprog"
+    repeat: 4
+    notes: "Descending and ascending Cdim7 chains. Lock in the 3-note cell."
+
+  # Phase 2: 6th diminished scale chain (add tonal gravity)
+  - config: "../exercises/chromatic_triplets/chromatic_triplet_chain_maj6_C.ztprog"
+    repeat: 4
+    notes: "C6 diminished scale in triplet groups. Hear chord tones vs passing tones."
+
+  # Phase 3: Applied ii-V-I chain (harmonic motion)
+  - config: "../exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.ztprog"
+    repeat: 4
+    notes: "Full ii-V-I triplet chain. Target 3rds at chord changes."
+
+  # Phase 4: Return to diminished at higher tempo (consolidation)
+  - config: "../exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.ztprog"
+    repeat: 2
+    notes: "Bump tempo 10-20 BPM. The dim chain should feel easier after ii-V-I."
+
+  # Phase 5: ii-V-I at performance tempo (integration)
+  - config: "../exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.ztprog"
+    repeat: 4
+    notes: "Target tempo. Full line, no stops, clean resolutions."
