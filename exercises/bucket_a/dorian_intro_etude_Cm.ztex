@@ -1,0 +1,51 @@
+# Bucket A -- Hendrix-Style C Dorian Intro Etude
+# Source: ChatGPT sandbox export (legacy YAML), converted to current format
+# Purpose: modal phrasing over C Dorian vamp targeting the natural 6th
+
+id: dorian_intro_etude_Cm
+title: "Hendrix-Style C Dorian Intro Etude"
+level: "A"
+category: "modal_phrase"
+key_center: "Cm"
+mode: "dorian"
+
+program_ref: "programs/bucket_a/dorian_vamp_Cm.ztprog"
+
+midi_segments:
+  - part: "main"
+    file: "exercises/bucket_a/midi/beginning_intro_dorian_etude.mid"
+    bars: [1, 2, 3, 4]
+
+goals:
+  - "Explore phrasing using the C Dorian mode."
+  - "Target the natural 6th (A) to reinforce modal color."
+  - "Blend blues licks with modal phrasing over C minor."
+  - "Distinguish Dorian from Aeolian -- A natural vs Ab."
+
+context:
+  - "C Dorian = C-D-Eb-F-G-A-Bb. The A natural separates it from C Aeolian (Ab)."
+  - "Over Cm7/Cm9, the A natural sounds warm and jazzy, not dark."
+  - "Hendrix used Dorian constantly -- 'Little Wing' and 'Bold As Love' are touchstones."
+  - "This is the static-vamp foundation. See dorian_gospel_backdoor_Cm.ztex for harmonic expansion."
+
+practice_steps:
+  - "Step 1: Loop the phrase slowly. Feel the C Dorian intervals."
+  - "Step 2: Emphasize the A natural as the modal color tone."
+  - "Step 3: Contrast A natural (Dorian) with Ab (Aeolian). Hear the difference."
+  - "Step 4: Use the descending segment to create your own modal riffs."
+  - "Step 5: When comfortable, graduate to dorian_gospel_backdoor_Cm.ztex for harmonic motion."
+
+assessment:
+  pass_condition:
+    - "A natural is audible as a deliberate color choice, not accidental."
+    - "Phrasing is relaxed and expressive -- Hendrix vibe."
+    - "Can distinguish this from Aeolian by ear."
+    - "At least one original riff created using the descending segment."
+
+tags:
+  - bucket_a
+  - hendrix
+  - blues_rock
+  - dorian
+  - modal_phrase
+  - key_Cm

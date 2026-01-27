@@ -1,0 +1,29 @@
+id: voodoo_child_intro_etude
+exercise_type: phrase_accuracy
+program_ref: voodoo_child_backing.ztprog
+title: "Voodoo Child (Slight Return) – Hendrix-style Intro Etude"
+
+goals:
+  - "Capture expressive phrasing in E minor modal blues"
+  - "Simulate dynamic wah-style contour with bends and glides"
+  - "Execute timing variations with rhythmic confidence"
+
+practice_steps:
+  - "Loop main phrase slowly, focus on note connections"
+  - "Play variation as contrast — add grace notes or extra phrasing"
+  - "Improvise 3rd pass using both modal fragments"
+
+segments:
+  - part: "main"
+    file: voodoo_child_intro_etude.mid
+    bars: [1, 2, 3, 4]
+  - part: "variation"
+    file: voodoo_child_intro_variation.mid
+    bars: [5, 6, 7, 8]
+
+tags:
+  style: hendrix
+  genre: blues_rock
+  key: E_minor
+  feel: slow_groove
+  mode: dorian

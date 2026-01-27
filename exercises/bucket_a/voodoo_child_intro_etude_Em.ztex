@@ -1,0 +1,54 @@
+# Bucket A -- Voodoo Child (Slight Return) Intro Etude (E minor)
+# Source: ChatGPT sandbox export (legacy YAML), converted to current format
+# Purpose: Hendrix-style expressive phrasing over E minor modal blues
+
+id: voodoo_child_intro_etude_Em
+title: "Voodoo Child (Slight Return) -- Hendrix-Style Intro Etude (E Minor)"
+level: "A"
+category: "phrase_accuracy"
+key_center: "Em"
+mode: "dorian"
+
+program_ref: "programs/bucket_a/voodoo_child_backing_Em.ztprog"
+
+midi_segments:
+  - part: "main"
+    file: "exercises/bucket_a/midi/voodoo_child_intro_etude.mid"
+    bars: [1, 2, 3, 4]
+  - part: "variation"
+    file: "exercises/bucket_a/midi/voodoo_child_intro_variation.mid"
+    bars: [5, 6, 7, 8]
+
+goals:
+  - "Capture expressive phrasing in E minor modal blues."
+  - "Simulate dynamic wah-style contour with bends and glides."
+  - "Execute timing variations with rhythmic confidence."
+  - "Use the variation segment as contrast -- different articulation, same tonality."
+
+context:
+  - "E Dorian = E-F#-G-A-B-C#-D. The C# (natural 6th) is the modal color."
+  - "The vamp is a single E7 chord with rhythmic breaks (N.C.)."
+  - "Hendrix treats E7 as a playground -- mix major and minor pentatonic freely."
+  - "Wah pedal contour: vowel-like dynamics on sustained bends."
+
+practice_steps:
+  - "Step 1: Loop the main phrase slowly. Focus on note connections and bends."
+  - "Step 2: Play the variation segment -- add grace notes and extra phrasing."
+  - "Step 3: Alternate main and variation back-to-back (8-bar cycle)."
+  - "Step 4: Improvise a third pass using modal fragments from both segments."
+  - "Step 5: Add dynamic contour -- simulate wah with pick attack and volume."
+
+assessment:
+  pass_condition:
+    - "Main phrase sounds relaxed and expressive, not mechanical."
+    - "Bends land on pitch (especially whole-step bends on G string)."
+    - "Variation provides audible contrast to the main phrase."
+    - "Timing is confident -- notes sit in the pocket, not rushed."
+
+tags:
+  - bucket_a
+  - hendrix
+  - blues_rock
+  - dorian
+  - phrase_accuracy
+  - key_Em

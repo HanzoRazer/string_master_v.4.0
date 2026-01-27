@@ -1,0 +1,54 @@
+# Bucket A -- Walkin' Blues Main Riff + Variation (C)
+# Source: ChatGPT sandbox export (legacy YAML), converted to current format
+# Purpose: 12-bar delta blues riff with variation for phrase contrast
+
+id: walkin_blues_riff_C
+title: "Walkin' Blues -- Main Riff + Variation (C)"
+level: "A"
+category: "riff"
+key_center: "C"
+
+program_ref: "programs/bucket_a/walkin_blues_backing_C.ztprog"
+
+midi_segments:
+  - part: "main"
+    file: "exercises/bucket_a/midi/walkin_blues_main_riff.mid"
+    bars: [1, 2, 3, 4, 5, 6]
+  - part: "variation"
+    file: "exercises/bucket_a/midi/walkin_blues_variation_riff.mid"
+    bars: [7, 8, 9, 10, 11, 12]
+
+goals:
+  - "Internalize 12-bar shuffle riff phrasing."
+  - "Connect descending licks with turnaround motion."
+  - "Introduce contrast between main phrase and variation."
+  - "Feel the delta shuffle -- swing the eighths, lay back."
+
+context:
+  - "Standard 12-bar blues in C. Delta/country blues lineage."
+  - "Main riff covers bars 1-6 (I-IV territory)."
+  - "Variation covers bars 7-12 (I-V turnaround territory)."
+  - "Robert Johnson, Son House, Muddy Waters -- this is the root tradition."
+
+practice_steps:
+  - "Step 1: Loop the main phrase (bars 1-6) until it feels relaxed."
+  - "Step 2: Play the variation riff (bars 7-12) immediately after for contrast."
+  - "Step 3: Play both back-to-back as a full 12-bar chorus."
+  - "Step 4: Improvise a third pass using elements of both phrases."
+  - "Step 5: Try at different tempos -- slow and greasy (52 BPM) vs. driving (96 BPM)."
+
+assessment:
+  pass_condition:
+    - "12-bar form is solid -- no lost bars."
+    - "Shuffle feel is authentic -- eighths swing, not straight."
+    - "Variation provides audible contrast to the main riff."
+    - "Turnaround (bars 11-12) sets up the loop cleanly."
+
+tags:
+  - bucket_a
+  - blues
+  - delta
+  - shuffle
+  - riff
+  - 12_bar
+  - key_C

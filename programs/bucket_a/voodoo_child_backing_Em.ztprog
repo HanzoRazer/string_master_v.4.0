@@ -1,0 +1,41 @@
+name: voodoo_child_backing_Em
+time_signature: 4/4
+bars_per_chord: 1
+style: hendrix_funk
+chords:
+# Voodoo Child (Slight Return) -- E7 vamp with N.C. breaks
+# 8-bar loop: E7 alternating with N.C. (no chord / rhythmic break)
+- E7
+- N.C.
+- E7
+- N.C.
+- E7
+- N.C.
+- E7
+- N.C.
+notes:
+- "Wah-funk groove in E. Single-chord vamp with rhythmic breaks."
+- "N.C. bars are riff space -- let the groove breathe."
+- "Shell voicings + walking bass outline E7 mixolydian."
+- "Classic Hendrix feel: slow, heavy, expressive."
+tags:
+- bucket_a
+- hendrix
+- blues_rock
+- funk
+- vamp
+- key_Em
+tempo_bpm: 66
+tempo_range:
+- 52
+- 84
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 66
+    comping: funk_strum
+  advanced:
+    tempo_bpm: 84
+    comping: wah_rhythm

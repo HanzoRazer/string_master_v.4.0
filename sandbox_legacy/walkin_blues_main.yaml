@@ -1,0 +1,29 @@
+id: walkin_blues_main
+exercise_type: riff
+program_ref: walkin_blues_backing.ztprog
+title: "Walkin' Blues – Main Riff + Variation"
+
+practice_steps:
+  - "Loop main phrase until it feels relaxed"
+  - "Play variation riff immediately after main for contrast"
+  - "Improvise third pass using elements of both"
+
+goals:
+  - "Internalize 12-bar shuffle riff phrasing"
+  - "Connect descending licks with turnaround motion"
+  - "Introduce contrast between phrases"
+
+segments:
+  - part: "main"
+    file: walkin_blues_main_riff.mid
+    bars: [1, 2, 3, 4, 5, 6]
+  - part: "variation"
+    file: walkin_blues_variation_riff.mid
+    bars: [7, 8, 9, 10, 11, 12]
+
+tags:
+  style: blues
+  region: delta
+  key: C
+  tempo: slow
+  form: 12-bar

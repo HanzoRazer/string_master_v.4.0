@@ -1,0 +1,38 @@
+name: dorian_vamp_Cm
+time_signature: 4/4
+bars_per_chord: 1
+style: funky_slow
+chords:
+# C Dorian modal vamp -- Cm7/Cm9 alternation
+# 4-bar loop for modal phrasing
+- Cm7
+- Cm9
+- Cm7
+- Cm9
+notes:
+- "Static C Dorian vamp for modal phrase exploration."
+- "Cm7/Cm9 alternation gives subtle harmonic motion without leaving the mode."
+- "Target the natural 6th (A) to reinforce Dorian color."
+- "Hendrix-style: blend blues licks with modal phrasing."
+tags:
+- bucket_a
+- hendrix
+- blues_rock
+- dorian
+- modal
+- vamp
+- key_Cm
+tempo_bpm: 72
+tempo_range:
+- 52
+- 96
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: funky_slow
+  advanced:
+    tempo_bpm: 96
+    comping: syncopated

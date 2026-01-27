@@ -1,0 +1,16 @@
+id: beginning_backing_dorian
+title: "Beginning – C Dorian Modal Vamp"
+tempo_bpm: 72
+loop_bars: 4
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    groove: funky_slow
+    chords:
+      - Cm7
+      - Cm9
+      - Cm7
+      - Cm9
+  - type: walking_bass
+    outline_chords: true
