@@ -1,0 +1,80 @@
+id: fandango_E_phrygian_dom
+title: "Fandango – Modal Phrygian Dance"
+tempo_bpm: 100
+tempo_range: [80, 130]
+root: E
+mode: phrygian_dominant
+loop_bars: 6
+time_signature: 3/4
+
+# Origin & Character
+# Fandango: One of the oldest Spanish dance forms
+# Pre-flamenco roots, likely 17th century or earlier
+# Character: Lively, proud, courtship dance
+# Many regional variants: Fandangos de Huelva, Fandangos Grandes, etc.
+# Became a parent form for Malaguena, Granainas, Tarantas
+
+# Compas Reference
+# Time signature: 3/4 (triple meter)
+# Feel: Waltz-like pulse, strong beat 1
+# Often alternates free (cante) sections with compas (guitar) sections
+# Fandangos Grandes: free rhythm; Fandangos de Huelva: strict compas
+
+# Scale Reference
+# E Phrygian Dominant (5th mode of A harmonic minor)
+# E-F-G#-A-B-C-D
+# Mixes Phrygian and Phrygian Dominant freely
+# The G vs G# ambiguity is a signature color:
+#   G natural (Phrygian) = darker, minor feel
+#   G# (Phrygian Dominant) = brighter, Spanish flavor
+# Players often alternate between both for expressive contrast
+
+# Zone-Tritone Connection
+# bII -> I (F -> E) zone-crossing resolution
+# E=4(Z1), F=5(Z2) -- ZONE CROSS
+# Tritone: G#-D (3rd & b7 of E7) resolves to A minor (parent)
+# The Phrygian/Phrygian Dominant mixing adds zone complexity
+
+# Harmony Reference
+# Key: E Phrygian Dominant (E-F-G#-A-B-C-D)
+# Typical chords: E(I) - F(bII) - G(bIII) - Am(iv)
+# Cadence: Am - G - F - E (Andalusian)
+# The E major chord at cadence end = Phrygian Dominant resolution
+# Modal play: bIII can be G major (Phrygian) or G# dim (Dominant)
+
+# Relationship to Other Palos
+# Fandango is the parent form for:
+#   Malaguena (rubato fandango from Malaga)
+#   Granainas (fandango from Granada)
+#   Tarantas (fandango from mining regions)
+# All share Phrygian Dominant harmony with regional variations
+
+levels:
+  beginner:
+    tempo_bpm: 80
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 100
+    comping: waltz
+  advanced:
+    tempo_bpm: 130
+    comping: ornamental
+
+instruments:
+  - type: palmas
+    pattern:
+      accents: [1]
+      subdivisions: ["1", "2", "3"]
+  - type: shell_voicings
+    groove: fandango
+    comping: waltz
+    chords:
+      - I
+      - bII
+      - iv
+      - iv
+      - bII
+      - I
+  - type: bass_line
+    root: tonic
+    pattern: waltz_root

@@ -1,0 +1,57 @@
+id: fandango_phrygian_dom_etude
+name: "Fandango -- Modal Phrygian Dance Etude"
+program_ref: fandango_E_phrygian_dom.ztprog
+exercise_type: flamenco_phrygian
+
+# Theory Context
+# Fandango freely mixes Phrygian and Phrygian Dominant
+# This modal ambiguity (G vs G#) is its signature sound
+# The 3/4 waltz feel distinguishes it from 4/4 Tangos family
+# Parent form for Malaguena, Granainas, Tarantas
+
+# Modal Mixing
+# Phrygian: E-F-G-A-B-C-D (G natural = minor 3rd)
+# Phrygian Dominant: E-F-G#-A-B-C-D (G# = major 3rd)
+# Players alternate freely for expressive contrast
+# G natural for darker passages, G# for bright resolution
+
+goals:
+  - "Internalize 3/4 waltz feel with Phrygian harmony"
+  - "Practice switching between G natural and G# (modal mixing)"
+  - "Feel bII -> I gravity (F -> E) in triple meter"
+  - "Connect Fandango to its descendant forms (Malaguena, etc.)"
+
+practice_steps:
+  - "Play E Phrygian Dominant scale in 3/4, accenting beat 1"
+  - "Alternate G natural and G# in the same phrase"
+  - "Practice Andalusian cadence in 3/4: Am - G - F - E"
+  - "End phrases on E major chord (G# gives the resolution)"
+
+technique_focus:
+  - name: modal_mixing
+    description: "Alternate Phrygian (G) and Phrygian Dominant (G#)"
+  - name: waltz_strum
+    description: "Bass note on 1, chord on 2 and 3"
+  - name: cadential_resolution
+    description: "Am - G - F - E with conviction on final E major"
+
+melodic_targets:
+  - degree: 3 (G#)
+    role: "Bright resolution tone (Phrygian Dominant)"
+  - degree: b3 (G)
+    role: "Dark color tone (natural Phrygian)"
+  - degree: bII (F)
+    role: "Gravity note - falls to E"
+
+modal_switch:
+  phrygian: "E-F-G-A-B-C-D (darker, minor feel)"
+  phrygian_dominant: "E-F-G#-A-B-C-D (brighter, Spanish)"
+  technique: "Use G natural ascending, G# descending for classic effect"
+
+tags:
+  palo: fandango
+  mode: phrygian_dominant_mixed
+  root: E
+  zone_theory: bII_gravity
+  time_signature: 3/4
+  parent_of: [malaguena, granainas, tarantas]
