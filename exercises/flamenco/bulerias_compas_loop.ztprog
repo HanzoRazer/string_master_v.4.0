@@ -6,6 +6,14 @@ root: E
 mode: phrygian
 loop_bars: 12
 
+# Compas Reference
+# Accent Map:  | 12 1 2 | 3 4 5 | 6 7 | 8 9 | 10 11 |
+#                 *       *       *     *      *
+# Accents on beats: 12, 3, 6, 8, 10
+# Beat 12 is the downbeat/start of phrasing
+# Guitarists syncopate across the cycle for swing and tension
+# Character: Playful, improvisatory, percussive, virtuosic
+
 # Harmony Reference
 # Key: E Phrygian (E-F-G-A-B-C-D)
 # Typical chords: E(i) - F(II) - G(III) - Am(iv)
