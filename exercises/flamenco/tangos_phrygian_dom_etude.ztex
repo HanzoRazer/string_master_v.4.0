@@ -1,0 +1,35 @@
+id: tangos_phrygian_dom_etude
+name: "Tangos -- Phrygian Dominant Etude"
+program_ref: tangos_A_phrygian_dom.ztprog
+exercise_type: flamenco_phrygian
+
+# Theory Context
+# Tangos uses A Phrygian Dominant (A-Bb-C#-D-E-F-G)
+# The bII (Bb) creates zone-crossing gravity to I (A)
+# Practice targeting the raised 3rd (C#) and the bII resolution
+
+goals:
+  - "Internalize A Phrygian Dominant sound and fingering"
+  - "Feel the bII -> I gravity cell in 4/4 context"
+  - "Use the C#-G tritone for tension and release"
+  - "Develop rhythmic phrasing for Tangos compas"
+
+practice_steps:
+  - "Play A Phrygian Dominant scale ascending/descending"
+  - "Target C# on strong beats (the 'Spanish' color note)"
+  - "Practice Bb -> A resolution phrases"
+  - "Add rasgueado accents on beats 1 and 3"
+
+melodic_targets:
+  - degree: 3 (C#)
+    role: "Color tone - gives the 'Spanish' exotic sound"
+  - degree: bII (Bb)
+    role: "Gravity note - wants to fall to A"
+  - degree: b7 (G)
+    role: "Tritone partner of C# - creates dominant tension"
+
+tags:
+  palo: tangos
+  mode: phrygian_dominant
+  root: A
+  zone_theory: bII_gravity

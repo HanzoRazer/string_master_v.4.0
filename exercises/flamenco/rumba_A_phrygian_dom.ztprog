@@ -1,0 +1,68 @@
+id: rumba_A_phrygian_dom
+title: "Rumba Flamenca – A Phrygian Dominant Party"
+tempo_bpm: 115
+tempo_range: [95, 140]
+root: A
+mode: phrygian_dominant
+loop_bars: 8
+
+# Compas Reference
+# Time signature: 4/4 (Cuban/Latin influence)
+# Character: Festive, party vibe, accessible, danceable
+# Rumba Flamenca borrows from Cuban rumba but uses Phrygian harmony
+# Often heard in Gipsy Kings style
+
+# Scale Reference
+# A Phrygian Dominant (5th mode of D harmonic minor)
+# A-Bb-C#-D-E-F-G
+# Bright, exotic sound from the major 3rd (C#)
+# More "major" feeling than natural Phrygian
+
+# Zone-Tritone Connection
+# bII -> I (Bb -> A) is the Phrygian Gravity Cell
+# A=9(Z2), Bb=10(Z1) -- ZONE CROSS = resolution direction
+# Latin clave patterns reinforce this gravitational pulse
+
+# Harmony Reference
+# Key: A Phrygian Dominant
+# Typical progression: A - G - F - E (Andalusian with A major tonic)
+# Or: A - Dm - Bb - A (emphasizing bII gravity)
+# The A major chord gives brightness; Bb gives exotic tension
+
+# Technique Reference
+# Right-hand: Rasgueado (fan strum), golpe (tap), rumba strum pattern
+# Often uses ventilador (fan) rasgueado on accents
+# Percussive muting between strums
+
+levels:
+  beginner:
+    tempo_bpm: 95
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 115
+    comping: rumba_strum
+  advanced:
+    tempo_bpm: 140
+    comping: rumba_strum
+
+instruments:
+  - type: cajon
+    pattern:
+      slap: [1, 3]
+      bass: [2, 4]
+      ghost: ["1e", "2e", "3e", "4e"]
+  - type: shell_voicings
+    groove: rumba
+    comping: rumba_strum
+    chords:
+      - I
+      - I
+      - bVII
+      - bVI
+      - bII
+      - bII
+      - I
+      - I
+  - type: bass_line
+    root: tonic
+    pattern: latin_tumbao

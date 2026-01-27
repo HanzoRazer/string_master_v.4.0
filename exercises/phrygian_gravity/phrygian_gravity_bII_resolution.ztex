@@ -1,0 +1,63 @@
+id: phrygian_gravity_bII_resolution
+name: "Phrygian Gravity -- bII to I Zone-Crossing Resolution"
+program_ref: "../../programs/phrygian_gravity_bII_to_I_cycle.ztprog"
+exercise_type: "phrygian_gravity"
+
+# Theory Foundation
+# The bII -> I half-step is the "Phrygian Gravity Cell"
+# In A Phrygian Dominant: Bb -> A
+# Zone analysis: Bb=10(Z1), A=9(Z2) -- ZONE CROSS!
+# This is parallel to V7 -> I in jazz, but descending
+
+# Tritone Awareness
+# A Phrygian Dominant contains the C#-G tritone (3rd & b7 of A7)
+# This tritone wants to resolve: C# -> D, G -> F# (or F)
+# A7 is the V7 of D minor (the parent harmonic minor)
+# Practice hearing BOTH gravity pulls: bII->I AND V7->i
+
+task:
+  mode: "custom"
+  instructions: "On each bII chord, feel the gravitational pull DOWN to I. Target the zone-crossing half-step (e.g., Bb->A). Also hear the tritone (3rd & b7) embedded in the I chord."
+  prompts:
+    - "Say 'zone cross' each time bII resolves to I"
+    - "Hear the tritone (C#-G in A) as embedded dominant tension"
+    - "Feel the bII as 'leaning in' -- it MUST fall to I"
+    - "Compare this gravity to V7->I: both are zone-crossing resolutions"
+
+goals:
+  - "Internalize bII -> I as a gravity cell (like V7 -> I)"
+  - "Hear the zone-crossing half-step as directional pull"
+  - "Connect Phrygian Dominant to its parent harmonic minor"
+  - "Transfer this resolution feel to Tangos and Rumba playing"
+
+practice_steps:
+  - "Start in A: play Bb triad, then A major. Feel the fall."
+  - "Add the tritone: play Bb with C#-G, resolve to A"
+  - "Cycle through keys by 4ths: A -> D -> G -> C -> F -> Bb..."
+  - "In each key, identify: bII note, I note, tritone pair"
+
+zone_map:
+  A_phrygian_dominant:
+    root: A (pc=9, Z2)
+    bII: Bb (pc=10, Z1)
+    third: C# (pc=1, Z2)
+    fourth: D (pc=2, Z1)
+    fifth: E (pc=4, Z1)
+    bVI: F (pc=5, Z2)
+    bVII: G (pc=7, Z2)
+    zone_cross: "Bb(Z1) -> A(Z2)"
+    tritone: "C#(1) - G(7)"
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Did the bII -> I feel like 'falling' or 'arriving'?"
+    - "Could you hear the tritone inside the I chord wanting to resolve further?"
+    - "How does this gravity compare to the V7 -> i you know from jazz?"
+    - "Which keys felt most natural? Which were hardest?"
+
+tags:
+  harmony_type: phrygian_dominant
+  motion_type: gravity_cell
+  zone_theory: zone_crossing
+  parent_scale: harmonic_minor

@@ -1,0 +1,74 @@
+id: phrygian_gravity_tritone_to_parent
+name: "Phrygian Gravity -- Tritone Resolution to Parent Minor"
+program_ref: "../../programs/phrygian_gravity_bII_to_I_cycle.ztprog"
+exercise_type: "phrygian_gravity"
+
+# Theory Foundation
+# A Phrygian Dominant is the 5th mode of D harmonic minor
+# The A7 chord (A-C#-E-G) contains the C#-G tritone
+# This tritone is the SAME as in D harmonic minor's dominant
+# So A Phrygian Dominant "wants" to resolve to D minor
+
+# Dual Gravity System
+# 1. bII -> I (Bb -> A) = Phrygian gravity (horizontal)
+# 2. V7 -> i (A7 -> Dm) = Dominant gravity (to parent)
+# Both are zone-crossing resolutions!
+
+# Parent Scale Map (by 4ths)
+# A Phryg Dom -> D harmonic minor
+# D Phryg Dom -> G harmonic minor
+# G Phryg Dom -> C harmonic minor
+# C Phryg Dom -> F harmonic minor
+# ...and so on through the cycle
+
+task:
+  mode: "custom"
+  instructions: "On each I chord (Phrygian Dominant), hear it as the V7 of its parent minor. Feel the tritone (3rd & b7) pulling toward the parent. Then resolve the bII -> I within the mode."
+  prompts:
+    - "In A Phrygian Dom: hear A7 wanting to go to Dm"
+    - "The C#-G tritone resolves: C# -> D, G -> F"
+    - "Now feel Bb -> A as a SECOND gravity pull"
+    - "You have TWO resolution paths: to parent (Dm) or within mode (A)"
+
+goals:
+  - "Hear Phrygian Dominant as 'dominant mode' of harmonic minor"
+  - "Identify the tritone in each Phrygian Dominant chord"
+  - "Feel the dual gravity: bII->I AND V7->i (to parent)"
+  - "Use this awareness to create tension and release in flamenco"
+
+practice_steps:
+  - "Play A7 chord. Hear C#-G tritone. Resolve to Dm."
+  - "Now play A7, then Bb, then A. Feel the mode stay on A."
+  - "Alternate: A7 -> Dm (parent) vs A7 -> Bb -> A (modal)"
+  - "Cycle through keys: D7 -> Gm OR D7 -> Eb -> D"
+
+tritone_map:
+  A_phrygian_dom:
+    chord: A7 (A-C#-E-G)
+    tritone: C#-G
+    resolves_to: Dm (D-F-A)
+    resolution: "C# -> D, G -> F"
+  D_phrygian_dom:
+    chord: D7 (D-F#-A-C)
+    tritone: F#-C
+    resolves_to: Gm (G-Bb-D)
+    resolution: "F# -> G, C -> Bb"
+  G_phrygian_dom:
+    chord: G7 (G-B-D-F)
+    tritone: B-F
+    resolves_to: Cm (C-Eb-G)
+    resolution: "B -> C, F -> Eb"
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Could you hear the tritone pulling toward the parent minor?"
+    - "Which gravity felt stronger: bII->I or V7->i?"
+    - "How might you use both gravities in a Tangos or Rumba?"
+    - "Did resolving to the parent feel like 'leaving' the flamenco sound?"
+
+tags:
+  harmony_type: phrygian_dominant
+  motion_type: tritone_resolution
+  zone_theory: dual_gravity
+  parent_scale: harmonic_minor

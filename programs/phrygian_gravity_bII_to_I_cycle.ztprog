@@ -1,0 +1,97 @@
+id: phrygian_gravity_bII_to_I_cycle
+name: "Phrygian Gravity -- bII to I Cycle (All 12 Keys by 4ths)"
+description: "Zone-crossing resolution practice through circle of 4ths"
+tempo_bpm: 92
+tempo_range: [60, 130]
+time_signature: 4/4
+bars_per_chord: 1
+
+# Theory Foundation
+# The bII -> I half-step is the Phrygian Gravity Cell
+# Each resolution is a ZONE-CROSSING event
+# Cycling by 4ths mirrors the dominant cycle in jazz
+# This connects flamenco harmony to circle-of-fifths theory
+
+# Zone-Tritone Reference
+# In each key, the pattern is: I - bII - I
+# The bII -> I motion crosses zones (half-step = zone change)
+# Example in A: A(Z2) <- Bb(Z1) -- Bb "falls into" A
+# The I chord (Phrygian Dominant) contains a tritone (3rd & b7)
+
+# Cycle Order (by 4ths, same as jazz dominant cycle)
+# A -> D -> G -> C -> F -> Bb -> Eb -> Ab -> Db -> Gb -> B -> E -> A
+
+levels:
+  beginner:
+    tempo_bpm: 60
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 92
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 130
+    comping: syncopated
+
+# Chord progression: I - bII - I for each key, then modulate by 4th
+# 3 bars per key = 36 bars total, then back to A
+chords:
+  # A Phrygian Dominant (bII = Bb)
+  - A
+  - Bb
+  - A
+  # D Phrygian Dominant (bII = Eb)
+  - D
+  - Eb
+  - D
+  # G Phrygian Dominant (bII = Ab)
+  - G
+  - Ab
+  - G
+  # C Phrygian Dominant (bII = Db)
+  - C
+  - Db
+  - C
+  # F Phrygian Dominant (bII = Gb)
+  - F
+  - Gb
+  - F
+  # Bb Phrygian Dominant (bII = Cb/B)
+  - Bb
+  - B
+  - Bb
+  # Eb Phrygian Dominant (bII = Fb/E)
+  - Eb
+  - E
+  - Eb
+  # Ab Phrygian Dominant (bII = Bbb/A)
+  - Ab
+  - A
+  - Ab
+  # Db Phrygian Dominant (bII = Ebb/D)
+  - Db
+  - D
+  - Db
+  # Gb Phrygian Dominant (bII = Abb/G)
+  - Gb
+  - G
+  - Gb
+  # B Phrygian Dominant (bII = C)
+  - B
+  - C
+  - B
+  # E Phrygian Dominant (bII = F)
+  - E
+  - F
+  - E
+
+style:
+  comp: flamenco_tangos
+  bass: pedal_root
+
+instruments:
+  - type: shell_voicings
+    groove: tangos
+    comping: rhythmic
+  - type: bass_pedal
+    root: tonic
+    pattern: pedal

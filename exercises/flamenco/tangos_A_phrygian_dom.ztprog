@@ -1,0 +1,60 @@
+id: tangos_A_phrygian_dom
+title: "Tangos – A Phrygian Dominant Groove"
+tempo_bpm: 100
+tempo_range: [80, 130]
+root: A
+mode: phrygian_dominant
+loop_bars: 8
+
+# Compas Reference
+# Time signature: 4/4 (not 12-beat like Bulerias/Solea)
+# Character: Upbeat, danceable, rhythmic drive
+# Often uses palmas, cajon, or full rhythm section
+
+# Scale Reference
+# A Phrygian Dominant (5th mode of D harmonic minor)
+# A-Bb-C#-D-E-F-G
+# The raised 3rd (C# vs C) gives the exotic Spanish flavor
+# Tritone: C#-G (3rd & b7 of A7) resolves to D minor
+
+# Zone-Tritone Connection
+# bII -> I (Bb -> A) is a ZONE-CROSSING half-step resolution
+# A=9(Z2), Bb=10(Z1) -- zone cross creates gravitational pull
+# This is the "Phrygian Gravity Cell"
+
+# Harmony Reference
+# Key: A Phrygian Dominant (A-Bb-C#-D-E-F-G)
+# Typical chords: A(I) - Bb(bII) - Dm(iv) - A(I)
+# The A major chord in minor context = exotic color
+# Parent scale: D harmonic minor (A7 is V7 of Dm)
+
+levels:
+  beginner:
+    tempo_bpm: 80
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 130
+    comping: syncopated
+
+instruments:
+  - type: palmas
+    pattern:
+      accents: [1, 3]
+  - type: shell_voicings
+    groove: tangos
+    comping: rhythmic
+    chords:
+      - I
+      - I
+      - bII
+      - bII
+      - iv
+      - iv
+      - I
+      - I
+  - type: bass_line
+    root: tonic
+    pattern: root_fifth

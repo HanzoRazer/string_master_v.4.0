@@ -1,0 +1,45 @@
+id: rumba_phrygian_dom_etude
+name: "Rumba Flamenca -- Phrygian Dominant Party Etude"
+program_ref: rumba_A_phrygian_dom.ztprog
+exercise_type: flamenco_phrygian
+
+# Theory Context
+# Rumba uses A Phrygian Dominant with Latin/Cuban influence
+# Brighter, more festive than Tangos
+# The raised 3rd (C#) gives major-chord brightness
+# bII -> I gravity still applies but with party energy
+
+goals:
+  - "Develop Rumba Flamenca rhythmic feel"
+  - "Use Phrygian Dominant for bright, festive melodic lines"
+  - "Blend flamenco gravity with Latin rhythmic drive"
+  - "Practice rasgueado and percussive strumming patterns"
+
+practice_steps:
+  - "Learn the rumba strum pattern (down-up-mute-up)"
+  - "Play A major chord with Phrygian approach notes"
+  - "Practice Bb -> A bass line motion"
+  - "Add golpe (tap) on the upbeats for percussion"
+
+technique_focus:
+  - name: rumba_strum
+    description: "Down-up-mute-up pattern with percussive attack"
+  - name: ventilador
+    description: "Fan rasgueado - rolling strum for accents"
+  - name: golpe
+    description: "Tap on guitar body for percussion"
+
+melodic_targets:
+  - degree: 3 (C#)
+    role: "Major 3rd - bright, festive color"
+  - degree: 5 (E)
+    role: "Strong chord tone - stable landing"
+  - degree: bII (Bb)
+    role: "Exotic tension - resolve down to A"
+
+tags:
+  palo: rumba
+  mode: phrygian_dominant
+  root: A
+  zone_theory: bII_gravity
+  latin_influence: true
