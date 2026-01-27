@@ -35,8 +35,27 @@ It is built on three fundamental principles:
 2. **Tritones define gravity**  
    Tritones express the harmonic backbone of dominant function. They anchor resolution direction.
 
-3. **Half-steps define motion**  
+3. **Half-steps define motion**
    Half-step movement transfers energy between zones and generates harmonic forward motion — including dominant cycles descending in 4ths.
+
+### What This Means
+
+Most theory systems describe *what* happens in harmony. This one explains *why*.
+
+Every dominant 7th chord contains exactly one tritone — between its 3rd and 7th. That tritone is unstable and wants to resolve. **If you can find the tritone, you can predict the resolution.** That's the entire engine of tonal harmony reduced to a single, testable claim.
+
+The zone system makes this computable. The 12 pitch classes split into two whole-tone families by parity: `zone(pc) = pc % 2`. A half-step always crosses zones. A whole-step stays in the same zone. Zone-crossing motion *is* resolution gravity. Same-zone motion is scalar drift. That's an enormous music-theory space compressed into one predicate.
+
+There are exactly **six tritone axes** in 12-tone equal temperament. Each axis is shared by two dominant 7th chords a tritone apart — the tritone-substitution pair. They share the same gravitational engine; only the bass note differs. Dominants can be grouped by axis, not just by root.
+
+This reframes substitution, voice-leading, and resolution as aspects of **one unified mechanism**:
+
+- **Guide tones** (3rds and 7ths) *are* the tritone. Voice-leading *is* gravity.
+- **Tritone substitution** isn't a trick — it's the same engine with a different entrance.
+- **Dual gravity** means both the front door (V7 → I) and the backdoor (bVII7 → I) are real gravitational paths to the same tonic.
+- **Gospel, jazz, blues, bebop, and bluegrass** all obey the same physics. The framework bridges styles by exposing their shared harmonic machinery.
+
+The result is a system that simultaneously serves as a **musical worldview**, an **annotation protocol** for exercises, and an **engineering contract** for content generation. Everything in this repository — enclosures, triplet chains, Drop-2 voice-leading, guide-tone studies, pivot patterns — connects back to the same small set of computable objects.
 
 ---
 
@@ -627,9 +646,29 @@ instruments:
 | Barry Harris | 24 | Bebop scales in all 12 keys |
 | Bluegrass | 13 | Flatpicking, fiddle tunes |
 | Blues | 7 | Turnarounds, intros |
+| Bucket A | 15 | Beginner-friendly cadence & etude exercises |
+| Chromatic Triplets | 3 | Barry Harris triplet chain technique |
 | Enclosures | 14 | Chromatic approach patterns |
 | Cycles | 6 | Circle of 5ths/3rds |
 | Got Rhythm | 4 | Rhythm changes |
 | Phrases | 8 | Jazz licks |
 | Pivot | 13 | Voice-leading |
-| Voicings | 2 | Chord studies |
+| Voicings | 9 | Drop-2 voice-leading & chord studies |
+
+### Every Exercise Through One Lens
+
+Every exercise family in this repository can be understood as an application of zone-tritone gravity. The same underlying mechanics explain everything you're training:
+
+| Exercise Family | Zone-Tritone Concept |
+|-----------------|---------------------|
+| **Enclosures** | Chromatic approach = zone-crossing half-step to chord tone |
+| **Pivot patterns** | Pivot note is same-zone; resolution target is zone-cross |
+| **Gospel backdoor** | Dual-axis gravity — bVII7 and V7 both pull to tonic |
+| **Drop-2 voice-leading** | Guide tones (3rd + 7th) *are* the tritone; voice-leading *is* gravity |
+| **Chromatic triplet chains** | 3-note cells engineered to cross zones and land on chord tones |
+| **Barry Harris 6th diminished** | Interleaved chord tones + diminished passing tones = zone-alternating pattern |
+| **Guide-tone studies** | 3rd and 7th form the tritone; tracking them tracks the gravitational engine |
+| **Phrygian gravity** | bII-I zone-cross + parent minor tritone resolution |
+| **Blues turnarounds** | V-IV-I gravity chain with chromatic passing |
+
+This isn't a loose metaphor. The zone-tritone engine is the **physics** beneath the exercises. When you practice enclosures, you're training zone-crossing by hand. When you practice guide-tone voice-leading, you're tracking the tritone as it resolves. The theory and the practice are the same object.

@@ -390,7 +390,77 @@ Quality > quantity.
 
 ---
 
-## 💡 **Final Note**
+## **For Developers & Content Builders**
+
+### **Q: What makes this different from other music theory libraries?**
+
+Most music theory libraries encode **chord-symbol lookups** — given a symbol, return the notes. The Zone-Tritone System encodes **harmonic causality** — given a tritone, predict the resolution. Given a pitch class, determine its zone. Given two zones, determine whether the motion is gravitational or scalar.
+
+This means you can build tools that don't just *label* harmony but *reason* about it.
+
+---
+
+### **Q: How computable is this, really?**
+
+The entire zone system is one line: `zone(pc) = pc % 2`. The gravity chain generator is one line: `next_root = (root - 7) % 12`. There are exactly 6 tritone axes in 12-TET. Every dominant 7th chord maps to one of them.
+
+That's the full state space. No heuristics, no trained models, no lookup tables. The theory compresses a huge music-theory space into a small number of deterministic functions. Content generation, exercise tagging, and harmonic analysis all reduce to these primitives.
+
+---
+
+### **Q: Can I generate exercises programmatically?**
+
+Yes. The system is designed for it. Every exercise in this repository can be described as a zone-tritone operation:
+
+- **Enclosures** = chromatic approach cells that zone-cross to a chord tone
+- **Triplet chains** = 3-note cells that alternate zones to land on resolution targets
+- **Gravity chains** = repeated `(root - 7) % 12` to produce dominant cycles
+- **Guide-tone lines** = tracking the tritone (3rd + 7th) across a progression
+
+If you can express the harmonic content in zone-tritone terms, you can generate the exercise, tag it, and validate its correctness — all from the same primitives.
+
+---
+
+### **Q: How does the exercise tagging system work?**
+
+Exercises are tagged with zone-tritone metadata in `.ztex` files:
+
+```yaml
+tritone_gravity:
+  target: "Cm"
+  axis_primary:
+    name: "D-Ab"
+    dominants: ["Bb7", "E7"]
+    resolution: "D->Eb, Ab->G"
+    role: "backdoor gravity"
+tags:
+  zone_theory: zone_crossing | dual_gravity | tritone_resolution
+  motion_type: gravity_cell
+```
+
+Tags aren't hand-wavy labels. They reference specific zone-tritone operations. This means tags can be validated against the theory, and exercises can be filtered, grouped, and sequenced by which gravitational concept they train.
+
+---
+
+### **Q: What's the relationship between the theory and the exercise system?**
+
+The Zone-Tritone framework serves three roles simultaneously:
+
+1. **Musical worldview** — it explains *why* harmonic motion works
+2. **Annotation protocol** — it defines *how* exercises are tagged and categorized
+3. **Engineering contract** — it specifies *what* primitives content generation uses
+
+These three roles share the same objects (zones, axes, gravity chains). This alignment is the spine of the repository: pedagogy, tagging, and generation all speak the same language.
+
+---
+
+### **Q: What are the scope boundaries?**
+
+The system is intentionally 12-TET centric. It treats harmonic gravity as primarily tritone-driven. Real music also uses modal centers, pedal points, and non-dominant functional motion — those are governed at the pedagogy layer, not the zone-tritone engine layer. These aren't flaws; they're scope boundaries that keep the computable core clean.
+
+---
+
+## **Final Note**
 
 The Zone–Tritone System exists to **serve sound, not dogma**.
 

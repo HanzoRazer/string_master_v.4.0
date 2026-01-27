@@ -273,6 +273,37 @@ The Zone-Tritone System is designed for cumulative mastery. Each level assumes c
 
 ---
 
+## How Exercises Connect to the Framework
+
+The pedagogical sequence above defines *what* students learn at each level. The exercise library defines *how* they practice it. Every exercise family maps back to a specific zone-tritone concept:
+
+| Exercise Family | Primary Concept | Level |
+|-----------------|-----------------|-------|
+| **Zone identification drills** | `zone(pc) = pc % 2` — instant parity recognition | 1 |
+| **Enclosures** | Zone-crossing half-steps approach chord tones from above and below | 2-3 |
+| **Pivot patterns** | Pivot note sits in the same zone as two chord tones; resolution crosses zones | 3 |
+| **Guide-tone voice-leading** | 3rds and 7ths form the tritone; tracking them tracks the engine | 3-4 |
+| **Drop-2 shell voicings** | Minimum harmonic information = the tritone (3rd + 7th) | 3-4 |
+| **Chromatic triplet chains** | 3-note cells cross zones to land on chord tones; zone-alternating pattern | 3-4 |
+| **Gospel backdoor cadence** | Dual gravity — both V7 and bVII7 pull to tonic via different tritone axes | 4-5 |
+| **Tritone substitution studies** | Same axis, different bass — dominant equivalence class | 4-5 |
+| **Barry Harris 6th diminished** | Interleaved chord tones and diminished passing tones alternate zones | 4-5 |
+| **Phrygian gravity** | bII-I zone-cross layered with parent minor tritone resolution | 4-5 |
+| **Gravity chain progressions** | `r = (r - 7) % 12` — repeated dominant resolution as a single generator | 5 |
+| **Reharmonization** | Axis substitution preserves gravitational function while changing color | 5-6 |
+
+### Design Principle
+
+Exercises are not separate from the theory — they are the theory made physical. When a student practices an enclosure, they are training zone-crossing reflexes. When they practice guide-tone voice-leading, they are tracking the tritone as it resolves. The framework does not merely *describe* the exercises; it *generates* them.
+
+This alignment means:
+
+- **Tagging is principled**: exercises can be categorized by which zone-tritone concept they train
+- **Assessment is grounded**: pass criteria reference observable gravity events (chord tone on beat 1, clean resolution, correct voice-leading)
+- **Progression is structural**: moving from Level 1 to Level 6 means practicing exercises that engage progressively deeper zone-tritone mechanics
+
+---
+
 ## Quick Reference
 
 ### Zone Membership Formula
