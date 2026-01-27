@@ -1,0 +1,30 @@
+id: tangos_phrygian_dominant_variation
+title: "Tangos Variation - Phrygian Dominant Development in E"
+program_ref: tangos_phrygian_loop.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Develop rhythmic and melodic variation over the Tangos groove"
+  - "Explore alternate phrasing paths within E Phrygian Dominant"
+  - "Build improvisational confidence over a repeating compas"
+
+practice_steps:
+  - "Compare this variation against the base etude to hear the differences"
+  - "Isolate new rhythmic figures and practice them against the click"
+  - "Combine both etude and variation phrases freely over the backing"
+
+tags:
+  style: flamenco
+  palo: tangos
+  key: E_phrygian_dominant
+  meter: 4/4
+  bars: [1, 2, 3, 4]
+
+assessment:
+  what_to_measure:
+    - rhythmic_alignment_to_backing
+    - phrase_variation_from_etude
+    - melodic_accuracy
+  pass_criteria:
+    rhythmic_alignment_to_backing: 0.85
+    phrase_variation_from_etude: true
