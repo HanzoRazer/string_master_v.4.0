@@ -1,0 +1,30 @@
+id: red_river_valley_etude
+title: "Red River Valley – 16-Bar Melody Etude"
+program_ref: red_river_valley_backing.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Play the full Red River Valley melody in G major"
+  - "Connect phrases smoothly over 16 bars"
+  - "Develop even eighth-note phrasing with tone"
+
+practice_steps:
+  - "Play with 78 BPM backing to support phrasing"
+  - "Loop each half (8 bars) before combining"
+  - "Focus on transitions between V and I phrases"
+
+tags:
+  style: traditional
+  key: G
+  meter: 4/4
+  technique: melodic_picking
+  phrase_type: folk_melody
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_shape_completion
+    - melodic_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 35
+    melodic_accuracy_min: 0.9
