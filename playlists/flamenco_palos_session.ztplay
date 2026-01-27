@@ -1,0 +1,69 @@
+name: "Flamenco Palos Practice Session"
+tempo: 80
+outfile: "flamenco_palos_session.mid"
+
+# Session flow: slow/solemn → moderate → fast/driving
+# Each palo gets its backing loop + etude(s), building tempo naturally
+
+programs:
+  # --- 1. Soleá (E Phrygian, 12-beat compás, solemn) ---
+  - config: "../exercises/flamenco/solea_compas_loop.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/solea_falseta_etude.ztex"
+    repeat: 2
+  - config: "../exercises/flamenco/solea_falseta_variation.ztex"
+    repeat: 2
+
+  # --- 2. Tientos (E Phrygian, 4/4 slow ~68 BPM, dragging behind the beat) ---
+  - config: "../exercises/flamenco/tientos_groove_loop.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/tientos_falseta_etude.ztex"
+    repeat: 2
+  - config: "../exercises/flamenco/tientos_falseta_variation.ztex"
+    repeat: 2
+
+  # --- 3. Zambra (D Phrygian Dominant, rubato → groove, Moorish) ---
+  - config: "../exercises/flamenco/zambra_groove_loop.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/zambra_falseta_etude.ztex"
+    repeat: 2
+  - config: "../exercises/flamenco/zambra_falseta_variation.ztex"
+    repeat: 2
+
+  # --- 4. Malagueña (E Phrygian Mixed, rubato/free, modal switching) ---
+  - config: "../exercises/flamenco/malaguena_backing.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/malaguena_falseta_etude.ztex"
+    repeat: 2
+
+  # --- 5. Fandango (E Phrygian Dominant, 3/4 waltz, proud) ---
+  - config: "../exercises/flamenco/fandango_E_phrygian_dom.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/fandango_phrygian_dom_etude.ztex"
+    repeat: 2
+
+  # --- 6. Tangos (E Phrygian Dominant, 4/4 ~100 BPM, rhythmic drive) ---
+  - config: "../exercises/flamenco/tangos_phrygian_loop.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/tangos_phrygian_dominant_etude.ztex"
+    repeat: 2
+  - config: "../exercises/flamenco/tangos_phrygian_dominant_variation.ztex"
+    repeat: 2
+
+  # --- 7. Rumba (E Phrygian Dominant, 4/4 ~100 BPM, festive) ---
+  - config: "../exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/rumba_phrygian_dominant_etude.ztex"
+    repeat: 2
+  - config: "../exercises/flamenco/rumba_phrygian_dominant_variation.ztex"
+    repeat: 2
+
+  # --- 8. Bulerías (E Phrygian, 12-beat compás, fastest/fiesta) ---
+  - config: "../exercises/flamenco/bulerias_compas_loop.ztprog"
+    repeat: 2
+  - config: "../exercises/flamenco/bulerias_falseta_etude.ztex"
+    repeat: 2
+
+  # --- 9. Cooldown: Andalusian Cadence cycle (all 12 keys) ---
+  - config: "../programs/andalusian_cadence_all_keys.ztprog"
+    repeat: 1
