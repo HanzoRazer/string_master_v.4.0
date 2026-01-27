@@ -3,7 +3,7 @@ title: "Malaguena – Free Rubato Backing"
 tempo_bpm: 65
 tempo_range: [45, 85]
 root: E
-mode: phrygian
+mode: phrygian_dominant
 loop_bars: 4
 
 # Origin & Form
@@ -11,11 +11,18 @@ loop_bars: 4
 # Not fixed compas: Often rubato or free rhythm, especially solo guitar
 # Popularized by: Ernesto Lecuona (classical), Sabicas, Paco de Lucia (flamenco)
 
+# Scale Reference
+# Phrygian Dominant (aka Spanish Phrygian, 5th mode of D harmonic minor)
+# E Phrygian Dominant: E-F-G#-A-B-C-D
+# vs Natural Phrygian: E-F-G-A-B-C-D
+# The raised 3rd (G# instead of G) gives the exotic Spanish flavor
+# This is why E MAJOR chord is used despite the flat 2nd
+
 # Harmony Reference
-# Key: E Phrygian (E-F-G-A-B-C-D)
-# Typical chords: E(i) - F(II) - Am(iv)
+# Key: E Phrygian Dominant (E-F-G#-A-B-C-D)
+# Typical chords: E(I) - F(bII) - Am(iv) - Dm(bvii)
 # Cadence: Am - G - F - E (Andalusian)
-# Left-hand: E major chord forms with embellishments
+# The E major chord resolves the descending line with exotic color
 
 # Technique Reference
 # Right-hand: Rasgueado (rolling strum), tremolo, arpeggio, golpes

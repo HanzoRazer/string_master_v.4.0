@@ -15,9 +15,15 @@ loop_bars: 12
 # Phrases often begin on beat 12
 # Character: Solemn, meditative, deep
 
+# Scale Reference
+# Natural Phrygian (not Phrygian Dominant)
+# E Phrygian: E-F-G-A-B-C-D (minor 3rd = G)
+# vs Phrygian Dominant: E-F-G#-A-B-C-D (major 3rd = G#)
+# Solea uses the darker, more solemn natural Phrygian sound
+
 # Harmony Reference
 # Key: E Phrygian (E-F-G-A-B-C-D) or A Phrygian
-# Typical chords: E(i) - F(II) - G(III) - Am(iv)
+# Typical chords: E(i) - F(bII) - G(bIII) - Am(iv)
 # Cadence: Am - G - F - E (Andalusian)
 
 levels:

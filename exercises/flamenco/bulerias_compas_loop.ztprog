@@ -14,9 +14,15 @@ loop_bars: 12
 # Guitarists syncopate across the cycle for swing and tension
 # Character: Playful, improvisatory, percussive, virtuosic
 
+# Scale Reference
+# Primarily Natural Phrygian (may borrow Phrygian Dominant)
+# E Phrygian: E-F-G-A-B-C-D (minor 3rd = G)
+# vs Phrygian Dominant: E-F-G#-A-B-C-D (major 3rd = G#)
+# Bulerias players often mix both for color and tension
+
 # Harmony Reference
 # Key: E Phrygian (E-F-G-A-B-C-D)
-# Typical chords: E(i) - F(II) - G(III) - Am(iv)
+# Typical chords: E(i) - F(bII) - G(bIII) - Am(iv)
 # Cadence: Am - G - F - E (Andalusian)
 
 levels:
