@@ -1,0 +1,49 @@
+name: walkin_blues_backing_C
+time_signature: 4/4
+bars_per_chord: 1
+style: delta_shuffle
+chords:
+# 12-bar blues in C (quick-change variant)
+# Bars 1-4: I chord territory
+- C7
+- C7
+- C7
+- C7
+# Bars 5-6: IV chord
+- F7
+- F7
+# Bars 7-8: back to I
+- C7
+- C7
+# Bars 9-12: turnaround
+- G7
+- F7
+- C7
+- G7
+notes:
+- "Standard 12-bar blues in C with quick-change option."
+- "Delta shuffle feel -- swing the eighths, lay back on 2 and 4."
+- "Turnaround: V-IV-I-V (bars 9-12) sets up the loop."
+- "Main riff covers bars 1-6, variation covers bars 7-12."
+tags:
+- bucket_a
+- blues
+- delta
+- shuffle
+- riff
+- 12_bar
+- key_C
+tempo_bpm: 72
+tempo_range:
+- 52
+- 96
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: shuffle_strum
+  advanced:
+    tempo_bpm: 96
+    comping: walking_bass
