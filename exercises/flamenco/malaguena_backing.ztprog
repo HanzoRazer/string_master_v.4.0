@@ -6,11 +6,20 @@ root: E
 mode: phrygian
 loop_bars: 4
 
+# Origin & Form
+# Root palo: Fandangos de Malaga (folkloric from Malaga)
+# Not fixed compas: Often rubato or free rhythm, especially solo guitar
+# Popularized by: Ernesto Lecuona (classical), Sabicas, Paco de Lucia (flamenco)
+
 # Harmony Reference
 # Key: E Phrygian (E-F-G-A-B-C-D)
 # Typical chords: E(i) - F(II) - Am(iv)
 # Cadence: Am - G - F - E (Andalusian)
-# Character: Free rubato, expressive descending lines
+# Left-hand: E major chord forms with embellishments
+
+# Technique Reference
+# Right-hand: Rasgueado (rolling strum), tremolo, arpeggio, golpes
+# Character: Free rubato, expressive descending lines, showcase piece
 
 levels:
   beginner:
