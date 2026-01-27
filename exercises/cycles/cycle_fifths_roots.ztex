@@ -1,5 +1,6 @@
+id: cycle_fifths_roots
 name: "Cycle of Fifths -- Roots (All Keys)"
-program: "../programs/cycle_fifths_all_keys.ztprog"
+program_ref: "../../programs/cycle_fifths_all_keys.ztprog"
 exercise_type: "cycle_fifths_roots"
 
 task:

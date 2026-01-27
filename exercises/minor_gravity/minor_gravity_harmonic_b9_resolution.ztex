@@ -1,5 +1,6 @@
+id: minor_gravity_harmonic_b9_resolution
 name: "Minor Gravity -- Harmonic Minor b9 Resolution Mission"
-program: "../programs/minor_gravity_harmonic_v7b9_to_i.ztprog"
+program_ref: "../../programs/minor_gravity_harmonic_v7b9_to_i.ztprog"
 exercise_type: "minor_gravity_harmonic_b9_resolution"
 
 task:

@@ -1,5 +1,6 @@
+id: cycle_fifths_roots_awareness
 name: "Cycle of Fifths -- Root Awareness"
-program: "../programs/cycle_fifths_roots.ztprog"
+program_ref: "../../programs/cycle_fifths_roots.ztprog"
 exercise_type: "cycle_fifths_roots"
 
 task:

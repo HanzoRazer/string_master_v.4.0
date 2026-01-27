@@ -1,0 +1,27 @@
+id: bebop_enclosure_descending
+title: "Bebop Enclosure Descending"
+program_ref: bebop_enclosure_descending.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on target chord tone (chord tones descending) on beat 1"
+  - "Enclosure type: chromatic descending"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+tags:
+  style: bebop
+  key: C
+  technique: enclosure
+  target_note: chord tones descending
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9

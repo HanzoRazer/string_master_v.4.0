@@ -1,0 +1,27 @@
+id: enclosure_dom7_G7_target_b7
+title: "Dominant 7 Enclosure - G7 Target b7"
+program_ref: enclosure_dom7_G7_target_b7.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on target chord tone (b7 (F)) on beat 1"
+  - "Enclosure type: chromatic"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+tags:
+  style: bebop
+  key: G
+  technique: enclosure
+  target_note: b7 (F)
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9

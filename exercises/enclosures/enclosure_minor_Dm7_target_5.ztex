@@ -1,0 +1,27 @@
+id: enclosure_minor_Dm7_target_5
+title: "Minor 7 Enclosure - Dm7 Target 5th"
+program_ref: enclosure_minor_Dm7_target_5.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on target chord tone (5th (A)) on beat 1"
+  - "Enclosure type: chromatic"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+tags:
+  style: bebop
+  key: D
+  technique: enclosure
+  target_note: 5th (A)
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9

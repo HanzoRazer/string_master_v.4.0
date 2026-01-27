@@ -1,5 +1,6 @@
+id: cycle_dominants_tritone_subs
 name: "Cycle of Dominants -- Tritone Subs (Guide Tone Mission)"
-program: "../programs/cycle_dominants_fourths.ztprog"
+program_ref: "../../programs/cycle_dominants_fourths.ztprog"
 exercise_type: "cycle_dominants_tritone_subs"
 
 task:

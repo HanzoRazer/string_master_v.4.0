@@ -1,0 +1,32 @@
+id: enclosure_major_C6_target_3
+title: "Major 6 Enclosure - C6 Target 3rd"
+tempo_bpm: 72
+tempo_range: [48, 110]
+root: C
+loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 48
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 110
+    comping: syncopated
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - I6
+      - I6
+  - type: walking_bass
+    outline_chords: true

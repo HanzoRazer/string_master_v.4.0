@@ -1,5 +1,6 @@
+id: minor_gravity_melodic_guidetones
 name: "Minor Gravity -- Melodic Minor Guide Tones (Two-Tritone Hearing)"
-program: "../programs/minor_gravity_melodic_ii_v_i.ztprog"
+program_ref: "../../programs/minor_gravity_melodic_ii_v_i.ztprog"
 exercise_type: "minor_gravity_melodic_guidetones"
 
 task:

@@ -1,0 +1,32 @@
+id: enclosure_alt_dom_target_b9
+title: "Altered Dominant Enclosure - Target b9"
+tempo_bpm: 72
+tempo_range: [48, 110]
+root: C
+loop_bars: 2
+
+levels:
+  beginner:
+    tempo_bpm: 48
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 110
+    comping: syncopated
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1&", "2&", "3&", "4&"]
+  - type: shell_voicings
+    groove: swing
+    comping: rhythmic
+    chords:
+      - V7alt
+      - V7alt
+  - type: walking_bass
+    outline_chords: true

@@ -1,5 +1,6 @@
+id: cycle_thirds_tritone
 name: "Cycle of Thirds -- Tritone Awareness"
-program: "../programs/cycle_thirds_symmetry.ztprog"
+program_ref: "../../programs/cycle_thirds_symmetry.ztprog"
 exercise_type: "cycle_thirds_tritone"
 
 task:

@@ -1,5 +1,6 @@
+id: cycle_fourths_ii_v_i_guidetones
 name: "Cycle of 4ths -- ii-V-I Guide Tones"
-program: "../programs/cycle_fourths_ii_v_i.ztprog"
+program_ref: "../../programs/cycle_fourths_ii_v_i.ztprog"
 exercise_type: "cycle_fourths_ii_v_i_guidetones"
 
 task:

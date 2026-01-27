@@ -1,0 +1,27 @@
+id: enclosure_lower_to_3
+title: "Lower Enclosure to 3rd"
+program_ref: enclosure_lower_to_3.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land on target chord tone (3rd (E)) on beat 1"
+  - "Enclosure type: lower neighbor chromatic"
+
+practice_steps:
+  - "Play phrase slowly (60 BPM)"
+  - "Increase tempo in 10 BPM increments"
+  - "Loop 4x without mistakes"
+
+tags:
+  style: bebop
+  key: C
+  technique: enclosure
+  target_note: 3rd (E)
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+  pass_criteria:
+    max_timing_deviation_ms: 30
+    chord_tone_hit_rate: 0.9

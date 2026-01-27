@@ -1,0 +1,30 @@
+id: muleskinner_intro_phrase_4bar
+title: "Muleskinner Blues – Intro Phrase (4-Bar Extended)"
+program_ref: muleskinner_intro_phrase.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Master the extended 4-bar intro phrase in G"
+  - "Develop stamina for longer melodic runs"
+  - "Lock timing across multiple chord changes"
+
+practice_steps:
+  - "Play phrase at 80 BPM with backing"
+  - "Focus on consistent articulation across all 4 bars"
+  - "Gradually increase tempo while maintaining clarity"
+
+tags:
+  style: bluegrass
+  key: G
+  meter: 4/4
+  technique: flatpicking
+  phrase_type: intro_lick
+  variant: extended
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - articulation_consistency
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 35

@@ -1,5 +1,6 @@
+id: cycle_thirds_guidetones
 name: "Cycle of Thirds -- Guide Tones"
-program: "../programs/cycle_thirds_dominant.ztprog"
+program_ref: "../../programs/cycle_thirds_dominant.ztprog"
 exercise_type: "cycle_thirds_guidetones"
 
 task:
