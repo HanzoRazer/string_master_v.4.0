@@ -13,6 +13,14 @@ exercise_type: melodic_motion
 
 phrase_type: chromatic_cells
 
+midi_segments:
+  - part: "descending"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.mid"
+    bars: [1, 2]
+  - part: "ascending"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.mid"
+    bars: [3, 4]
+
 goals:
   - "Connect diminished chord tones using chromatic triplet cells."
   - "Land every chord tone on a strong beat -- triplet groups fill the gaps."

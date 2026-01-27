@@ -18,6 +18,14 @@ exercise_type: melodic_motion
 
 phrase_type: triplet_resolution_chain
 
+midi_segments:
+  - part: "descending"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_maj6_C.mid"
+    bars: [1, 2]
+  - part: "ascending"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_maj6_C.mid"
+    bars: [3, 4]
+
 goals:
   - "Play the 6th diminished scale in triplet groups."
   - "Hear the C6 chord tones emerge from the diminished passing tones."

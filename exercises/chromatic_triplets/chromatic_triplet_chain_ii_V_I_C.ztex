@@ -19,6 +19,17 @@ exercise_type: melodic_motion
 
 phrase_type: triplet_resolution_chain
 
+midi_segments:
+  - part: "Dm7_chain"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.mid"
+    bars: [1]
+  - part: "G7_chain"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.mid"
+    bars: [2]
+  - part: "Cmaj7_resolve"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.mid"
+    bars: [3, 4]
+
 goals:
   - "Apply chromatic triplet cells over moving harmony (ii-V-I)."
   - "Target the 3rd of each resolution chord using half-step voice-leading."
