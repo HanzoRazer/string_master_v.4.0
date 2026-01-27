@@ -1,0 +1,108 @@
+id: andalusian_cadence_all_keys
+name: "Andalusian Cadence – All 12 Keys (Cycle by 4ths)"
+description: "iv-bIII-bII-I cadence through all keys descending by 4ths"
+tempo_bpm: 100
+tempo_range: [65, 150]
+time_signature: 4/4
+bars_per_chord: 1
+
+# Theory Foundation
+# Andalusian cadence: iv - bIII - bII - I
+# Stepwise descending bass over Phrygian harmony
+# The bII -> I resolution is a zone-crossing half-step
+# Each cadence ends on a major I chord (Phrygian Dominant flavor)
+
+# Zone-Tritone Connection
+# Every bII -> I resolution crosses zones
+# The I chord contains a tritone (3rd & b7) pointing to its parent minor
+# Cycling by 4ths mirrors the dominant cycle in jazz
+# This connects the Andalusian cadence to circle-of-fifths theory
+
+# Cycle Order (by 4ths)
+# Resolves to: E -> A -> D -> G -> C -> F -> Bb -> Eb -> Ab -> Db -> F# -> B
+
+levels:
+  beginner:
+    tempo_bpm: 65
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 150
+    comping: syncopated
+
+# 4 chords per key, 12 keys = 48 bars
+chords:
+  # Key of E: Am - G - F - E
+  - Am
+  - G
+  - F
+  - E
+  # Key of A: Dm - C - Bb - A
+  - Dm
+  - C
+  - Bb
+  - A
+  # Key of D: Gm - F - Eb - D
+  - Gm
+  - F
+  - Eb
+  - D
+  # Key of G: Cm - Bb - Ab - G
+  - Cm
+  - Bb
+  - Ab
+  - G
+  # Key of C: Fm - Eb - Db - C
+  - Fm
+  - Eb
+  - Db
+  - C
+  # Key of F: Bbm - Ab - Gb - F
+  - Bbm
+  - Ab
+  - Gb
+  - F
+  # Key of Bb: Ebm - Db - B - Bb
+  - Ebm
+  - Db
+  - B
+  - Bb
+  # Key of Eb: Abm - Gb - E - Eb
+  - Abm
+  - Gb
+  - E
+  - Eb
+  # Key of Ab: Dbm - B - A - Ab
+  - Dbm
+  - B
+  - A
+  - Ab
+  # Key of Db: Gbm - E - D - Db
+  - Gbm
+  - E
+  - D
+  - Db
+  # Key of F#: Bm - A - G - F#
+  - Bm
+  - A
+  - G
+  - F#
+  # Key of B: Em - D - C - B
+  - Em
+  - D
+  - C
+  - B
+
+style:
+  comp: flamenco_basic
+  bass: descending_root
+
+instruments:
+  - type: shell_voicings
+    groove: flamenco
+    comping: rhythmic
+  - type: bass_line
+    root: descending
+    pattern: stepwise

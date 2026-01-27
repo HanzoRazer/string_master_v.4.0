@@ -1,0 +1,68 @@
+id: andalusian_cadence_all_keys
+name: "Andalusian Cadence -- All 12 Keys Cycle"
+program_ref: "../../programs/andalusian_cadence_all_keys.ztprog"
+exercise_type: cadence_cycle
+
+# Theory Foundation
+# The Andalusian cadence (iv - bIII - bII - I) is the harmonic spine of flamenco
+# It descends stepwise through Phrygian harmony
+# The final bII -> I is a zone-crossing half-step (Phrygian Gravity Cell)
+# Practicing in all 12 keys builds transposition fluency
+
+# Zone-Tritone Analysis
+# In every key, the bII -> I is a zone cross:
+#   E: F(Z2) -> E(Z1)    A: Bb(Z1) -> A(Z2)
+#   D: Eb(Z2) -> D(Z1)   G: Ab(Z1) -> G(Z2)
+#   C: Db(Z2) -> C(Z1)   F: Gb(Z1) -> F(Z2)
+# Pattern: Zone alternates with each key change by 4ths
+
+# All 12 Cadences
+# E:  Am  - G  - F  - E       A:  Dm  - C  - Bb - A
+# D:  Gm  - F  - Eb - D       G:  Cm  - Bb - Ab - G
+# C:  Fm  - Eb - Db - C       F:  Bbm - Ab - Gb - F
+# Bb: Ebm - Db - B  - Bb      Eb: Abm - Gb - E  - Eb
+# Ab: Dbm - B  - A  - Ab      Db: Gbm - E  - D  - Db
+# F#: Bm  - A  - G  - F#      B:  Em  - D  - C  - B
+
+task:
+  mode: "custom"
+  instructions: "Play the Andalusian cadence (iv-bIII-bII-I) in each key. Focus on the bII->I resolution as a zone-crossing event. Feel the stepwise bass descent in every key."
+  prompts:
+    - "Name each chord as you play it: 'iv - bIII - bII - I'"
+    - "Feel the bII -> I half-step as gravitational pull"
+    - "Keep voice leading smooth across the key change"
+    - "The I chord is always MAJOR -- hear the Phrygian Dominant color"
+
+goals:
+  - "Play the Andalusian cadence fluently in all 12 keys"
+  - "Hear the bII -> I zone-crossing resolution in every key"
+  - "Develop automatic transposition of the iv-bIII-bII-I pattern"
+  - "Connect each cadence to its Phrygian Dominant mode"
+
+practice_steps:
+  - "Start with E (Am-G-F-E) -- the most common flamenco key"
+  - "Move to A (Dm-C-Bb-A) -- second most common"
+  - "Add D and G -- guitar-friendly keys"
+  - "Work through flat keys: C, F, Bb, Eb, Ab, Db"
+  - "Complete with sharp keys: F#, B"
+  - "Finally: play all 12 in sequence by 4ths without stopping"
+
+key_reference:
+  guitar_friendly: [E, A, D, G, B, F#]
+  flat_keys: [C, F, Bb, Eb, Ab, Db]
+  most_common_flamenco: [E, A]
+
+interaction:
+  mode: "self_report"
+  questions:
+    - "Which keys felt most natural?"
+    - "Could you hear the bII -> I gravity in every key?"
+    - "Did the stepwise descent feel the same in all keys?"
+    - "Which key changes (between cadences) were hardest?"
+
+tags:
+  harmony_type: phrygian
+  motion_type: andalusian_cadence
+  zone_theory: zone_crossing
+  keys: all_12
+  technique: transposition

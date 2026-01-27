@@ -1,0 +1,31 @@
+name: andalusian_Bbm
+description: Andalusian cadence in Bb minor (Bbm-Ab-Gb-F7)
+time_signature: 4/4
+bars_per_chord: 2
+chords:
+- Bbm
+- Ab
+- Gb
+- F7
+- Bbm
+style:
+  comp: latin_basic
+  bass: descending_root
+expressive:
+  swing: 0.0
+  humanize_ms: 0
+  humanize_vel: 0
+tempo_bpm: 110
+tempo_range:
+- 71
+- 165
+levels:
+  beginner:
+    tempo_bpm: 71
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 110
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 165
+    comping: syncopated

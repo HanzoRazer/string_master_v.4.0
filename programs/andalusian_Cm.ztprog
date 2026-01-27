@@ -1,0 +1,31 @@
+name: andalusian_Cm
+description: Andalusian cadence in C minor (Cm-Bb-Ab-G7)
+time_signature: 4/4
+bars_per_chord: 2
+chords:
+- Cm
+- Bb
+- Ab
+- G7
+- Cm
+style:
+  comp: latin_basic
+  bass: descending_root
+expressive:
+  swing: 0.0
+  humanize_ms: 0
+  humanize_vel: 0
+tempo_bpm: 110
+tempo_range:
+- 71
+- 165
+levels:
+  beginner:
+    tempo_bpm: 71
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 110
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 165
+    comping: syncopated
