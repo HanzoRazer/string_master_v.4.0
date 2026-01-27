@@ -3,7 +3,14 @@ title: "Malaguena – Free Rubato Backing"
 tempo_bpm: 65
 tempo_range: [45, 85]
 root: E
+mode: phrygian
 loop_bars: 4
+
+# Harmony Reference
+# Key: E Phrygian (E-F-G-A-B-C-D)
+# Typical chords: E(i) - F(II) - Am(iv)
+# Cadence: Am - G - F - E (Andalusian)
+# Character: Free rubato, expressive descending lines
 
 levels:
   beginner:

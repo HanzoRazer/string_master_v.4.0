@@ -3,7 +3,13 @@ title: "Bulerias – 12-Beat Compas Loop"
 tempo_bpm: 190
 tempo_range: [140, 240]
 root: E
+mode: phrygian
 loop_bars: 12
+
+# Harmony Reference
+# Key: E Phrygian (E-F-G-A-B-C-D)
+# Typical chords: E(i) - F(II) - G(III) - Am(iv)
+# Cadence: Am - G - F - E (Andalusian)
 
 levels:
   beginner:
