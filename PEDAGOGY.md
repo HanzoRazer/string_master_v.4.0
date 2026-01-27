@@ -304,6 +304,70 @@ This alignment means:
 
 ---
 
+## The 12-Key Axis Rotation
+
+A 12-bar blues uses three dominant 7th chords — I7, IV7, V7 — each contributing one tritone axis. Every blues key therefore activates exactly **3 of the 6 available axes**. The complete map across all 12 keys reveals a deterministic rotation:
+
+| Key | I7 axis | IV7 axis | V7 axis |
+|-----|---------|----------|---------|
+| **C** | E–Bb (4,10) | Eb–A (3,9) | F–B (5,11) |
+| **Db** | F–B (5,11) | E–Bb (4,10) | C–Gb (0,6) |
+| **D** | C–Gb (0,6) | F–B (5,11) | Db–G (1,7) |
+| **Eb** | Db–G (1,7) | C–Gb (0,6) | D–Ab (2,8) |
+| **E** | D–Ab (2,8) | Db–G (1,7) | Eb–A (3,9) |
+| **F** | Eb–A (3,9) | D–Ab (2,8) | E–Bb (4,10) |
+| **Gb** | E–Bb (4,10) | Eb–A (3,9) | F–B (5,11) |
+| **G** | F–B (5,11) | E–Bb (4,10) | C–Gb (0,6) |
+| **Ab** | C–Gb (0,6) | F–B (5,11) | Db–G (1,7) |
+| **A** | Db–G (1,7) | C–Gb (0,6) | D–Ab (2,8) |
+| **Bb** | D–Ab (2,8) | Db–G (1,7) | Eb–A (3,9) |
+| **B** | Eb–A (3,9) | D–Ab (2,8) | E–Bb (4,10) |
+
+### The 6-Key Cycle
+
+The rotation repeats every **6 keys** (one tritone). Keys a tritone apart share the same axis set with identical role assignments:
+
+| Pair | Shared axes (I / IV / V) |
+|------|--------------------------|
+| C and Gb | E–Bb / Eb–A / F–B |
+| Db and G | F–B / E–Bb / C–Gb |
+| D and Ab | C–Gb / F–B / Db–G |
+| Eb and A | Db–G / C–Gb / D–Ab |
+| E and Bb | D–Ab / Db–G / Eb–A |
+| F and B | Eb–A / D–Ab / E–Bb |
+
+**Key insight**: There are only **6 distinct axis configurations** for a 12-bar blues, not 12. Keys a tritone apart are gravitationally identical — they activate the same three axes in the same roles. This is tritone equivalence applied to entire keys, not just chords.
+
+### Why This Matters
+
+1. **Transposition is axis rotation, not note memorization.** Moving from C blues to D blues shifts all three axes by one position in the rotation. A student who knows the axis set for C already knows Gb.
+
+2. **The entire blues harmonic space is 6 x 3 = 18 axis-role slots.** That is the complete gravitational inventory of the 12-bar dominant blues across all keys. No heuristics, no exceptions.
+
+3. **Practice efficiency doubles.** Learning 6 keys covers all 12. The second 6 keys are free — same axes, same voice-leading, same gravity.
+
+### Derivation
+
+The rotation follows from one formula. For a blues in key root `R`:
+
+    I7_axis  = canonical_axis((R + 4) % 12, (R + 10) % 12)
+    IV7_axis = canonical_axis((R + 9) % 12, (R + 3) % 12)
+    V7_axis  = canonical_axis((R + 11) % 12, (R + 5) % 12)
+
+Since `canonical_axis(a, b)` sorts the pair and both members are `(R + offset) mod 12`, transposing by a tritone (`R + 6`) maps each axis back to itself. This is why the pattern has period 6, not 12.
+
+### Pedagogical Placement
+
+This material belongs at **Level 5** (Composition in Gravity). Students must already:
+
+- Identify all 6 axes instantly (Level 2)
+- Resolve any dominant tritone by voice-leading (Level 3)
+- Navigate dual-zone harmony (Level 4)
+
+The 12-key rotation table is the capstone reference for gravity-based composition and transposition.
+
+---
+
 ## Quick Reference
 
 ### Zone Membership Formula
@@ -357,5 +421,6 @@ The Zone-Tritone System is implemented in src/shared/zone_tritone/:
 
 | Date | Change |
 |------|--------|
+| 2025-01-27 | Added 12-Key Axis Rotation section with 6-key cycle, derivation, and pedagogical placement. |
 | 2025-01-25 | Expanded with full Zone-Tritone content from implementation. |
 | 2025-01-25 | Initial sparse outline. |
