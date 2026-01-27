@@ -3,7 +3,7 @@ title: "Malaguena – Free Rubato Backing"
 tempo_bpm: 65
 tempo_range: [45, 85]
 root: E
-mode: phrygian_dominant
+mode: phrygian_mixed
 loop_bars: 4
 
 # Origin & Form
@@ -11,18 +11,26 @@ loop_bars: 4
 # Not fixed compas: Often rubato or free rhythm, especially solo guitar
 # Popularized by: Ernesto Lecuona (classical), Sabicas, Paco de Lucia (flamenco)
 
-# Scale Reference
-# Phrygian Dominant (aka Spanish Phrygian, 5th mode of D harmonic minor)
-# E Phrygian Dominant: E-F-G#-A-B-C-D
-# vs Natural Phrygian: E-F-G-A-B-C-D
-# The raised 3rd (G# instead of G) gives the exotic Spanish flavor
-# This is why E MAJOR chord is used despite the flat 2nd
+# Scale Reference -- Modal Mixing
+# The chord progression (Am-G-F-E) is mostly NATURAL PHRYGIAN:
+#   Am, G, F are diatonic to E Phrygian: E-F-G-A-B-C-D (G natural)
+# The raised 3rd (G#) appears ONLY in the resolution chord (E major):
+#   E major = E-G#-B -- this single G# creates the "Spanish" sound
+#
+# Modal mixing at the point of resolution:
+#   Over Am, G, F chords -> G natural (Phrygian, darker)
+#   Over E major chord   -> G# (Phrygian Dominant, bright resolution)
+#
+# In the melody, players alternate G and G# for expressive contrast:
+#   G natural for darker passages, G# when resolving to E major
+# This G vs G# ambiguity is the expressive core of Malaguena
 
 # Harmony Reference
-# Key: E Phrygian Dominant (E-F-G#-A-B-C-D)
-# Typical chords: E(I) - F(bII) - Am(iv) - Dm(bvii)
-# Cadence: Am - G - F - E (Andalusian)
-# The E major chord resolves the descending line with exotic color
+# Key: E Phrygian with Phrygian Dominant resolution
+# Progression: Am(iv) - G(bIII) - F(bII) - E(I)
+# The chords Am, G, F use G natural (pure Phrygian)
+# The E major chord introduces G# (Phrygian Dominant)
+# The cadence DESCENDS through Phrygian but RESOLVES to a major I
 
 # Technique Reference
 # Right-hand: Rasgueado (rolling strum), tremolo, arpeggio, golpes
