@@ -1,0 +1,38 @@
+id: shady_grove_backing
+title: "Shady Grove – Backing Loop"
+tempo_bpm: 95
+tempo_range: [65, 130]
+root: G
+loop_bars: 8
+
+levels:
+  beginner:
+    tempo_bpm: 65
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 95
+    comping: on_beats
+  advanced:
+    tempo_bpm: 130
+    comping: rhythmic
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1", "2", "3", "4"]
+  - type: shell_voicings
+    groove: straight
+    comping: on_beats
+    chords:
+      - I
+      - V
+      - I
+      - I
+      - V
+      - I
+      - I
+      - I
+  - type: walking_bass
+    outline_chords: true

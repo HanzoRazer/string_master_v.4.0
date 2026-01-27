@@ -1,0 +1,38 @@
+id: on_top_of_old_smokey_backing
+title: "On Top of Old Smokey – Waltz Backing"
+tempo_bpm: 72
+tempo_range: [50, 95]
+root: G
+loop_bars: 8
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 72
+    comping: on_beats
+  advanced:
+    tempo_bpm: 95
+    comping: rhythmic
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1]
+      snare:  [2, 3]
+      hihat:  ["1", "2", "3"]
+  - type: shell_voicings
+    groove: waltz
+    comping: on_beats
+    chords:
+      - I
+      - V7
+      - I
+      - I
+      - IV
+      - I
+      - V7
+      - I
+  - type: walking_bass
+    outline_chords: true

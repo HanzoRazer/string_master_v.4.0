@@ -1,0 +1,30 @@
+id: shady_grove_etude
+title: "Shady Grove – 8-Bar Melody Etude"
+program_ref: shady_grove_backing.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Play the melody clearly in G Dorian modal style"
+  - "Focus on alternate picking and phrasing"
+  - "Capture folk character and sustain"
+
+practice_steps:
+  - "Loop with backing at 95 BPM"
+  - "Play with even eighths, then explore push/pull phrasing"
+  - "Add slides or hammer-ons for variation"
+
+tags:
+  style: traditional
+  key: G
+  meter: 4/4
+  technique: melody_picking
+  phrase_type: modal_folk
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - melodic_accuracy
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 35
+    melodic_accuracy_min: 0.88

@@ -1,0 +1,30 @@
+id: on_top_of_old_smokey_etude
+title: "On Top of Old Smokey – 8-Bar Melody Etude"
+program_ref: on_top_of_old_smokey_backing.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Play the melody cleanly in 3/4 waltz time"
+  - "Emphasize phrasing and tone control on downbeats"
+  - "Develop accuracy for vocal-style folk melody"
+
+practice_steps:
+  - "Loop 8 bars with backing at 72 BPM"
+  - "Focus on note duration and pulse consistency"
+  - "Add slight rubato for expressive phrasing"
+
+tags:
+  style: folk
+  key: G
+  meter: 3/4
+  technique: melody_picking
+  phrase_type: waltz
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - melodic_accuracy
+    - phrase_shape_completion
+  pass_criteria:
+    max_timing_deviation_ms: 40
+    melodic_accuracy_min: 0.88
