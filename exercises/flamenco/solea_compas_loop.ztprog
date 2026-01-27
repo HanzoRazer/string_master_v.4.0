@@ -1,13 +1,22 @@
 id: solea_compas_loop
 title: "Solea – 12-Beat Compas Loop"
-tempo_bpm: 90
-tempo_range: [60, 120]
+tempo_bpm: 75
+tempo_range: [60, 90]
 root: E
 mode: phrygian
 loop_bars: 12
 
+# Compas Reference
+# Pulse Grouping: 3+3+2+2+2
+# Accent Map:  | 1   2   3   | 4   5   6   | 7   8   | 9   10  | 11  12 |
+#                      *           *       *         *        *
+# Strong accents: [12], [6], [10]  (bracketed)
+# All accents: 3, 6, 8, 10, 12
+# Phrases often begin on beat 12
+# Character: Solemn, meditative, deep
+
 # Harmony Reference
-# Key: E Phrygian (E-F-G-A-B-C-D)
+# Key: E Phrygian (E-F-G-A-B-C-D) or A Phrygian
 # Typical chords: E(i) - F(II) - G(III) - Am(iv)
 # Cadence: Am - G - F - E (Andalusian)
 
@@ -16,16 +25,17 @@ levels:
     tempo_bpm: 60
     comping: on_beats
   intermediate:
-    tempo_bpm: 90
+    tempo_bpm: 75
     comping: accent_solea
   advanced:
-    tempo_bpm: 120
+    tempo_bpm: 90
     comping: accent_solea
 
 instruments:
   - type: palmas
     pattern:
       accents: [3, 6, 8, 10, 12]
+      strong_accents: [6, 10, 12]
   - type: shell_voicings
     groove: flamenco
     comping: accent_solea
