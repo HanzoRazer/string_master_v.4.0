@@ -1,0 +1,88 @@
+# Bucket A -- Dorian Chromatic Lick (C minor)
+# Fusion: gospel chromatic fill adapted for C Dorian backdoor resolution
+# Purpose: chromatic approach over Bb7 -> Cm using Dorian intervals
+
+id: dorian_chromatic_lick_Cm
+title: "Dorian Chromatic Lick (bVII7 -> i) -- C Minor"
+level: "A"
+category: "lick"
+key_center: "Cm"
+mode: "dorian"
+
+program_ref: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+
+goals:
+  - "Play the chromatic Eb-E-F-G fill over the Bb7 -> Cm resolution."
+  - "Land G (5th of Cm) on beat 1 of the resolution chord."
+  - "Hear the tritone D-Ab collapsing as the lick enters."
+  - "Feel the Dorian color: E natural (major 3rd neighbor) bends into Eb (minor 3rd)."
+
+context:
+  - "This is the C Dorian adaptation of the gospel chromatic lick."
+  - "In C major: E-F-F#-G (3-4-#4-5). In C minor: Eb-E-F-G (b3-3-4-5)."
+  - "The E natural is a chromatic passing tone -- it briefly suggests major before"
+  - "  settling into the minor 3rd (Eb) of the Cm chord. Gospel/blues ambiguity."
+  - "The lick sits on the Bb7 -> Cm moment (backdoor resolution)."
+  - "The tritone D-Ab in Bb7 is collapsing as you play this fill."
+
+lick:
+  name: "Dorian chromatic approach (Bb7 -> Cm)"
+  degrees: "b3 - 3 - 4 - 5"
+  notes: "Eb - E - F - G"
+  timing: "eighth-notes leading into beat 1"
+  tab:
+    g_string: "8 - 9 - 10 - 12"
+    d_string: "1 - 2 - 3 - 5"
+    a_string: "6 - 7 - 8 - 10"
+
+tritone_awareness:
+  during_lick: "Bb7 tritone (D-Ab) is active. D wants Eb, Ab wants G."
+  lick_landing: "G (5th of Cm) = resolution target of Ab (7th of Bb7)."
+  double_resolution: "The lick lands on G just as Ab->G resolves. Two arrivals at once."
+
+variations:
+  - name: "Blues bend"
+    degrees: "b3 - (bend 3 to 4) - 5"
+    notes: "Eb - (E bent to F) - G"
+    description: "Bend the major 3rd up to the 4th. Blues/gospel minor-major ambiguity."
+  - name: "Descending approach"
+    degrees: "5 - 4 - 3 - b3 - 5"
+    notes: "G - F - E - Eb - G"
+    description: "Start on the target, dip into the chromatic zone, return. Hendrix flavor."
+  - name: "Extended -- tritone to tonic"
+    degrees: "b7 - 5 - b3 - 3 - 4 - 5"
+    notes: "Bb - G - Eb - E - F - G"
+    description: "Start from the b7 (Bb7 root), walk down to b3, then chromatic up. Full gravity arc."
+  - name: "Dorian signature lick"
+    degrees: "6 - 5 - 4 - b3 - b3 - 3 - 4 - 5"
+    notes: "A - G - F - Eb - Eb - E - F - G"
+    description: "Start on the Dorian 6th (A), descend, then chromatic climb. Proves the mode."
+
+practice_steps:
+  - "Step 1: Play Eb-E-F-G slowly (quarter notes) over Bb7 -> Cm. Hear each note."
+  - "Step 2: Speed up to eighth notes. Land G on beat 1 of Cm."
+  - "Step 3: On the Bb7, hum D and Ab. Feel the tritone while your fingers play the lick."
+  - "Step 4: Loop the full turnaround. Insert the lick every time Bb9 appears."
+  - "Step 5: Try on all three string sets (G, D, A strings)."
+  - "Step 6: Try the blues bend and descending variants."
+  - "Step 7: Try the Dorian signature lick -- start on A, prove the mode."
+
+assessment:
+  pass_condition:
+    - "G lands cleanly on beat 1 of Cm."
+    - "Chromatic notes are even (no rushing E -> F)."
+    - "The major 3rd (E) sounds like a passing color, not a wrong note."
+    - "Lick flows naturally within the turnaround groove."
+    - "At least one variation attempted."
+    - "Can explain: 'the tritone D-Ab is resolving while I play this lick.'"
+
+tags:
+  - bucket_a
+  - backdoor
+  - cadence
+  - gospel
+  - dorian
+  - lick
+  - chromatic
+  - tritone_gravity
+  - key_Cm

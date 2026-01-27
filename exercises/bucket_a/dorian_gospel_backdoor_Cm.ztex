@@ -1,0 +1,152 @@
+# Bucket A -- Dorian Gospel Backdoor (C minor)
+# Fusion: C Dorian etude + gospel backdoor cadence + tritone gravity model
+# Purpose: move the static Cm vamp into a harmonic cycle with audible gravity
+
+id: dorian_gospel_backdoor_Cm
+title: "Dorian Gospel Backdoor -- C Minor (Tritone Gravity)"
+level: "A"
+category: "cadence"
+key_center: "Cm"
+mode: "dorian"
+
+program_ref: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+
+goals:
+  - "Turn the static C Dorian vamp into a living gospel backdoor cycle."
+  - "Hear the Bb7 tritone (D-Ab) as the gravitational engine pulling to Cm."
+  - "Keep the Dorian color: the natural 6th (A) appears in Fm6 and Cm6."
+  - "Feel the dual gravity: backdoor (Bb7->Cm) and tritone-sub (E7->Cm)."
+  - "Resolve guide-tones by step, never by leap."
+
+context:
+  - "C Dorian = C-D-Eb-F-G-A-Bb. The A natural is the modal signature."
+  - "The backdoor cadence IV -> bVII7 -> i (Fm -> Bb7 -> Cm) avoids the V7 (G7)."
+  - "But Bb7 contains the SAME tritone as G7: D-Ab. Same gravity, side entrance."
+  - "The tritone-sub of Bb7 is E7 (shares D-Ab axis). Two dominants, one engine."
+  - "Gospel turnaround extends this: Fm -> Bb9 -> Cm9 -> G7alt -> Cm6."
+  - "G7alt re-enters from the front door -- now you have BOTH paths home."
+
+# ── Tritone Gravity Map ──────────────────────────────────────────────
+#
+# Zone-Tritone axis for Cm:  D-Ab (pitch classes 2-8)
+#
+#   Bb7  (Bb-D-F-Ab)   → tritone D-Ab → resolves: D->Eb, Ab->G  (backdoor)
+#   G7   (G-B-D-F)     → tritone B-F  → resolves: B->C,  F->Eb  (front door)
+#   E7   (E-G#-B-D)    → tritone G#-D → same axis as D-Ab        (tritone sub of Bb7)
+#   Db7  (Db-F-Ab-Cb)  → tritone F-Cb → same axis as B-F         (tritone sub of G7)
+#
+# The backdoor and front door share gravitational pull toward Cm.
+# The tritone subs offer chromatic bass alternatives.
+#
+tritone_gravity:
+  target: "Cm"
+  axis_primary:
+    name: "D-Ab"
+    dominants: ["Bb7", "E7"]
+    resolution: "D->Eb, Ab->G"
+    role: "backdoor gravity"
+  axis_secondary:
+    name: "B-F"
+    dominants: ["G7", "Db7"]
+    resolution: "B->C, F->Eb"
+    role: "front-door gravity"
+  dual_gravity_note: >
+    Both axes pull to Cm. The backdoor (Bb7) and front door (G7) are
+    not opposites -- they are two faces of the same gravitational field.
+    The tritone subs (E7, Db7) give chromatic bass motion.
+
+targets:
+  - name: "Bb9 -> Cm9 guide-tone (3rd)"
+    from: "Bb9: 3rd (D)"
+    to: "Cm9: 3rd (Eb)"
+    motion: "up a half-step"
+  - name: "Bb9 -> Cm9 guide-tone (7th)"
+    from: "Bb9: 7th (Ab)"
+    to: "Cm9: 5th (G)"
+    motion: "down a half-step"
+  - name: "G7alt -> Cm6 guide-tone (3rd)"
+    from: "G7alt: 3rd (B)"
+    to: "Cm6: root (C)"
+    motion: "up a half-step (leading tone)"
+  - name: "G7alt -> Cm6 guide-tone (7th)"
+    from: "G7alt: 7th (F)"
+    to: "Cm6: 3rd (Eb)"
+    motion: "down a half-step"
+  - name: "Dorian color tone"
+    note: "A natural appears in Fm6 (as 6th of F) and Cm6 (as 6th of C)"
+    role: "Modal fingerprint -- when you hear A instead of Ab, that is Dorian."
+
+voicing_sets:
+  - name: "Set A -- gospel grabs (low register)"
+    chords:
+      Fm9:    "x-x-3-1-1-1"
+      Bb9:    "x-1-0-1-1-1"
+      Cm9:    "x-3-1-3-3-3"
+      G7alt:  "3-x-3-4-4-x"
+      Cm6:    "x-3-1-2-1-x"
+  - name: "Set B -- mid-neck compact"
+    chords:
+      Fm7:    "x-8-8-8-9-8"
+      Bb7:    "x-x-8-7-6-7"
+      Cm7:    "x-x-10-8-8-8"
+      G7b13:  "x-10-9-10-10-x"
+      Cm6:    "x-x-10-8-8-10"
+  - name: "Set C -- Dorian color upgrades"
+    chords:
+      Fm6:     "x-x-3-1-1-1"
+      Bb13:    "x-1-0-1-1-3"
+      Cm_add9: "x-3-1-0-3-3"
+      G7sharp9: "3-x-3-4-4-6"
+      Cm6_9:   "x-3-1-2-3-x"
+    dorian_note: "Fm6 has the A natural; Cm6/9 has it too. Dorian lives in the 6th."
+
+# ── Tritone-Sub Reharmonization (advanced) ───────────────────────────
+tritone_sub_reharmonization:
+  description: >
+    Replace Bb7 with E7 (tritone sub). Same D-Ab tritone, chromatic bass.
+    Replace G7 with Db7 (tritone sub). Same B-F tritone, chromatic bass.
+  progression_original: "Fm9 -> Bb9 -> Cm9 -> G7alt -> Cm6"
+  progression_sub_1:    "Fm9 -> E9  -> Cm9 -> G7alt -> Cm6"
+  progression_sub_2:    "Fm9 -> Bb9 -> Cm9 -> Db9   -> Cm6"
+  progression_full_sub: "Fm9 -> E9  -> Cm9 -> Db9   -> Cm6"
+  bass_motion_original: "F - Bb - C - G - C  (fourths)"
+  bass_motion_full_sub: "F - E  - C - Db - C (chromatic approach from both sides)"
+
+rhythm:
+  feel: "dorian_gospel"
+  tips:
+    - "Push the Bb9 slightly ahead of the beat -- gospel anticipation."
+    - "Let Cm9 breathe. Don't rush to G7alt."
+    - "G7alt is tension; sit in it. The resolution to Cm6 should feel like an exhale."
+    - "When using tritone subs, the chromatic bass motion IS the groove."
+    - "The A natural in Fm6/Cm6 is your modal anchor -- let it ring."
+
+practice_steps:
+  - "Step 1: Play the basic backdoor only -- Fm7 -> Bb7 -> Cm7. Hear the side entrance."
+  - "Step 2: Extend to full gospel turnaround -- Fm9 -> Bb9 -> Cm9 -> G7alt -> Cm6."
+  - "Step 3: On each Bb9, sing or hum D and Ab. Feel them pull to Eb and G."
+  - "Step 4: On G7alt, sing B and F. Feel them pull to C and Eb."
+  - "Step 5: Try tritone sub -- replace Bb9 with E9. Same pull, chromatic bass."
+  - "Step 6: Try full sub chain -- Fm9 -> E9 -> Cm9 -> Db9 -> Cm6. Hear the bass slide."
+  - "Step 7: Loop Set A, Set B, Set C. Each pass, hear the A natural as Dorian proof."
+  - "Step 8: Improvise a melodic line targeting the guide-tone resolutions."
+
+assessment:
+  pass_condition:
+    - "Full turnaround loops without rhythmic breaks."
+    - "Guide-tone resolutions are audible (D->Eb and Ab->G on the backdoor)."
+    - "Can name which tritone axis is active at any moment."
+    - "Dorian color (A natural) is present in voicings, not just scale runs."
+    - "At least one tritone-sub variant attempted."
+    - "Feel is warm and grounded, not academic."
+
+tags:
+  - bucket_a
+  - backdoor
+  - cadence
+  - gospel
+  - turnaround
+  - dorian
+  - tritone_gravity
+  - modal
+  - key_Cm

@@ -1,0 +1,58 @@
+# Bucket A -- Dorian Gospel Backdoor Practice Session
+# Fusion: C Dorian etude + gospel backdoor + tritone gravity model
+# Flow: static vamp -> backdoor discovery -> tritone awareness -> lick integration
+# Duration: ~15 minutes
+
+id: dorian_gospel_session
+title: "Dorian Gospel Backdoor -- Full Practice Session (C Minor)"
+level: "A"
+category: "cadence"
+tags: [bucket_a, backdoor, cadence, dorian, gospel, tritone_gravity, session]
+
+defaults:
+  tempo: 72
+  bars_per_chord: 2
+  style: dorian_gospel
+
+items:
+  # Phase 1: Modal warmup (static vamp -- where the etude started)
+  - name: "Cm7/Cm9 vamp -- Dorian warmup (find the A natural)"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 2
+    notes: "Play only Cm9. Establish the mode. Target the A natural (6th)."
+
+  # Phase 2: Backdoor discovery (add IV -> bVII7 -> i)
+  - name: "Fm9 -> Bb9 -> Cm9 -- backdoor only (hear the side entrance)"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 3
+    notes: "First three chords only. Hear Bb9 resolve to Cm9 without using V7."
+
+  # Phase 3: Full gospel turnaround
+  - name: "Full turnaround -- Fm9 -> Bb9 -> Cm9 -> G7alt -> Cm6"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 4
+    notes: "Complete cycle. Back door in, front door reentry. Loop without gaps."
+
+  # Phase 4: Tritone awareness
+  - name: "Tritone hearing -- hum D-Ab on Bb9, hum B-F on G7alt"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 3
+    notes: "While playing, sing or hum the tritone tones. Feel them resolve."
+
+  # Phase 5: Chromatic lick integration
+  - name: "Chromatic lick -- Eb-E-F-G over every Bb9 -> Cm9"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 4
+    notes: "Insert the lick at the backdoor moment. Land G on beat 1 of Cm."
+
+  # Phase 6: Tritone sub exploration (advanced)
+  - name: "Tritone sub pass -- replace Bb9 with E9"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 2
+    notes: "Same tritone (D-Ab), chromatic bass. Fm9 -> E9 -> Cm9 -> G7alt -> Cm6."
+
+  # Phase 7: Integration (everything together)
+  - name: "Full integration -- turnaround + lick + voicing sets"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+    repeats: 3
+    notes: "Mix voicing sets, insert licks, try tritone subs. Free play."

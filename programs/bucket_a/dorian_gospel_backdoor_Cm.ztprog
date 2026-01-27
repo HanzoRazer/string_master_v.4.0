@@ -1,0 +1,44 @@
+name: dorian_gospel_backdoor_Cm
+time_signature: 4/4
+bars_per_chord: 2
+style: dorian_gospel
+chords:
+# Full gospel turnaround in C Dorian
+# Backdoor entry (IV -> bVII7 -> i) + front-door reentry (V7alt -> i6)
+- Fm9
+- Bb9
+- Cm9
+- G7alt
+- Cm6
+notes:
+- "Gospel backdoor turnaround in C Dorian."
+- "Backdoor: Fm9 -> Bb9 -> Cm9 (IV -> bVII7 -> i). Side entrance."
+- "Front door: G7alt -> Cm6 (V7alt -> i6). Standard reentry."
+- "Bb7 tritone D-Ab resolves: D->Eb, Ab->G."
+- "G7 tritone B-F resolves: B->C, F->Eb."
+- "Dorian signature: A natural in Fm6 and Cm6 voicings."
+tags:
+- bucket_a
+- backdoor
+- gospel
+- dorian
+- turnaround
+- cadence
+- tritone_gravity
+- key_Cm
+tempo_bpm: 72
+tempo_range:
+- 52
+- 112
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 112
+    comping: syncopated
+tritone_mode: none
+tritone_strength: 1.0
