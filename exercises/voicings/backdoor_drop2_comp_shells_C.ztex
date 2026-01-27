@@ -1,0 +1,116 @@
+# Drop-2 Voice-Leading: Backdoor Cadence -- Comp Shells (C)
+# Part 1 of 3: Drop-2 Voice-Leading Applied to the Backdoor Cadence
+# Purpose: Play the backdoor cadence as shell voicings (3rd + 7th only).
+#          Strip away roots and 5ths to hear ONLY the voice-leading engine.
+#
+# The backdoor cadence (IV -> bVII7 -> I) resolves through guide-tone motion:
+#   Fmaj7 shells: A (3rd) + E (7th)
+#   Bb7 shells:   D (3rd) + Ab (7th)   <-- THIS is the tritone
+#   Cmaj7 shells: E (3rd) + B (7th)
+#
+# Voice motion:
+#   Upper voice: E -> Ab -> B  (Fmaj7 7th -> Bb7 7th -> Cmaj7 7th)
+#   Lower voice: A -> D  -> E  (Fmaj7 3rd -> Bb7 3rd -> Cmaj7 3rd)
+#
+# Without roots, you hear the raw gravitational engine of the cadence.
+
+id: backdoor_drop2_comp_shells_C
+title: "Drop-2 Backdoor Cadence -- Comp Shells (3rd + 7th Only)"
+level: "A"
+category: "drop2_voice_leading"
+key_center: "C"
+exercise_type: voicing_motion
+
+program_ref: backdoor_drop2_comp_shells_C.ztprog
+
+midi_ref: "exercises/voicings/backdoor_cadence_comp_shells_C.mid"
+
+goals:
+  - "Hear the backdoor cadence as pure voice-leading (no roots, no 5ths)."
+  - "Track two voices independently: upper shell and lower shell."
+  - "Feel the tritone (D-Ab) in Bb7 as the gravitational engine."
+  - "Understand shells as the minimum harmonic information for a chord."
+
+context:
+  - "Drop-2 voicings are built from 4 voices (SATB). Shells reduce this to 2 voices (3rd + 7th)."
+  - "The 3rd defines chord quality (major vs minor). The 7th defines function (dominant vs tonic)."
+  - "Together, the 3rd and 7th ARE the chord. Everything else is color."
+  - "In Bb7, the 3rd (D) and 7th (Ab) form a tritone -- the unstable interval that drives resolution."
+  - "This exercise strips the cadence to its skeleton so you can hear the engine."
+
+shell_voicings:
+  Fmaj7:
+    notes: ["A", "E"]
+    roles: ["3rd", "7th"]
+    interval: "perfect 5th (A to E)"
+  Bb7:
+    notes: ["D", "Ab"]
+    roles: ["3rd", "7th"]
+    interval: "tritone (D to Ab) -- the gravitational engine"
+  Cmaj7:
+    notes: ["E", "B"]
+    roles: ["3rd", "7th"]
+    interval: "perfect 5th (E to B)"
+
+voice_leading:
+  upper_voice:
+    path: "E -> Ab -> B"
+    analysis:
+      - "E (Fmaj7 7th) -> Ab (Bb7 7th): up major 3rd"
+      - "Ab (Bb7 7th) -> B (Cmaj7 7th): up minor 3rd"
+  lower_voice:
+    path: "A -> D -> E"
+    analysis:
+      - "A (Fmaj7 3rd) -> D (Bb7 3rd): up perfect 4th"
+      - "D (Bb7 3rd) -> E (Cmaj7 3rd): up whole step"
+  resolution_moment:
+    from: "Bb7 shells (D + Ab)"
+    to: "Cmaj7 shells (E + B)"
+    motion: "Both voices move UP. D->E (whole step), Ab->B (minor 3rd)."
+    note: "The tritone opens outward to a perfect 5th. Tension -> resolution."
+
+tritone_gravity:
+  target: "Cmaj7"
+  axis: "D-Ab"
+  dominants: ["Bb7", "E7"]
+  resolution: "D->E, Ab->G (or Ab->B in shell voicing)"
+  role: "backdoor gravity"
+
+practice_steps:
+  - "Step 1: Play Fmaj7 shell (A + E) as a dyad. Hold 2 beats."
+  - "Step 2: Move to Bb7 shell (D + Ab). Feel the tritone tension."
+  - "Step 3: Resolve to Cmaj7 shell (E + B). Hear the 5th open up."
+  - "Step 4: Loop the 3-chord shell cycle. Track which finger moves where."
+  - "Step 5: Sing the upper voice (E-Ab-B) while playing the lower voice (A-D-E)."
+  - "Step 6: Sing the lower voice while playing the upper. Hear independence."
+  - "Step 7: Play along with the MIDI. Match the voicing exactly."
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - voicing_change_accuracy
+  pass_criteria:
+    max_timing_deviation_ms: 35
+  pass_condition:
+    - "Shell changes are smooth -- no gaps between chords."
+    - "Can name both notes in each shell without looking."
+    - "Tritone (D-Ab) is identified by ear before resolving."
+    - "Both voices tracked independently (can sing one, play the other)."
+
+tags:
+  voicing_type: drop2
+  technique: shell_voicings
+  cadence: backdoor
+  key: C
+  origin: barry_harris_class
+  related:
+    - backdoor_drop2_guide_tones_C
+    - backdoor_drop2_triplet_targets_C
+    - backdoor_cadence_C
+    - dorian_gospel_backdoor_Cm
+
+voice_motion:
+  primary: "v6"
+  description: "Both voices move; no static voices (2-voice texture)."
+  motion_type: "parallel"
+  moving_voices: ["soprano", "tenor"]

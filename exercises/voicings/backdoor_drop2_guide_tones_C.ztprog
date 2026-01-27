@@ -1,0 +1,33 @@
+name: backdoor_drop2_guide_tones_C
+time_signature: 4/4
+bars_per_chord: 2
+style: ballad_basic
+chords:
+- Fmaj7
+- Bb7
+- Cmaj7
+notes:
+- "Guide-tone pairs backing for backdoor cadence."
+- "Focus on two voice strands: upper (A-Ab-G) and lower (E-D-E)."
+- "The guide-tone resolution IS the cadence. Hear the melody inside the chords."
+- "Bb7 contains the tritone (D-Ab). Both notes resolve by step."
+tags:
+- voicings
+- drop2
+- backdoor
+- guide_tones
+- key_C
+tempo_bpm: 66
+tempo_range:
+- 48
+- 92
+levels:
+  beginner:
+    tempo_bpm: 48
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 66
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 92
+    comping: syncopated

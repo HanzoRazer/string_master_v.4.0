@@ -1,0 +1,34 @@
+name: backdoor_drop2_triplet_targets_C
+time_signature: 4/4
+bars_per_chord: 2
+style: ballad_basic
+chords:
+- Fmaj7
+- Bb7
+- Cmaj7
+notes:
+- "Triplet targeting backing for backdoor cadence."
+- "Each chord gets 2 bars for the triplet chain to develop and resolve."
+- "Target notes: D (beat 1 of Bb7), E (beat 1 of Cmaj7), C (resolve home)."
+- "Same harmonic rhythm as comp shells and guide tones exercises."
+tags:
+- voicings
+- drop2
+- backdoor
+- triplet_targeting
+- key_C
+- barry_harris_class
+tempo_bpm: 72
+tempo_range:
+- 52
+- 108
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 108
+    comping: syncopated

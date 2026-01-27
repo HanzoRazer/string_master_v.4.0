@@ -1,0 +1,38 @@
+name: "Drop-2 Voice-Leading: Backdoor Cadence Session"
+tempo: 72
+outfile: "backdoor_drop2_voice_leading_session.mid"
+
+# One unified lesson: Drop-2 Voice-Leading Applied to the Backdoor Cadence
+#
+# Progression: skeleton -> engine -> melody
+#   Phase 1: Comp shells (3rd + 7th only) -- hear the harmonic skeleton
+#   Phase 2: Guide-tone pairs -- isolate the two voice-leading strands
+#   Phase 3: Triplet targets -- aim a melodic line at the resolution notes
+#   Phase 4: Guide tones again (consolidation) -- re-hear the engine after melodic work
+#   Phase 5: Triplet targets at performance tempo -- integration
+
+programs:
+  # Phase 1: Shell voicings (strip to skeleton)
+  - config: "../exercises/voicings/backdoor_drop2_comp_shells_C.ztprog"
+    repeat: 4
+    notes: "3rd + 7th only. Hear the tritone (D-Ab) in Bb7 resolve to (E-B) in Cmaj7."
+
+  # Phase 2: Guide-tone pairs (hear the two voice strands)
+  - config: "../exercises/voicings/backdoor_drop2_guide_tones_C.ztprog"
+    repeat: 4
+    notes: "Track upper voice (A-Ab-G) and lower voice (E-D-E) independently."
+
+  # Phase 3: Triplet targeting (melodic resolution)
+  - config: "../exercises/voicings/backdoor_drop2_triplet_targets_C.ztprog"
+    repeat: 4
+    notes: "Chromatic triplet chains targeting D (Bb7 3rd) and E (Cmaj7 3rd)."
+
+  # Phase 4: Return to guide tones (consolidation)
+  - config: "../exercises/voicings/backdoor_drop2_guide_tones_C.ztprog"
+    repeat: 2
+    notes: "After melodic work, re-hear the guide-tone engine. It should feel obvious now."
+
+  # Phase 5: Triplet targets at performance tempo (integration)
+  - config: "../exercises/voicings/backdoor_drop2_triplet_targets_C.ztprog"
+    repeat: 4
+    notes: "Bump tempo 10-20 BPM. Full triplet line, clean target landings."

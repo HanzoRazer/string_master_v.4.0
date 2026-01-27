@@ -1,0 +1,146 @@
+# Drop-2 Voice-Leading: Backdoor Cadence -- Triplet Targets (C)
+# Part 3 of 3: Drop-2 Voice-Leading Applied to the Backdoor Cadence
+# Purpose: Apply chromatic triplet cells (Barry Harris technique) to melodically
+#          TARGET the guide-tone resolutions of the backdoor cadence.
+#
+# This bridges the Drop-2 voice-leading concept (Parts 1-2) with the
+# chromatic triplet chain technique (chromatic_triplets/ exercises).
+#
+# Over each chord, a descending triplet chain lands on the guide-tone
+# resolution target of the NEXT chord:
+#
+#   Over Fmaj7: triplet chain targets D (3rd of Bb7)
+#   Over Bb7:   triplet chain targets E (3rd of Cmaj7)
+#   Over Cmaj7: triplet chain resolves to C (root -- home)
+#
+# The triplet cells make the guide-tone resolution MELODIC, not just harmonic.
+# You hear the line pulling toward each resolution note.
+
+id: backdoor_drop2_triplet_targets_C
+title: "Drop-2 Backdoor Cadence -- Triplet Targeting (Melodic Resolution)"
+level: "A"
+category: "drop2_voice_leading"
+key_center: "C"
+exercise_type: melodic_motion
+
+program_ref: backdoor_drop2_triplet_targets_C.ztprog
+
+midi_ref: "exercises/voicings/backdoor_cadence_triplet_targets_C.mid"
+
+goals:
+  - "Apply chromatic triplet chains to melodically target guide-tone resolutions."
+  - "Land on D (3rd of Bb7) from the Fmaj7 triplet chain."
+  - "Land on E (3rd of Cmaj7) from the Bb7 triplet chain."
+  - "Hear how the triplet cells create momentum toward each resolution."
+  - "Connect this technique to chromatic_triplet_chain_ii_V_I_C (same idea, different cadence)."
+
+context:
+  - "Parts 1-2 taught you WHAT resolves (guide tones) and HOW (by step)."
+  - "Part 3 teaches you to AIM a melodic line at those resolution targets."
+  - "Barry Harris chromatic triplet chains: 3-note cells (chord tone - chromatic - chromatic) descending to a target."
+  - "The target is always a guide tone of the NEXT chord -- the note that defines the resolution."
+  - "This is the same technique as the ii-V-I triplet chain, now applied to the backdoor cadence."
+  - "The backdoor cadence uses different voice-leading than ii-V-I, so the target notes change."
+
+chain:
+  over_Fmaj7:
+    name: "Fmaj7 chain targeting D (3rd of Bb7)"
+    description: "Descend from E (7th of Fmaj7) through chromatic cells to land on D."
+    cells:
+      - group: 1
+        notes: "E - Eb - D"
+        analysis: "7th of Fmaj7 -> chromatic -> 3rd of Bb7 (TARGET)"
+    resolution: "Land on D (beat 1 of Bb7 bar)"
+    voice_leading: "E (7th of Fmaj7) -> D (3rd of Bb7) = half-step resolution"
+
+  over_Bb7:
+    name: "Bb7 chain targeting E (3rd of Cmaj7)"
+    description: "Descend from Ab (7th of Bb7) through cells, then resolve UP to E."
+    cells:
+      - group: 1
+        notes: "Ab - G - F"
+        analysis: "7th of Bb7 -> chromatic descent through 5th"
+      - group: 2
+        notes: "E - Eb - D"
+        analysis: "approach zone -- chromatic cells around the target"
+    resolution: "Land on E (beat 1 of Cmaj7 bar)"
+    voice_leading: "D (3rd of Bb7) -> E (3rd of Cmaj7) = whole-step up"
+    note: "The resolution from Bb7 to Cmaj7 is the KEY moment -- the backdoor opening."
+
+  over_Cmaj7:
+    name: "Cmaj7 chain resolving to root"
+    description: "Confirm arrival on Cmaj7 by descending to root (C)."
+    cells:
+      - group: 1
+        notes: "B - Bb - A"
+        analysis: "7th -> chromatic -> 6th"
+      - group: 2
+        notes: "G - F - E"
+        analysis: "5th -> passing -> 3rd"
+    resolution: "Arrive on C (root -- home)"
+
+  resolution_summary:
+    - "Fmaj7 chain -> D (Bb7 3rd): sets up the tritone"
+    - "Bb7 chain -> E (Cmaj7 3rd): resolves the tritone"
+    - "Cmaj7 chain -> C (root): confirms arrival"
+    - "The arc: setup -> tension -> release -> home"
+
+tritone_gravity:
+  target: "Cmaj7"
+  axis: "D-Ab"
+  resolution: "D->E (whole-step up), Ab->G (half-step down)"
+  role: "backdoor gravity"
+  melodic_note: "The triplet chain AIMS at these resolution targets. The line IS the gravity."
+
+practice_steps:
+  - "Step 1: Review Part 2 (guide tones). Know where D and E live on your instrument."
+  - "Step 2: Play the Fmaj7 triplet chain slowly. Land D on beat 1 of the Bb7 bar."
+  - "Step 3: Play the Bb7 triplet chain. Land E on beat 1 of the Cmaj7 bar."
+  - "Step 4: Play the Cmaj7 chain to resolve home (C)."
+  - "Step 5: Connect all three chains into one continuous line. No stops at chord changes."
+  - "Step 6: Loop at 60 BPM. The target notes (D, E, C) should feel like arrivals, not accidents."
+  - "Step 7: Speed up in 10 BPM increments. Keep resolution targets on strong beats."
+  - "Step 8: Play along with the MIDI. Match the rhythmic placement of targets."
+  - "Step 9: Transpose to G (Cmaj7 -> F7 -> Gmaj7) using the same targeting logic."
+
+variations:
+  - name: "Ascending approach"
+    description: "Approach each target from below instead of above."
+    note: "Ascending cells create forward energy. Good for gospel feel."
+  - name: "Mixed direction"
+    description: "Descend over Fmaj7, ascend over Bb7, descend to resolve on Cmaj7."
+    note: "Creates contour arc. Barry Harris mixes direction constantly."
+  - name: "Tritone sub"
+    description: "Replace Bb7 with E7. Same target (E for Cmaj7) but different approach notes."
+    note: "Connects to tritone gravity model. Same engine, chromatic bass."
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - chord_tone_on_strong_beats
+    - target_chord_tone_accuracy
+    - note_density_evenness
+  pass_criteria:
+    max_timing_deviation_ms: 28
+    chord_tone_hit_rate: 0.85
+  pass_condition:
+    - "D lands on beat 1 of Bb7 bar -- clean arrival from Fmaj7 chain."
+    - "E lands on beat 1 of Cmaj7 bar -- the backdoor opens."
+    - "Full line played without stopping at chord boundaries."
+    - "Triplet cells are even -- no rushing or dragging through chromatic notes."
+    - "At least one transposition attempted (backdoor in G or D)."
+
+tags:
+  voicing_type: drop2
+  technique: triplet_targeting
+  phrase_type: triplet_resolution_chain
+  cadence: backdoor
+  key: C
+  origin: barry_harris_class
+  zone_theory: tritone_resolution
+  related:
+    - backdoor_drop2_comp_shells_C
+    - backdoor_drop2_guide_tones_C
+    - chromatic_triplet_chain_ii_V_I_C
+    - backdoor_cadence_C
+    - dorian_gospel_backdoor_Cm

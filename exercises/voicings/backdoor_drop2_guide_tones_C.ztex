@@ -1,0 +1,130 @@
+# Drop-2 Voice-Leading: Backdoor Cadence -- Guide-Tone Pairs (C)
+# Part 2 of 3: Drop-2 Voice-Leading Applied to the Backdoor Cadence
+# Purpose: Isolate the two guide-tone voice-leading strands across the cadence.
+#          This is the core of Drop-2 thinking: smooth stepwise motion in inner voices.
+#
+# Guide-tone pairs through IV -> bVII7 -> I:
+#
+#   Voice 1 (upper guide tone):
+#     A (Fmaj7 3rd) -> Ab (Bb7 7th) -> G (Cmaj7 5th)
+#     Motion: half-step down, half-step down
+#     All chromatic descent: A -> Ab -> G
+#
+#   Voice 2 (lower guide tone):
+#     E (Fmaj7 7th) -> D (Bb7 3rd) -> E (Cmaj7 3rd)
+#     Motion: half-step down, whole-step up
+#     Returns home: E -> D -> E
+#
+# The guide tones ARE the harmony. Everything else is decoration.
+
+id: backdoor_drop2_guide_tones_C
+title: "Drop-2 Backdoor Cadence -- Guide-Tone Pairs (Voice-Leading Core)"
+level: "A"
+category: "drop2_voice_leading"
+key_center: "C"
+exercise_type: voicing_motion
+
+program_ref: backdoor_drop2_guide_tones_C.ztprog
+
+midi_ref: "exercises/voicings/backdoor_cadence_guide_tones_C.mid"
+
+goals:
+  - "Track two independent guide-tone lines through the backdoor cadence."
+  - "Hear the chromatic descent in the upper voice: A -> Ab -> G."
+  - "Hear the return motion in the lower voice: E -> D -> E."
+  - "Understand guide-tone pairs as the foundation of Drop-2 voice-leading."
+  - "Connect this to the shell voicings exercise (Part 1)."
+
+context:
+  - "Guide tones = 3rds and 7ths. They define chord quality and function."
+  - "In Drop-2 harmony, guide tones move by step (half or whole). Leaps are avoided."
+  - "The upper guide tone (A->Ab->G) descends chromatically -- all half-steps."
+  - "The lower guide tone (E->D->E) leaves home and returns -- a neighbor tone motion."
+  - "Barry Harris: 'The melody is in the guide tones. The bass is transportation.'"
+  - "This exercise isolates the guide tones so you can hear the melody inside the chords."
+
+guide_tone_pairs:
+  Fmaj7:
+    upper: {note: "A", role: "3rd"}
+    lower: {note: "E", role: "7th"}
+  Bb7:
+    upper: {note: "Ab", role: "7th"}
+    lower: {note: "D", role: "3rd"}
+    tritone_note: "Ab and D form the tritone -- the tension that drives resolution."
+  Cmaj7:
+    upper: {note: "G", role: "5th"}
+    lower: {note: "E", role: "3rd"}
+
+voice_leading_strands:
+  upper_strand:
+    name: "Chromatic descent"
+    path: "A -> Ab -> G"
+    intervals: ["half-step down", "half-step down"]
+    character: "Smooth, inevitable descent. Each step adds gravity."
+  lower_strand:
+    name: "Neighbor tone return"
+    path: "E -> D -> E"
+    intervals: ["half-step down", "whole-step up"]
+    character: "Leaves home, returns. The 3rd of Cmaj7 was there all along."
+
+resolution_analysis:
+  Fmaj7_to_Bb7:
+    upper: "A -> Ab: half-step down (3rd becomes 7th -- role swap)"
+    lower: "E -> D: half-step down (7th becomes 3rd -- role swap)"
+    note: "3rds and 7ths swap roles between IV and bVII7. This is a Drop-2 hallmark."
+  Bb7_to_Cmaj7:
+    upper: "Ab -> G: half-step down (7th resolves down to 5th)"
+    lower: "D -> E: whole-step up (3rd resolves up to 3rd)"
+    note: "The tritone (D-Ab) resolves: D rises to E, Ab falls to G."
+
+tritone_gravity:
+  target: "Cmaj7"
+  axis: "D-Ab"
+  resolution: "D->E (whole-step up), Ab->G (half-step down)"
+  role: "backdoor gravity"
+  note: "The guide-tone resolution IS the gravity event. Hearing this = hearing the cadence."
+
+practice_steps:
+  - "Step 1: Play only the upper guide tone: A -> Ab -> G. Sing it."
+  - "Step 2: Play only the lower guide tone: E -> D -> E. Sing it."
+  - "Step 3: Play both guide tones together as dyads. Hear the intervals change."
+  - "Step 4: On the Bb7 dyad (D + Ab), pause. Feel the tritone tension."
+  - "Step 5: Resolve to Cmaj7 (E + G). Hear the tritone open to a minor 3rd."
+  - "Step 6: Loop the full cadence. Focus on the upper voice descending chromatically."
+  - "Step 7: Loop again. Focus on the lower voice leaving and returning (E-D-E)."
+  - "Step 8: Play along with the MIDI. Match the guide-tone motion exactly."
+  - "Step 9: Add roots underneath (F, Bb, C in bass). Hear how guide tones sit inside full chords."
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - voicing_change_accuracy
+    - voice_independence
+  pass_criteria:
+    max_timing_deviation_ms: 30
+  pass_condition:
+    - "Both guide-tone lines played cleanly without hesitation."
+    - "Can sing one voice while playing the other."
+    - "Tritone (D-Ab) identified by ear before resolution."
+    - "Role swap (3rd<->7th between Fmaj7 and Bb7) understood and verbalized."
+    - "Chromatic upper descent (A-Ab-G) heard as a melodic line, not just 'chord changes.'"
+
+tags:
+  voicing_type: drop2
+  technique: guide_tone_pairs
+  cadence: backdoor
+  key: C
+  origin: barry_harris_class
+  zone_theory: tritone_resolution
+  related:
+    - backdoor_drop2_comp_shells_C
+    - backdoor_drop2_triplet_targets_C
+    - backdoor_cadence_C
+    - dorian_gospel_backdoor_Cm
+
+voice_motion:
+  primary: "v6"
+  description: "Upper and lower guide tones move by step; all voices active."
+  motion_type: "contrary"
+  moving_voices: ["soprano", "tenor"]
+  note: "Upper voice descends, lower voice descends then ascends -- mixed contrary."
