@@ -1,0 +1,68 @@
+# Bucket A -- Gospel Chromatic Lick (C)
+# Source: Musical_Cadence_Explaine.md (ChatGPT sandbox export, enhanced)
+# Purpose: one-bar chromatic fill over Bb7 -> C resolution
+
+id: gospel_chromatic_lick_C
+title: "Gospel Chromatic Lick (bVII7 -> I) -- C Major"
+level: "A"
+category: "lick"
+key_center: "C"
+
+program_ref: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+goals:
+  - "Play the chromatic 3-4-#4-5 fill over the Bb7 -> C change."
+  - "Land the G (5th of C) on beat 1 of the resolution chord."
+  - "Feel the chromatic pull: each note tightens until release."
+
+context:
+  - "This lick sits over the bVII7 -> I moment in the backdoor cadence."
+  - "The notes E-F-F#-G span the 3rd to 5th of C major."
+  - "F# is the chromatic passing tone -- it creates the 'butter' feel."
+  - "Gospel, R&B, and soul guitarists use this constantly."
+
+lick:
+  name: "Chromatic butter (Bb7 -> C)"
+  degrees: "3 - 4 - #4 - 5"
+  notes: "E - F - F# - G"
+  timing: "eighth-notes leading into beat 1"
+  tab:
+    high_e: "0 - 1 - 2 - 3"
+    b_string: "5 - 6 - 7 - 8"
+    g_string: "9 - 10 - 11 - 12"
+
+variations:
+  - name: "Descending approach"
+    degrees: "5 - #4 - 4 - 3 - 5"
+    notes: "G - F# - F - E - G"
+    description: "Start on the target, dip down chromatically, return."
+  - name: "Double-time fill"
+    degrees: "3 - 4 - #4 - 5 - 3 - 4 - #4 - 5"
+    notes: "E - F - F# - G - E - F - F# - G"
+    description: "Sixteenth-notes: run the chromatic line twice in one bar."
+  - name: "Bend variant"
+    degrees: "3 - (bend 4 to #4) - 5"
+    notes: "E - (F bent to F#) - G"
+    description: "Bend the 4th up a half-step instead of fretting F#. Blues/gospel flavor."
+
+practice_steps:
+  - "Step 1: Play E-F-F#-G slowly (quarter notes) over Bb7 -> C. Hear each note."
+  - "Step 2: Speed up to eighth notes. Land G on beat 1 of C chord."
+  - "Step 3: Loop the turnaround. Insert the lick every time Bb9 appears."
+  - "Step 4: Try on the B string (frets 5-6-7-8) and G string (9-10-11-12)."
+  - "Step 5: Try the descending and bend variants."
+
+assessment:
+  pass_condition:
+    - "G lands cleanly on beat 1 of the I chord."
+    - "Chromatic notes are even (no rushing F# -> G)."
+    - "Lick flows naturally within the turnaround groove."
+    - "At least one variation attempted."
+
+tags:
+  - bucket_a
+  - backdoor
+  - cadence
+  - gospel
+  - lick
+  - chromatic

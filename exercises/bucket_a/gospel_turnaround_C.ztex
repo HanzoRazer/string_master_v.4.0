@@ -1,0 +1,95 @@
+# Bucket A -- Gospel Turnaround (C)
+# Source: Musical_Cadence_Explaine.md (ChatGPT sandbox export, enhanced)
+# Purpose: full gospel turnaround with backdoor + V13 reentry
+
+id: gospel_turnaround_C
+title: "Gospel Turnaround (IV -> bVII9 -> I -> V13 -> I6) -- C Major"
+level: "A"
+category: "cadence"
+key_center: "C"
+
+program_ref: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+goals:
+  - "Play the full gospel turnaround as one flowing phrase."
+  - "Hear the backdoor (Bb9 -> Cmaj9) resolve, then the V13 reentry."
+  - "Keep top voices smooth -- max one step between adjacent chords."
+  - "Internalize the 'sigh into home' feel on the final C6."
+
+context:
+  - "The backdoor cadence (IV -> bVII7 -> I) is the first half."
+  - "G13 -> C6 is a standard V -> I turnaround that loops the phrase."
+  - "Together they make a complete gospel turnaround cycle."
+  - "This is the progression gospel pianists and R&B guitarists use constantly."
+
+targets:
+  - name: "Bb9 -> Cmaj9 guide-tone (3rd)"
+    from: "Bb9: 3rd (D)"
+    to: "Cmaj9: 3rd (E)"
+    motion: "up a half-step"
+  - name: "Bb9 -> Cmaj9 guide-tone (7th)"
+    from: "Bb9: 7th (Ab)"
+    to: "Cmaj9: 5th (G)"
+    motion: "down a half-step"
+  - name: "G13 -> C6 guide-tone (3rd)"
+    from: "G13: 3rd (B)"
+    to: "C6: root (C)"
+    motion: "up a half-step (leading tone)"
+  - name: "G13 -> C6 guide-tone (7th)"
+    from: "G13: 7th (F)"
+    to: "C6: 3rd (E)"
+    motion: "down a half-step"
+
+voicing_sets:
+  - name: "Set A -- gospel grabs (open/low)"
+    chords:
+      Fmaj9: "x-3-2-0-1-0"
+      Bb9:   "x-1-0-1-1-1"
+      Cmaj9: "x-3-2-0-3-0"
+      G13:   "3-x-0-0-1-0"
+      C6:    "x-3-2-2-1-0"
+  - name: "Set B -- compact jazz grips (mid-neck)"
+    chords:
+      Fmaj7: "x-8-7-5-6-5"
+      Bb7:   "x-x-7-6-6-6"
+      Cmaj7: "x-x-9-9-8-7"
+      G13:   "x-x-5-4-5-5"
+      C6:    "x-x-5-5-5-5"
+  - name: "Set C -- gospel color upgrades"
+    chords:
+      F6_9:    "x-3-2-2-3-x"
+      Bb13:    "x-1-1-1-3-3"
+      Cmaj9:   "x-3-2-0-3-0"
+      G13:     "3-x-0-0-1-0"
+      C6_9:    "x-3-2-2-3-0"
+
+rhythm:
+  feel: "soul/gospel"
+  tips:
+    - "Anticipate Bb9 by an eighth-note (push slightly before beat 3)."
+    - "Let Cmaj9 sit and breathe -- don't rush to G13."
+    - "G13 creates tension; let it hang for a full bar before resolving."
+    - "C6 lands relaxed and warm -- this is 'home.'"
+
+practice_steps:
+  - "Step 1: Play Fmaj9 -> Bb9 -> Cmaj9 only. 2 bars each. Focus on smooth top voice."
+  - "Step 2: Add G13 -> C6 at the end. Now you have the full 5-chord turnaround."
+  - "Step 3: Loop the full cycle (C6 feeds back to Fmaj9). No gaps."
+  - "Step 4: Try Set B (mid-neck). Same sound, different shapes."
+  - "Step 5: Try Set C (color upgrades). Listen for the richer extensions."
+  - "Step 6: Experiment with gospel timing -- push and delay chords around the beat."
+
+assessment:
+  pass_condition:
+    - "Full turnaround loops without rhythmic breaks."
+    - "Guide-tone resolutions are audible (especially D->E and B->C)."
+    - "Top voice moves by step, never leaps."
+    - "Feel is relaxed and warm, not mechanical."
+
+tags:
+  - bucket_a
+  - backdoor
+  - cadence
+  - gospel
+  - turnaround
+  - jazz

@@ -1,0 +1,75 @@
+# Bucket A -- Gospel Turnaround Movable Pack (C / G / D)
+# Source: Musical_Cadence_Explaine.md (ChatGPT sandbox export, enhanced)
+# Purpose: same turnaround shape moved through three keys
+
+id: gospel_turnaround_movable_pack
+title: "Gospel Turnaround -- Movable Pack (C / G / D)"
+level: "A"
+category: "cadence"
+concept: "IV -> bVII9 -> Imaj9 -> V13 -> I6 (full gospel turnaround)"
+
+program_refs:
+  - "programs/bucket_a/gospel_turnaround_C.ztprog"
+  - "programs/bucket_a/gospel_turnaround_G.ztprog"
+  - "programs/bucket_a/gospel_turnaround_D.ztprog"
+
+goals:
+  - "Play the full gospel turnaround in three keys without stopping."
+  - "Recognize the turnaround sound instantly regardless of key."
+  - "Move voicing families across the neck by pattern, not memorization."
+
+quick_map:
+  C: "Fmaj9 -> Bb9 -> Cmaj9 -> G13 -> C6"
+  G: "Cmaj9 -> F9 -> Gmaj9 -> D13 -> G6"
+  D: "Gmaj9 -> C9 -> Dmaj9 -> A13 -> D6"
+
+voicing_families:
+  - name: "Family 1 -- gospel grabs (open/low zone)"
+    examples:
+      C_major:
+        "IV":    "Fmaj9   x-3-2-0-1-0"
+        "bVII9": "Bb9     x-1-0-1-1-1"
+        "Imaj9": "Cmaj9   x-3-2-0-3-0"
+        "V13":   "G13     3-x-0-0-1-0"
+        "I6":    "C6      x-3-2-2-1-0"
+      G_major:
+        "IV":    "Cmaj9   x-3-2-0-3-0"
+        "bVII9": "F9      1-x-1-2-1-x"
+        "Imaj9": "Gmaj9   3-x-4-4-3-x"
+        "V13":   "D13     x-5-4-5-5-5"
+        "I6":    "G6      3-x-2-4-3-x"
+      D_major:
+        "IV":    "Gmaj9   3-x-4-4-3-x"
+        "bVII9": "C9      x-3-2-3-3-x"
+        "Imaj9": "Dmaj9   x-5-4-2-5-x"
+        "V13":   "A13     x-0-4-5-5-5"
+        "I6":    "D6      x-5-4-4-5-x"
+
+guide_tone_map:
+  C: "D->E (Bb9->C), B->C (G13->C6)"
+  G: "A->B (F9->G), F#->G (D13->G6)"
+  D: "E->F# (C9->D), C#->D (A13->D6)"
+
+rhythm:
+  feel: "soul/gospel"
+  tips:
+    - "Same timing rules in every key: push bVII9, relax into I."
+    - "V13 hangs -- let it simmer before resolving to I6."
+    - "When switching keys, take a breath on the last I6 before the new IV."
+
+practice_steps:
+  - "Step 1: Play the full turnaround in C for 4 cycles."
+  - "Step 2: Same in G for 4 cycles."
+  - "Step 3: Same in D for 4 cycles."
+  - "Step 4: Chain all three keys back-to-back (C -> G -> D), 2 cycles each."
+  - "Step 5: Add the chromatic lick (3-4-#4-5) at each bVII9 -> I transition."
+  - "Step 6: Randomize key order. Can you start in D? In G?"
+
+assessment:
+  pass_condition:
+    - "All three keys played without losing time."
+    - "The turnaround sounds consistent across keys."
+    - "Guide-tone resolutions are audible in every key."
+    - "Key transitions are smooth (no long pauses between keys)."
+
+tags: [bucket_a, backdoor, cadence, turnaround, movable, gospel, jazz]

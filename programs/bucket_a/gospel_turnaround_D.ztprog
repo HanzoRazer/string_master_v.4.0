@@ -1,0 +1,35 @@
+name: gospel_turnaround_D
+time_signature: 4/4
+bars_per_chord: 2
+style: gospel_ballad
+chords:
+- Gmaj9
+- C9
+- Dmaj9
+- A13
+- D6
+notes:
+- Full gospel turnaround in D = G -> C7 -> D -> A13 -> D6
+- Backdoor resolves into D, then V13 loops back.
+- 'Guide-tones: E->F# (C9->D), C#->D (A13->D6).'
+tags:
+- bucket_a
+- backdoor
+- gospel
+- turnaround
+- cadence
+- key_D
+tempo_bpm: 72
+tempo_range:
+- 52
+- 112
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 112
+    comping: syncopated

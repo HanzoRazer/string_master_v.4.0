@@ -1,0 +1,71 @@
+# Bucket A -- Gospel Color Upgrades (C)
+# Source: Musical_Cadence_Explaine.md (ChatGPT sandbox export, enhanced)
+# Purpose: swap basic triads for gospel extensions on the same progression
+
+id: gospel_color_upgrades_C
+title: "Gospel Color Upgrades -- Substitution Drill (C Major)"
+level: "A"
+category: "voicing"
+key_center: "C"
+
+program_ref: "programs/bucket_a/gospel_color_upgrades_C.ztprog"
+
+goals:
+  - "Learn three tiers of voicing richness on the same progression."
+  - "Hear the difference: triad -> 7th -> 9th/13th."
+  - "Swap chords in real time without losing the groove."
+
+context:
+  - "Gospel harmony starts simple but gets rich through extensions."
+  - "Each tier adds color: triads are clean, 7ths are warm, 9ths/13ths are lush."
+  - "The same IV -> bVII7 -> I backbone supports all three tiers."
+
+tiers:
+  - name: "Tier 1 -- Clean triads"
+    chords:
+      IV:     "F       x-3-3-2-1-1"
+      bVII7:  "Bb7     x-1-3-1-3-1"
+      I:      "C       x-3-2-0-1-0"
+  - name: "Tier 2 -- Seventh chords"
+    chords:
+      IV:     "Fmaj7   x-3-3-2-1-0"
+      bVII7:  "Bb7     x-1-0-1-1-1"
+      I:      "Cmaj7   x-3-2-0-0-0"
+  - name: "Tier 3 -- Gospel extensions (9ths, 13ths, 6/9)"
+    chords:
+      IV:     "F6/9    x-3-2-2-3-x"
+      bVII7:  "Bb13    x-1-1-1-3-3"
+      I:      "C6/9    x-3-2-2-3-0"
+    alternates:
+      bVII7_alt1: "Bb9     x-1-0-1-1-1"
+      bVII7_alt2: "Bb7#11  x-1-0-1-0-1"
+      I_alt1:     "Cmaj9   x-3-2-0-3-0"
+
+rhythm:
+  feel: "soul/gospel"
+  tips:
+    - "Play each tier for 2 full cycles before upgrading."
+    - "Don't switch tiers mid-phrase -- commit to a tier per pass."
+    - "Once comfortable, mix tiers freely within the same cycle."
+
+practice_steps:
+  - "Step 1: Play Tier 1 (triads) for 4 cycles. Lock in the changes."
+  - "Step 2: Play Tier 2 (7ths) for 4 cycles. Notice the added warmth."
+  - "Step 3: Play Tier 3 (extensions) for 4 cycles. Listen for the lush color."
+  - "Step 4: Alternate -- Tier 1 for 1 cycle, Tier 2 for 1, Tier 3 for 1."
+  - "Step 5: Free mix -- swap any tier chord anywhere. Can you stay in time?"
+
+assessment:
+  pass_condition:
+    - "All three tiers played without rhythmic breaks."
+    - "Tier 3 chords ring cleanly (no buzzing from stretch)."
+    - "You can name which tier you're playing without looking."
+    - "The bVII7 chord always sounds like a 'side door' regardless of tier."
+
+tags:
+  - bucket_a
+  - backdoor
+  - cadence
+  - gospel
+  - voicing
+  - substitution

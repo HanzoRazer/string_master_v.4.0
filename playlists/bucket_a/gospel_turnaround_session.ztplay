@@ -1,0 +1,48 @@
+# Bucket A -- Gospel Turnaround Practice Session
+# Source: Musical_Cadence_Explaine.md (ChatGPT sandbox export, enhanced)
+# Flow: single-key warmup -> color upgrades -> lick integration -> movable keys
+# Duration: ~12-15 minutes
+
+id: gospel_turnaround_session
+title: "Gospel Turnaround -- Full Practice Session"
+level: "A"
+category: "cadence"
+tags: [bucket_a, backdoor, cadence, turnaround, gospel, jazz, session]
+
+defaults:
+  tempo: 72
+  bars_per_chord: 2
+  style: gospel_ballad
+
+items:
+  # Phase 1: Single-key warmup (C)
+  - name: "C -- Gospel Turnaround (warmup)"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+    repeats: 4
+
+  # Phase 2: Color upgrades (still C)
+  - name: "C -- Color Upgrades (triads -> 7ths -> extensions)"
+    file: "programs/bucket_a/gospel_color_upgrades_C.ztprog"
+    repeats: 4
+
+  # Phase 3: Movable keys
+  - name: "G -- Gospel Turnaround"
+    file: "programs/bucket_a/gospel_turnaround_G.ztprog"
+    repeats: 3
+
+  - name: "D -- Gospel Turnaround"
+    file: "programs/bucket_a/gospel_turnaround_D.ztprog"
+    repeats: 3
+
+  # Phase 4: All keys back-to-back (integration)
+  - name: "C -- Final pass (integrate lick)"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+    repeats: 2
+
+  - name: "G -- Final pass (integrate lick)"
+    file: "programs/bucket_a/gospel_turnaround_G.ztprog"
+    repeats: 2
+
+  - name: "D -- Final pass (integrate lick)"
+    file: "programs/bucket_a/gospel_turnaround_D.ztprog"
+    repeats: 2
