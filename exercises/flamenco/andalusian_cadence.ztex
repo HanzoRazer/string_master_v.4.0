@@ -1,0 +1,27 @@
+id: andalusian_cadence
+title: "Andalusian Cadence – iv-III-II-I Study"
+program_ref: ../../programs/andalusian_Am.ztprog
+exercise_type: cadence_study
+
+goals:
+  - "Internalize the Andalusian cadence (iv-III-II-I)"
+  - "Hear the Phrygian gravity pulling to the I chord"
+  - "Apply to flamenco and Spanish-influenced music"
+
+practice_steps:
+  - "Loop Am-G-F-E progression slowly"
+  - "Voice lead smoothly between chords"
+  - "Try in Dm (Dm-C-Bb-A) for comparison"
+
+tags:
+  style: flamenco
+  key: A_phrygian
+  technique: cadence
+  progression: andalusian
+
+assessment:
+  what_to_measure:
+    - chord_transition_smoothness
+    - voice_leading_accuracy
+  pass_criteria:
+    chord_transition_smoothness: 0.9

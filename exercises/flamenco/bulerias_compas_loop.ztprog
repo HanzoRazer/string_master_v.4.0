@@ -1,0 +1,41 @@
+id: bulerias_compas_loop
+title: "Bulerias – 12-Beat Compas Loop"
+tempo_bpm: 190
+tempo_range: [140, 240]
+root: E
+loop_bars: 12
+
+levels:
+  beginner:
+    tempo_bpm: 140
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 190
+    comping: accent_bulerias
+  advanced:
+    tempo_bpm: 240
+    comping: accent_bulerias
+
+instruments:
+  - type: palmas
+    pattern:
+      accents: [12, 3, 6, 8, 10]
+  - type: shell_voicings
+    groove: flamenco
+    comping: accent_bulerias
+    chords:
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+  - type: bass_pedal
+    root: tonic
+    pattern: pedal

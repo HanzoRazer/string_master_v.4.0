@@ -1,0 +1,34 @@
+id: malaguena_backing
+title: "Malaguena – Free Rubato Backing"
+tempo_bpm: 65
+tempo_range: [45, 85]
+root: E
+loop_bars: 4
+
+levels:
+  beginner:
+    tempo_bpm: 45
+    comping: sustain
+  intermediate:
+    tempo_bpm: 65
+    comping: sustain
+  advanced:
+    tempo_bpm: 85
+    comping: rubato
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1]
+      hihat:  ["1", "2", "3", "4"]
+  - type: shell_voicings
+    groove: rubato
+    comping: sustain
+    chords:
+      - i
+      - i
+      - i
+      - i
+  - type: bass_pedal
+    root: tonic
+    pattern: pedal

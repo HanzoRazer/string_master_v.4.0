@@ -1,0 +1,29 @@
+id: malaguena_falseta_etude
+title: "Malaguena – Intro Falseta Etude"
+program_ref: malaguena_backing.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Play expressive descending phrases over E Phrygian"
+  - "Focus on rubato phrasing and tone"
+  - "Capture Flamenco style and dynamic range"
+
+practice_steps:
+  - "Play slowly with free-rhythm backing"
+  - "Emphasize slurs and pull-offs"
+  - "Experiment with rasgueado and golpes where stylistic"
+
+tags:
+  style: flamenco
+  palo: malaguena
+  key: E_phrygian
+  meter: free
+  technique: falseta
+
+assessment:
+  what_to_measure:
+    - melodic_accuracy
+    - phrase_shape_completion
+    - tone_dynamic_variance
+  pass_criteria:
+    melodic_accuracy_min: 0.85

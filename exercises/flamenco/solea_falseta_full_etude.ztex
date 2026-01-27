@@ -1,0 +1,31 @@
+id: solea_falseta_full_etude
+title: "Solea – Full Falseta with Variation"
+program_ref: solea_compas_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Connect primary and variation falseta across compas"
+  - "Maintain rhythmic integrity in 12-beat cycles"
+  - "Express dynamic contrast between A and B sections"
+
+practice_steps:
+  - "Play original falseta (compas 1-2) with phrasing clarity"
+  - "Add variation falseta (compas 3-4) with brighter attack"
+  - "Loop entire 4-compas cycle with attention to phrasing arch"
+
+tags:
+  style: flamenco
+  palo: solea
+  key: E_phrygian
+  meter: 12/8
+  technique: falseta
+  variant: full_with_variation
+
+assessment:
+  what_to_measure:
+    - phrase_shape_completion
+    - rhythmic_alignment_to_accent_grid
+    - dynamic_contrast_a_b
+  pass_criteria:
+    phrase_shape_completion: true
+    rhythmic_alignment_to_accent_grid: 0.85

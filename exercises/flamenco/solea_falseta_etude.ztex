@@ -1,0 +1,30 @@
+id: solea_falseta_etude
+title: "Solea – 2-Compas Falseta Etude"
+program_ref: solea_compas_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Internalize the 12-beat compas with accent focus"
+  - "Execute descending phrasing over beats 3, 6, 10"
+  - "Control dynamics and articulation in rubato"
+
+practice_steps:
+  - "Play slowly with compas loop to feel the accent cycle"
+  - "Visualize beat placement (3-6-10) in each 12-beat phrase"
+  - "Add flamenco right-hand techniques gradually (rasgueado, ligado)"
+
+tags:
+  style: flamenco
+  palo: solea
+  key: E_phrygian
+  meter: 12/8
+  technique: falseta
+
+assessment:
+  what_to_measure:
+    - phrase_shape_completion
+    - rhythmic_alignment_to_accent_grid
+    - tone_dynamic_variance
+  pass_criteria:
+    phrase_shape_completion: true
+    rhythmic_alignment_to_accent_grid: 0.85

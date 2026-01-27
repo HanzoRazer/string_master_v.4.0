@@ -1,0 +1,30 @@
+id: bulerias_falseta_etude
+title: "Bulerias – Syncopated 12-Beat Falseta"
+program_ref: bulerias_compas_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Execute phrasing with compas accent awareness (12, 3, 6, 8, 10)"
+  - "Develop speed and precision across 12-beat cycle"
+  - "Capture energetic character of Bulerias"
+
+practice_steps:
+  - "Loop with compas and clap along to internalize 12-beat pulse"
+  - "Accent beats 12, 3, 6, 8, 10 using dynamic contrast"
+  - "Alternate picking with ligado technique to increase clarity"
+
+tags:
+  style: flamenco
+  palo: bulerias
+  key: E_phrygian
+  meter: 12/8
+  technique: falseta
+
+assessment:
+  what_to_measure:
+    - rhythmic_alignment_to_accent_grid
+    - phrase_shape_completion
+    - dynamic_contrast_between_accents
+  pass_criteria:
+    rhythmic_alignment_to_accent_grid: 0.85
+    dynamic_contrast_between_accents: true

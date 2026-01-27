@@ -1,0 +1,41 @@
+id: solea_compas_loop
+title: "Solea – 12-Beat Compas Loop"
+tempo_bpm: 90
+tempo_range: [60, 120]
+root: E
+loop_bars: 12
+
+levels:
+  beginner:
+    tempo_bpm: 60
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 90
+    comping: accent_solea
+  advanced:
+    tempo_bpm: 120
+    comping: accent_solea
+
+instruments:
+  - type: palmas
+    pattern:
+      accents: [3, 6, 8, 10, 12]
+  - type: shell_voicings
+    groove: flamenco
+    comping: accent_solea
+    chords:
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+      - i
+  - type: bass_pedal
+    root: tonic
+    pattern: pedal
