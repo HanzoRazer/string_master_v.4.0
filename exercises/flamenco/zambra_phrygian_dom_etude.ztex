@@ -5,15 +5,16 @@ exercise_type: flamenco_phrygian
 
 # Theory Context
 # Zambra is a Moorish-influenced flamenco dance from Granada
-# Uses C# Phrygian Dominant for darker, more exotic color
+# Uses C# or D Phrygian Dominant for exotic, hypnotic color
 # The augmented 2nd (D to E#) is the signature Moorish interval
-# Hypnotic, trance-like quality distinct from other palos
+# Meter: Flexible -- rubato intro followed by rhythmic verse at ~90 BPM
 
 # Moorish Influence
 # Originated in Sacromonte caves of Granada
 # Reflects Al-Andalus (Moorish Spain) musical heritage
 # The augmented 2nd interval evokes Middle Eastern maqam scales
-# Dance is sensual with dramatic arm movements
+# Belly-dance influence: dramatic arm movements, hip sways
+# Ornamental phrasing -- more decorative than rhythmic
 
 goals:
   - "Internalize C# Phrygian Dominant sound and fingering"
@@ -22,18 +23,22 @@ goals:
   - "Feel bII -> I gravity in darker key center"
 
 practice_steps:
-  - "Play C# Phrygian Dominant scale, pausing on the augmented 2nd"
+  - "Start with rubato: free-time arpeggios in C# Phrygian Dominant"
   - "Practice D -> E# interval repeatedly (the Moorish sound)"
-  - "Arpeggiate C# major with bII (D) approach"
-  - "Create flowing lines that sway rather than drive"
+  - "Transition from rubato into rhythmic groove at ~90 BPM"
+  - "Create flowing, ornamental lines that sway rather than drive"
 
 technique_focus:
+  - name: rubato_intro
+    description: "Free-time arpeggios establishing the mode before groove enters"
   - name: augmented_2nd
     description: "D to E# interval - the Moorish signature sound"
   - name: flowing_arpeggios
     description: "Continuous rolling arpeggios for hypnotic feel"
   - name: soft_rasgueado
     description: "Gentle strums, less percussive than Tangos"
+  - name: ornamental_phrasing
+    description: "Decorative melodic turns, grace notes, Middle Eastern feel"
 
 melodic_targets:
   - degree: 3 (E#/F)

@@ -1,7 +1,7 @@
 id: zambra_Cs_phrygian_dom
 title: "Zambra – Moorish Flamenco Dance"
-tempo_bpm: 95
-tempo_range: [75, 120]
+tempo_bpm: 90
+tempo_range: [0, 100]
 root: C#
 mode: phrygian_dominant
 loop_bars: 8
@@ -9,14 +9,16 @@ loop_bars: 8
 # Origin & Character
 # Zambra: Moorish-rooted flamenco dance from Granada
 # Originally performed by Gitanos (Spanish Roma) in Sacromonte caves
-# Character: Sensual, hypnotic, Middle Eastern influence
-# Often features dramatic arm movements and hip sways
+# Character: Sensual, hypnotic, exotic, Middle Eastern influence
+# Belly-dance influence: dramatic arm movements, hip sways, ornamental phrasing
+# Stylistic markers: Modal, ornamental, Moorish atmosphere
 
 # Compas Reference
-# Time signature: 4/4 or 2/4
+# Meter: Flexible (rubato intro + rhythmic verse)
+# Typical form: Free rubato guitar introduction -> rhythmic verse at ~90 BPM
 # Feel: Swaying, undulating, trance-like
 # Less percussive than Tangos, more flowing
-# Accents often on 1 and 3, but with fluid subdivision
+# The rubato intro sets the exotic mood before the groove enters
 
 # Scale Reference
 # C# Phrygian Dominant (5th mode of F# harmonic minor)
@@ -40,17 +42,18 @@ loop_bars: 8
 # Right-hand: Flowing arpeggios, tremolo, soft rasgueados
 # Left-hand: Ornaments emphasizing the augmented 2nd
 # Character: Hypnotic, swaying, less aggressive than other palos
+# Rubato intro: Free-time arpeggios establishing the mode before groove enters
 
 levels:
   beginner:
-    tempo_bpm: 75
+    tempo_bpm: 70
     comping: sustain
   intermediate:
-    tempo_bpm: 95
+    tempo_bpm: 90
     comping: flowing
   advanced:
-    tempo_bpm: 120
-    comping: ornamental
+    tempo_bpm: 100
+    comping: rubato_to_groove
 
 instruments:
   - type: palmas

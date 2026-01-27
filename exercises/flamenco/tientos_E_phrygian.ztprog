@@ -1,0 +1,78 @@
+id: tientos_E_phrygian
+title: "Tientos - Slow Expressive Tangos Variant"
+tempo_bpm: 65
+tempo_range: [55, 75]
+root: E
+mode: phrygian
+loop_bars: 8
+
+# Compas Reference
+# Time signature: 4/4 (same structure as Tangos, half the tempo)
+# Character: Slow, expressive, solemn
+# Feel: Dragging behind the beat, deep groove
+# Often paired with Tangos (ending in Tangos for rhythmic lift)
+# Traditional: Singer-focused, guitar accompanies with restraint
+
+# Relationship to Tangos
+# Tientos is Tangos slowed down to ~60-70 BPM
+# Same compas, same harmony, different energy
+# Tempo: Tientos 55-75 BPM vs Tangos 80-130 BPM
+# Many performances start Tientos and accelerate into Tangos
+# The transition from Tientos to Tangos is a classic climactic move
+
+# Scale Reference
+# E Phrygian (natural): E-F-G-A-B-C-D
+# NOT Phrygian Dominant -- Tientos uses the darker natural Phrygian
+# The slow tempo reveals the solemn, minor quality of G natural
+# Same modal world as Solea, but in 4/4 instead of 12-beat compas
+
+# Zone-Tritone Connection
+# bII -> I (F -> E) zone-crossing resolution
+# E=4(Z1), F=5(Z2) -- ZONE CROSS
+# At slow tempo, the gravitational pull is deeply felt
+# Each resolution can be savored and ornamented
+
+# Harmony Reference
+# Key: E Phrygian (E-F-G-A-B-C-D)
+# Typical chords: Am(iv) - G(bIII) - F(bII) - E(i)
+# Cadence: Am - G - F - E (Andalusian)
+# E minor chord (not E major) -- pure Phrygian, solemn
+# Slower harmonic rhythm = more time on each chord
+
+# Technique Reference
+# Right-hand: Slower rasgueados, arpeggios, tremolo passages
+# Left-hand: Ligados (hammer-ons/pull-offs), slides, vibrato
+# Expression: Dragging behind the beat, dynamic swells
+# The slow tempo demands control and emotional depth
+
+levels:
+  beginner:
+    tempo_bpm: 55
+    comping: sustain
+  intermediate:
+    tempo_bpm: 65
+    comping: arpeggiated
+  advanced:
+    tempo_bpm: 75
+    comping: expressive
+
+instruments:
+  - type: palmas
+    pattern:
+      accents: [1, 3]
+      style: soft
+  - type: shell_voicings
+    groove: tientos
+    comping: arpeggiated
+    chords:
+      - iv
+      - iv
+      - bIII
+      - bIII
+      - bII
+      - bII
+      - i
+      - i
+  - type: bass_line
+    root: tonic
+    pattern: whole_notes

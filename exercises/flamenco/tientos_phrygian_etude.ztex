@@ -1,0 +1,55 @@
+id: tientos_phrygian_etude
+name: "Tientos -- Slow Expressive Phrygian Etude"
+program_ref: tientos_E_phrygian.ztprog
+exercise_type: flamenco_phrygian
+
+# Theory Context
+# Tientos is the slow, expressive cousin of Tangos
+# Uses E Phrygian (natural) -- NOT Phrygian Dominant
+# The slower pace reveals the solemn, minor quality of G natural
+# Feel: Dragging behind the beat, deep groove
+# Traditional: accompanies cante (singing) with restraint
+
+# Relationship to Tangos
+# Tientos (55-75 BPM) -> Tangos (80-130 BPM)
+# Many performances start Tientos and accelerate into Tangos
+# Same modal world as Solea, but in 4/4 instead of 12-beat compas
+
+goals:
+  - "Develop expressive phrasing at slow tempo"
+  - "Feel bII -> I gravity (F -> E) with space to ornament"
+  - "Drag behind the beat for deep groove feel"
+  - "Build foundation for Tientos-to-Tangos transitions"
+
+practice_steps:
+  - "Play E Phrygian scale with ornaments on each note"
+  - "Practice F -> E resolution with grace notes"
+  - "Arpeggiate Am-G-F-E slowly, feeling each voice"
+  - "Drag slightly behind the beat -- do not rush"
+  - "Practice accelerating from Tientos tempo into Tangos"
+
+technique_focus:
+  - name: dragging_feel
+    description: "Play slightly behind the beat for solemn depth"
+  - name: ligados
+    description: "Hammer-ons and pull-offs for smooth lines"
+  - name: slides
+    description: "Glissando between chord tones"
+  - name: vibrato
+    description: "Sustained notes with pitch oscillation"
+
+melodic_targets:
+  - degree: b3 (G)
+    role: "Minor 3rd -- natural Phrygian, solemn color"
+  - degree: bII (F)
+    role: "Gravity note -- falls to E"
+  - degree: root (E)
+    role: "Resolution -- arrive with vibrato"
+
+tags:
+  palo: tientos
+  mode: phrygian
+  root: E
+  zone_theory: bII_gravity
+  tempo: slow
+  related_palo: tangos
