@@ -546,3 +546,90 @@ This repository includes:
 - ✅ Comprehensive documentation (20+ files)
 
 Your participation is welcome — but must follow governance rules.
+
+---
+
+## Exercise Library
+
+The repository includes a structured exercise library with **83 MIDI exercises** across multiple genres and techniques.
+
+### Three-File Architecture
+
+Each exercise uses a three-file pattern:
+
+| Format | Purpose | Example |
+|--------|---------|---------|
+| `.mid` | MIDI melody/exercise notes | `amazing_grace_etude.mid` |
+| `.ztex` | Exercise definition (goals, assessment) | `amazing_grace_etude.ztex` |
+| `.ztprog` | Backing track program (v2 format) | `amazing_grace_backing.ztprog` |
+
+### Exercise Folders
+
+```
+exercises/
+├── barry_harris_dom7/   # Bebop dominant scales (12 keys)
+├── barry_harris_maj7/   # Bebop major scales (12 keys)
+├── bluegrass/           # Flatpicking, fiddle tunes
+├── blues/               # Turnarounds, intros, licks
+├── bucket_a/            # Beginner-friendly exercises
+├── cycles/              # Circle of fifths/thirds
+├── enclosures/          # Bebop enclosure patterns
+├── got_rhythm/          # Rhythm changes studies
+├── minor_gravity/       # Minor key exercises
+├── phrases/             # Jazz phrases and licks
+├── pivot/               # Pivot tone exercises (12 keys)
+└── voicings/            # Chord voicing studies
+```
+
+### v2 Backing Track Format
+
+All `.ztprog` files use the v2 format with progressive difficulty:
+
+```yaml
+id: example_backing
+tempo_bpm: 80
+tempo_range: [55, 110]      # UI speed slider bounds
+root: G                      # Transposable key
+loop_bars: 8
+
+levels:
+  beginner:
+    tempo_bpm: 55
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 80
+    comping: on_beats
+  advanced:
+    tempo_bpm: 110
+    comping: rhythmic
+
+instruments:
+  - type: drum_kit
+    pattern:
+      kick:   [1, 3]
+      snare:  [2, 4]
+      hihat:  ["1", "2", "3", "4"]
+  - type: shell_voicings
+    groove: straight
+    chords:              # Roman numerals for transposability
+      - I
+      - IV
+      - I
+      - V
+  - type: walking_bass
+    outline_chords: true
+```
+
+### Exercise Categories
+
+| Category | Count | Description |
+|----------|-------|-------------|
+| Barry Harris | 24 | Bebop scales in all 12 keys |
+| Bluegrass | 13 | Flatpicking, fiddle tunes |
+| Blues | 7 | Turnarounds, intros |
+| Enclosures | 14 | Chromatic approach patterns |
+| Cycles | 6 | Circle of 5ths/3rds |
+| Got Rhythm | 4 | Rhythm changes |
+| Phrases | 8 | Jazz licks |
+| Pivot | 13 | Voice-leading |
+| Voicings | 2 | Chord studies |
