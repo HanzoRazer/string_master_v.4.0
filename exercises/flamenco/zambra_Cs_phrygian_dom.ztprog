@@ -1,0 +1,74 @@
+id: zambra_Cs_phrygian_dom
+title: "Zambra – Moorish Flamenco Dance"
+tempo_bpm: 95
+tempo_range: [75, 120]
+root: C#
+mode: phrygian_dominant
+loop_bars: 8
+
+# Origin & Character
+# Zambra: Moorish-rooted flamenco dance from Granada
+# Originally performed by Gitanos (Spanish Roma) in Sacromonte caves
+# Character: Sensual, hypnotic, Middle Eastern influence
+# Often features dramatic arm movements and hip sways
+
+# Compas Reference
+# Time signature: 4/4 or 2/4
+# Feel: Swaying, undulating, trance-like
+# Less percussive than Tangos, more flowing
+# Accents often on 1 and 3, but with fluid subdivision
+
+# Scale Reference
+# C# Phrygian Dominant (5th mode of F# harmonic minor)
+# C#-D-E#-F#-G#-A-B
+# The raised 3rd (E# = F natural) gives exotic Moorish color
+# Often uses augmented 2nd interval (D to E#) for Middle Eastern flavor
+
+# Zone-Tritone Connection
+# bII -> I (D -> C#) zone-crossing resolution
+# C#=1(Z2), D=2(Z1) -- ZONE CROSS
+# Tritone: E#-B (3rd & b7 of C#7) resolves to F# minor (parent)
+# The Moorish flavor comes from emphasizing the augmented 2nd
+
+# Harmony Reference
+# Key: C# Phrygian Dominant (C#-D-E#-F#-G#-A-B)
+# Typical chords: C#(I) - D(bII) - F#m(iv) - C#(I)
+# The D major chord (bII) has strong gravitational pull
+# Augmented 2nd (D to E#) = signature Moorish interval
+
+# Technique Reference
+# Right-hand: Flowing arpeggios, tremolo, soft rasgueados
+# Left-hand: Ornaments emphasizing the augmented 2nd
+# Character: Hypnotic, swaying, less aggressive than other palos
+
+levels:
+  beginner:
+    tempo_bpm: 75
+    comping: sustain
+  intermediate:
+    tempo_bpm: 95
+    comping: flowing
+  advanced:
+    tempo_bpm: 120
+    comping: ornamental
+
+instruments:
+  - type: palmas
+    pattern:
+      accents: [1, 3]
+      style: soft
+  - type: shell_voicings
+    groove: zambra
+    comping: flowing
+    chords:
+      - I
+      - I
+      - bII
+      - bII
+      - iv
+      - iv
+      - I
+      - I
+  - type: bass_line
+    root: tonic
+    pattern: pedal

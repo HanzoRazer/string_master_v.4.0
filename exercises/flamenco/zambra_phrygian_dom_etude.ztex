@@ -1,0 +1,59 @@
+id: zambra_phrygian_dom_etude
+name: "Zambra -- Moorish Phrygian Dominant Etude"
+program_ref: zambra_Cs_phrygian_dom.ztprog
+exercise_type: flamenco_phrygian
+
+# Theory Context
+# Zambra is a Moorish-influenced flamenco dance from Granada
+# Uses C# Phrygian Dominant for darker, more exotic color
+# The augmented 2nd (D to E#) is the signature Moorish interval
+# Hypnotic, trance-like quality distinct from other palos
+
+# Moorish Influence
+# Originated in Sacromonte caves of Granada
+# Reflects Al-Andalus (Moorish Spain) musical heritage
+# The augmented 2nd interval evokes Middle Eastern maqam scales
+# Dance is sensual with dramatic arm movements
+
+goals:
+  - "Internalize C# Phrygian Dominant sound and fingering"
+  - "Emphasize the augmented 2nd (D to E#) for Moorish color"
+  - "Develop flowing, hypnotic phrasing"
+  - "Feel bII -> I gravity in darker key center"
+
+practice_steps:
+  - "Play C# Phrygian Dominant scale, pausing on the augmented 2nd"
+  - "Practice D -> E# interval repeatedly (the Moorish sound)"
+  - "Arpeggiate C# major with bII (D) approach"
+  - "Create flowing lines that sway rather than drive"
+
+technique_focus:
+  - name: augmented_2nd
+    description: "D to E# interval - the Moorish signature sound"
+  - name: flowing_arpeggios
+    description: "Continuous rolling arpeggios for hypnotic feel"
+  - name: soft_rasgueado
+    description: "Gentle strums, less percussive than Tangos"
+
+melodic_targets:
+  - degree: 3 (E#/F)
+    role: "Raised 3rd - exotic Phrygian Dominant color"
+  - degree: bII (D)
+    role: "Gravity note + start of augmented 2nd"
+  - degree: augmented_2nd
+    role: "D to E# - the Moorish interval to emphasize"
+
+interval_highlight:
+  name: augmented_2nd
+  from: bII (D)
+  to: 3 (E#)
+  semitones: 3
+  character: "Middle Eastern / Moorish flavor"
+
+tags:
+  palo: zambra
+  mode: phrygian_dominant
+  root: C#
+  zone_theory: bII_gravity
+  influence: moorish
+  region: granada
