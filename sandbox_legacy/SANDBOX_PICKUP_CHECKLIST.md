@@ -39,17 +39,12 @@
   Gary Moore, Peter Green, Hendrix, Clapton
 - **Priority**: Medium — large batch, can be done incrementally
 
-### 3. "When You Have a Good Friend" (Robert Johnson)
-- **Status**: .mid exists, needs .ztex + .ztprog
-- **Key**: C (slow blues)
-- **Tempo**: 60 BPM
-- **What exists**:
-  - `when_you_have_a_good_friend.mid` (in `exercises/bucket_a/midi/`)
-  - Melody: slow C blues vocal line, 12-bar form
-- **What's needed**:
-  - .ztex lesson wrapper (12-bar vocal line phrasing)
-  - .ztprog slow shuffle backing (drum + bass + shell voicings)
-- **Priority**: Quick win — .mid already committed
+### 3. ~~"When You Have a Good Friend" (Robert Johnson)~~ DONE
+- **Status**: Complete — .ztex + .ztprog created (2026-01-27)
+- **Files created**:
+  - `exercises/bucket_a/when_you_have_a_good_friend_C.ztex` (vocal phrasing lesson)
+  - `programs/bucket_a/when_you_have_a_good_friend_C.ztprog` (60 BPM slow shuffle)
+- **MIDI**: `exercises/bucket_a/midi/when_you_have_a_good_friend.mid` (already existed)
 
 ### 4. ~~Chromatic Triplet Chain Exercises (Barry Harris)~~ DONE
 - **Status**: Complete — 3 exercises + playlist created (2026-01-27)

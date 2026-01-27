@@ -1,0 +1,79 @@
+# Bucket A -- "When You Have a Good Friend" Vocal Line Etude (C)
+# Source: ChatGPT sandbox export (Robert Johnson session)
+# Purpose: 12-bar slow blues vocal melody phrasing in C
+
+id: when_you_have_a_good_friend_C
+title: "When You Have a Good Friend -- Vocal Line Etude (C)"
+level: "A"
+category: "vocal_phrasing"
+key_center: "C"
+
+program_ref: "programs/bucket_a/when_you_have_a_good_friend_C.ztprog"
+
+midi_segments:
+  - part: "main"
+    file: "exercises/bucket_a/midi/when_you_have_a_good_friend.mid"
+    bars: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
+goals:
+  - "Internalize Robert Johnson vocal phrasing on guitar."
+  - "Play the melody as a singer would -- breath marks, not machine precision."
+  - "Feel the slow 12-bar form without rushing through empty space."
+  - "Use space and silence as part of the phrase."
+
+context:
+  - "Robert Johnson's vocal lines are the blueprint for all blues guitar phrasing."
+  - "Key of C, slow blues (60 BPM). Every note has weight at this tempo."
+  - "The melody follows call-and-response: vocal phrase (bars 1-2), guitar answer (bars 3-4)."
+  - "12-bar form: I (bars 1-4), IV (bars 5-6), I (bars 7-8), V-IV-I-V turnaround (bars 9-12)."
+  - "Johnson sang and played simultaneously -- the vocal line IS the guitar line."
+  - "Related: walkin_blues_riff_C.ztex uses the same delta tradition, faster tempo."
+
+phrasing:
+  form: "12-bar blues"
+  call_response:
+    - bars: [1, 2]
+      role: "vocal phrase (call)"
+    - bars: [3, 4]
+      role: "guitar response (answer)"
+    - bars: [5, 6]
+      role: "IV chord restatement"
+    - bars: [7, 8]
+      role: "return to I"
+    - bars: [9, 10, 11, 12]
+      role: "turnaround (V-IV-I-V)"
+  breath_marks:
+    - "End of bar 2 -- pause before the answer phrase."
+    - "End of bar 4 -- longer pause before IV chord."
+    - "End of bar 8 -- breath before turnaround."
+  dynamics:
+    - "Bars 1-4: medium, conversational."
+    - "Bars 5-6: slightly louder (IV chord lift)."
+    - "Bars 9-12: build into turnaround, then relax."
+
+practice_steps:
+  - "Step 1: Listen to the MIDI at 60 BPM. Don't play -- just hear the phrase shape."
+  - "Step 2: Sing the melody. Yes, sing it. Feel where the phrases breathe."
+  - "Step 3: Play the melody on guitar. Match the vocal phrasing -- don't add notes."
+  - "Step 4: Play with the backing track. Let the shuffle carry you."
+  - "Step 5: Add subtle bends on the b3 (Eb) and b7 (Bb). Blues inflection."
+  - "Step 6: Try at 52 BPM -- even slower forces you to LIVE in each note."
+  - "Step 7: Improvise a second chorus using the same phrase shapes but different notes."
+
+assessment:
+  pass_condition:
+    - "Melody is recognizable as a vocal line, not a guitar exercise."
+    - "Breath marks are audible -- silence between phrases, not continuous notes."
+    - "12-bar form is solid -- no lost bars, especially in the turnaround."
+    - "Tempo stays at 60 BPM without rushing -- slow blues discipline."
+    - "At least one blues inflection (bend, slide, vibrato) per phrase."
+
+tags:
+  - bucket_a
+  - blues
+  - delta
+  - robert_johnson
+  - vocal_phrasing
+  - slow_blues
+  - 12_bar
+  - key_C

@@ -1,0 +1,51 @@
+name: when_you_have_a_good_friend_C
+time_signature: 4/4
+bars_per_chord: 1
+style: slow_shuffle
+chords:
+# 12-bar slow blues in C (Robert Johnson style)
+# Bars 1-4: I chord
+- C7
+- C7
+- C7
+- C7
+# Bars 5-6: IV chord
+- F7
+- F7
+# Bars 7-8: back to I
+- C7
+- C7
+# Bars 9-12: turnaround (V-IV-I-V)
+- G7
+- F7
+- C7
+- G7
+notes:
+- "Slow delta blues shuffle at 60 BPM. Every beat has weight."
+- "Robert Johnson style: sparse, vocal-driven phrasing."
+- "Shell voicings only -- don't crowd the melody."
+- "Turnaround (bars 9-12): V-IV-I-V sets up the next chorus."
+- "Leave space. The silence between notes IS the music."
+tags:
+- bucket_a
+- blues
+- delta
+- robert_johnson
+- slow_blues
+- shuffle
+- 12_bar
+- key_C
+tempo_bpm: 60
+tempo_range:
+- 48
+- 72
+levels:
+  beginner:
+    tempo_bpm: 48
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 60
+    comping: slow_shuffle
+  advanced:
+    tempo_bpm: 72
+    comping: fingerpick_shuffle
