@@ -1,0 +1,757 @@
+{
+  "schema_version": "1.0",
+  "source": "40 Essential Blues Guitar Intros and Outros (Richard Barrett, Guitar Techniques, 2011)",
+  "archetypes": [
+    "ASC_LINE_TURNAROUND",
+    "CHORDAL_COLOR",
+    "DESC_LINE_TURNAROUND",
+    "DIM_PASSING_ENGINE",
+    "DOUBLESTOP_EXPRESSIVE",
+    "EXPRESSIVE_MINIMAL",
+    "PENTATONIC_LEAD",
+    "ROCK_BLUES_HYBRID",
+    "SEMITONE_APPROACH",
+    "STATIC_RIFF"
+  ],
+  "motives": [
+    {
+      "id": "intro_01",
+      "kind": "Intro",
+      "num": 1,
+      "difficulty_level": "Easy",
+      "style_qualifier": "acoustic",
+      "key": "E",
+      "version": null,
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "V_SETUP",
+      "articulation_tags": null,
+      "description": "This should sound familiar to anyone who's ever listened to the blues. Using the open-string friendly key of E, this descending figure creeps back up to the V chord (B) ready for the first verse."
+    },
+    {
+      "id": "intro_02",
+      "kind": "Intro",
+      "num": 2,
+      "difficulty_level": "Advanced",
+      "style_qualifier": "acoustic",
+      "key": "E",
+      "version": null,
+      "archetype": "CHORDAL_COLOR",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": null,
+      "description": "A fancier spin in the previous idea, the chord voicings here are expanded for a jazzier feel. Play with confidence for the best effect!"
+    },
+    {
+      "id": "intro_03",
+      "kind": "Intro",
+      "num": 3,
+      "difficulty_level": "Easy",
+      "style_qualifier": "acoustic",
+      "key": "G",
+      "version": null,
+      "archetype": "ASC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "V_SETUP",
+      "articulation_tags": [
+        "fingerstyle"
+      ],
+      "description": "This ascending turnaround leads to the V chord again (D in this case). Keep the feel swinging and bouncy and dig in confidently with thumb and fingers. A pick will give a more modern sound if desired."
+    },
+    {
+      "id": "intro_04",
+      "kind": "Intro",
+      "num": 4,
+      "difficulty_level": "Advanced",
+      "style_qualifier": "acoustic",
+      "key": "G",
+      "version": null,
+      "archetype": "ASC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": null,
+      "description": "Using the same basic idea but adding a few embellishments gives an interesting and harmonically 'complete' sounding intro. Note that the ascending bassline is still very apparent, until we break away for the licks in bar 2."
+    },
+    {
+      "id": "intro_05",
+      "kind": "Intro",
+      "num": 5,
+      "difficulty_level": "Easy",
+      "style_qualifier": "acoustic",
+      "key": "A",
+      "version": null,
+      "archetype": "DIM_PASSING_ENGINE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": "dim_chromatic"
+      },
+      "cadential_intent": "V_SETUP",
+      "articulation_tags": null,
+      "description": "Starting on the V chord (E) means we've jumped in towards the end of the progression, just in time for the turnaround. The partial 7th chords lead to an ascending chromatic line, implying both 7th and diminished chords. The sudden stop for the vocals is also an essential in blues vocabulary!"
+    },
+    {
+      "id": "intro_06",
+      "kind": "Intro",
+      "num": 6,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "A",
+      "version": null,
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "rake"
+      ],
+      "description": "Letting a little rock 'n' roll filter in here, these pentatonic based licks lead to another useful chromatic idea, loved by Robben Ford among others. really dig in to the raked chords at the beginning and keep the attitude going from there."
+    },
+    {
+      "id": "intro_07",
+      "kind": "Intro",
+      "num": 7,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "E",
+      "version": null,
+      "archetype": "STATIC_RIFF",
+      "gravity": {
+        "primary": "static",
+        "secondary": null
+      },
+      "cadential_intent": "V_SETUP",
+      "articulation_tags": null,
+      "description": "This classic pattern is one of those that doesn't need turnarounds or V chord tomfoolery - it is what it is! Though easy to play, it's challenging to sound like you really mean it - so keep a close eye on timing and don't lose the intensity."
+    },
+    {
+      "id": "intro_08",
+      "kind": "Intro",
+      "num": 8,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "E",
+      "version": null,
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "static",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "bend",
+        "doublestop"
+      ],
+      "description": "Turning up the gain and indulging in a few double-stop bends brings the idea forward a few years. Having established the riff, who could be blamed for allowing their fingers to slip up the neck for some pentatonic indulgence? Dig in to those low notes to make people pay attention."
+    },
+    {
+      "id": "intro_09",
+      "kind": "Intro",
+      "num": 9,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "Gm",
+      "version": null,
+      "archetype": "EXPRESSIVE_MINIMAL",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "bend",
+        "vibrato"
+      ],
+      "description": "Without the minor blues, many classic records would never have been heard. This idea focuses on wringing as much emotion out of as few notes as possible, making the most of bends and vibrato. These details are crucial if you are to really get the point across."
+    },
+    {
+      "id": "intro_10",
+      "kind": "Intro",
+      "num": 10,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "Gm",
+      "version": null,
+      "archetype": "EXPRESSIVE_MINIMAL",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": null,
+      "description": "Much more fiddly but no less intense, this idea is quite logical to play once you've teased your fingers through it once. From then on, it's simply a matter of running through it to develop your 'muscle memory'."
+    },
+    {
+      "id": "intro_11",
+      "kind": "Intro",
+      "num": 11,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "E",
+      "version": "Version 2",
+      "archetype": "DIM_PASSING_ENGINE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": "dim_chromatic"
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": null,
+      "description": "Using 7th and diminished chords (you get the diminished by simply dropping down a fret in this case) this intro is played with quite a heavy picking hand, to maximise its impact. Remember, this would be your first and last chance to grab an audience's attention!"
+    },
+    {
+      "id": "intro_12",
+      "kind": "Intro",
+      "num": 12,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "E",
+      "version": "Version 2",
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "bend_quarter"
+      ],
+      "description": "Calling to mind a higher class of Beano reader, the gain is turned up here, though not quite to 'rock' levels. Details like timing and quarter-tone bends are all important to give the right bluesy effect. Take your time developing these skills and you can't lose!"
+    },
+    {
+      "id": "intro_13",
+      "kind": "Intro",
+      "num": 13,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "Bb",
+      "version": null,
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": null,
+      "description": "Using the tried and tested descending line approach that we can see in 100 blues intros, this should example be played delicately but upfront in the mix. Add a little delay to create the right atmosphere."
+    },
+    {
+      "id": "intro_14",
+      "kind": "Intro",
+      "num": 14,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "Bb",
+      "version": null,
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "vibrato",
+        "doublestop"
+      ],
+      "description": "Taking a more solo-based approach, this intro employs fragments of the original descending line, building into some Hendrix style double-stops. A little wobble with the vibrato bar (if you have one) can add some nice extra expressiveness."
+    },
+    {
+      "id": "intro_15",
+      "kind": "Intro",
+      "num": 15,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "Cm",
+      "version": null,
+      "archetype": "ROCK_BLUES_HYBRID",
+      "gravity": {
+        "primary": "static",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": null,
+      "description": "A straight four to the bar instead of a swung or 12/8 feel will give a more 'in your face' result - especially if you play it aggressively with lots of gain! This Jimmy Page style intro doubles the bass and is a good example of the symmetry often present in intros and outros."
+    },
+    {
+      "id": "intro_16",
+      "kind": "Intro",
+      "num": 16,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "Cm",
+      "version": null,
+      "archetype": "EXPRESSIVE_MINIMAL",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "bend",
+        "vibrato"
+      ],
+      "description": "This wailing solo-fest is a great way of letting the audience know you mean business before toning it down for the verse. Bends and vibrato are again the key of producing this feel. Take your time to work on both. Touch is all-important in blues."
+    },
+    {
+      "id": "intro_17",
+      "kind": "Intro",
+      "num": 17,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "A",
+      "version": "Version 2",
+      "archetype": "STATIC_RIFF",
+      "gravity": {
+        "primary": "static",
+        "secondary": null
+      },
+      "cadential_intent": "V_SETUP",
+      "articulation_tags": null,
+      "description": "Another intro identical to how you might play the body of the song, with no turnarounds or diminished chords. It's deceptively tricky, so be patient with yourself. A little bit of gain is nice, but too much crosses over into rock territory and is harder to control."
+    },
+    {
+      "id": "intro_18",
+      "kind": "Intro",
+      "num": 18,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "A",
+      "version": "Version 2",
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "static",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "doublestop"
+      ],
+      "description": "Slightly more gain for some edge and some bent double-stop licks give this intro a little more attitude. Bars 2 and 4 also double up on the fourth and fifth strings. Not too much harder than the easy version, but to make it sound 'right' takes a little work."
+    },
+    {
+      "id": "intro_19",
+      "kind": "Intro",
+      "num": 19,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "C",
+      "version": null,
+      "archetype": "CHORDAL_COLOR",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "rake"
+      ],
+      "description": "Rake through those 9th chords and wobble a little with the bar if you have one. Combined with a little reverb it gives a nice shimmer. A combination of descending line and spelling out the chords a little like Eric Johnson and we're ready for vocals..."
+    },
+    {
+      "id": "intro_20",
+      "kind": "Intro",
+      "num": 20,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "C",
+      "version": null,
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "OPEN_STATEMENT",
+      "articulation_tags": [
+        "bend_quarter",
+        "rake",
+        "doublestop"
+      ],
+      "description": "Starting with a raked G9 chord, this intro quickly moves into Hendrix/SRV territory with a series of double-stops. Take your time to find the most comfortable fingerings and don't neglect the all-important quarter-tone 'blues curl'..."
+    },
+    {
+      "id": "outro_01",
+      "kind": "Outro",
+      "num": 1,
+      "difficulty_level": "Easy",
+      "style_qualifier": "acoustic",
+      "key": "E",
+      "version": null,
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": null,
+      "description": "This ascending line leads to the common and efective device of moving up a semitone (F7) to 'resolve' into the home key (E7). Not too technically challenging, but you can never play something too beautifully, can you? So make that the object of this particular exercise..."
+    },
+    {
+      "id": "outro_02",
+      "kind": "Outro",
+      "num": 2,
+      "difficulty_level": "Advanced",
+      "style_qualifier": "acoustic",
+      "key": "E",
+      "version": null,
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "CLOSE",
+      "articulation_tags": [
+        "doublestop",
+        "fingerstyle"
+      ],
+      "description": "Using a similar template to the easy version, we've opted for a descending figure this time, with a little double-stop trickery and some fancier 13th chords bringing things to a close. These are best played with thumb and fingers to sound all the notes simultaneously and avoid unwanted strings."
+    },
+    {
+      "id": "outro_03",
+      "kind": "Outro",
+      "num": 3,
+      "difficulty_level": "Easy",
+      "style_qualifier": "acoustic",
+      "key": "G",
+      "version": null,
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": null
+      },
+      "cadential_intent": "SEMITONE_TO_I",
+      "articulation_tags": null,
+      "description": "The concept of an ascending figure followed by the semitone chord movement is put to good use again here, this time in the key of G, a favourite of Robert Johnson. Let all the open strings ring together for some interesting implied chords..."
+    },
+    {
+      "id": "outro_04",
+      "kind": "Outro",
+      "num": 4,
+      "difficulty_level": "Advanced",
+      "style_qualifier": "acoustic",
+      "key": "G",
+      "version": null,
+      "archetype": "CHORDAL_COLOR",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "fingerstyle"
+      ],
+      "description": "Taking a more chordal approach, the ascending bass line is preserved, even when we reach the 'surprise' D11 chord. This is a great example of spicing up a classic progression. Use thumb and fingers for simultaneous notes and to avoid the unused strings on those 7#9 chords at the finish."
+    },
+    {
+      "id": "outro_05",
+      "kind": "Outro",
+      "num": 5,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "A",
+      "version": null,
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": "front_door"
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": null,
+      "description": "Jumping in at the E - or V chord - this example leads us back home with a descending line to the not entirely unexpected semitone chord movement. Tip: try moving down a semitone then up again too. In fact, you can amend any or all of these examples to suit your own style."
+    },
+    {
+      "id": "outro_06",
+      "kind": "Outro",
+      "num": 6,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "A",
+      "version": null,
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": null
+      },
+      "cadential_intent": "SEMITONE_TO_I",
+      "articulation_tags": [
+        "doublestop"
+      ],
+      "description": "These rock 'n' roll double-stops lead to a harmonised descending line on the second and third strings. remember, a lot of classic blues was made in that same era. The semitone movement is back again like an old friend, but we're sure you won't mind when you hear those lovely 13b5 chords."
+    },
+    {
+      "id": "outro_07",
+      "kind": "Outro",
+      "num": 7,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "E",
+      "version": null,
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "CLOSE",
+      "articulation_tags": null,
+      "description": "This could be an early Van Halen ending, but has its roots in the classic descending line. Note, the bass features an ascending line underneath, implying some interesting harmony. Take this as a starting point for more rock excess!"
+    },
+    {
+      "id": "outro_08",
+      "kind": "Outro",
+      "num": 8,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "E",
+      "version": null,
+      "archetype": "EXPRESSIVE_MINIMAL",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "CLOSE",
+      "articulation_tags": [
+        "bend_quarter",
+        "vibrato"
+      ],
+      "description": "A more Clapton-esque affair, this outro is peppered with vibrato, whole and quarter-tone bends, all of which require your strictest attention to detail. How many times have you heard the old adage \"it's not what you play but the way you play it\"? Well that's true here."
+    },
+    {
+      "id": "outro_09",
+      "kind": "Outro",
+      "num": 9,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "Gm",
+      "version": null,
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": "semitone"
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "bend",
+        "vibrato"
+      ],
+      "description": "Using the V chord (D) to set up for the last Gm chord is an alternative to the semitone movement featured here. Watch out for the usual bend/vibrato issues. This is a simple pentatonic phrase that can sound magnificent. Jumping into the chords at the very end gives a nice finish."
+    },
+    {
+      "id": "outro_10",
+      "kind": "Outro",
+      "num": 10,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "Gm",
+      "version": null,
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "vibrato",
+        "doublestop"
+      ],
+      "description": "Busier and with a fair amount more gain, here is an alternative/advanced take on the same backing. After the pickup bar, really dig in to that first G for some stinging vibrato. We've opted again to follow the final chords, this time with two double-stops, like Peter Green."
+    },
+    {
+      "id": "outro_11",
+      "kind": "Outro",
+      "num": 11,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "E",
+      "version": "Version 2",
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": "front_door"
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": null,
+      "description": "Using a clean-ish tone, this example follows the V chord through the descending run and semitone movement to the home chord template. This will obviously be a familiar idea by now but ideas like this never stop being useful, as blues is often based on tried and trusted ideas."
+    },
+    {
+      "id": "outro_12",
+      "kind": "Outro",
+      "num": 12,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "E",
+      "version": "Version 2",
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": null,
+      "description": "Flicking to the bridge pickup, with a little more gain, this outro gives a few useful soloing ideas too, using the E major pentatonic - which works especially well over the A chord. It's another way of playing the classic descending pattern leads to the final chords..."
+    },
+    {
+      "id": "outro_13",
+      "kind": "Outro",
+      "num": 13,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "Bb",
+      "version": null,
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "doublestop"
+      ],
+      "description": "Similar to the earlier intro, this simple phrase takes in a couple of doublestops, to reflect its 'finishing-the-song' status. As a set-up for the final chord, we've opted for the V (Eb) but as a minor chord, adding a little drama and demonstrating another sonic possibility."
+    },
+    {
+      "id": "outro_14",
+      "kind": "Outro",
+      "num": 14,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "Bb",
+      "version": null,
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "CLOSE",
+      "articulation_tags": [
+        "bend"
+      ],
+      "description": "Taking a more SRV or BB King approach, this pentatonic phrasing is another example of the importance of string bending in the blues. Even if the phrase is easy for you technically, there are always improvements you can make on these little details..."
+    },
+    {
+      "id": "outro_15",
+      "kind": "Outro",
+      "num": 15,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "Cm",
+      "version": null,
+      "archetype": "ROCK_BLUES_HYBRID",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": null,
+      "description": "Now we're adding a bit of rock to the blues. This outro plays a slightly more fleshed out version of the bass part, pausing on the V (G7#9, but it could be a regular G chord if you prefer) before a big C finish."
+    },
+    {
+      "id": "outro_16",
+      "kind": "Outro",
+      "num": 16,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "Cm",
+      "version": null,
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "bend"
+      ],
+      "description": "Staying firmly in lead guitar territory, this Gary Moore style finish really milks those string bends. Although it launches into something of a pentatonic flurry, it stops a little way short of 'widdle' territory and should fall under the fingers if you run through it a few times."
+    },
+    {
+      "id": "outro_17",
+      "kind": "Outro",
+      "num": 17,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "A",
+      "version": "Version 2",
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "CLOSE",
+      "articulation_tags": [
+        "bend_quarter",
+        "doublestop"
+      ],
+      "description": "These double-stops are saved from simply doubling the bass by the quarter-tone bend in bar 1. Sometimes, that's all it takes. But in cases like this, make sure you have your timing razor-sharp too. Playing ahead of or slightly behind the beat makes a huge amount of difference."
+    },
+    {
+      "id": "outro_18",
+      "kind": "Outro",
+      "num": 18,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "A",
+      "version": "Version 2",
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "bend_quarter",
+        "doublestop"
+      ],
+      "description": "Another spin on a previously used idea using rapid-fire double-stops. As always, watch for the quarter-tone bends that are a classic blues fingerprint - and how about that delightful Am/maj7 chord that creates a very sophisticated finish."
+    },
+    {
+      "id": "outro_19",
+      "kind": "Outro",
+      "num": 19,
+      "difficulty_level": "Easy",
+      "style_qualifier": null,
+      "key": "C",
+      "version": null,
+      "archetype": "CHORDAL_COLOR",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "cadential_intent": "I_FINAL",
+      "articulation_tags": [
+        "tremolo"
+      ],
+      "description": "It's nice to give these chords a little tremolo shimmer, but spelling them out in bar 3 gives an even nicer spin on the classic descending sequence. The 13th chords add a cool jazzy finishing touch."
+    },
+    {
+      "id": "outro_20",
+      "kind": "Outro",
+      "num": 20,
+      "difficulty_level": "Advanced",
+      "style_qualifier": null,
+      "key": "C",
+      "version": null,
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "expressive",
+        "secondary": null
+      },
+      "cadential_intent": "CLOSE",
+      "articulation_tags": [
+        "bend",
+        "doublestop"
+      ],
+      "description": "Mixing double-stop and pentatonic ideas, this outro is quite complex, so it deserves a bit of extra time. Work through slowly and absorb the vib/bend details, as well as the best fingerings for those double-stops. It should be fairly self-explanatory with a guitar in your hands."
+    }
+  ]
+}
