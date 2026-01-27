@@ -1,0 +1,30 @@
+id: tientos_falseta_variation
+title: "Tientos Etude - Variation Phrase in E Phrygian"
+program_ref: tientos_groove_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Introduce variation with new upper neighbor motion"
+  - "Maintain compas alignment while increasing melodic range"
+  - "Build control over descending legato phrasing"
+
+practice_steps:
+  - "Loop this variation after the original falseta"
+  - "Work with accents on beats 2 and 4 for deep groove"
+  - "Use slow practice to clean up descent toward C"
+
+tags:
+  style: flamenco
+  palo: tientos
+  key: E_phrygian
+  meter: 4/4
+  bars: [5, 6, 7, 8]
+
+assessment:
+  what_to_measure:
+    - melodic_accuracy
+    - rhythmic_alignment_to_backing
+    - descent_control
+  pass_criteria:
+    melodic_accuracy: 0.9
+    rhythmic_alignment_to_backing: 0.85

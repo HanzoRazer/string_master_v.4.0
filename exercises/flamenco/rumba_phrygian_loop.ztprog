@@ -1,0 +1,35 @@
+id: rumba_phrygian_loop
+title: "Rumba Groove - E Phrygian Dominant"
+tempo_bpm: 100
+tempo_range: [90, 140]
+root: E
+mode: phrygian_dominant
+loop_bars: 4
+
+# Compas: 4/4, festive Latin-influenced groove
+# Key: E Phrygian Dominant (E-F-G#-A-B-C-D)
+# Character: Festive, party, bright
+
+levels:
+  beginner:
+    tempo_bpm: 90
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 100
+    comping: rumba_strum
+  advanced:
+    tempo_bpm: 140
+    comping: rumba_strum
+
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    groove: rumba
+    chords:
+      - E
+      - E
+      - F
+      - E
+  - type: walking_bass
+    outline_chords: true

@@ -1,0 +1,30 @@
+id: tangos_phrygian_dominant_etude
+title: "Tangos Etude - Phrygian Dominant Phrase in E"
+program_ref: tangos_phrygian_loop.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Phrase over the E Phrygian Dominant scale with rhythmic drive"
+  - "Synchronize melodic attack with the compas pulse"
+  - "Highlight flamenco phrasing over beats 2 and 4"
+
+practice_steps:
+  - "Loop the phrase with drum and shell voicings"
+  - "Identify where the phrase lands rhythmically against 4/4 groove"
+  - "Add palm muting and right-hand accents for flamenco flavor"
+
+tags:
+  style: flamenco
+  palo: tangos
+  key: E_phrygian_dominant
+  meter: 4/4
+  bars: [1, 2, 3, 4]
+
+assessment:
+  what_to_measure:
+    - rhythmic_alignment_to_backing
+    - phrase_sync_with_backbeat
+    - melodic_accuracy
+  pass_criteria:
+    rhythmic_alignment_to_backing: 0.85
+    phrase_sync_with_backbeat: true

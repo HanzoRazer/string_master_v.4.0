@@ -1,0 +1,35 @@
+id: tientos_groove_loop
+title: "Tientos - Slow 4/4 Backing Loop"
+tempo_bpm: 68
+tempo_range: [55, 75]
+root: E
+mode: phrygian
+loop_bars: 4
+
+# Compas: 4/4, dragging behind the beat
+# Key: E Phrygian (E-F-G-A-B-C-D)
+# Character: Slow, expressive, solemn
+
+levels:
+  beginner:
+    tempo_bpm: 55
+    comping: sustain
+  intermediate:
+    tempo_bpm: 68
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 75
+    comping: expressive
+
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    groove: tientos
+    chords:
+      - E
+      - F
+      - E
+      - E
+  - type: walking_bass
+    outline_chords: true

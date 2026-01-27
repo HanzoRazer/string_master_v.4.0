@@ -1,0 +1,36 @@
+id: zambra_groove_loop
+title: "Zambra - D Phrygian Dominant Rubato Backing"
+tempo_bpm: 60
+tempo_range: [0, 90]
+root: D
+mode: phrygian_dominant
+loop_bars: 4
+
+# Compas: Flexible (rubato intro -> rhythmic verse)
+# Key: D Phrygian Dominant (D-Eb-F#-G-A-Bb-C)
+# Character: Moorish, hypnotic, exotic
+# Augmented 2nd: Eb to F# (the Moorish interval)
+
+levels:
+  beginner:
+    tempo_bpm: 50
+    comping: sustain
+  intermediate:
+    tempo_bpm: 60
+    comping: flowing
+  advanced:
+    tempo_bpm: 90
+    comping: rubato_to_groove
+
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    groove: rubato
+    chords:
+      - D
+      - Eb
+      - D
+      - D
+  - type: walking_bass
+    outline_chords: true

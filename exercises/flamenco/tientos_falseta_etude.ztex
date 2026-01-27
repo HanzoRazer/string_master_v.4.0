@@ -1,0 +1,30 @@
+id: tientos_falseta_etude
+title: "Tientos Etude - Expressive Falseta in E Phrygian"
+program_ref: tientos_groove_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Develop expressive legato phrasing in a slow Tientos groove"
+  - "Control dynamic shaping and melodic tension"
+  - "Internalize the slow compas feel of Tientos (4/4 at ~68 BPM)"
+
+practice_steps:
+  - "Play with slow tempo backing to focus on tone and timing"
+  - "Exaggerate phrasing with rubato and dynamics"
+  - "Loop each bar with rest stroke articulation practice"
+
+tags:
+  style: flamenco
+  palo: tientos
+  key: E_phrygian
+  meter: 4/4
+  bars: [1, 2, 3, 4]
+
+assessment:
+  what_to_measure:
+    - rhythmic_alignment_to_backing
+    - melodic_phrasing_accuracy
+    - dynamic_control
+  pass_criteria:
+    rhythmic_alignment_to_backing: 0.85
+    melodic_phrasing_accuracy: 0.9

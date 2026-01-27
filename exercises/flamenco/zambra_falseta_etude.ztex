@@ -1,0 +1,30 @@
+id: zambra_falseta_etude
+title: "Zambra Etude - Rubato Phrase in D Phrygian Dominant"
+program_ref: zambra_groove_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Express rubato melodic phrasing in Phrygian Dominant"
+  - "Introduce Zambra feel with modal tension"
+  - "Develop long-tone control and ornamental dynamics"
+
+practice_steps:
+  - "Play slowly with focus on note connection and sustain"
+  - "Improvise rhythmic placement over groove"
+  - "Emphasize top note phrasing in melodic arcs"
+
+tags:
+  style: flamenco
+  palo: zambra
+  key: D_phrygian_dominant
+  meter: 4/4
+  bars: [1, 2, 3, 4]
+
+assessment:
+  what_to_measure:
+    - phrasing_consistency
+    - rubato_control
+    - melodic_accuracy
+  pass_criteria:
+    phrasing_consistency: 0.8
+    melodic_accuracy: 0.9

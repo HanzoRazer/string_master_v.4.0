@@ -1,0 +1,35 @@
+id: tangos_phrygian_loop
+title: "Tangos - E Phrygian Dominant Backing"
+tempo_bpm: 100
+tempo_range: [80, 130]
+root: E
+mode: phrygian_dominant
+loop_bars: 4
+
+# Compas: 4/4, upbeat rhythmic drive
+# Key: E Phrygian Dominant (E-F-G#-A-B-C-D)
+# Character: Danceable, percussive, bright
+
+levels:
+  beginner:
+    tempo_bpm: 80
+    comping: on_beats
+  intermediate:
+    tempo_bpm: 100
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 130
+    comping: syncopated
+
+instruments:
+  - type: drum_tick
+    pattern: "1---2---3---4---"
+  - type: shell_voicings
+    groove: tangos
+    chords:
+      - E
+      - E
+      - F
+      - E
+  - type: walking_bass
+    outline_chords: true

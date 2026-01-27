@@ -1,0 +1,30 @@
+id: rumba_phrygian_dominant_variation
+title: "Rumba Etude - Variation Phrase in E Phrygian Dominant"
+program_ref: rumba_phrygian_loop.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Practice melodic phrasing variation using scale tones"
+  - "Develop dynamic shifts in descending motion"
+  - "Explore rhythmic syncopation inside Rumba compas"
+
+practice_steps:
+  - "Loop both original and variation phrases alternately"
+  - "Play slowly, exaggerating dynamic contrast"
+  - "Improvise your own closing based on the motif"
+
+tags:
+  style: flamenco
+  palo: rumba
+  key: E_phrygian_dominant
+  meter: 4/4
+  bars: [1, 2, 3, 4]
+
+assessment:
+  what_to_measure:
+    - rhythmic_alignment_to_backing
+    - phrase_shape_completion
+    - dynamic_articulation
+  pass_criteria:
+    rhythmic_alignment_to_backing: 0.85
+    phrase_shape_completion: true

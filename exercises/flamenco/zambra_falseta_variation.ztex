@@ -1,0 +1,30 @@
+id: zambra_falseta_variation
+title: "Zambra Etude - Variation Phrase in D Phrygian Dominant"
+program_ref: zambra_groove_loop.ztprog
+exercise_type: falseta
+
+goals:
+  - "Introduce melodic contrast to the rubato theme"
+  - "Maintain phrasing clarity with chromatic figures"
+  - "Control dynamic build in descending lines"
+
+practice_steps:
+  - "Loop after original phrase to reinforce continuity"
+  - "Target resolution notes with vibrato"
+  - "Use accent displacement across beats 3 and 4"
+
+tags:
+  style: flamenco
+  palo: zambra
+  key: D_phrygian_dominant
+  meter: 4/4
+  bars: [5, 6, 7, 8]
+
+assessment:
+  what_to_measure:
+    - phrasing_continuity
+    - chromatic_passage_accuracy
+    - dynamic_tapering
+  pass_criteria:
+    phrasing_continuity: 0.8
+    chromatic_passage_accuracy: 0.9

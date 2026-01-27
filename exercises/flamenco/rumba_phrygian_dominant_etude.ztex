@@ -1,0 +1,30 @@
+id: rumba_phrygian_dominant_etude
+title: "Rumba Etude - Phrygian Dominant Phrase in E"
+program_ref: rumba_phrygian_loop.ztprog
+exercise_type: melodic_study
+
+goals:
+  - "Develop melodic phrasing using the Phrygian Dominant scale"
+  - "Lock in rhythmic feel of Rumba over E -> F -> E pattern"
+  - "Use accent phrasing and dynamics to express compas"
+
+practice_steps:
+  - "Play the phrase slowly over backing loop"
+  - "Sing the scale before playing to internalize color"
+  - "Experiment with rhythmic displacement over bars 2-3"
+
+tags:
+  style: flamenco
+  palo: rumba
+  key: E_phrygian_dominant
+  meter: 4/4
+  bars: [1, 2, 3, 4]
+
+assessment:
+  what_to_measure:
+    - rhythmic_alignment_to_backing
+    - melodic_accuracy
+    - dynamic_variation
+  pass_criteria:
+    rhythmic_alignment_to_backing: 0.85
+    melodic_accuracy: 0.9
