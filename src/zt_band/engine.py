@@ -3,7 +3,9 @@ Accompaniment generation engine with gravity-aware reharmonization.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import replace
+from pathlib import Path
 from typing import Any
 
 from .chords import Chord, chord_bass_pitch, chord_pitches, parse_chord_symbol
@@ -14,6 +16,8 @@ from .gravity_bridge import apply_tritone_substitutions
 from .midi_out import NoteEvent, write_midi_file
 from .musical_contract import enforce_determinism_inputs, validate_note_events
 from .patterns import STYLE_REGISTRY, StylePattern
+from .rock_articulations import Difficulty, RockStyle
+from .rock_tag_attach import attach_tags_sidecar, tags_to_annotation_list
 from .velocity_contour import VelContour, apply_velocity_contour
 
 # Velocity contour presets (must match validate.py)
@@ -282,5 +286,62 @@ def generate_accompaniment(
             comp_events = apply_expressive(comp_events, spec=expressive, tempo_bpm=tempo_bpm)
             bass_events = apply_expressive(bass_events, spec=expressive, tempo_bpm=tempo_bpm)
         write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=outfile)
+
+    # ---- Technique Tag Attachment (sidecar mode, via style_overrides) ----
+    tt_cfg = None
+    if style_overrides:
+        tt_cfg = style_overrides.get("technique_tags")
+
+    if tt_cfg and tt_cfg.get("enabled", False):
+        # Parse enums safely from strings
+        def _parse_enum(enum_cls, value, default):
+            if value is None:
+                return default
+            if isinstance(value, enum_cls):
+                return value
+            if isinstance(value, str):
+                v = value.strip().lower()
+                for e in enum_cls:
+                    if e.value == v or e.name.lower() == v:
+                        return e
+            return default
+
+        tag_density = float(tt_cfg.get("density", 0.5))
+        tag_seed = tt_cfg.get("seed", tritone_seed)
+        tag_seed = int(tag_seed) if tag_seed is not None else None
+
+        tag_difficulty = _parse_enum(Difficulty, tt_cfg.get("difficulty"), Difficulty.INTERMEDIATE)
+        tag_style = _parse_enum(RockStyle, tt_cfg.get("style"), RockStyle.NEUTRAL)
+
+        tag_aggression = float(tt_cfg.get("aggression", 0.5))
+        tag_legato_bias = float(tt_cfg.get("legato_bias", 0.5))
+        tag_style_energy = float(tt_cfg.get("style_energy", 0.5))
+        tag_leadness = float(tt_cfg.get("leadness", 0.5))
+
+        comp_tags, bass_tags = attach_tags_sidecar(
+            comp_events=comp_events,
+            bass_events=bass_events,
+            beats_per_bar=4.0,  # engine hardcodes 4/4
+            difficulty=tag_difficulty,
+            style=tag_style,
+            density=tag_density,
+            aggression=tag_aggression,
+            legato_bias=tag_legato_bias,
+            style_energy=tag_style_energy,
+            leadness=tag_leadness,
+            seed=tag_seed,
+        )
+
+        # Write sidecar annotation file next to MIDI (JSON, zero deps)
+        if outfile:
+            sidecar_path = Path(outfile).with_suffix(".tags.json")
+            annotations = {
+                "schema": "technique_tags_v1",
+                "beats_per_bar": 4.0,
+                "comp_annotations": tags_to_annotation_list(comp_events, comp_tags),
+                "bass_annotations": tags_to_annotation_list(bass_events, bass_tags),
+            }
+            with open(sidecar_path, "w", encoding="utf-8") as f:
+                json.dump(annotations, f, indent=2)
 
     return comp_events, bass_events
