@@ -19,7 +19,7 @@
     {
       "id": "barry_harris_dom7_bebop",
       "title": "Barry Harris Dominant 7 Bebop Scale",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "static_dominant",
       "key": "C",
@@ -37,7 +37,7 @@
     {
       "id": "barry_harris_maj7_scale",
       "title": "Barry Harris Major 6 Bebop Scale",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "static_major_6",
       "key": "C",

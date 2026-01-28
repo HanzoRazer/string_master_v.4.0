@@ -24,7 +24,7 @@
     {
       "id": "chromatic_triplet_chain_dim7_C",
       "title": "Chromatic Triplet Chain -- Cdim7 (Pure Diminished)",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "chromatic_approach",
       "harmonic_context": "static_diminished",
       "key": "C",
@@ -47,7 +47,7 @@
     {
       "id": "chromatic_triplet_chain_maj6_C",
       "title": "Chromatic Triplet Chain -- C6 (6th Diminished Scale)",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "static_major_sixth",
       "key": "C",
@@ -85,7 +85,7 @@
     {
       "id": "chromatic_triplet_chain_ii_V_I_C",
       "title": "Chromatic Triplet Chain -- ii-V-I in C (Applied)",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "voice_leading",
       "harmonic_context": "ii_v_i_cadence",
       "key": "C",

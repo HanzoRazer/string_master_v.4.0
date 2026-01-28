@@ -167,7 +167,7 @@
     {
       "id": "dorian_gospel_backdoor_Cm",
       "title": "Dorian Gospel Backdoor -- C Minor (Tritone Gravity)",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "resolution",
       "harmonic_context": "tritone_gravity",
       "key": "Cm",
@@ -183,7 +183,7 @@
     {
       "id": "dorian_chromatic_lick_Cm",
       "title": "Dorian Chromatic Lick (bVII7 -> i) -- C Minor",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "articulation",
       "harmonic_context": "tritone_gravity",
       "key": "Cm",
@@ -199,7 +199,7 @@
     {
       "id": "voodoo_child_intro_etude_Em",
       "title": "Voodoo Child (Slight Return) -- Hendrix-Style Intro Etude (E Minor)",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "static_vamp",
       "key": "Em",
@@ -215,7 +215,7 @@
     {
       "id": "dorian_intro_etude_Cm",
       "title": "Hendrix-Style C Dorian Intro Etude",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "static_vamp",
       "key": "Cm",

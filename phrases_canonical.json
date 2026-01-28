@@ -94,7 +94,7 @@
     {
       "id": "joe_pass_etude_10",
       "title": "Joe Pass Etude 10 -- ii-V-I Cycle",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "ii_v_i_major",
       "key": "C",
@@ -109,7 +109,7 @@
     {
       "id": "joe_pass_etude_11",
       "title": "Joe Pass Etude 11 -- Descending ii-V",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "descending_ii_v",
       "key": "C",
@@ -124,7 +124,7 @@
     {
       "id": "joe_pass_etude_12",
       "title": "Joe Pass Etude 12 -- Minor ii-V-i",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "ii_v_i_minor",
       "key": "Cm",
@@ -139,7 +139,7 @@
     {
       "id": "joe_pass_etude_13",
       "title": "Joe Pass Etude 13 -- Tritone Subs",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "scale_patterns",
       "harmonic_context": "tritone_sub",
       "key": "C",

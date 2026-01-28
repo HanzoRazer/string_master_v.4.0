@@ -14,7 +14,7 @@
     {
       "id": "pivot_enclosure_to_root",
       "title": "Pivot Enclosure to Root -- Neighbor Resolution",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "voice_leading",
       "harmonic_context": "static_major",
       "key": "C",
@@ -30,7 +30,7 @@
     {
       "id": "pivot_2_3_2_5_1",
       "title": "Pivot Pattern 2-3-2-5-1 -- All Keys",
-      "style_family": "bebop",
+      "style_family": "jazz",
       "technique": "transposition",
       "harmonic_context": "static_major",
       "key": "C",
