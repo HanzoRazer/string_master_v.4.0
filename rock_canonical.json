@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "rock",
+  "title": "Rock & Hendrix Style",
+  "description": "Dorian modal vamps, Hendrix-style chord work, and rock phrasing.",
+  "taxonomy_ref": "taxonomy.json",
+
+  "harmonic_contexts": [
+    {
+      "id": "dorian_vamp",
+      "progression": "im7 (static)",
+      "description": "Single-chord modal vamp for melodic exploration"
+    },
+    {
+      "id": "dorian_backdoor",
+      "progression": "iv -> bVII9 -> im9 -> V7alt -> i6",
+      "description": "Minor backdoor with tritone axis awareness"
+    }
+  ],
+
+  "exercises": [
+    {
+      "id": "dorian_intro_Cm",
+      "title": "Hendrix-Style C Dorian Intro",
+      "style_family": "rock",
+      "technique": "melodic",
+      "harmonic_context": "dorian_vamp",
+      "key": "Cm",
+      "mode": "dorian",
+      "meter": "4/4",
+      "tempo_range": [80, 120],
+      "difficulty": "intermediate",
+      "program_ref": "programs/rock/dorian_vamp_Cm.ztprog"
+    },
+    {
+      "id": "dorian_backdoor_Cm",
+      "title": "Dorian Backdoor -- C Minor (Tritone Gravity)",
+      "style_family": "rock",
+      "technique": "harmonic",
+      "harmonic_context": "dorian_backdoor",
+      "key": "Cm",
+      "mode": "dorian",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "program_ref": "programs/rock/dorian_gospel_backdoor_Cm.ztprog"
+    },
+    {
+      "id": "dorian_chromatic_lick_Cm",
+      "title": "Dorian Chromatic Lick (bVII7 -> i) -- C Minor",
+      "style_family": "rock",
+      "technique": "melodic",
+      "harmonic_context": "dorian_backdoor",
+      "key": "Cm",
+      "mode": "dorian",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "program_ref": "programs/rock/dorian_gospel_backdoor_Cm.ztprog"
+    },
+    {
+      "id": "voodoo_child_intro_Em",
+      "title": "Hendrix-Style Intro -- E Minor Dorian",
+      "style_family": "rock",
+      "technique": "melodic",
+      "harmonic_context": "dorian_vamp",
+      "key": "Em",
+      "mode": "dorian",
+      "meter": "4/4",
+      "tempo_range": [80, 120],
+      "difficulty": "intermediate",
+      "program_ref": "programs/rock/voodoo_child_backing_Em.ztprog"
+    }
+  ],
+
+  "playlists": [
+    {
+      "id": "rock_dorian_session",
+      "title": "Dorian Rock Session",
+      "exercises": ["dorian_intro_Cm", "dorian_backdoor_Cm", "dorian_chromatic_lick_Cm", "voodoo_child_intro_Em"],
+      "tags": ["rock", "dorian", "hendrix", "modal"]
+    }
+  ],
+
+  "stats": {
+    "total_exercises": 4,
+    "by_difficulty": {"intermediate": 3, "advanced": 1},
+    "keys": ["Cm", "Em"],
+    "playlist_count": 1
+  }
+}

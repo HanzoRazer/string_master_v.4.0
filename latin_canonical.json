@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "latin",
+  "title": "Latin Grooves",
+  "description": "Samba and bossa nova rhythms and comping patterns.",
+  "taxonomy_ref": "taxonomy.json",
+
+  "harmonic_contexts": [
+    {
+      "id": "samba_groove",
+      "progression": "Imaj7 - IVmaj7 - V7 - Imaj7",
+      "description": "Basic samba harmonic cycle with off-beat emphasis"
+    }
+  ],
+
+  "exercises": [
+    {
+      "id": "samba_basic_G",
+      "title": "Basic Samba -- G Major",
+      "style_family": "latin",
+      "technique": "rhythmic",
+      "harmonic_context": "samba_groove",
+      "key": "G",
+      "meter": "2/4",
+      "tempo_range": [80, 140],
+      "difficulty": "beginner",
+      "program_ref": "programs/latin/samba_basic_G.ztprog"
+    },
+    {
+      "id": "samba_4_4_G",
+      "title": "Samba 4/4 Variation -- G Major",
+      "style_family": "latin",
+      "technique": "rhythmic",
+      "harmonic_context": "samba_groove",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "beginner",
+      "program_ref": "programs/latin/samba_basic_G_4_4.ztprog"
+    }
+  ],
+
+  "playlists": [
+    {
+      "id": "latin_samba_session",
+      "title": "Samba Groove Session",
+      "exercises": ["samba_basic_G", "samba_4_4_G"],
+      "tags": ["samba", "latin", "groove"]
+    }
+  ],
+
+  "stats": {
+    "total_exercises": 2,
+    "by_difficulty": {"beginner": 2},
+    "keys": ["G"],
+    "playlist_count": 1
+  }
+}

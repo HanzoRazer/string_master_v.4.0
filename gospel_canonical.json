@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "gospel",
+  "title": "Gospel Harmony",
+  "description": "Backdoor cadences, gospel turnarounds, and church harmony voicings.",
+  "taxonomy_ref": "taxonomy.json",
+
+  "harmonic_contexts": [
+    {
+      "id": "backdoor_cadence",
+      "progression": "IV -> bVII7 -> I",
+      "description": "Side-door resolution using the same tritone as V7 but from bVII"
+    },
+    {
+      "id": "gospel_turnaround",
+      "progression": "IV -> bVII9 -> Imaj9 -> V13 -> I6",
+      "description": "Full gospel cycle combining backdoor and front-door resolutions"
+    }
+  ],
+
+  "exercises": [
+    {
+      "id": "backdoor_cadence_C",
+      "title": "Backdoor Cadence (IV -> bVII7 -> I) -- C Major",
+      "style_family": "gospel",
+      "technique": "harmonic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "program_ref": "programs/gospel/backdoor_cadence_C.ztprog"
+    },
+    {
+      "id": "backdoor_cadence_movable",
+      "title": "Backdoor Cadence -- Movable (C / G / D)",
+      "style_family": "gospel",
+      "technique": "harmonic",
+      "harmonic_context": "backdoor_cadence",
+      "keys": ["C", "G", "D"],
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "program_ref": "programs/gospel/backdoor_cadence_C.ztprog"
+    },
+    {
+      "id": "gospel_turnaround_C",
+      "title": "Gospel Turnaround (IV -> bVII9 -> I -> V13 -> I6) -- C Major",
+      "style_family": "gospel",
+      "technique": "harmonic",
+      "harmonic_context": "gospel_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "program_ref": "programs/gospel/gospel_turnaround_C.ztprog"
+    },
+    {
+      "id": "gospel_color_upgrades_C",
+      "title": "Gospel Color Upgrades -- Substitution Drill (C Major)",
+      "style_family": "gospel",
+      "technique": "harmonic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "program_ref": "programs/gospel/gospel_color_upgrades_C.ztprog"
+    },
+    {
+      "id": "gospel_chromatic_lick_C",
+      "title": "Gospel Chromatic Lick (bVII7 -> I) -- C Major",
+      "style_family": "gospel",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "program_ref": "programs/gospel/gospel_turnaround_C.ztprog"
+    },
+    {
+      "id": "gospel_turnaround_movable",
+      "title": "Gospel Turnaround -- Movable (C / G / D)",
+      "style_family": "gospel",
+      "technique": "harmonic",
+      "harmonic_context": "gospel_turnaround",
+      "keys": ["C", "G", "D"],
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "program_ref": "programs/gospel/gospel_turnaround_C.ztprog"
+    }
+  ],
+
+  "playlists": [
+    {
+      "id": "gospel_backdoor_session",
+      "title": "Backdoor Cadence Session",
+      "exercises": ["backdoor_cadence_C", "backdoor_cadence_movable"],
+      "tags": ["backdoor", "cadence", "gospel"]
+    },
+    {
+      "id": "gospel_turnaround_session",
+      "title": "Gospel Turnaround Session",
+      "exercises": ["gospel_turnaround_C", "gospel_color_upgrades_C", "gospel_chromatic_lick_C", "gospel_turnaround_movable"],
+      "tags": ["gospel", "turnaround", "voicing"]
+    }
+  ],
+
+  "stats": {
+    "total_exercises": 6,
+    "by_difficulty": {"beginner": 2, "intermediate": 4},
+    "keys": ["C", "G", "D"],
+    "playlist_count": 2
+  }
+}

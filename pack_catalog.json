@@ -8,7 +8,7 @@
       "id": "blues",
       "label": "Blues",
       "style_family": "blues",
-      "description": "Blues vocabulary, motives, and 12-key transpositions",
+      "description": "Blues vocabulary, motives, turnarounds, and delta blues",
       "packs": ["blues_motives", "blues_motives_12key", "blues"]
     },
     {
@@ -17,6 +17,13 @@
       "style_family": "jazz",
       "description": "Enclosures, bebop scales, chromatic lines, and etudes",
       "packs": ["enclosures", "got_rhythm", "barry_harris", "phrases", "chromatic_triplets", "pivot"]
+    },
+    {
+      "id": "rock",
+      "label": "Rock",
+      "style_family": "rock",
+      "description": "Hendrix-style dorian, modal vamps, and rock phrasing",
+      "packs": ["rock"]
     },
     {
       "id": "folk",
@@ -33,18 +40,25 @@
       "packs": ["flamenco"]
     },
     {
+      "id": "gospel",
+      "label": "Gospel",
+      "style_family": "gospel",
+      "description": "Backdoor cadences, gospel turnarounds, and church harmony",
+      "packs": ["gospel"]
+    },
+    {
+      "id": "latin",
+      "label": "Latin",
+      "style_family": "latin",
+      "description": "Samba and bossa nova grooves",
+      "packs": ["latin"]
+    },
+    {
       "id": "theory",
       "label": "Theory / Harmony",
       "style_family": "theory",
       "description": "Cycles, voicings, gravity systems, and harmonic devices",
       "packs": ["cycles", "voicings", "minor_gravity", "phrygian_gravity"]
-    },
-    {
-      "id": "mixed",
-      "label": "Mixed",
-      "style_family": null,
-      "description": "Gospel, latin, walking blues, and assorted etudes",
-      "packs": ["bucket_a"]
     }
   ],
 
@@ -331,23 +345,52 @@
       "keys": "all_12"
     },
     {
-      "id": "bucket_a",
-      "title": "Bucket A – Mixed Etudes",
+      "id": "gospel",
+      "title": "Gospel Harmony",
       "status": "formalized",
-      "description": "Gospel turnarounds, samba, walking blues, Dorian etudes, and assorted studies",
-      "style": "mixed",
-      "canonical_json": "bucket_a_canonical.json",
+      "description": "Backdoor cadences, gospel turnarounds, and church harmony",
+      "style": "jazz",
+      "canonical_json": "gospel_canonical.json",
       "exercises_dir": "exercises/bucket_a",
       "programs_dir": "programs/bucket_a",
-      "playlists_prefix": "bucket_a_",
-      "exercise_count": 14,
-      "program_count": 17,
-      "playlist_count": 8,
-      "midi_dir": "exercises/bucket_a/midi",
-      "midi_count": 6,
-      "emit_scripts": ["emit_bucket_a_pack.py"],
-      "difficulty_range": ["beginner", "advanced"],
-      "keys": ["C", "G", "Cm", "Em"]
+      "playlists_prefix": "gospel_",
+      "exercise_count": 6,
+      "program_count": 4,
+      "playlist_count": 2,
+      "difficulty_range": ["beginner", "intermediate"],
+      "keys": ["C", "G", "D"]
+    },
+    {
+      "id": "latin",
+      "title": "Latin Grooves",
+      "status": "formalized",
+      "description": "Samba and bossa nova rhythms",
+      "style": "jazz",
+      "canonical_json": "latin_canonical.json",
+      "exercises_dir": "exercises/bucket_a",
+      "programs_dir": "programs/bucket_a",
+      "playlists_prefix": "latin_",
+      "exercise_count": 2,
+      "program_count": 2,
+      "playlist_count": 1,
+      "difficulty_range": ["beginner", "beginner"],
+      "keys": ["G"]
+    },
+    {
+      "id": "rock",
+      "title": "Rock & Hendrix Style",
+      "status": "formalized",
+      "description": "Dorian modal vamps and Hendrix-style phrasing",
+      "style": "jazz",
+      "canonical_json": "rock_canonical.json",
+      "exercises_dir": "exercises/bucket_a",
+      "programs_dir": "programs/bucket_a",
+      "playlists_prefix": "rock_",
+      "exercise_count": 4,
+      "program_count": 3,
+      "playlist_count": 1,
+      "difficulty_range": ["intermediate", "advanced"],
+      "keys": ["Cm", "Em"]
     }
   ],
 
@@ -400,12 +443,12 @@
   ],
 
   "stats": {
-    "total_packs": 16,
-    "formalized": 16,
+    "total_packs": 18,
+    "formalized": 18,
     "unformalized": 0,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 100,
+    "total_playlists": 96,
     "total_midi_generated": 126,
     "validation_count": 882
   }

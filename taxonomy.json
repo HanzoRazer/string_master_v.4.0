@@ -49,6 +49,12 @@
       "label": "Latin / Bossa",
       "description": "Samba, bossa nova, and Latin comping patterns",
       "subsumes": ["samba", "bossa_nova"]
+    },
+    {
+      "id": "rock",
+      "label": "Rock",
+      "description": "Rock vocabulary: Hendrix, modal vamps, pentatonic riffs, and power chord idioms",
+      "subsumes": ["hendrix", "dorian_rock", "pentatonic_rock", "power_chord"]
     }
   ],
 
