@@ -1,42 +1,49 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "description": "Master registry of all exercise packs. Single source of truth for navigation, discovery, and validation.",
+  "taxonomy_ref": "taxonomy.json",
 
   "navigation_groups": [
     {
       "id": "blues",
       "label": "Blues",
+      "style_family": "blues",
       "description": "Blues vocabulary, motives, and 12-key transpositions",
       "packs": ["blues_motives", "blues_motives_12key", "blues"]
     },
     {
-      "id": "jazz_bebop",
-      "label": "Jazz / Bebop",
-      "description": "Bebop enclosures, rhythm changes, and Barry Harris method",
-      "packs": ["enclosures", "got_rhythm", "barry_harris"]
+      "id": "jazz",
+      "label": "Jazz",
+      "style_family": "jazz",
+      "description": "Enclosures, bebop scales, chromatic lines, and etudes",
+      "packs": ["enclosures", "got_rhythm", "barry_harris", "phrases", "chromatic_triplets", "pivot"]
     },
     {
-      "id": "folk_traditional",
-      "label": "Folk / Traditional",
-      "description": "Bluegrass, flatpicking, fiddle tunes, and folk melodies",
+      "id": "folk",
+      "label": "Folk / Bluegrass",
+      "style_family": "folk",
+      "description": "Flatpicking, fiddle tunes, G-runs, and traditional melodies",
       "packs": ["bluegrass"]
     },
     {
       "id": "flamenco",
       "label": "Flamenco",
+      "style_family": "flamenco",
       "description": "Phrygian modes, compas patterns, and palo-specific techniques",
       "packs": ["flamenco"]
     },
     {
-      "id": "theory_technique",
-      "label": "Theory / Technique",
-      "description": "Cycles, voicings, chromatic patterns, gravity systems, and phrases",
-      "packs": ["cycles", "voicings", "chromatic_triplets", "phrases", "minor_gravity", "phrygian_gravity", "pivot"]
+      "id": "theory",
+      "label": "Theory / Harmony",
+      "style_family": "theory",
+      "description": "Cycles, voicings, gravity systems, and harmonic devices",
+      "packs": ["cycles", "voicings", "minor_gravity", "phrygian_gravity"]
     },
     {
       "id": "mixed",
-      "label": "Mixed / Bucket A",
-      "description": "Gospel, samba, walking blues, and assorted etudes",
+      "label": "Mixed",
+      "style_family": null,
+      "description": "Gospel, latin, walking blues, and assorted etudes",
       "packs": ["bucket_a"]
     }
   ],
@@ -216,7 +223,7 @@
       "title": "Chord Voicings & Drop-2",
       "status": "formalized",
       "description": "Drop-2 voicings, backdoor cadence shells, diminished cycles, contrary motion",
-      "style": "jazz",
+      "style": "theory",
       "canonical_json": "voicings_canonical.json",
       "exercises_dir": "exercises/voicings",
       "programs_dir": null,
