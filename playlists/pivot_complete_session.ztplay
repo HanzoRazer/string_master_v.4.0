@@ -1,0 +1,13 @@
+# Pivot -- Pivot Techniques -- Complete Session
+# Auto-generated from pivot_canonical.json
+
+id: pivot_complete_session
+title: "Pivot Techniques -- Complete Session"
+tags: [pivot, melodic_motion, transposition]
+
+items:
+  - name: "Pivot Enclosure to Root -- Neighbor Resolution"
+    file: "exercises/pivot/pivot_enclosure_to_root.ztprog"
+
+  - name: "Pivot Pattern 2-3-2-5-1 -- All Keys"
+    file: "exercises/pivot/pivot_2_3_2_5_1.ztprog"
