@@ -123,6 +123,74 @@ def main():
         if VERBOSE and not errs:
             print(f"  PASS  {os.path.relpath(path, ROOT)}")
 
+    # ── Pack Catalog ──
+    catalog_path = os.path.join(ROOT, "pack_catalog.json")
+    if os.path.exists(catalog_path):
+        catalog_schema = load_schema("pack_catalog.schema.json")
+        with open(catalog_path, encoding="utf-8") as f:
+            catalog = json.load(f)
+
+        # Schema validation
+        errs = validate_file(catalog, catalog_schema, catalog_path)
+        if errs:
+            results["catalog"]["fail"] += 1
+            results["catalog"]["errors"].extend(errs)
+        else:
+            results["catalog"]["pass"] += 1
+
+        # Integrity checks: referenced paths exist
+        integrity_errors = []
+        pack_ids = set()
+        for pack in catalog.get("packs", []):
+            pid = pack["id"]
+            pack_ids.add(pid)
+
+            # Check exercises_dir exists
+            edir = os.path.join(ROOT, pack["exercises_dir"])
+            if not os.path.isdir(edir):
+                integrity_errors.append(
+                    f"  pack_catalog.json: pack '{pid}' exercises_dir "
+                    f"'{pack['exercises_dir']}' not found")
+
+            # Check canonical_json exists (if formalized)
+            cj = pack.get("canonical_json")
+            if cj and not os.path.isfile(os.path.join(ROOT, cj)):
+                integrity_errors.append(
+                    f"  pack_catalog.json: pack '{pid}' canonical_json "
+                    f"'{cj}' not found")
+
+            # Check midi_dir exists (if declared)
+            mdir = pack.get("midi_dir")
+            if mdir and not os.path.isdir(os.path.join(ROOT, mdir)):
+                integrity_errors.append(
+                    f"  pack_catalog.json: pack '{pid}' midi_dir "
+                    f"'{mdir}' not found")
+
+            # Check emit_scripts exist
+            for script in pack.get("emit_scripts", []):
+                if not os.path.isfile(os.path.join(ROOT, script)):
+                    integrity_errors.append(
+                        f"  pack_catalog.json: pack '{pid}' emit_script "
+                        f"'{script}' not found")
+
+        # Check navigation_groups reference valid pack ids
+        for group in catalog.get("navigation_groups", []):
+            for ref in group.get("packs", []):
+                if ref not in pack_ids:
+                    integrity_errors.append(
+                        f"  pack_catalog.json: nav group '{group['id']}' "
+                        f"references unknown pack '{ref}'")
+
+        if integrity_errors:
+            results["catalog_integrity"] = {
+                "pass": 0, "fail": 1,
+                "errors": integrity_errors
+            }
+        else:
+            results["catalog_integrity"] = {
+                "pass": 1, "fail": 0, "errors": []
+            }
+
     # ── Report ──
     total_pass = 0
     total_fail = 0
@@ -130,13 +198,14 @@ def main():
     print("Schema Validation Report")
     print("=" * 60)
 
-    for ftype in ("ztex", "ztprog", "ztplay"):
+    for ftype in ("ztex", "ztprog", "ztplay", "catalog", "catalog_integrity"):
         r = results[ftype]
         p, f = r["pass"], r["fail"]
         total_pass += p
         total_fail += f
         status = "PASS" if f == 0 else "FAIL"
-        print(f"\n.{ftype}: {p} pass, {f} fail  [{status}]")
+        label = f".{ftype}" if not ftype.startswith("catalog") else ftype
+        print(f"\n{label}: {p} pass, {f} fail  [{status}]")
         if r["errors"]:
             # Show first 10 errors per type to avoid flood
             shown = r["errors"][:10]

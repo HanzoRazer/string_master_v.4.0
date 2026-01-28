@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Pack Catalog",
+  "description": "Master registry of all exercise packs for navigation, discovery, and validation.",
+  "type": "object",
+  "required": ["schema_version", "navigation_groups", "packs", "stats"],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "navigation_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "packs"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "label": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" },
+          "packs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "packs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status", "description", "style", "exercises_dir", "exercise_count"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "title": { "type": "string", "minLength": 1 },
+          "status": { "type": "string", "enum": ["formalized", "unformalized"] },
+          "description": { "type": "string" },
+          "style": { "type": "string", "enum": ["blues", "jazz", "folk", "flamenco", "theory", "mixed"] },
+          "canonical_json": { "type": ["string", "null"] },
+          "exercises_dir": { "type": "string" },
+          "exercises_dir_2": { "type": "string" },
+          "programs_dir": { "type": ["string", "null"] },
+          "playlists_prefix": { "type": ["string", "null"] },
+          "exercise_count": { "type": "integer", "minimum": 0 },
+          "program_count": { "type": "integer", "minimum": 0 },
+          "playlist_count": { "type": "integer", "minimum": 0 },
+          "midi_dir": { "type": ["string", "null"] },
+          "midi_count": { "type": "integer", "minimum": 0 },
+          "midi_legacy_count": { "type": "integer", "minimum": 0 },
+          "emit_scripts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "difficulty_range": {
+            "type": "array",
+            "items": { "type": "string" },
+            "minItems": 1,
+            "maxItems": 3
+          },
+          "keys": {
+            "oneOf": [
+              { "type": "array", "items": { "type": "string" } },
+              { "type": "string", "enum": ["all_12", "all_24"] }
+            ]
+          }
+        }
+      }
+    },
+    "standalone_playlists": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "related_pack": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "required": ["total_packs", "formalized", "unformalized"],
+      "properties": {
+        "total_packs": { "type": "integer", "minimum": 0 },
+        "formalized": { "type": "integer", "minimum": 0 },
+        "unformalized": { "type": "integer", "minimum": 0 },
+        "total_exercises": { "type": "integer", "minimum": 0 },
+        "total_programs": { "type": "integer", "minimum": 0 },
+        "total_playlists": { "type": "integer", "minimum": 0 },
+        "total_midi_generated": { "type": "integer", "minimum": 0 },
+        "validation_count": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
