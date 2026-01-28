@@ -3,47 +3,6 @@
   "pack_id": "cycles",
   "title": "Cycle Training",
   "description": "Circle of 5ths, 4ths, 3rds, dominants, and tritone substitution cycles. Root awareness, guide-tone voice leading, and tritone recognition drills over all 12 keys.",
-
-  "style_taxonomy": {
-    "families": [
-      {
-        "id": "cycle_fifths",
-        "label": "Cycle of Fifths",
-        "description": "Circle of fifths root and harmonic movement through all 12 keys"
-      },
-      {
-        "id": "cycle_thirds",
-        "label": "Cycle of Thirds",
-        "description": "Minor-third (diminished axis) interval cycles through dominant harmony"
-      },
-      {
-        "id": "cycle_fourths",
-        "label": "Cycle of Fourths",
-        "description": "Circle of fourths, ii-V-I chains, and dominant resolution cycles"
-      }
-    ]
-  },
-
-  "technique_taxonomy": {
-    "categories": [
-      {
-        "id": "root_awareness",
-        "label": "Root Awareness",
-        "description": "Root identification, anticipation, and tracking through cycle movement"
-      },
-      {
-        "id": "guide_tone_voicing",
-        "label": "Guide Tone Voicing",
-        "description": "Playing 3rds and 7ths with voice-leading awareness through harmonic cycles"
-      },
-      {
-        "id": "tritone_awareness",
-        "label": "Tritone Awareness",
-        "description": "Recognition and use of tritone relationships and substitutions within cycles"
-      }
-    ]
-  },
-
   "harmonic_contexts": [
     {
       "id": "cycle_fifths_diatonic",
@@ -76,17 +35,19 @@
       "description": "Dominant 7th cycle through fourths with probabilistic tritone substitutions, 1 bar per chord"
     }
   ],
-
   "exercises": [
     {
       "id": "cycle_fifths_roots",
       "title": "Cycle of Fifths -- Roots (All Keys)",
-      "style_family": "cycle_fifths",
-      "technique": "root_awareness",
+      "style_family": "cycles",
+      "technique": "transposition",
       "harmonic_context": "cycle_fifths_diatonic",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [65, 150],
+      "tempo_range": [
+        65,
+        150
+      ],
       "difficulty": "intermediate",
       "task_mode": "play_roots",
       "program_ref": "programs/cycle_fifths_all_keys.ztprog"
@@ -94,12 +55,15 @@
     {
       "id": "cycle_fifths_roots_awareness",
       "title": "Cycle of Fifths -- Root Awareness",
-      "style_family": "cycle_fifths",
-      "technique": "root_awareness",
+      "style_family": "cycles",
+      "technique": "transposition",
       "harmonic_context": "cycle_fifths_roots",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [78, 180],
+      "tempo_range": [
+        78,
+        180
+      ],
       "difficulty": "intermediate",
       "task_mode": "play_roots",
       "program_ref": "programs/cycle_fifths_roots.ztprog"
@@ -107,12 +71,15 @@
     {
       "id": "cycle_fourths_ii_v_i_guidetones",
       "title": "Cycle of 4ths -- ii-V-I Guide Tones",
-      "style_family": "cycle_fourths",
-      "technique": "guide_tone_voicing",
+      "style_family": "cycles",
+      "technique": "guide_tones",
       "harmonic_context": "cycle_fourths_ii_v_i",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [78, 180],
+      "tempo_range": [
+        78,
+        180
+      ],
       "difficulty": "intermediate",
       "task_mode": "play_shells",
       "program_ref": "programs/cycle_fourths_ii_v_i.ztprog"
@@ -120,12 +87,15 @@
     {
       "id": "cycle_thirds_guidetones",
       "title": "Cycle of Thirds -- Guide Tones",
-      "style_family": "cycle_thirds",
-      "technique": "guide_tone_voicing",
+      "style_family": "cycles",
+      "technique": "guide_tones",
       "harmonic_context": "cycle_thirds_dominant",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [71, 165],
+      "tempo_range": [
+        71,
+        165
+      ],
       "difficulty": "intermediate",
       "task_mode": "play_shells",
       "program_ref": "programs/cycle_thirds_dominant.ztprog"
@@ -133,12 +103,15 @@
     {
       "id": "cycle_thirds_tritone",
       "title": "Cycle of Thirds -- Tritone Awareness",
-      "style_family": "cycle_thirds",
-      "technique": "tritone_awareness",
+      "style_family": "cycles",
+      "technique": "guide_tones",
       "harmonic_context": "cycle_thirds_tritone",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [78, 180],
+      "tempo_range": [
+        78,
+        180
+      ],
       "difficulty": "advanced",
       "task_mode": "play_shells",
       "program_ref": "programs/cycle_thirds_symmetry.ztprog"
@@ -146,18 +119,20 @@
     {
       "id": "cycle_dominants_tritone_subs",
       "title": "Cycle of Dominants -- Tritone Subs (Guide Tone Mission)",
-      "style_family": "cycle_fourths",
-      "technique": "tritone_awareness",
+      "style_family": "cycles",
+      "technique": "guide_tones",
       "harmonic_context": "cycle_dominants_in_fourths",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [78, 180],
+      "tempo_range": [
+        78,
+        180
+      ],
       "difficulty": "advanced",
       "task_mode": "play_shells",
       "program_ref": "programs/cycle_dominants_fourths.ztprog"
     }
   ],
-
   "progressive_paths": [
     {
       "id": "cycle_foundation_to_mastery",
@@ -183,7 +158,6 @@
       ]
     }
   ],
-
   "playlists": [
     {
       "id": "cycle_complete_session",
@@ -196,7 +170,13 @@
         "cycle_thirds_tritone",
         "cycle_dominants_tritone_subs"
       ],
-      "tags": ["cycle", "theory", "guide_tones", "tritone", "transposition"]
+      "tags": [
+        "cycle",
+        "theory",
+        "guide_tones",
+        "tritone",
+        "transposition"
+      ]
     },
     {
       "id": "cycle_root_awareness_warmup",
@@ -205,10 +185,14 @@
         "cycle_fifths_roots",
         "cycle_fifths_roots_awareness"
       ],
-      "tags": ["cycle", "fifths", "roots", "warmup"]
+      "tags": [
+        "cycle",
+        "fifths",
+        "roots",
+        "warmup"
+      ]
     }
   ],
-
   "stats": {
     "total_exercises": 6,
     "by_style": {
@@ -225,7 +209,10 @@
       "intermediate": 4,
       "advanced": 2
     },
-    "keys": ["C"],
+    "keys": [
+      "C"
+    ],
     "playlist_count": 2
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

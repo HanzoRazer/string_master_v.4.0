@@ -2,54 +2,42 @@
   "schema_version": "1.0",
   "source": "got_rhythm_canonical.json",
   "description": "Barry Harris-inspired bebop studies over 'I Got Rhythm' chord changes. Four progressive studies covering dominant motion, triplet enclosures, ii-V movement, and backdoor harmony.",
-
-  "style_taxonomy": {
-    "bebop": {
-      "label": "Bebop",
-      "description": "Barry Harris method bebop phrasing",
-      "groove": "swing",
-      "time_signature": "4/4"
-    }
-  },
-
-  "technique_taxonomy": {
-    "melodic_motion": {
-      "label": "Melodic Motion",
-      "description": "Chromatic and scalar voice-leading between chord changes"
-    },
-    "melodic_enclosure": {
-      "label": "Melodic Enclosure",
-      "description": "Chromatic approach patterns targeting chord tones"
-    },
-    "chromatic_triplet": {
-      "label": "Chromatic Triplet",
-      "description": "Triplet-feel chromatic approach to target notes"
-    }
-  },
-
   "harmonic_contexts": {
     "dominant_to_subdominant": {
       "label": "I7 → IV7",
       "description": "Classic blues/rhythm changes dominant to subdominant motion",
-      "roman": ["I7", "IV7"]
+      "roman": [
+        "I7",
+        "IV7"
+      ]
     },
     "rhythm_turnaround": {
       "label": "I7 → VI7 → ii7 → V7",
       "description": "Standard rhythm changes turnaround",
-      "roman": ["I7", "VI7", "ii7", "V7"]
+      "roman": [
+        "I7",
+        "VI7",
+        "ii7",
+        "V7"
+      ]
     },
     "ii_v": {
       "label": "ii7 → V7",
       "description": "Minor-to-dominant cadential motion",
-      "roman": ["ii7", "V7"]
+      "roman": [
+        "ii7",
+        "V7"
+      ]
     },
     "subdominant_backdoor": {
       "label": "IVmaj7 → bVII7",
       "description": "Subdominant major to flat-VII dominant (backdoor motion)",
-      "roman": ["IVmaj7", "bVII7"]
+      "roman": [
+        "IVmaj7",
+        "bVII7"
+      ]
     }
   },
-
   "exercises": [
     {
       "id": "got_rhythm_bb7_eb7_study1",
@@ -108,7 +96,6 @@
       "backing_track": "got_rhythm_ebmaj7_ab7_study4"
     }
   ],
-
   "backing_tracks": [
     {
       "id": "got_rhythm_bb7_eb7_study1",
@@ -117,9 +104,17 @@
       "meter": "4/4",
       "groove": "swing",
       "tempo_bpm": 140,
-      "tempo_range": [90, 200],
+      "tempo_range": [
+        90,
+        200
+      ],
       "loop_bars": 2,
-      "chords": ["I7", "I7", "IV7", "I7"],
+      "chords": [
+        "I7",
+        "I7",
+        "IV7",
+        "I7"
+      ],
       "bass_type": "walking"
     },
     {
@@ -129,9 +124,17 @@
       "meter": "4/4",
       "groove": "swing",
       "tempo_bpm": 120,
-      "tempo_range": [80, 180],
+      "tempo_range": [
+        80,
+        180
+      ],
       "loop_bars": 4,
-      "chords": ["I7", "VI7", "ii7", "V7"],
+      "chords": [
+        "I7",
+        "VI7",
+        "ii7",
+        "V7"
+      ],
       "bass_type": "walking"
     },
     {
@@ -141,9 +144,17 @@
       "meter": "4/4",
       "groove": "swing",
       "tempo_bpm": 132,
-      "tempo_range": [88, 190],
+      "tempo_range": [
+        88,
+        190
+      ],
       "loop_bars": 2,
-      "chords": ["ii7", "V7", "ii7", "V7"],
+      "chords": [
+        "ii7",
+        "V7",
+        "ii7",
+        "V7"
+      ],
       "bass_type": "walking"
     },
     {
@@ -153,17 +164,30 @@
       "meter": "4/4",
       "groove": "swing",
       "tempo_bpm": 144,
-      "tempo_range": [96, 210],
+      "tempo_range": [
+        96,
+        210
+      ],
       "loop_bars": 2,
-      "chords": ["IVmaj7", "bVII7", "IVmaj7", "bVII7"],
+      "chords": [
+        "IVmaj7",
+        "bVII7",
+        "IVmaj7",
+        "bVII7"
+      ],
       "bass_type": "walking"
     }
   ],
-
   "playlist_groups": {
     "by_technique": {
-      "enclosures": ["got_rhythm_enclosure_study2", "got_rhythm_ebmaj7_ab7_study4"],
-      "melodic_motion": ["got_rhythm_bb7_eb7_study1", "got_rhythm_fm7_bb7_study3"]
+      "enclosures": [
+        "got_rhythm_enclosure_study2",
+        "got_rhythm_ebmaj7_ab7_study4"
+      ],
+      "melodic_motion": [
+        "got_rhythm_bb7_eb7_study1",
+        "got_rhythm_fm7_bb7_study3"
+      ]
     },
     "progressive_path": {
       "description": "Curriculum order: dominant motion → enclosure technique → ii-V connection → advanced backdoor harmony",
@@ -174,5 +198,6 @@
         "got_rhythm_ebmaj7_ab7_study4"
       ]
     }
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

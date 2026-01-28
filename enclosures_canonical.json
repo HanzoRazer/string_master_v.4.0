@@ -2,7 +2,6 @@
   "schema_version": "1.0",
   "source": "enclosures_canonical.json",
   "description": "Bebop enclosure exercises: chromatic approach patterns targeting chord tones over jazz harmony.",
-
   "enclosure_taxonomy": {
     "upper_diatonic": {
       "label": "Upper Diatonic",
@@ -71,40 +70,59 @@
       "chromatic": true
     }
   },
-
   "chord_contexts": {
     "major": {
       "label": "Major (Imaj7 / I6)",
-      "chord_qualities": ["Imaj7", "I6"],
+      "chord_qualities": [
+        "Imaj7",
+        "I6"
+      ],
       "description": "Enclosures over static major harmony"
     },
     "dominant": {
       "label": "Dominant (V7 / V7alt)",
-      "chord_qualities": ["V7", "V7alt"],
+      "chord_qualities": [
+        "V7",
+        "V7alt"
+      ],
       "description": "Enclosures over dominant harmony (including altered)"
     },
     "minor": {
       "label": "Minor (i7 / ii7)",
-      "chord_qualities": ["i7", "ii7"],
+      "chord_qualities": [
+        "i7",
+        "ii7"
+      ],
       "description": "Enclosures over minor harmony"
     },
     "ii_v_i": {
       "label": "ii-V-I Progression",
-      "chord_qualities": ["ii7", "V7", "Imaj7"],
+      "chord_qualities": [
+        "ii7",
+        "V7",
+        "Imaj7"
+      ],
       "description": "Enclosures across the fundamental jazz cadence"
     },
     "turnaround": {
       "label": "Turnaround (I-vi-ii-V)",
-      "chord_qualities": ["Imaj7", "vi7", "ii7", "V7"],
+      "chord_qualities": [
+        "Imaj7",
+        "vi7",
+        "ii7",
+        "V7"
+      ],
       "description": "Enclosures over rhythm changes turnaround"
     },
     "v_i_resolution": {
       "label": "V-I Resolution",
-      "chord_qualities": ["V7", "Imaj7"],
+      "chord_qualities": [
+        "V7",
+        "Imaj7"
+      ],
       "description": "Enclosures targeting resolution from dominant to tonic"
     }
   },
-
   "difficulty_tiers": {
     "foundations": {
       "label": "Foundations",
@@ -127,7 +145,6 @@
       "order": 4
     }
   },
-
   "exercises": [
     {
       "id": "enclosure_upper_to_5",
@@ -138,10 +155,16 @@
       "target_note": "5th",
       "target_pitch": "G",
       "key": "C",
-      "chords": ["Imaj7", "Imaj7"],
+      "chords": [
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on 5th (G) beat 1, upper diatonic neighbor approach"
     },
     {
@@ -153,10 +176,16 @@
       "target_note": "3rd",
       "target_pitch": "E",
       "key": "C",
-      "chords": ["Imaj7", "Imaj7"],
+      "chords": [
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on 3rd (E) beat 1, chromatic half-step below"
     },
     {
@@ -168,10 +197,16 @@
       "target_note": "root",
       "target_pitch": "C",
       "key": "C",
-      "chords": ["Imaj7", "Imaj7"],
+      "chords": [
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on root (C) beat 1, double chromatic enclosure"
     },
     {
@@ -183,10 +218,16 @@
       "target_note": "3rd",
       "target_pitch": "E",
       "key": "C",
-      "chords": ["I6", "I6"],
+      "chords": [
+        "I6",
+        "I6"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on 3rd (E) over C6, diatonic/chromatic combo"
     },
     {
@@ -198,10 +239,16 @@
       "target_note": "3rd",
       "target_pitch": "B",
       "key": "G",
-      "chords": ["V7", "V7"],
+      "chords": [
+        "V7",
+        "V7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on 3rd (B) of G7, diatonic upper/chromatic lower"
     },
     {
@@ -213,10 +260,16 @@
       "target_note": "b7",
       "target_pitch": "F",
       "key": "G",
-      "chords": ["V7", "V7"],
+      "chords": [
+        "V7",
+        "V7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on b7 (F) of G7, chromatic approach"
     },
     {
@@ -228,10 +281,16 @@
       "target_note": "5th",
       "target_pitch": "A",
       "key": "D",
-      "chords": ["i7", "i7"],
+      "chords": [
+        "i7",
+        "i7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on 5th (A) of Dm7, chromatic approach"
     },
     {
@@ -243,10 +302,16 @@
       "target_note": "b9",
       "target_pitch": "Db",
       "key": "C",
-      "chords": ["V7alt", "V7alt"],
+      "chords": [
+        "V7alt",
+        "V7alt"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Land on b9 of altered dominant, chromatic altered approach"
     },
     {
@@ -258,10 +323,18 @@
       "target_note": "root",
       "target_pitch": "C",
       "key": "C",
-      "chords": ["V7", "V7", "Imaj7", "Imaj7"],
+      "chords": [
+        "V7",
+        "V7",
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Double chromatic enclosure resolving b7 to root over V-I"
     },
     {
@@ -273,10 +346,18 @@
       "target_note": "3rd of each chord",
       "target_pitch": "F/B/E",
       "key": "C",
-      "chords": ["ii7", "V7", "Imaj7", "Imaj7"],
+      "chords": [
+        "ii7",
+        "V7",
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 4,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Chromatic chain targeting 3rd of each chord through ii-V-I"
     },
     {
@@ -288,10 +369,18 @@
       "target_note": "3rd",
       "target_pitch": "E",
       "key": "C",
-      "chords": ["ii7", "V7", "Imaj7", "Imaj7"],
+      "chords": [
+        "ii7",
+        "V7",
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 4,
       "tempo_bpm": 76,
-      "tempo_range": [50, 115],
+      "tempo_range": [
+        50,
+        115
+      ],
       "focus": "Chromatic above/below approach to 3rd over ii-V-I"
     },
     {
@@ -303,10 +392,18 @@
       "target_note": "7th",
       "target_pitch": "B",
       "key": "C",
-      "chords": ["ii7", "V7", "Imaj7", "Imaj7"],
+      "chords": [
+        "ii7",
+        "V7",
+        "Imaj7",
+        "Imaj7"
+      ],
       "loop_bars": 4,
       "tempo_bpm": 68,
-      "tempo_range": [45, 100],
+      "tempo_range": [
+        45,
+        100
+      ],
       "focus": "Diatonic approach to 7th over ii-V-I cadence"
     },
     {
@@ -318,10 +415,18 @@
       "target_note": "chord tones descending",
       "target_pitch": "varies",
       "key": "C",
-      "chords": ["Imaj7", "vi7", "ii7", "V7"],
+      "chords": [
+        "Imaj7",
+        "vi7",
+        "ii7",
+        "V7"
+      ],
       "loop_bars": 4,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Descending chromatic enclosures through I-vi-ii-V turnaround"
     },
     {
@@ -333,25 +438,63 @@
       "target_note": "various",
       "target_pitch": "varies",
       "key": "C",
-      "chords": ["Imaj7", "Imaj7", "V7", "V7"],
+      "chords": [
+        "Imaj7",
+        "Imaj7",
+        "V7",
+        "V7"
+      ],
       "loop_bars": 4,
       "tempo_bpm": 72,
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "focus": "Barry Harris 6th-diminished scale chromatic approach patterns"
     }
   ],
-
   "playlist_groups": {
     "by_tier": {
-      "foundations": ["enclosure_upper_to_5", "enclosure_lower_to_3", "enclosure_double_to_1"],
-      "chord_quality": ["enclosure_major_C6_target_3", "enclosure_dom7_G7_target_3", "enclosure_dom7_G7_target_b7", "enclosure_minor_Dm7_target_5", "enclosure_alt_dom_target_b9"],
-      "progressions": ["dominant_enclosure_b7_to_root", "enclosure_ii_v_i_chain", "ii_v_i_to_3rd_chromatic", "ii_v_i_to_7th_diatonic"],
-      "advanced": ["bebop_enclosure_descending", "barry_harris_enclosure_examples"]
+      "foundations": [
+        "enclosure_upper_to_5",
+        "enclosure_lower_to_3",
+        "enclosure_double_to_1"
+      ],
+      "chord_quality": [
+        "enclosure_major_C6_target_3",
+        "enclosure_dom7_G7_target_3",
+        "enclosure_dom7_G7_target_b7",
+        "enclosure_minor_Dm7_target_5",
+        "enclosure_alt_dom_target_b9"
+      ],
+      "progressions": [
+        "dominant_enclosure_b7_to_root",
+        "enclosure_ii_v_i_chain",
+        "ii_v_i_to_3rd_chromatic",
+        "ii_v_i_to_7th_diatonic"
+      ],
+      "advanced": [
+        "bebop_enclosure_descending",
+        "barry_harris_enclosure_examples"
+      ]
     },
     "by_context": {
-      "major": ["enclosure_upper_to_5", "enclosure_lower_to_3", "enclosure_double_to_1", "enclosure_major_C6_target_3"],
-      "dominant": ["enclosure_dom7_G7_target_3", "enclosure_dom7_G7_target_b7", "enclosure_alt_dom_target_b9"],
-      "ii_v_i": ["enclosure_ii_v_i_chain", "ii_v_i_to_3rd_chromatic", "ii_v_i_to_7th_diatonic"]
+      "major": [
+        "enclosure_upper_to_5",
+        "enclosure_lower_to_3",
+        "enclosure_double_to_1",
+        "enclosure_major_C6_target_3"
+      ],
+      "dominant": [
+        "enclosure_dom7_G7_target_3",
+        "enclosure_dom7_G7_target_b7",
+        "enclosure_alt_dom_target_b9"
+      ],
+      "ii_v_i": [
+        "enclosure_ii_v_i_chain",
+        "ii_v_i_to_3rd_chromatic",
+        "ii_v_i_to_7th_diatonic"
+      ]
     },
     "progressive_path": {
       "description": "Curriculum order: basic types -> chord qualities -> progressions -> advanced",
@@ -372,5 +515,6 @@
         "barry_harris_enclosure_examples"
       ]
     }
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

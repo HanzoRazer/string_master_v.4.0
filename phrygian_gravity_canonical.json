@@ -3,37 +3,6 @@
   "pack_id": "phrygian_gravity",
   "title": "Phrygian Gravity Techniques",
   "description": "Phrygian bII resolution and tritone-to-parent gravity exercises. Zone-crossing half-step resolution and dual gravity system (modal bII-I vs dominant V7-i to parent harmonic minor) through all 12 keys.",
-
-  "style_taxonomy": {
-    "families": [
-      {
-        "id": "bII_resolution_gravity",
-        "label": "bII Resolution Gravity",
-        "description": "Phrygian bII-to-I zone-crossing gravity cell -- the half-step descent as directional pull parallel to V7-I in jazz"
-      },
-      {
-        "id": "dual_gravity_system",
-        "label": "Dual Gravity System",
-        "description": "Hearing Phrygian Dominant as V7 of parent harmonic minor while maintaining modal bII-I resolution -- two gravitational paths"
-      }
-    ]
-  },
-
-  "technique_taxonomy": {
-    "categories": [
-      {
-        "id": "zone_crossing_resolution",
-        "label": "Zone-Crossing Resolution",
-        "description": "Targeting the bII-to-I half-step as gravitational descent, feeling the zone-crossing event as directional pull"
-      },
-      {
-        "id": "tritone_parent_hearing",
-        "label": "Tritone Parent Hearing",
-        "description": "Hearing the Phrygian Dominant tritone (3rd and b7) as embedded dominant tension resolving to parent harmonic minor"
-      }
-    ]
-  },
-
   "harmonic_contexts": [
     {
       "id": "phrygian_bII_I_cycle",
@@ -41,18 +10,20 @@
       "description": "A-Bb-A | D-Eb-D | G-Ab-G | ... cycling through all 12 Phrygian Dominant keys, 1 bar per chord, flamenco tangos style"
     }
   ],
-
   "exercises": [
     {
       "id": "phrygian_gravity_bII_resolution",
       "title": "Phrygian Gravity -- bII to I Zone-Crossing Resolution",
-      "style_family": "bII_resolution_gravity",
-      "technique": "zone_crossing_resolution",
+      "style_family": "gravity",
+      "technique": "resolution",
       "harmonic_context": "phrygian_bII_I_cycle",
       "key": "A",
       "keys_all": "all_12",
       "meter": "4/4",
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "difficulty": "intermediate",
       "task_mode": "custom",
       "zone_theory": "bII(Z1) falls to I(Z2) -- zone-crossing half-step",
@@ -61,13 +32,16 @@
     {
       "id": "phrygian_gravity_tritone_to_parent",
       "title": "Phrygian Gravity -- Tritone Resolution to Parent Minor",
-      "style_family": "dual_gravity_system",
-      "technique": "tritone_parent_hearing",
+      "style_family": "gravity",
+      "technique": "resolution",
       "harmonic_context": "phrygian_bII_I_cycle",
       "key": "A",
       "keys_all": "all_12",
       "meter": "4/4",
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "difficulty": "advanced",
       "task_mode": "custom",
       "parent_relationship": "A Phrygian Dominant = V7 of D harmonic minor",
@@ -78,7 +52,6 @@
       "program_ref": "programs/phrygian_gravity_bII_to_I_cycle.ztprog"
     }
   ],
-
   "progressive_paths": [
     {
       "id": "phrygian_gravity_path",
@@ -90,7 +63,6 @@
       ]
     }
   ],
-
   "playlists": [
     {
       "id": "phrygian_gravity_complete_session",
@@ -99,10 +71,16 @@
         "phrygian_gravity_bII_resolution",
         "phrygian_gravity_tritone_to_parent"
       ],
-      "tags": ["phrygian", "gravity", "zone_theory", "flamenco", "tritone", "transposition"]
+      "tags": [
+        "phrygian",
+        "gravity",
+        "zone_theory",
+        "flamenco",
+        "tritone",
+        "transposition"
+      ]
     }
   ],
-
   "stats": {
     "total_exercises": 2,
     "by_style": {
@@ -117,8 +95,11 @@
       "intermediate": 1,
       "advanced": 1
     },
-    "keys": ["A"],
+    "keys": [
+      "A"
+    ],
     "keys_all_12": true,
     "playlist_count": 1
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

@@ -2,34 +2,6 @@
   "schema_version": "1.0",
   "source": "bluegrass_canonical.json",
   "description": "Bluegrass and traditional flatpicking exercises: licks, fiddle tunes, folk melodies, and intro phrases.",
-
-  "style_taxonomy": {
-    "bluegrass": {
-      "label": "Bluegrass",
-      "description": "Classic bluegrass flatpicking",
-      "groove": "straight",
-      "time_signature": "4/4"
-    },
-    "old_time": {
-      "label": "Old-Time",
-      "description": "Old-time fiddle tune style",
-      "groove": "straight",
-      "time_signature": "4/4"
-    },
-    "traditional": {
-      "label": "Traditional / Folk",
-      "description": "Traditional folk melodies and ballads",
-      "groove": "straight",
-      "time_signature": "varies"
-    },
-    "folk": {
-      "label": "Folk",
-      "description": "Folk melody picking",
-      "groove": "straight",
-      "time_signature": "varies"
-    }
-  },
-
   "exercise_categories": {
     "licks": {
       "label": "G Flatpicking Licks",
@@ -52,7 +24,6 @@
       "order": 4
     }
   },
-
   "exercises": [
     {
       "id": "g_lick_1",
@@ -195,7 +166,6 @@
       "focus": "Extended 4-bar intro phrase, stamina for longer melodic runs"
     }
   ],
-
   "backing_tracks": [
     {
       "id": "g_lick_1",
@@ -204,9 +174,15 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 90,
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "loop_bars": 2,
-      "chords": ["I", "I"],
+      "chords": [
+        "I",
+        "I"
+      ],
       "bass_type": "pedal"
     },
     {
@@ -216,9 +192,15 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 90,
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "loop_bars": 2,
-      "chords": ["I", "I"],
+      "chords": [
+        "I",
+        "I"
+      ],
       "bass_type": "pedal"
     },
     {
@@ -228,9 +210,15 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 90,
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "loop_bars": 2,
-      "chords": ["I", "I"],
+      "chords": [
+        "I",
+        "I"
+      ],
       "bass_type": "pedal"
     },
     {
@@ -240,9 +228,15 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 90,
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "loop_bars": 2,
-      "chords": ["I", "I"],
+      "chords": [
+        "I",
+        "I"
+      ],
       "bass_type": "pedal"
     },
     {
@@ -252,9 +246,21 @@
       "meter": "3/4",
       "groove": "waltz",
       "tempo_bpm": 80,
-      "tempo_range": [55, 110],
+      "tempo_range": [
+        55,
+        110
+      ],
       "loop_bars": 8,
-      "chords": ["I", "IV", "I", "I", "IV", "I", "V", "I"],
+      "chords": [
+        "I",
+        "IV",
+        "I",
+        "I",
+        "IV",
+        "I",
+        "V",
+        "I"
+      ],
       "bass_type": "walking"
     },
     {
@@ -264,9 +270,21 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 100,
-      "tempo_range": [70, 140],
+      "tempo_range": [
+        70,
+        140
+      ],
       "loop_bars": 8,
-      "chords": ["I", "I", "IV", "IV", "V", "V", "I", "I"],
+      "chords": [
+        "I",
+        "I",
+        "IV",
+        "IV",
+        "V",
+        "V",
+        "I",
+        "I"
+      ],
       "bass_type": "walking"
     },
     {
@@ -276,9 +294,17 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 92,
-      "tempo_range": [65, 130],
+      "tempo_range": [
+        65,
+        130
+      ],
       "loop_bars": 4,
-      "chords": ["I", "I", "IV", "I"],
+      "chords": [
+        "I",
+        "I",
+        "IV",
+        "I"
+      ],
       "bass_type": "walking"
     },
     {
@@ -288,9 +314,21 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 105,
-      "tempo_range": [70, 150],
+      "tempo_range": [
+        70,
+        150
+      ],
       "loop_bars": 8,
-      "chords": ["I", "I", "V", "I", "I", "IV", "I", "V"],
+      "chords": [
+        "I",
+        "I",
+        "V",
+        "I",
+        "I",
+        "IV",
+        "I",
+        "V"
+      ],
       "bass_type": "walking"
     },
     {
@@ -300,9 +338,21 @@
       "meter": "3/4",
       "groove": "waltz",
       "tempo_bpm": 72,
-      "tempo_range": [50, 95],
+      "tempo_range": [
+        50,
+        95
+      ],
       "loop_bars": 8,
-      "chords": ["I", "V7", "I", "I", "IV", "I", "V7", "I"],
+      "chords": [
+        "I",
+        "V7",
+        "I",
+        "I",
+        "IV",
+        "I",
+        "V7",
+        "I"
+      ],
       "bass_type": "walking"
     },
     {
@@ -312,9 +362,29 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 78,
-      "tempo_range": [55, 100],
+      "tempo_range": [
+        55,
+        100
+      ],
       "loop_bars": 16,
-      "chords": ["I", "I", "V", "I", "I", "IV", "I", "V", "I", "IV", "I", "I", "V", "V", "I", "I"],
+      "chords": [
+        "I",
+        "I",
+        "V",
+        "I",
+        "I",
+        "IV",
+        "I",
+        "V",
+        "I",
+        "IV",
+        "I",
+        "I",
+        "V",
+        "V",
+        "I",
+        "I"
+      ],
       "bass_type": "walking"
     },
     {
@@ -324,9 +394,21 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 95,
-      "tempo_range": [65, 130],
+      "tempo_range": [
+        65,
+        130
+      ],
       "loop_bars": 8,
-      "chords": ["I", "V", "I", "I", "V", "I", "I", "I"],
+      "chords": [
+        "I",
+        "V",
+        "I",
+        "I",
+        "V",
+        "I",
+        "I",
+        "I"
+      ],
       "bass_type": "walking"
     },
     {
@@ -336,19 +418,48 @@
       "meter": "4/4",
       "groove": "straight",
       "tempo_bpm": 90,
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "loop_bars": 8,
-      "chords": ["I", "V7", "I", "I", "I", "IV", "I", "I"],
+      "chords": [
+        "I",
+        "V7",
+        "I",
+        "I",
+        "I",
+        "IV",
+        "I",
+        "I"
+      ],
       "bass_type": "walking"
     }
   ],
-
   "playlist_groups": {
     "by_category": {
-      "licks": ["g_lick_1", "g_lick_2", "g_lick_3", "g_lick_4"],
-      "folk_melodies": ["amazing_grace_etude", "on_top_of_old_smokey_etude", "red_river_valley_etude", "shady_grove_etude"],
-      "fiddle_tunes": ["blackberry_blossom_a1", "blackberry_blossom_b1", "blackberry_blossom_b1a", "olde_joe_clark_etude"],
-      "intro_phrases": ["muleskinner_intro_phrase", "muleskinner_intro_phrase_4bar"]
+      "licks": [
+        "g_lick_1",
+        "g_lick_2",
+        "g_lick_3",
+        "g_lick_4"
+      ],
+      "folk_melodies": [
+        "amazing_grace_etude",
+        "on_top_of_old_smokey_etude",
+        "red_river_valley_etude",
+        "shady_grove_etude"
+      ],
+      "fiddle_tunes": [
+        "blackberry_blossom_a1",
+        "blackberry_blossom_b1",
+        "blackberry_blossom_b1a",
+        "olde_joe_clark_etude"
+      ],
+      "intro_phrases": [
+        "muleskinner_intro_phrase",
+        "muleskinner_intro_phrase_4bar"
+      ]
     },
     "progressive_path": {
       "description": "Curriculum order: licks -> folk melodies -> fiddle tunes -> intro phrases",
@@ -369,5 +480,6 @@
         "muleskinner_intro_phrase_4bar"
       ]
     }
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

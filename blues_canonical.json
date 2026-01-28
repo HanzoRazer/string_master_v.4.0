@@ -3,52 +3,6 @@
   "pack_id": "blues",
   "title": "Blues Turnarounds & Licks",
   "description": "Blues lead phrases, major turnarounds in 12/8 Texas style, and minor turnarounds with jazz-blues crossover harmony.",
-
-  "style_taxonomy": {
-    "families": [
-      {
-        "id": "lead_phrase",
-        "label": "Lead Phrase",
-        "description": "Intro and outro licks in idiomatic blues style (Chicago, Texas)"
-      },
-      {
-        "id": "major_turnaround",
-        "label": "Major Turnaround",
-        "description": "Two-bar turnaround phrases over I7-VI7-ii7-V7 in 12/8 Texas shuffle feel"
-      },
-      {
-        "id": "minor_turnaround",
-        "label": "Minor Turnaround",
-        "description": "Minor key turnaround phrases over iiø7-V7alt-i7-bVI7 with jazz inflection"
-      }
-    ]
-  },
-
-  "technique_taxonomy": {
-    "categories": [
-      {
-        "id": "lead_phrase",
-        "label": "Lead Phrase",
-        "description": "Single-line melodic phrases targeting idiomatic blues expression"
-      },
-      {
-        "id": "turnaround_phrase",
-        "label": "Turnaround Phrase",
-        "description": "Two-bar turnaround patterns resolving to the I chord"
-      },
-      {
-        "id": "chromatic_phrase",
-        "label": "Chromatic Phrase",
-        "description": "Chromatic approach patterns using enclosures to target chord tones"
-      },
-      {
-        "id": "melodic_study",
-        "label": "Melodic Study",
-        "description": "Extended melodic line over harmonic form emphasizing scale color"
-      }
-    ]
-  },
-
   "harmonic_contexts": [
     {
       "id": "blues_major",
@@ -66,112 +20,137 @@
       "description": "Minor key turnaround with altered dominant and tritone substitution"
     }
   ],
-
   "exercises": [
     {
       "id": "albertking_intro_slideup",
       "title": "Albert King Intro Slide-Up",
-      "style_family": "lead_phrase",
-      "technique": "lead_phrase",
+      "style_family": "blues",
+      "technique": "articulation",
       "harmonic_context": "blues_major",
       "key": "G",
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "beginner",
       "program_ref": "programs/blues_albertking_intro_G.ztprog"
     },
     {
       "id": "srv_outro_bb_bend",
       "title": "SRV Outro with b5 Bend",
-      "style_family": "lead_phrase",
-      "technique": "lead_phrase",
+      "style_family": "blues",
+      "technique": "articulation",
       "harmonic_context": "blues_major",
       "key": "E",
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "advanced",
       "program_ref": "programs/blues_srv_outro_E.ztprog"
     },
     {
       "id": "turnaround_contrary_motion",
       "title": "Contrary Motion Line into I Chord",
-      "style_family": "major_turnaround",
-      "technique": "turnaround_phrase",
+      "style_family": "blues",
+      "technique": "resolution",
       "harmonic_context": "turnaround_major",
       "key": "E",
       "meter": "12/8",
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/blues/turnaround_contrary_motion.ztprog"
     },
     {
       "id": "turnaround_descending_triplet",
       "title": "Classic Descending Blues Turnaround",
-      "style_family": "major_turnaround",
-      "technique": "turnaround_phrase",
+      "style_family": "blues",
+      "technique": "resolution",
       "harmonic_context": "turnaround_major",
       "key": "E",
       "meter": "12/8",
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/blues/turnaround_descending_triplet.ztprog"
     },
     {
       "id": "turnaround_expanding_intervals",
       "title": "Expanding Intervals Before Resolution",
-      "style_family": "major_turnaround",
-      "technique": "turnaround_phrase",
+      "style_family": "blues",
+      "technique": "resolution",
       "harmonic_context": "turnaround_major",
       "key": "E",
       "meter": "12/8",
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/blues/turnaround_expanding_intervals.ztprog"
     },
     {
       "id": "turnaround_expanding_intervals_minor",
       "title": "Minor Key Turnaround -- Expanding Intervals",
-      "style_family": "minor_turnaround",
-      "technique": "turnaround_phrase",
+      "style_family": "blues",
+      "technique": "resolution",
       "harmonic_context": "turnaround_minor",
       "key": "Cm",
       "meter": "4/4",
-      "tempo_range": [50, 120],
+      "tempo_range": [
+        50,
+        120
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
     },
     {
       "id": "turnaround_minor_enclosure",
       "title": "Minor Turnaround -- Chromatic Phrase",
-      "style_family": "minor_turnaround",
-      "technique": "chromatic_phrase",
+      "style_family": "blues",
+      "technique": "chromatic_approach",
       "harmonic_context": "turnaround_minor",
       "key": "Cm",
       "meter": "4/4",
-      "tempo_range": [50, 120],
+      "tempo_range": [
+        50,
+        120
+      ],
       "difficulty": "advanced",
       "program_ref": "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
     },
     {
       "id": "turnaround_minor_enclosure_harmonic_minor",
       "title": "8-Bar Minor Turnaround -- Harmonic Minor Line",
-      "style_family": "minor_turnaround",
-      "technique": "melodic_study",
+      "style_family": "blues",
+      "technique": "scale_patterns",
       "harmonic_context": "turnaround_minor",
       "key": "Cm",
       "meter": "4/4",
-      "tempo_range": [50, 120],
+      "tempo_range": [
+        50,
+        120
+      ],
       "difficulty": "advanced",
       "program_ref": "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
     }
   ],
-
   "progressive_paths": [
     {
       "id": "lead_phrase_progression",
       "title": "Lead Phrase Path",
       "description": "From accessible Chicago intro to advanced Texas outro",
-      "sequence": ["albertking_intro_slideup", "srv_outro_bb_bend"]
+      "sequence": [
+        "albertking_intro_slideup",
+        "srv_outro_bb_bend"
+      ]
     },
     {
       "id": "major_turnaround_progression",
@@ -194,13 +173,20 @@
       ]
     }
   ],
-
   "playlists": [
     {
       "id": "blues_lead_phrases_session",
       "title": "Blues Lead Phrases Session",
-      "exercises": ["albertking_intro_slideup", "srv_outro_bb_bend"],
-      "tags": ["blues", "lead_phrase", "chicago", "texas"]
+      "exercises": [
+        "albertking_intro_slideup",
+        "srv_outro_bb_bend"
+      ],
+      "tags": [
+        "blues",
+        "lead_phrase",
+        "chicago",
+        "texas"
+      ]
     },
     {
       "id": "blues_major_turnarounds_session",
@@ -210,7 +196,12 @@
         "turnaround_descending_triplet",
         "turnaround_expanding_intervals"
       ],
-      "tags": ["blues", "turnaround", "texas", "shuffle"]
+      "tags": [
+        "blues",
+        "turnaround",
+        "texas",
+        "shuffle"
+      ]
     },
     {
       "id": "blues_minor_turnarounds_session",
@@ -220,7 +211,12 @@
         "turnaround_minor_enclosure",
         "turnaround_minor_enclosure_harmonic_minor"
       ],
-      "tags": ["blues", "turnaround", "minor", "jazz"]
+      "tags": [
+        "blues",
+        "turnaround",
+        "minor",
+        "jazz"
+      ]
     },
     {
       "id": "blues_turnarounds_all_session",
@@ -233,7 +229,11 @@
         "turnaround_minor_enclosure",
         "turnaround_minor_enclosure_harmonic_minor"
       ],
-      "tags": ["blues", "turnaround", "complete"]
+      "tags": [
+        "blues",
+        "turnaround",
+        "complete"
+      ]
     },
     {
       "id": "blues_all_8",
@@ -248,10 +248,13 @@
         "turnaround_minor_enclosure",
         "turnaround_minor_enclosure_harmonic_minor"
       ],
-      "tags": ["complete", "blues", "all_styles"]
+      "tags": [
+        "complete",
+        "blues",
+        "all_styles"
+      ]
     }
   ],
-
   "stats": {
     "total_exercises": 8,
     "by_style": {
@@ -270,7 +273,12 @@
       "intermediate": 4,
       "advanced": 3
     },
-    "keys": ["G", "E", "Cm"],
+    "keys": [
+      "G",
+      "E",
+      "Cm"
+    ],
     "playlist_count": 5
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

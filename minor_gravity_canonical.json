@@ -3,37 +3,6 @@
   "pack_id": "minor_gravity",
   "title": "Minor Gravity Techniques",
   "description": "Harmonic minor b9 resolution and melodic minor guide-tone exercises. V7b9-to-im gravity and iio-V7alt-im6 tritone-driven voice-leading through all 12 keys.",
-
-  "style_taxonomy": {
-    "families": [
-      {
-        "id": "harmonic_minor_gravity",
-        "label": "Harmonic Minor Gravity",
-        "description": "V7b9 resolution to minor tonic using the b9 as extra gravitational pull beyond the tritone"
-      },
-      {
-        "id": "melodic_minor_gravity",
-        "label": "Melodic Minor Gravity",
-        "description": "Full minor ii-V-i (iio7-V7alt-im6) with tritone-driven guide-tone resolution and probabilistic tritone substitutions"
-      }
-    ]
-  },
-
-  "technique_taxonomy": {
-    "categories": [
-      {
-        "id": "b9_tritone_targeting",
-        "label": "b9 Tritone Targeting",
-        "description": "Targeting both the tritone (3rd and 7th) and the b9 on V7b9 for maximum harmonic gravity into the minor tonic"
-      },
-      {
-        "id": "minor_guide_tone_voicing",
-        "label": "Minor Guide-Tone Voicing",
-        "description": "Playing 3rds and 7ths through minor iio-V7alt-im6 changes with tritone awareness and voice-leading stability"
-      }
-    ]
-  },
-
   "harmonic_contexts": [
     {
       "id": "harmonic_minor_V7b9_i",
@@ -46,18 +15,20 @@
       "description": "Dm7b5-G7alt-Cm6 | Gm7b5-C7alt-Fm6 | ... cycling through all 12 minor keys, 1 bar per chord with probabilistic tritone subs"
     }
   ],
-
   "exercises": [
     {
       "id": "minor_gravity_harmonic_b9_resolution",
       "title": "Minor Gravity -- Harmonic Minor b9 Resolution Mission",
-      "style_family": "harmonic_minor_gravity",
-      "technique": "b9_tritone_targeting",
+      "style_family": "gravity",
+      "technique": "resolution",
       "harmonic_context": "harmonic_minor_V7b9_i",
       "key": "C",
       "keys_all": "all_12",
       "meter": "4/4",
-      "tempo_range": [70, 162],
+      "tempo_range": [
+        70,
+        162
+      ],
       "difficulty": "intermediate",
       "task_mode": "custom",
       "program_ref": "programs/minor_gravity_harmonic_v7b9_to_i.ztprog"
@@ -65,19 +36,21 @@
     {
       "id": "minor_gravity_melodic_guidetones",
       "title": "Minor Gravity -- Melodic Minor Guide Tones (Two-Tritone Hearing)",
-      "style_family": "melodic_minor_gravity",
-      "technique": "minor_guide_tone_voicing",
+      "style_family": "gravity",
+      "technique": "guide_tones",
       "harmonic_context": "melodic_minor_ii_V_i",
       "key": "C",
       "keys_all": "all_12",
       "meter": "4/4",
-      "tempo_range": [78, 180],
+      "tempo_range": [
+        78,
+        180
+      ],
       "difficulty": "advanced",
       "task_mode": "play_shells",
       "program_ref": "programs/minor_gravity_melodic_ii_v_i.ztprog"
     }
   ],
-
   "progressive_paths": [
     {
       "id": "minor_gravity_path",
@@ -89,7 +62,6 @@
       ]
     }
   ],
-
   "playlists": [
     {
       "id": "minor_gravity_complete_session",
@@ -98,10 +70,16 @@
         "minor_gravity_harmonic_b9_resolution",
         "minor_gravity_melodic_guidetones"
       ],
-      "tags": ["minor", "gravity", "harmonic_minor", "melodic_minor", "tritone", "transposition"]
+      "tags": [
+        "minor",
+        "gravity",
+        "harmonic_minor",
+        "melodic_minor",
+        "tritone",
+        "transposition"
+      ]
     }
   ],
-
   "stats": {
     "total_exercises": 2,
     "by_style": {
@@ -116,8 +94,11 @@
       "intermediate": 1,
       "advanced": 1
     },
-    "keys": ["C"],
+    "keys": [
+      "C"
+    ],
     "keys_all_12": true,
     "playlist_count": 1
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

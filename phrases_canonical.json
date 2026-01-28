@@ -3,37 +3,6 @@
   "pack_id": "phrases",
   "title": "Blues Phrases & Joe Pass Etudes",
   "description": "Blues intro phrases in regional styles (SRV, Texas, Chicago, Classic) and Joe Pass-inspired jazz etudes over ii-V progressions.",
-
-  "style_taxonomy": {
-    "families": [
-      {
-        "id": "blues_intro",
-        "label": "Blues Intro",
-        "description": "Short intro phrases over dominant blues vamps in various regional styles"
-      },
-      {
-        "id": "jazz_etude",
-        "label": "Jazz Etude",
-        "description": "Joe Pass-inspired melodic studies targeting chord-scale relationships over ii-V harmony"
-      }
-    ]
-  },
-
-  "technique_taxonomy": {
-    "categories": [
-      {
-        "id": "phrase_accuracy",
-        "label": "Phrase Accuracy",
-        "description": "Timing and articulation accuracy over a looped phrase"
-      },
-      {
-        "id": "melodic_study",
-        "label": "Melodic Study",
-        "description": "Extended melodic lines emphasizing voice-leading and chord-tone targeting"
-      }
-    ]
-  },
-
   "harmonic_contexts": [
     {
       "id": "blues_dominant",
@@ -61,106 +30,128 @@
       "description": "ii-V-I with tritone substitution on the dominant"
     }
   ],
-
   "exercises": [
     {
       "id": "blues_intro_1",
       "title": "Blues Intro 1 -- SRV Style",
-      "style_family": "blues_intro",
-      "technique": "phrase_accuracy",
+      "style_family": "blues",
+      "technique": "articulation",
       "harmonic_context": "blues_dominant",
       "key": "E",
       "meter": "4/4",
-      "tempo_range": [55, 120],
+      "tempo_range": [
+        55,
+        120
+      ],
       "difficulty": "beginner",
       "program_ref": "exercises/phrases/blues_intro_1.ztprog"
     },
     {
       "id": "blues_intro_2",
       "title": "Blues Intro 2 -- Texas Shuffle",
-      "style_family": "blues_intro",
-      "technique": "phrase_accuracy",
+      "style_family": "blues",
+      "technique": "articulation",
       "harmonic_context": "blues_dominant",
       "key": "A",
       "meter": "4/4",
-      "tempo_range": [60, 130],
+      "tempo_range": [
+        60,
+        130
+      ],
       "difficulty": "beginner",
       "program_ref": "exercises/phrases/blues_intro_2.ztprog"
     },
     {
       "id": "blues_intro_3",
       "title": "Blues Intro 3 -- Chicago Style",
-      "style_family": "blues_intro",
-      "technique": "phrase_accuracy",
+      "style_family": "blues",
+      "technique": "articulation",
       "harmonic_context": "blues_dominant",
       "key": "Bb",
       "meter": "4/4",
-      "tempo_range": [50, 110],
+      "tempo_range": [
+        50,
+        110
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/phrases/blues_intro_3.ztprog"
     },
     {
       "id": "blues_intro_4",
       "title": "Blues Intro 4 -- Classic 12-Bar",
-      "style_family": "blues_intro",
-      "technique": "phrase_accuracy",
+      "style_family": "blues",
+      "technique": "articulation",
       "harmonic_context": "blues_dominant",
       "key": "G",
       "meter": "4/4",
-      "tempo_range": [55, 120],
+      "tempo_range": [
+        55,
+        120
+      ],
       "difficulty": "beginner",
       "program_ref": "exercises/phrases/blues_intro_4.ztprog"
     },
     {
       "id": "joe_pass_etude_10",
       "title": "Joe Pass Etude 10 -- ii-V-I Cycle",
-      "style_family": "jazz_etude",
-      "technique": "melodic_study",
+      "style_family": "bebop",
+      "technique": "scale_patterns",
       "harmonic_context": "ii_v_i_major",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [48, 110],
+      "tempo_range": [
+        48,
+        110
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/phrases/joe_pass_etude_10.ztprog"
     },
     {
       "id": "joe_pass_etude_11",
       "title": "Joe Pass Etude 11 -- Descending ii-V",
-      "style_family": "jazz_etude",
-      "technique": "melodic_study",
+      "style_family": "bebop",
+      "technique": "scale_patterns",
       "harmonic_context": "descending_ii_v",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [50, 115],
+      "tempo_range": [
+        50,
+        115
+      ],
       "difficulty": "intermediate",
       "program_ref": "exercises/phrases/joe_pass_etude_11.ztprog"
     },
     {
       "id": "joe_pass_etude_12",
       "title": "Joe Pass Etude 12 -- Minor ii-V-i",
-      "style_family": "jazz_etude",
-      "technique": "melodic_study",
+      "style_family": "bebop",
+      "technique": "scale_patterns",
       "harmonic_context": "ii_v_i_minor",
       "key": "Cm",
       "meter": "4/4",
-      "tempo_range": [45, 100],
+      "tempo_range": [
+        45,
+        100
+      ],
       "difficulty": "advanced",
       "program_ref": "exercises/phrases/joe_pass_etude_12.ztprog"
     },
     {
       "id": "joe_pass_etude_13",
       "title": "Joe Pass Etude 13 -- Tritone Subs",
-      "style_family": "jazz_etude",
-      "technique": "melodic_study",
+      "style_family": "bebop",
+      "technique": "scale_patterns",
       "harmonic_context": "tritone_sub",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [52, 120],
+      "tempo_range": [
+        52,
+        120
+      ],
       "difficulty": "advanced",
       "program_ref": "exercises/phrases/joe_pass_etude_13.ztprog"
     }
   ],
-
   "progressive_paths": [
     {
       "id": "blues_intro_progression",
@@ -185,7 +176,6 @@
       ]
     }
   ],
-
   "playlists": [
     {
       "id": "phrases_blues_intros_session",
@@ -196,7 +186,11 @@
         "blues_intro_3",
         "blues_intro_4"
       ],
-      "tags": ["blues", "intro", "phrase"]
+      "tags": [
+        "blues",
+        "intro",
+        "phrase"
+      ]
     },
     {
       "id": "phrases_joe_pass_etudes_session",
@@ -207,7 +201,11 @@
         "joe_pass_etude_12",
         "joe_pass_etude_13"
       ],
-      "tags": ["jazz", "etude", "ii_v"]
+      "tags": [
+        "jazz",
+        "etude",
+        "ii_v"
+      ]
     },
     {
       "id": "phrases_all_8",
@@ -222,10 +220,13 @@
         "joe_pass_etude_12",
         "joe_pass_etude_13"
       ],
-      "tags": ["complete", "blues", "jazz"]
+      "tags": [
+        "complete",
+        "blues",
+        "jazz"
+      ]
     }
   ],
-
   "stats": {
     "total_exercises": 8,
     "by_style": {
@@ -241,7 +242,15 @@
       "intermediate": 3,
       "advanced": 2
     },
-    "keys": ["E", "A", "Bb", "G", "C", "Cm"],
+    "keys": [
+      "E",
+      "A",
+      "Bb",
+      "G",
+      "C",
+      "Cm"
+    ],
     "playlist_count": 3
-  }
+  },
+  "taxonomy_ref": "taxonomy.json"
 }

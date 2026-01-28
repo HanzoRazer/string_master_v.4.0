@@ -1,0 +1,230 @@
+{
+  "schema_version": "1.0",
+  "description": "Shared vocabulary for all exercise packs. Single source of truth for style families and technique categories.",
+
+  "style_families": [
+    {
+      "id": "blues",
+      "label": "Blues",
+      "description": "Blues vocabulary: turnarounds, licks, motives, and 12-bar idioms",
+      "subsumes": ["turnaround", "licks", "motives", "srv_outro", "albertking_intro", "walking_blues"]
+    },
+    {
+      "id": "bebop",
+      "label": "Bebop / Jazz Lines",
+      "description": "Bebop scales, enclosures, approach patterns, and chromatic passing tones",
+      "subsumes": ["enclosure", "bebop_scale", "approach_pattern", "chromatic_chain", "passing_tone"]
+    },
+    {
+      "id": "voicings",
+      "label": "Chord Voicings",
+      "description": "Shell voicings, drop-2, guide tones, and harmonic comping",
+      "subsumes": ["drop2", "shell_voicing", "guide_tone", "contrary_motion", "diminished_cycle"]
+    },
+    {
+      "id": "cycles",
+      "label": "Cycle Training",
+      "description": "Circle of 4ths/5ths, tritone subs, and systematic key movement",
+      "subsumes": ["cycle_fifths", "cycle_fourths", "cycle_thirds", "tritone_sub"]
+    },
+    {
+      "id": "gravity",
+      "label": "Gravity Systems",
+      "description": "Resolution patterns: dominant function, harmonic/melodic minor, Phrygian bII",
+      "subsumes": ["harmonic_minor_gravity", "melodic_minor_gravity", "phrygian_gravity", "dominant_resolution"]
+    },
+    {
+      "id": "folk",
+      "label": "Folk / Bluegrass",
+      "description": "Flatpicking, fiddle tunes, G-run patterns, and traditional melodies",
+      "subsumes": ["bluegrass", "fiddle_tune", "flatpicking", "g_run"]
+    },
+    {
+      "id": "flamenco",
+      "label": "Flamenco",
+      "description": "Phrygian modes, compas, rasgueado, and palo-specific techniques",
+      "subsumes": ["solea", "buleria", "tangos", "farruca", "granainas", "taranta", "alegrias", "fandango"]
+    },
+    {
+      "id": "rhythm_changes",
+      "label": "Rhythm Changes",
+      "description": "AABA form studies, bridge navigation, and Gershwin-derived harmony",
+      "subsumes": ["got_rhythm", "bridge_pattern", "aaba_form"]
+    },
+    {
+      "id": "gospel",
+      "label": "Gospel / Soul",
+      "description": "Gospel turnarounds, soul progressions, and church harmony",
+      "subsumes": ["gospel_turnaround", "soul_progression"]
+    },
+    {
+      "id": "latin",
+      "label": "Latin / Bossa",
+      "description": "Samba, bossa nova, and Latin comping patterns",
+      "subsumes": ["samba", "bossa_nova"]
+    }
+  ],
+
+  "technique_categories": [
+    {
+      "id": "chromatic_approach",
+      "label": "Chromatic Approach",
+      "description": "Half-step enclosures, chromatic passing tones, and approach patterns",
+      "subsumes": ["enclosure", "passing_tone", "chromatic_cell", "zone_crossing"]
+    },
+    {
+      "id": "guide_tones",
+      "label": "Guide Tone Navigation",
+      "description": "3rds and 7ths through changes, voice leading, and shell awareness",
+      "subsumes": ["guide_tone_voicing", "guide_tone_pairs", "shell_voicings", "tritone_awareness"]
+    },
+    {
+      "id": "arpeggiation",
+      "label": "Arpeggiation",
+      "description": "Chord tone targeting, sweep patterns, and arpeggio shapes",
+      "subsumes": ["chord_tone_targeting", "arpeggio_shape", "sweep"]
+    },
+    {
+      "id": "scale_patterns",
+      "label": "Scale Patterns",
+      "description": "Bebop scales, modes, and systematic scale practice",
+      "subsumes": ["bebop_scale", "modal_scale", "pentatonic"]
+    },
+    {
+      "id": "rhythmic_phrasing",
+      "label": "Rhythmic Phrasing",
+      "description": "Triplet patterns, syncopation, and metric displacement",
+      "subsumes": ["triplet_chain", "syncopation", "metric_displacement", "swing_feel"]
+    },
+    {
+      "id": "voice_leading",
+      "label": "Voice Leading",
+      "description": "Smooth voice motion, contrary motion, and minimal movement",
+      "subsumes": ["contrary_motion", "parallel_motion", "oblique_motion"]
+    },
+    {
+      "id": "transposition",
+      "label": "Transposition / 12-Key",
+      "description": "Moving patterns through all keys systematically",
+      "subsumes": ["twelve_key", "modulation", "key_center_awareness"]
+    },
+    {
+      "id": "resolution",
+      "label": "Resolution Patterns",
+      "description": "V-I motion, tritone resolution, b9 targeting, and cadential patterns",
+      "subsumes": ["tritone_resolution", "b9_targeting", "cadence", "dominant_function"]
+    },
+    {
+      "id": "articulation",
+      "label": "Articulation",
+      "description": "Hammer-ons, pull-offs, slides, bends, and ornaments",
+      "subsumes": ["legato", "staccato", "bend", "vibrato", "ornament"]
+    },
+    {
+      "id": "compas",
+      "label": "Compas / Rhythmic Cycle",
+      "description": "Flamenco compas, clave patterns, and cyclic rhythmic structures",
+      "subsumes": ["compas_12", "compas_4", "clave", "rasgueado"]
+    }
+  ],
+
+  "difficulty_levels": ["beginner", "intermediate", "advanced"],
+
+  "key_sets": {
+    "all_12": ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"],
+    "all_24": "all_12 major + all_12 minor",
+    "common_blues": ["E", "A", "G", "C", "Bb"],
+    "common_jazz": ["C", "F", "Bb", "Eb", "Ab", "G", "D"],
+    "flamenco_keys": ["E", "A", "D", "G", "Am"]
+  },
+
+  "migration_map": {
+    "_comment": "Maps old pack-specific IDs to new shared IDs",
+    "style_families": {
+      "turnaround_licks": "blues",
+      "bb_king_vibrato": "blues",
+      "srv_outro": "blues",
+      "albertking_intro": "blues",
+      "walking_blues_bass": "blues",
+      "lead_phrase": "blues",
+      "major_turnaround": "blues",
+      "minor_turnaround": "blues",
+      "blues_intro": "blues",
+      "delta_blues": "blues",
+      "chromatic_enclosure": "bebop",
+      "diatonic_enclosure": "bebop",
+      "approach_pattern_targeting": "bebop",
+      "diminished_chain": "bebop",
+      "sixth_diminished_chain": "bebop",
+      "applied_chain": "bebop",
+      "bebop_scale": "bebop",
+      "jazz_etude": "bebop",
+      "pivot_pattern": "bebop",
+      "dorian_modal": "bebop",
+      "backdoor_cadence": "voicings",
+      "diminished_cycle": "voicings",
+      "contrary_motion": "voicings",
+      "cycle_fifths": "cycles",
+      "cycle_fourths": "cycles",
+      "cycle_thirds": "cycles",
+      "tritone_awareness": "cycles",
+      "harmonic_minor_gravity": "gravity",
+      "melodic_minor_gravity": "gravity",
+      "bII_resolution_gravity": "gravity",
+      "dual_gravity_system": "gravity",
+      "bluegrass_g_run": "folk",
+      "fiddle_tune": "folk",
+      "folk_melody": "folk",
+      "intro_phrase": "folk",
+      "solea": "flamenco",
+      "buleria": "flamenco",
+      "tangos": "flamenco",
+      "farruca": "flamenco",
+      "granainas": "flamenco",
+      "taranta": "flamenco",
+      "alegrias": "flamenco",
+      "fandango": "flamenco",
+      "bebop_study": "rhythm_changes",
+      "bridge_pattern": "rhythm_changes",
+      "gospel_turnaround": "gospel",
+      "dorian_etude": "gospel",
+      "gospel_soul": "gospel",
+      "samba_pattern": "latin",
+      "samba_latin": "latin"
+    },
+    "techniques": {
+      "guide_tone_voicing": "guide_tones",
+      "guide_tone_pairs": "guide_tones",
+      "minor_guide_tone_voicing": "guide_tones",
+      "shell_voicings": "guide_tones",
+      "tritone_awareness": "guide_tones",
+      "voicing": "guide_tones",
+      "triplet_targeting": "rhythmic_phrasing",
+      "groove": "rhythmic_phrasing",
+      "chromatic_cell_construction": "chromatic_approach",
+      "chromatic_phrase": "chromatic_approach",
+      "sixth_diminished_scale": "scale_patterns",
+      "scale_fluency": "scale_patterns",
+      "melodic_study": "scale_patterns",
+      "modal_phrase": "scale_patterns",
+      "voice_leading_targeting": "voice_leading",
+      "voicing_memory": "voice_leading",
+      "contrary_motion_technique": "voice_leading",
+      "melodic_motion": "voice_leading",
+      "b9_tritone_targeting": "resolution",
+      "tritone_parent_hearing": "resolution",
+      "zone_crossing_resolution": "resolution",
+      "turnaround_phrase": "resolution",
+      "cadence": "resolution",
+      "root_awareness": "transposition",
+      "compas_awareness": "compas",
+      "rasgueado_pattern": "compas",
+      "palo_specific_technique": "articulation",
+      "lead_phrase": "articulation",
+      "phrase_accuracy": "articulation",
+      "lick": "articulation",
+      "riff": "articulation",
+      "vocal_phrasing": "articulation"
+    }
+  }
+}
