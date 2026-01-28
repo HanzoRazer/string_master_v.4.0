@@ -1,0 +1,13 @@
+# Barry Harris -- Barry Harris Scales -- Complete Session
+# Auto-generated from barry_harris_canonical.json
+
+id: barry_harris_complete_session
+title: "Barry Harris Scales -- Complete Session"
+tags: [bebop, scale, barry_harris, transposition]
+
+items:
+  - name: "Barry Harris Dominant 7 Bebop Scale"
+    file: "exercises/barry_harris_dom7/barry_harris_dom7_bebop.ztprog"
+
+  - name: "Barry Harris Major 6 Bebop Scale"
+    file: "exercises/barry_harris_maj7/barry_harris_maj7_scale.ztprog"

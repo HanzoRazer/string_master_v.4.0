@@ -176,21 +176,21 @@
     {
       "id": "barry_harris",
       "title": "Barry Harris Scales",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Dominant 7th and major 7th bebop scale exercises with 12-key MIDI",
       "style": "jazz",
-      "canonical_json": null,
+      "canonical_json": "barry_harris_canonical.json",
       "exercises_dir": "exercises/barry_harris_dom7",
       "exercises_dir_2": "exercises/barry_harris_maj7",
       "programs_dir": null,
-      "playlists_prefix": null,
+      "playlists_prefix": "barry_harris_",
       "exercise_count": 2,
       "program_count": 2,
-      "playlist_count": 0,
+      "playlist_count": 1,
       "midi_dir": null,
       "midi_legacy_count": 24,
-      "emit_scripts": [],
-      "difficulty_range": ["intermediate", "advanced"],
+      "emit_scripts": ["emit_barry_harris_pack.py"],
+      "difficulty_range": ["intermediate", "intermediate"],
       "keys": "all_12"
     },
     {
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 10,
-    "unformalized": 6,
+    "formalized": 11,
+    "unformalized": 5,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 92,
+    "total_playlists": 93,
     "total_midi_generated": 126,
-    "validation_count": 874
+    "validation_count": 875
   }
 }
