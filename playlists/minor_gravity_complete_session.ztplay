@@ -1,0 +1,13 @@
+# Minor Gravity -- Minor Gravity -- Complete Session
+# Auto-generated from minor_gravity_canonical.json
+
+id: minor_gravity_complete_session
+title: "Minor Gravity -- Complete Session"
+tags: [minor, gravity, harmonic_minor, melodic_minor, tritone, transposition]
+
+items:
+  - name: "Minor Gravity -- Harmonic Minor b9 Resolution Mission"
+    file: "programs/minor_gravity_harmonic_v7b9_to_i.ztprog"
+
+  - name: "Minor Gravity -- Melodic Minor Guide Tones (Two-Tritone Hearing)"
+    file: "programs/minor_gravity_melodic_ii_v_i.ztprog"

@@ -271,20 +271,20 @@
     {
       "id": "minor_gravity",
       "title": "Minor Gravity Techniques",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Harmonic minor b9 resolution and melodic minor guidetone exercises",
       "style": "theory",
-      "canonical_json": null,
+      "canonical_json": "minor_gravity_canonical.json",
       "exercises_dir": "exercises/minor_gravity",
       "programs_dir": null,
-      "playlists_prefix": null,
+      "playlists_prefix": "minor_gravity_",
       "exercise_count": 2,
-      "program_count": 0,
-      "playlist_count": 0,
+      "program_count": 2,
+      "playlist_count": 1,
       "midi_dir": null,
-      "emit_scripts": [],
+      "emit_scripts": ["emit_minor_gravity_pack.py"],
       "difficulty_range": ["intermediate", "advanced"],
-      "keys": ["D", "C"]
+      "keys": ["C"]
     },
     {
       "id": "phrygian_gravity",
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 14,
-    "unformalized": 2,
+    "formalized": 15,
+    "unformalized": 1,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 98,
+    "total_playlists": 99,
     "total_midi_generated": 126,
-    "validation_count": 880
+    "validation_count": 881
   }
 }
