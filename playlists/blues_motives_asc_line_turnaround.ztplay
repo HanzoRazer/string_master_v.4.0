@@ -1,0 +1,19 @@
+id: blues_motives_asc_line_turnaround
+title: "Barrett 40 Motives: Ascending Line Turnaround Family"
+category: archetype_session
+tags: [barrett_40, blues, asc_line_turnaround]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  - name: "Intro 03 (Easy, G)"
+    file: "programs/blues_motives/blues_12bar_G.ztprog"
+    repeats: 2
+
+  - name: "Intro 04 (Advanced, G)"
+    file: "programs/blues_motives/blues_12bar_G.ztprog"
+    repeats: 2
+

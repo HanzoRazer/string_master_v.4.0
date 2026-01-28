@@ -1,0 +1,43 @@
+id: blues_motives_doublestop_expressive
+title: "Barrett 40 Motives: Double-Stop Expressive Family"
+category: archetype_session
+tags: [barrett_40, blues, doublestop_expressive]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  - name: "Intro 08 (Advanced, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Intro 18 (Advanced, A)"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Intro 20 (Advanced, C)"
+    file: "programs/blues_motives/blues_12bar_C.ztprog"
+    repeats: 2
+
+  - name: "Outro 10 (Advanced, Gm)"
+    file: "programs/blues_motives/blues_12bar_Gm.ztprog"
+    repeats: 2
+
+  - name: "Outro 13 (Easy, Bb)"
+    file: "programs/blues_motives/blues_12bar_Bb.ztprog"
+    repeats: 2
+
+  - name: "Outro 17 (Easy, A)"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Outro 18 (Advanced, A)"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Outro 20 (Advanced, C)"
+    file: "programs/blues_motives/blues_12bar_C.ztprog"
+    repeats: 2
+

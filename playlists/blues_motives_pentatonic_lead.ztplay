@@ -1,0 +1,35 @@
+id: blues_motives_pentatonic_lead
+title: "Barrett 40 Motives: Pentatonic Lead Family"
+category: archetype_session
+tags: [barrett_40, blues, pentatonic_lead]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  - name: "Intro 06 (Advanced, A)"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Intro 12 (Advanced, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Outro 09 (Easy, Gm)"
+    file: "programs/blues_motives/blues_12bar_Gm.ztprog"
+    repeats: 2
+
+  - name: "Outro 12 (Advanced, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Outro 14 (Advanced, Bb)"
+    file: "programs/blues_motives/blues_12bar_Bb.ztprog"
+    repeats: 2
+
+  - name: "Outro 16 (Advanced, Cm)"
+    file: "programs/blues_motives/blues_12bar_Cm.ztprog"
+    repeats: 2
+

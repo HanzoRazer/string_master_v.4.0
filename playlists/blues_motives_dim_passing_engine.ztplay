@@ -1,0 +1,19 @@
+id: blues_motives_dim_passing_engine
+title: "Barrett 40 Motives: Diminished Passing Engine Family"
+category: archetype_session
+tags: [barrett_40, blues, dim_passing_engine]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  - name: "Intro 05 (Easy, A)"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Intro 11 (Easy, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+

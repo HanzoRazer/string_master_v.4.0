@@ -1,0 +1,27 @@
+id: blues_motives_chordal_color
+title: "Barrett 40 Motives: Chordal Color Family"
+category: archetype_session
+tags: [barrett_40, blues, chordal_color]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: jazz_blues
+
+items:
+  - name: "Intro 02 (Advanced, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Intro 19 (Easy, C)"
+    file: "programs/blues_motives/blues_12bar_C.ztprog"
+    repeats: 2
+
+  - name: "Outro 04 (Advanced, G)"
+    file: "programs/blues_motives/blues_12bar_G.ztprog"
+    repeats: 2
+
+  - name: "Outro 19 (Easy, C)"
+    file: "programs/blues_motives/blues_12bar_C.ztprog"
+    repeats: 2
+

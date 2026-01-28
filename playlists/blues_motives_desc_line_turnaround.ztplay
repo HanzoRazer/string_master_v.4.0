@@ -1,0 +1,31 @@
+id: blues_motives_desc_line_turnaround
+title: "Barrett 40 Motives: Descending Line Turnaround Family"
+category: archetype_session
+tags: [barrett_40, blues, desc_line_turnaround]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  - name: "Intro 01 (Easy, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Intro 13 (Easy, Bb)"
+    file: "programs/blues_motives/blues_12bar_Bb.ztprog"
+    repeats: 2
+
+  - name: "Intro 14 (Advanced, Bb)"
+    file: "programs/blues_motives/blues_12bar_Bb.ztprog"
+    repeats: 2
+
+  - name: "Outro 02 (Advanced, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Outro 07 (Easy, E)"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+

@@ -1,0 +1,19 @@
+id: blues_motives_rock_blues_hybrid
+title: "Barrett 40 Motives: Rock-Blues Hybrid Family"
+category: archetype_session
+tags: [barrett_40, blues, rock_blues_hybrid]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  - name: "Intro 15 (Easy, Cm)"
+    file: "programs/blues_motives/blues_12bar_Cm.ztprog"
+    repeats: 2
+
+  - name: "Outro 15 (Easy, Cm)"
+    file: "programs/blues_motives/blues_12bar_Cm.ztprog"
+    repeats: 2
+

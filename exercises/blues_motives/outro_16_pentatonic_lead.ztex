@@ -1,0 +1,31 @@
+id: outro_16
+title: "Barrett Outro 16: Pentatonic Lead (Cm)"
+program_ref: ../../programs/blues_motives/blues_12bar_Cm.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Phrase pentatonic lines with rhythmic variety"
+  - "Target chord tones on strong beats"
+  - "Primary technique focus: Bend"
+
+practice_steps:
+  - "Play at slow tempo, isolating each bend"
+  - "Check bend pitch against fretted reference note"
+  - "Gradually increase tempo while maintaining pitch accuracy"
+
+tags:
+  archetype: PENTATONIC_LEAD
+  gravity: expressive
+  difficulty: advanced
+  phrase_type: outro
+  key: Cm
+  source: Barrett_40_Motives
+  articulation_model: bend
+
+assessment:
+  what_to_measure:
+    - bend_pitch_accuracy
+    - timing_consistency_ms
+  pass_criteria:
+    bend_pitch_deviation_cents: 15
+    max_timing_deviation_ms: 35
