@@ -1,0 +1,31 @@
+# Phrases -- Phrases -- Complete Session
+# Auto-generated from phrases_canonical.json
+
+id: phrases_all_8
+title: "Phrases -- Complete Session"
+tags: [complete, blues, jazz]
+
+items:
+  - name: "Blues Intro 1 -- SRV Style"
+    file: "exercises/phrases/blues_intro_1.ztprog"
+
+  - name: "Blues Intro 2 -- Texas Shuffle"
+    file: "exercises/phrases/blues_intro_2.ztprog"
+
+  - name: "Blues Intro 3 -- Chicago Style"
+    file: "exercises/phrases/blues_intro_3.ztprog"
+
+  - name: "Blues Intro 4 -- Classic 12-Bar"
+    file: "exercises/phrases/blues_intro_4.ztprog"
+
+  - name: "Joe Pass Etude 10 -- ii-V-I Cycle"
+    file: "exercises/phrases/joe_pass_etude_10.ztprog"
+
+  - name: "Joe Pass Etude 11 -- Descending ii-V"
+    file: "exercises/phrases/joe_pass_etude_11.ztprog"
+
+  - name: "Joe Pass Etude 12 -- Minor ii-V-i"
+    file: "exercises/phrases/joe_pass_etude_12.ztprog"
+
+  - name: "Joe Pass Etude 13 -- Tritone Subs"
+    file: "exercises/phrases/joe_pass_etude_13.ztprog"

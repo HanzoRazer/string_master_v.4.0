@@ -233,21 +233,21 @@
     {
       "id": "phrases",
       "title": "Blues Phrases & Joe Pass Etudes",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Blues intro phrases and Joe Pass-inspired jazz etudes",
       "style": "jazz",
-      "canonical_json": null,
+      "canonical_json": "phrases_canonical.json",
       "exercises_dir": "exercises/phrases",
       "programs_dir": null,
-      "playlists_prefix": "blues_phrases_",
+      "playlists_prefix": "phrases_",
       "exercise_count": 8,
       "program_count": 8,
-      "playlist_count": 1,
+      "playlist_count": 3,
       "midi_dir": null,
       "midi_legacy_count": 8,
-      "emit_scripts": [],
-      "difficulty_range": ["intermediate", "advanced"],
-      "keys": ["G", "E"]
+      "emit_scripts": ["emit_phrases_pack.py"],
+      "difficulty_range": ["beginner", "advanced"],
+      "keys": ["E", "A", "Bb", "G", "C", "Cm"]
     },
     {
       "id": "chromatic_triplets",
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 8,
-    "unformalized": 8,
+    "formalized": 9,
+    "unformalized": 7,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 88,
+    "total_playlists": 91,
     "total_midi_generated": 126,
-    "validation_count": 870
+    "validation_count": 873
   }
 }

@@ -1,0 +1,19 @@
+# Phrases -- Joe Pass Etudes Session
+# Auto-generated from phrases_canonical.json
+
+id: phrases_joe_pass_etudes_session
+title: "Joe Pass Etudes Session"
+tags: [jazz, etude, ii_v]
+
+items:
+  - name: "Joe Pass Etude 10 -- ii-V-I Cycle"
+    file: "exercises/phrases/joe_pass_etude_10.ztprog"
+
+  - name: "Joe Pass Etude 11 -- Descending ii-V"
+    file: "exercises/phrases/joe_pass_etude_11.ztprog"
+
+  - name: "Joe Pass Etude 12 -- Minor ii-V-i"
+    file: "exercises/phrases/joe_pass_etude_12.ztprog"
+
+  - name: "Joe Pass Etude 13 -- Tritone Subs"
+    file: "exercises/phrases/joe_pass_etude_13.ztprog"
