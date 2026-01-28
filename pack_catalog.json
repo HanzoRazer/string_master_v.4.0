@@ -252,10 +252,10 @@
     {
       "id": "chromatic_triplets",
       "title": "Chromatic Triplet Chains",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Chromatic triplet approach patterns over dim7, ii-V-I, and maj6 harmony",
       "style": "jazz",
-      "canonical_json": null,
+      "canonical_json": "chromatic_triplets_canonical.json",
       "exercises_dir": "exercises/chromatic_triplets",
       "programs_dir": null,
       "playlists_prefix": "chromatic_triplet_",
@@ -264,7 +264,7 @@
       "playlist_count": 1,
       "midi_dir": null,
       "midi_legacy_count": 3,
-      "emit_scripts": [],
+      "emit_scripts": ["emit_chromatic_triplets_pack.py"],
       "difficulty_range": ["intermediate", "advanced"],
       "keys": ["C"]
     },
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 13,
-    "unformalized": 3,
+    "formalized": 14,
+    "unformalized": 2,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 97,
+    "total_playlists": 98,
     "total_midi_generated": 126,
-    "validation_count": 879
+    "validation_count": 880
   }
 }

@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "chromatic_triplets",
+  "title": "Chromatic Triplet Chains",
+  "description": "Barry Harris chromatic triplet approach patterns over dim7, major 6th, and ii-V-I harmony. 3-note chromatic cells connecting chord tones with strong-beat targeting and voice-leading resolution.",
+
+  "style_taxonomy": {
+    "families": [
+      {
+        "id": "diminished_chain",
+        "label": "Diminished Triplet Chain",
+        "description": "Pure diminished chord tone connections using 3-note chromatic cells -- all minor 3rds, perfect triplet alignment"
+      },
+      {
+        "id": "sixth_diminished_chain",
+        "label": "6th Diminished Triplet Chain",
+        "description": "Triplet chains through the Barry Harris 8-note 6th diminished scale (major 6th chord tones interleaved with diminished passing tones)"
+      },
+      {
+        "id": "applied_chain",
+        "label": "Applied Triplet Chain",
+        "description": "Chromatic triplet cells applied over moving harmony, targeting guide-tone resolutions in the next chord"
+      }
+    ]
+  },
+
+  "technique_taxonomy": {
+    "categories": [
+      {
+        "id": "chromatic_cell_construction",
+        "label": "Chromatic Cell Construction",
+        "description": "Building 3-note chromatic groups between chord tones with chord-tone-on-strong-beat placement"
+      },
+      {
+        "id": "sixth_diminished_scale",
+        "label": "6th Diminished Scale",
+        "description": "Barry Harris 8-note scale combining major 6th and diminished tones, practiced in triplet groupings"
+      },
+      {
+        "id": "voice_leading_targeting",
+        "label": "Voice-Leading Targeting",
+        "description": "Aiming chromatic triplet cells at specific voice-leading resolution targets (3rd of next chord) over moving harmony"
+      }
+    ]
+  },
+
+  "harmonic_contexts": [
+    {
+      "id": "static_diminished",
+      "progression": "Cdim7 (static)",
+      "description": "Static Cdim7 vamp (C-Eb-Gb-A), 2-bar loop with triplet feel"
+    },
+    {
+      "id": "static_major_sixth",
+      "progression": "C6 (static)",
+      "description": "Static C6 vamp (C-E-G-A) with interleaved diminished passing tones, 2-bar loop"
+    },
+    {
+      "id": "ii_v_i_cadence",
+      "progression": "Dm7-G7-Cmaj7-Cmaj7",
+      "description": "Standard ii-V-I cadence in C, 4-bar cycle with 1 bar per chord and 2 bars on Imaj7"
+    }
+  ],
+
+  "exercises": [
+    {
+      "id": "chromatic_triplet_chain_dim7_C",
+      "title": "Chromatic Triplet Chain -- Cdim7 (Pure Diminished)",
+      "style_family": "diminished_chain",
+      "technique": "chromatic_cell_construction",
+      "harmonic_context": "static_diminished",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [50, 120],
+      "difficulty": "intermediate",
+      "chord_tones": ["C", "Eb", "Gb", "A"],
+      "interval_between_tones": "minor 3rd (3 semitones)",
+      "program_ref": "exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.ztprog",
+      "midi_ref": "exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.mid"
+    },
+    {
+      "id": "chromatic_triplet_chain_maj6_C",
+      "title": "Chromatic Triplet Chain -- C6 (6th Diminished Scale)",
+      "style_family": "sixth_diminished_chain",
+      "technique": "sixth_diminished_scale",
+      "harmonic_context": "static_major_sixth",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [50, 130],
+      "difficulty": "intermediate",
+      "chord_tones": ["C", "E", "G", "A"],
+      "diminished_passing_tones": ["B", "D", "F", "Ab"],
+      "scale": ["C", "D", "E", "F", "G", "Ab", "A", "B"],
+      "program_ref": "exercises/chromatic_triplets/chromatic_triplet_chain_maj6_C.ztprog",
+      "midi_ref": "exercises/chromatic_triplets/chromatic_triplet_chain_maj6_C.mid"
+    },
+    {
+      "id": "chromatic_triplet_chain_ii_V_I_C",
+      "title": "Chromatic Triplet Chain -- ii-V-I in C (Applied)",
+      "style_family": "applied_chain",
+      "technique": "voice_leading_targeting",
+      "harmonic_context": "ii_v_i_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [50, 130],
+      "difficulty": "advanced",
+      "resolution_targets": {
+        "Dm7_chain_targets": "B (3rd of G7)",
+        "G7_chain_targets": "E (3rd of Cmaj7)",
+        "Cmaj7_resolves_to": "C (root)"
+      },
+      "program_ref": "exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.ztprog",
+      "midi_ref": "exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.mid"
+    }
+  ],
+
+  "progressive_paths": [
+    {
+      "id": "chromatic_triplet_mastery",
+      "title": "Chromatic Triplet Mastery",
+      "description": "Pure diminished cells to 6th diminished scale to applied ii-V-I targeting",
+      "sequence": [
+        "chromatic_triplet_chain_dim7_C",
+        "chromatic_triplet_chain_maj6_C",
+        "chromatic_triplet_chain_ii_V_I_C"
+      ]
+    }
+  ],
+
+  "playlists": [
+    {
+      "id": "chromatic_triplet_complete_session",
+      "title": "Chromatic Triplet Chains -- Complete Session",
+      "exercises": [
+        "chromatic_triplet_chain_dim7_C",
+        "chromatic_triplet_chain_maj6_C",
+        "chromatic_triplet_chain_ii_V_I_C"
+      ],
+      "tags": ["chromatic", "triplet", "barry_harris", "diminished", "ii_V_I"]
+    }
+  ],
+
+  "stats": {
+    "total_exercises": 3,
+    "by_style": {
+      "diminished_chain": 1,
+      "sixth_diminished_chain": 1,
+      "applied_chain": 1
+    },
+    "by_technique": {
+      "chromatic_cell_construction": 1,
+      "sixth_diminished_scale": 1,
+      "voice_leading_targeting": 1
+    },
+    "by_difficulty": {
+      "intermediate": 2,
+      "advanced": 1
+    },
+    "keys": ["C"],
+    "midi_legacy_count": 3,
+    "playlist_count": 1
+  }
+}

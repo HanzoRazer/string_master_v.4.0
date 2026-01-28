@@ -1,0 +1,16 @@
+# Chromatic Triplets -- Chromatic Triplet Chains -- Complete Session
+# Auto-generated from chromatic_triplets_canonical.json
+
+id: chromatic_triplet_complete_session
+title: "Chromatic Triplet Chains -- Complete Session"
+tags: [chromatic, triplet, barry_harris, diminished, ii_V_I]
+
+items:
+  - name: "Chromatic Triplet Chain -- Cdim7 (Pure Diminished)"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_dim7_C.ztprog"
+
+  - name: "Chromatic Triplet Chain -- C6 (6th Diminished Scale)"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_maj6_C.ztprog"
+
+  - name: "Chromatic Triplet Chain -- ii-V-I in C (Applied)"
+    file: "exercises/chromatic_triplets/chromatic_triplet_chain_ii_V_I_C.ztprog"
