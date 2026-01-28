@@ -1,0 +1,49 @@
+# Bucket A -- Bucket A -- Complete Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_all_14
+title: "Bucket A -- Complete Session"
+tags: [complete, mixed, all_styles]
+
+items:
+  - name: "Basic Samba -- G Major"
+    file: "programs/bucket_a/samba_basic_G.ztprog"
+
+  - name: "Basic Samba -- 4/4 Variation (G Major)"
+    file: "programs/bucket_a/samba_basic_G_4_4.ztprog"
+
+  - name: "Backdoor Cadence (IV -> bVII7 -> I) -- C Major"
+    file: "programs/bucket_a/backdoor_cadence_C.ztprog"
+
+  - name: "Backdoor Cadence -- Movable Pack (C / G / D)"
+    file: "programs/bucket_a/backdoor_cadence_C.ztprog"
+
+  - name: "Gospel Turnaround (IV -> bVII9 -> I -> V13 -> I6) -- C Major"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+  - name: "Gospel Color Upgrades -- Substitution Drill (C Major)"
+    file: "programs/bucket_a/gospel_color_upgrades_C.ztprog"
+
+  - name: "Gospel Chromatic Lick (bVII7 -> I) -- C Major"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+  - name: "Gospel Turnaround -- Movable Pack (C / G / D)"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+  - name: "Hendrix-Style C Dorian Intro Etude"
+    file: "programs/bucket_a/dorian_vamp_Cm.ztprog"
+
+  - name: "Dorian Gospel Backdoor -- C Minor (Tritone Gravity)"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+
+  - name: "Dorian Chromatic Lick (bVII7 -> i) -- C Minor"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"
+
+  - name: "Voodoo Child (Slight Return) -- Hendrix-Style Intro Etude (E Minor)"
+    file: "programs/bucket_a/voodoo_child_backing_Em.ztprog"
+
+  - name: "Walkin' Blues -- Main Riff + Variation (C)"
+    file: "programs/bucket_a/walkin_blues_backing_C.ztprog"
+
+  - name: "When You Have a Good Friend -- Vocal Line Etude (C)"
+    file: "programs/bucket_a/when_you_have_a_good_friend_C.ztprog"

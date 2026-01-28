@@ -1,0 +1,13 @@
+# Bucket A -- Movable Shapes Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_movable_shapes_session
+title: "Movable Shapes Session"
+tags: [movable, transposition, all_keys]
+
+items:
+  - name: "Backdoor Cadence -- Movable Pack (C / G / D)"
+    file: "programs/bucket_a/backdoor_cadence_C.ztprog"
+
+  - name: "Gospel Turnaround -- Movable Pack (C / G / D)"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"

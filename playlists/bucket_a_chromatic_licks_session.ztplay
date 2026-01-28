@@ -1,0 +1,13 @@
+# Bucket A -- Chromatic Licks Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_chromatic_licks_session
+title: "Chromatic Licks Session"
+tags: [lick, chromatic, resolution]
+
+items:
+  - name: "Gospel Chromatic Lick (bVII7 -> I) -- C Major"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+  - name: "Dorian Chromatic Lick (bVII7 -> i) -- C Minor"
+    file: "programs/bucket_a/dorian_gospel_backdoor_Cm.ztprog"

@@ -1,0 +1,19 @@
+# Bucket A -- Gospel Turnaround Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_gospel_turnaround_session
+title: "Gospel Turnaround Session"
+tags: [gospel, turnaround, voicing]
+
+items:
+  - name: "Gospel Turnaround (IV -> bVII9 -> I -> V13 -> I6) -- C Major"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+  - name: "Gospel Color Upgrades -- Substitution Drill (C Major)"
+    file: "programs/bucket_a/gospel_color_upgrades_C.ztprog"
+
+  - name: "Gospel Chromatic Lick (bVII7 -> I) -- C Major"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"
+
+  - name: "Gospel Turnaround -- Movable Pack (C / G / D)"
+    file: "programs/bucket_a/gospel_turnaround_C.ztprog"

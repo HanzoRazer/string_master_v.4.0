@@ -1,0 +1,13 @@
+# Bucket A -- Samba Groove Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_samba_session
+title: "Samba Groove Session"
+tags: [samba, latin, groove]
+
+items:
+  - name: "Basic Samba -- G Major"
+    file: "programs/bucket_a/samba_basic_G.ztprog"
+
+  - name: "Basic Samba -- 4/4 Variation (G Major)"
+    file: "programs/bucket_a/samba_basic_G_4_4.ztprog"

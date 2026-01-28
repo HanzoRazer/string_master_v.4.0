@@ -326,21 +326,21 @@
     {
       "id": "bucket_a",
       "title": "Bucket A – Mixed Etudes",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Gospel turnarounds, samba, walking blues, Dorian etudes, and assorted studies",
       "style": "mixed",
-      "canonical_json": null,
+      "canonical_json": "bucket_a_canonical.json",
       "exercises_dir": "exercises/bucket_a",
       "programs_dir": "programs/bucket_a",
-      "playlists_prefix": null,
+      "playlists_prefix": "bucket_a_",
       "exercise_count": 14,
       "program_count": 17,
-      "playlist_count": 0,
-      "midi_dir": null,
-      "midi_legacy_count": 6,
-      "emit_scripts": [],
+      "playlist_count": 8,
+      "midi_dir": "exercises/bucket_a/midi",
+      "midi_count": 6,
+      "emit_scripts": ["emit_bucket_a_pack.py"],
       "difficulty_range": ["beginner", "advanced"],
-      "keys": ["C", "G", "E", "Bb"]
+      "keys": ["C", "G", "Cm", "Em"]
     }
   ],
 
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 6,
-    "unformalized": 10,
+    "formalized": 7,
+    "unformalized": 9,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 75,
+    "total_playlists": 83,
     "total_midi_generated": 126,
-    "validation_count": 855
+    "validation_count": 865
   }
 }

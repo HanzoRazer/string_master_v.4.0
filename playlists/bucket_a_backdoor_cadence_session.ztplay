@@ -1,0 +1,13 @@
+# Bucket A -- Backdoor Cadence Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_backdoor_cadence_session
+title: "Backdoor Cadence Session"
+tags: [backdoor, cadence, gospel]
+
+items:
+  - name: "Backdoor Cadence (IV -> bVII7 -> I) -- C Major"
+    file: "programs/bucket_a/backdoor_cadence_C.ztprog"
+
+  - name: "Backdoor Cadence -- Movable Pack (C / G / D)"
+    file: "programs/bucket_a/backdoor_cadence_C.ztprog"

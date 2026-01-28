@@ -1,0 +1,13 @@
+# Bucket A -- Delta Blues Session
+# Auto-generated from bucket_a_canonical.json
+
+id: bucket_a_delta_blues_session
+title: "Delta Blues Session"
+tags: [blues, delta, robert_johnson]
+
+items:
+  - name: "Walkin' Blues -- Main Riff + Variation (C)"
+    file: "programs/bucket_a/walkin_blues_backing_C.ztprog"
+
+  - name: "When You Have a Good Friend -- Vocal Line Etude (C)"
+    file: "programs/bucket_a/when_you_have_a_good_friend_C.ztprog"
