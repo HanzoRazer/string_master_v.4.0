@@ -1,0 +1,22 @@
+# Voicings -- Chord Voicings -- Complete Session
+# Auto-generated from voicings_canonical.json
+
+id: voicing_complete_session
+title: "Chord Voicings -- Complete Session"
+tags: [voicings, drop2, backdoor, guide_tones, contrary_motion]
+
+items:
+  - name: "Drop-2 Backdoor Cadence -- Comp Shells (3rd + 7th Only)"
+    file: "exercises/voicings/backdoor_drop2_comp_shells_C.ztprog"
+
+  - name: "Drop-2 Backdoor Cadence -- Guide-Tone Pairs (Voice-Leading Core)"
+    file: "exercises/voicings/backdoor_drop2_guide_tones_C.ztprog"
+
+  - name: "Drop-2 Backdoor Cadence -- Triplet Targeting (Melodic Resolution)"
+    file: "exercises/voicings/backdoor_drop2_triplet_targets_C.ztprog"
+
+  - name: "Diminished Drop-2 Cycle (12 Keys)"
+    file: "programs/voicing_diminished_drop2_cycle.ztprog"
+
+  - name: "Drop-2 Top 4 Motion: C6 -> E° -> Ebm6"
+    file: "exercises/voicings/v6_contrary_top4.ztprog"

@@ -214,10 +214,10 @@
     {
       "id": "voicings",
       "title": "Chord Voicings & Drop-2",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Drop-2 voicings, backdoor cadence shells, diminished cycles, contrary motion",
       "style": "jazz",
-      "canonical_json": null,
+      "canonical_json": "voicings_canonical.json",
       "exercises_dir": "exercises/voicings",
       "programs_dir": null,
       "playlists_prefix": "voicing_",
@@ -226,7 +226,7 @@
       "playlist_count": 2,
       "midi_dir": null,
       "midi_legacy_count": 5,
-      "emit_scripts": [],
+      "emit_scripts": ["emit_voicings_pack.py"],
       "difficulty_range": ["intermediate", "advanced"],
       "keys": ["C"]
     },
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 12,
-    "unformalized": 4,
+    "formalized": 13,
+    "unformalized": 3,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 95,
+    "total_playlists": 97,
     "total_midi_generated": 126,
-    "validation_count": 877
+    "validation_count": 879
   }
 }

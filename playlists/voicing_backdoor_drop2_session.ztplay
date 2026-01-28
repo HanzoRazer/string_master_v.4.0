@@ -1,0 +1,16 @@
+# Voicings -- Chord Voicings -- Backdoor Drop-2 Session
+# Auto-generated from voicings_canonical.json
+
+id: voicing_backdoor_drop2_session
+title: "Chord Voicings -- Backdoor Drop-2 Session"
+tags: [voicings, drop2, backdoor, shell_voicings, guide_tones, triplet_targeting]
+
+items:
+  - name: "Drop-2 Backdoor Cadence -- Comp Shells (3rd + 7th Only)"
+    file: "exercises/voicings/backdoor_drop2_comp_shells_C.ztprog"
+
+  - name: "Drop-2 Backdoor Cadence -- Guide-Tone Pairs (Voice-Leading Core)"
+    file: "exercises/voicings/backdoor_drop2_guide_tones_C.ztprog"
+
+  - name: "Drop-2 Backdoor Cadence -- Triplet Targeting (Melodic Resolution)"
+    file: "exercises/voicings/backdoor_drop2_triplet_targets_C.ztprog"
