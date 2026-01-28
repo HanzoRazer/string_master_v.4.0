@@ -1,0 +1,20 @@
+id: enclosure_advanced
+title: "Enclosures: Advanced Patterns (Turnarounds & Barry Harris)"
+category: tier_session
+tags: [enclosure, bebop, advanced, barry_harris]
+
+defaults:
+  tempo: 72
+  style: swing
+
+items:
+  - name: "Bebop Enclosure Descending"
+    file: "exercises/enclosures/bebop_enclosure_descending.ztprog"
+    repeats: 3
+    notes: "Descending chromatic enclosures through I-vi-ii-V turnaround"
+
+  - name: "Barry Harris Enclosure Examples"
+    file: "exercises/enclosures/barry_harris_enclosure_examples.ztprog"
+    repeats: 3
+    notes: "Barry Harris 6th-diminished scale chromatic approach patterns"
+

@@ -1,0 +1,80 @@
+id: enclosure_all_14
+title: "Enclosures: Complete 14-Exercise Session"
+category: complete_session
+tags: [enclosure, bebop, complete]
+
+defaults:
+  tempo: 72
+  style: swing
+
+items:
+  - name: "Double Enclosure to Root"
+    file: "exercises/enclosures/enclosure_double_to_1.ztprog"
+    repeats: 1
+    notes: "Land on root (C) beat 1, double chromatic enclosure"
+
+  - name: "Lower Enclosure to 3rd"
+    file: "exercises/enclosures/enclosure_lower_to_3.ztprog"
+    repeats: 1
+    notes: "Land on 3rd (E) beat 1, chromatic half-step below"
+
+  - name: "Upper Enclosure to 5th"
+    file: "exercises/enclosures/enclosure_upper_to_5.ztprog"
+    repeats: 1
+    notes: "Land on 5th (G) beat 1, upper diatonic neighbor approach"
+
+  - name: "Altered Dominant Enclosure - Target b9"
+    file: "exercises/enclosures/enclosure_alt_dom_target_b9.ztprog"
+    repeats: 1
+    notes: "Land on b9 of altered dominant, chromatic altered approach"
+
+  - name: "Dominant 7 Enclosure - G7 Target 3rd"
+    file: "exercises/enclosures/enclosure_dom7_G7_target_3.ztprog"
+    repeats: 1
+    notes: "Land on 3rd (B) of G7, diatonic upper/chromatic lower"
+
+  - name: "Dominant 7 Enclosure - G7 Target b7"
+    file: "exercises/enclosures/enclosure_dom7_G7_target_b7.ztprog"
+    repeats: 1
+    notes: "Land on b7 (F) of G7, chromatic approach"
+
+  - name: "Major 6 Enclosure - C6 Target 3rd"
+    file: "exercises/enclosures/enclosure_major_C6_target_3.ztprog"
+    repeats: 1
+    notes: "Land on 3rd (E) over C6, diatonic/chromatic combo"
+
+  - name: "Minor 7 Enclosure - Dm7 Target 5th"
+    file: "exercises/enclosures/enclosure_minor_Dm7_target_5.ztprog"
+    repeats: 1
+    notes: "Land on 5th (A) of Dm7, chromatic approach"
+
+  - name: "Dominant Enclosure - b7 to Root Resolution"
+    file: "exercises/enclosures/dominant_enclosure_b7_to_root.ztprog"
+    repeats: 1
+    notes: "Double chromatic enclosure resolving b7 to root over V-I"
+
+  - name: "ii-V-I Enclosure Chain"
+    file: "exercises/enclosures/enclosure_ii_v_i_chain.ztprog"
+    repeats: 1
+    notes: "Chromatic chain targeting 3rd of each chord through ii-V-I"
+
+  - name: "ii-V-I Enclosure - Chromatic to 3rd"
+    file: "exercises/enclosures/ii_v_i_to_3rd_chromatic.ztprog"
+    repeats: 1
+    notes: "Chromatic above/below approach to 3rd over ii-V-I"
+
+  - name: "ii-V-I Enclosure - Diatonic to 7th"
+    file: "exercises/enclosures/ii_v_i_to_7th_diatonic.ztprog"
+    repeats: 1
+    notes: "Diatonic approach to 7th over ii-V-I cadence"
+
+  - name: "Barry Harris Enclosure Examples"
+    file: "exercises/enclosures/barry_harris_enclosure_examples.ztprog"
+    repeats: 1
+    notes: "Barry Harris 6th-diminished scale chromatic approach patterns"
+
+  - name: "Bebop Enclosure Descending"
+    file: "exercises/enclosures/bebop_enclosure_descending.ztprog"
+    repeats: 1
+    notes: "Descending chromatic enclosures through I-vi-ii-V turnaround"
+

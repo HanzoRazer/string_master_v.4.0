@@ -1,0 +1,30 @@
+id: enclosure_context_major
+title: "Enclosures: Major Harmony (Imaj7 / I6)"
+category: context_session
+tags: [enclosure, bebop, major, Imaj7]
+
+defaults:
+  tempo: 72
+  style: swing
+
+items:
+  - name: "Upper Enclosure to 5th"
+    file: "exercises/enclosures/enclosure_upper_to_5.ztprog"
+    repeats: 2
+    notes: "Land on 5th (G) beat 1, upper diatonic neighbor approach"
+
+  - name: "Lower Enclosure to 3rd"
+    file: "exercises/enclosures/enclosure_lower_to_3.ztprog"
+    repeats: 2
+    notes: "Land on 3rd (E) beat 1, chromatic half-step below"
+
+  - name: "Double Enclosure to Root"
+    file: "exercises/enclosures/enclosure_double_to_1.ztprog"
+    repeats: 2
+    notes: "Land on root (C) beat 1, double chromatic enclosure"
+
+  - name: "Major 6 Enclosure - C6 Target 3rd"
+    file: "exercises/enclosures/enclosure_major_C6_target_3.ztprog"
+    repeats: 2
+    notes: "Land on 3rd (E) over C6, diatonic/chromatic combo"
+

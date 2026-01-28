@@ -1,0 +1,25 @@
+id: enclosure_foundations
+title: "Enclosures: Foundations (Basic Types)"
+category: tier_session
+tags: [enclosure, bebop, foundations]
+
+defaults:
+  tempo: 72
+  style: swing
+
+items:
+  - name: "Upper Enclosure to 5th"
+    file: "exercises/enclosures/enclosure_upper_to_5.ztprog"
+    repeats: 3
+    notes: "Land on 5th (G) beat 1, upper diatonic neighbor approach"
+
+  - name: "Lower Enclosure to 3rd"
+    file: "exercises/enclosures/enclosure_lower_to_3.ztprog"
+    repeats: 3
+    notes: "Land on 3rd (E) beat 1, chromatic half-step below"
+
+  - name: "Double Enclosure to Root"
+    file: "exercises/enclosures/enclosure_double_to_1.ztprog"
+    repeats: 3
+    notes: "Land on root (C) beat 1, double chromatic enclosure"
+

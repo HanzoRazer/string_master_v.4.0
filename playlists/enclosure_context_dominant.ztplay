@@ -1,0 +1,25 @@
+id: enclosure_context_dominant
+title: "Enclosures: Dominant Harmony (V7 / V7alt)"
+category: context_session
+tags: [enclosure, bebop, dominant, V7]
+
+defaults:
+  tempo: 72
+  style: swing
+
+items:
+  - name: "Dominant 7 Enclosure - G7 Target 3rd"
+    file: "exercises/enclosures/enclosure_dom7_G7_target_3.ztprog"
+    repeats: 2
+    notes: "Land on 3rd (B) of G7, diatonic upper/chromatic lower"
+
+  - name: "Dominant 7 Enclosure - G7 Target b7"
+    file: "exercises/enclosures/enclosure_dom7_G7_target_b7.ztprog"
+    repeats: 2
+    notes: "Land on b7 (F) of G7, chromatic approach"
+
+  - name: "Altered Dominant Enclosure - Target b9"
+    file: "exercises/enclosures/enclosure_alt_dom_target_b9.ztprog"
+    repeats: 2
+    notes: "Land on b9 of altered dominant, chromatic altered approach"
+

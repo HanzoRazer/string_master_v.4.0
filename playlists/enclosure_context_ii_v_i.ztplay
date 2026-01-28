@@ -1,0 +1,25 @@
+id: enclosure_context_ii_v_i
+title: "Enclosures: ii-V-I Cadence"
+category: context_session
+tags: [enclosure, bebop, ii_v_i, cadence]
+
+defaults:
+  tempo: 72
+  style: swing
+
+items:
+  - name: "ii-V-I Enclosure Chain"
+    file: "exercises/enclosures/enclosure_ii_v_i_chain.ztprog"
+    repeats: 2
+    notes: "Chromatic chain targeting 3rd of each chord through ii-V-I"
+
+  - name: "ii-V-I Enclosure - Chromatic to 3rd"
+    file: "exercises/enclosures/ii_v_i_to_3rd_chromatic.ztprog"
+    repeats: 2
+    notes: "Chromatic above/below approach to 3rd over ii-V-I"
+
+  - name: "ii-V-I Enclosure - Diatonic to 7th"
+    file: "exercises/enclosures/ii_v_i_to_7th_diatonic.ztprog"
+    repeats: 2
+    notes: "Diatonic approach to 7th over ii-V-I cadence"
+
