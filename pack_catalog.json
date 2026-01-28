@@ -196,18 +196,18 @@
     {
       "id": "cycles",
       "title": "Cycle Training",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Circle of 5ths, 4ths, 3rds, dominants, and tritone substitution cycles",
       "style": "theory",
-      "canonical_json": null,
+      "canonical_json": "cycles_canonical.json",
       "exercises_dir": "exercises/cycles",
       "programs_dir": null,
       "playlists_prefix": "cycle_",
       "exercise_count": 6,
-      "program_count": 0,
-      "playlist_count": 1,
+      "program_count": 6,
+      "playlist_count": 2,
       "midi_dir": null,
-      "emit_scripts": [],
+      "emit_scripts": ["emit_cycles_pack.py"],
       "difficulty_range": ["intermediate", "advanced"],
       "keys": ["C"]
     },
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 11,
-    "unformalized": 5,
+    "formalized": 12,
+    "unformalized": 4,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 93,
+    "total_playlists": 95,
     "total_midi_generated": 126,
-    "validation_count": 875
+    "validation_count": 877
   }
 }

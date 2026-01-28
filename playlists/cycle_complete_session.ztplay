@@ -1,0 +1,25 @@
+# Cycle Training -- Cycle Training -- Complete Session
+# Auto-generated from cycles_canonical.json
+
+id: cycle_complete_session
+title: "Cycle Training -- Complete Session"
+tags: [cycle, theory, guide_tones, tritone, transposition]
+
+items:
+  - name: "Cycle of Fifths -- Roots (All Keys)"
+    file: "programs/cycle_fifths_all_keys.ztprog"
+
+  - name: "Cycle of Fifths -- Root Awareness"
+    file: "programs/cycle_fifths_roots.ztprog"
+
+  - name: "Cycle of 4ths -- ii-V-I Guide Tones"
+    file: "programs/cycle_fourths_ii_v_i.ztprog"
+
+  - name: "Cycle of Thirds -- Guide Tones"
+    file: "programs/cycle_thirds_dominant.ztprog"
+
+  - name: "Cycle of Thirds -- Tritone Awareness"
+    file: "programs/cycle_thirds_symmetry.ztprog"
+
+  - name: "Cycle of Dominants -- Tritone Subs (Guide Tone Mission)"
+    file: "programs/cycle_dominants_fourths.ztprog"

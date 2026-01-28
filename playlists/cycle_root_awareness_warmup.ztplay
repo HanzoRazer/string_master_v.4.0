@@ -1,0 +1,13 @@
+# Cycle Training -- Cycle Training -- Root Awareness Warmup
+# Auto-generated from cycles_canonical.json
+
+id: cycle_root_awareness_warmup
+title: "Cycle Training -- Root Awareness Warmup"
+tags: [cycle, fifths, roots, warmup]
+
+items:
+  - name: "Cycle of Fifths -- Roots (All Keys)"
+    file: "programs/cycle_fifths_all_keys.ztprog"
+
+  - name: "Cycle of Fifths -- Root Awareness"
+    file: "programs/cycle_fifths_roots.ztprog"
