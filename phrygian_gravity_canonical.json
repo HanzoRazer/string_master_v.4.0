@@ -14,7 +14,7 @@
     {
       "id": "phrygian_gravity_bII_resolution",
       "title": "Phrygian Gravity -- bII to I Zone-Crossing Resolution",
-      "style_family": "gravity",
+      "style_family": "theory",
       "technique": "resolution",
       "harmonic_context": "phrygian_bII_I_cycle",
       "key": "A",
@@ -32,7 +32,7 @@
     {
       "id": "phrygian_gravity_tritone_to_parent",
       "title": "Phrygian Gravity -- Tritone Resolution to Parent Minor",
-      "style_family": "gravity",
+      "style_family": "theory",
       "technique": "resolution",
       "harmonic_context": "phrygian_bII_I_cycle",
       "key": "A",

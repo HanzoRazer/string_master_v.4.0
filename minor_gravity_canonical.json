@@ -19,7 +19,7 @@
     {
       "id": "minor_gravity_harmonic_b9_resolution",
       "title": "Minor Gravity -- Harmonic Minor b9 Resolution Mission",
-      "style_family": "gravity",
+      "style_family": "theory",
       "technique": "resolution",
       "harmonic_context": "harmonic_minor_V7b9_i",
       "key": "C",
@@ -36,7 +36,7 @@
     {
       "id": "minor_gravity_melodic_guidetones",
       "title": "Minor Gravity -- Melodic Minor Guide Tones (Two-Tritone Hearing)",
-      "style_family": "gravity",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "melodic_minor_ii_V_i",
       "key": "C",

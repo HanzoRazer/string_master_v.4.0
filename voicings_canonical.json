@@ -24,7 +24,7 @@
     {
       "id": "backdoor_drop2_comp_shells_C",
       "title": "Drop-2 Backdoor Cadence -- Comp Shells (3rd + 7th Only)",
-      "style_family": "voicings",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "backdoor_IV_bVII_I",
       "key": "C",
@@ -42,7 +42,7 @@
     {
       "id": "backdoor_drop2_guide_tones_C",
       "title": "Drop-2 Backdoor Cadence -- Guide-Tone Pairs (Voice-Leading Core)",
-      "style_family": "voicings",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "backdoor_IV_bVII_I",
       "key": "C",
@@ -60,7 +60,7 @@
     {
       "id": "backdoor_drop2_triplet_targets_C",
       "title": "Drop-2 Backdoor Cadence -- Triplet Targeting (Melodic Resolution)",
-      "style_family": "voicings",
+      "style_family": "theory",
       "technique": "rhythmic_phrasing",
       "harmonic_context": "backdoor_IV_bVII_I",
       "key": "C",
@@ -78,7 +78,7 @@
     {
       "id": "diminished_drop2_cycle",
       "title": "Diminished Drop-2 Cycle (12 Keys)",
-      "style_family": "voicings",
+      "style_family": "theory",
       "technique": "voice_leading",
       "harmonic_context": "static_major_diminished",
       "key": "C",
@@ -94,7 +94,7 @@
     {
       "id": "v6_contrary_top4",
       "title": "Drop-2 Top 4 Motion: C6 -> E° -> Ebm6",
-      "style_family": "voicings",
+      "style_family": "theory",
       "technique": "voice_leading",
       "harmonic_context": "contrary_I6_IIIdim_bIIIm6",
       "key": "C",

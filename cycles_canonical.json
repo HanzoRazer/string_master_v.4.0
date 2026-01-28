@@ -39,7 +39,7 @@
     {
       "id": "cycle_fifths_roots",
       "title": "Cycle of Fifths -- Roots (All Keys)",
-      "style_family": "cycles",
+      "style_family": "theory",
       "technique": "transposition",
       "harmonic_context": "cycle_fifths_diatonic",
       "key": "C",
@@ -55,7 +55,7 @@
     {
       "id": "cycle_fifths_roots_awareness",
       "title": "Cycle of Fifths -- Root Awareness",
-      "style_family": "cycles",
+      "style_family": "theory",
       "technique": "transposition",
       "harmonic_context": "cycle_fifths_roots",
       "key": "C",
@@ -71,7 +71,7 @@
     {
       "id": "cycle_fourths_ii_v_i_guidetones",
       "title": "Cycle of 4ths -- ii-V-I Guide Tones",
-      "style_family": "cycles",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "cycle_fourths_ii_v_i",
       "key": "C",
@@ -87,7 +87,7 @@
     {
       "id": "cycle_thirds_guidetones",
       "title": "Cycle of Thirds -- Guide Tones",
-      "style_family": "cycles",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "cycle_thirds_dominant",
       "key": "C",
@@ -103,7 +103,7 @@
     {
       "id": "cycle_thirds_tritone",
       "title": "Cycle of Thirds -- Tritone Awareness",
-      "style_family": "cycles",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "cycle_thirds_tritone",
       "key": "C",
@@ -119,7 +119,7 @@
     {
       "id": "cycle_dominants_tritone_subs",
       "title": "Cycle of Dominants -- Tritone Subs (Guide Tone Mission)",
-      "style_family": "cycles",
+      "style_family": "theory",
       "technique": "guide_tones",
       "harmonic_context": "cycle_dominants_in_fourths",
       "key": "C",
