@@ -1,0 +1,16 @@
+# Blues -- Major Blues Turnarounds Session
+# Auto-generated from blues_canonical.json
+
+id: blues_major_turnarounds_session
+title: "Major Blues Turnarounds Session"
+tags: [blues, turnaround, texas, shuffle]
+
+items:
+  - name: "Contrary Motion Line into I Chord"
+    file: "exercises/blues/turnaround_contrary_motion.ztprog"
+
+  - name: "Classic Descending Blues Turnaround"
+    file: "exercises/blues/turnaround_descending_triplet.ztprog"
+
+  - name: "Expanding Intervals Before Resolution"
+    file: "exercises/blues/turnaround_expanding_intervals.ztprog"

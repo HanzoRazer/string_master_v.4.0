@@ -1,0 +1,13 @@
+# Blues -- Blues Lead Phrases Session
+# Auto-generated from blues_canonical.json
+
+id: blues_lead_phrases_session
+title: "Blues Lead Phrases Session"
+tags: [blues, lead_phrase, chicago, texas]
+
+items:
+  - name: "Albert King Intro Slide-Up"
+    file: "programs/blues_albertking_intro_G.ztprog"
+
+  - name: "SRV Outro with b5 Bend"
+    file: "programs/blues_srv_outro_E.ztprog"

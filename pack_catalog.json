@@ -81,21 +81,21 @@
     {
       "id": "blues",
       "title": "Blues Turnarounds & Licks",
-      "status": "unformalized",
+      "status": "formalized",
       "description": "Blues turnarounds, licks, and backing tracks in multiple keys",
       "style": "blues",
-      "canonical_json": null,
+      "canonical_json": "blues_canonical.json",
       "exercises_dir": "exercises/blues",
       "programs_dir": null,
-      "playlists_prefix": "blues_phrases_",
+      "playlists_prefix": "blues_",
       "exercise_count": 8,
       "program_count": 5,
-      "playlist_count": 1,
+      "playlist_count": 5,
       "midi_dir": null,
       "midi_legacy_count": 7,
-      "emit_scripts": [],
-      "difficulty_range": ["intermediate", "advanced"],
-      "keys": ["E", "G", "A", "Bb"]
+      "emit_scripts": ["emit_blues_pack.py"],
+      "difficulty_range": ["beginner", "advanced"],
+      "keys": ["E", "G", "Cm"]
     },
     {
       "id": "enclosures",
@@ -394,12 +394,12 @@
 
   "stats": {
     "total_packs": 16,
-    "formalized": 7,
-    "unformalized": 9,
+    "formalized": 8,
+    "unformalized": 8,
     "total_exercises": 624,
     "total_programs": 156,
-    "total_playlists": 83,
+    "total_playlists": 88,
     "total_midi_generated": 126,
-    "validation_count": 865
+    "validation_count": 870
   }
 }

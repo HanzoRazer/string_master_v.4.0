@@ -1,0 +1,25 @@
+# Blues -- All Blues Turnarounds Session
+# Auto-generated from blues_canonical.json
+
+id: blues_turnarounds_all_session
+title: "All Blues Turnarounds Session"
+tags: [blues, turnaround, complete]
+
+items:
+  - name: "Contrary Motion Line into I Chord"
+    file: "exercises/blues/turnaround_contrary_motion.ztprog"
+
+  - name: "Classic Descending Blues Turnaround"
+    file: "exercises/blues/turnaround_descending_triplet.ztprog"
+
+  - name: "Expanding Intervals Before Resolution"
+    file: "exercises/blues/turnaround_expanding_intervals.ztprog"
+
+  - name: "Minor Key Turnaround -- Expanding Intervals"
+    file: "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
+
+  - name: "Minor Turnaround -- Chromatic Phrase"
+    file: "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
+
+  - name: "8-Bar Minor Turnaround -- Harmonic Minor Line"
+    file: "exercises/blues/turnaround_expanding_intervals_minor.ztprog"

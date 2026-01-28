@@ -1,0 +1,16 @@
+# Blues -- Minor Blues Turnarounds Session
+# Auto-generated from blues_canonical.json
+
+id: blues_minor_turnarounds_session
+title: "Minor Blues Turnarounds Session"
+tags: [blues, turnaround, minor, jazz]
+
+items:
+  - name: "Minor Key Turnaround -- Expanding Intervals"
+    file: "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
+
+  - name: "Minor Turnaround -- Chromatic Phrase"
+    file: "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
+
+  - name: "8-Bar Minor Turnaround -- Harmonic Minor Line"
+    file: "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
