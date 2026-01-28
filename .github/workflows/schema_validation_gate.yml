@@ -1,0 +1,32 @@
+# Schema Validation Gate
+#
+# Validates all .ztex, .ztprog, and .ztplay files against JSON schemas.
+# Blocks merges if any file fails validation.
+
+name: CI / Schema Validation
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  schema-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml jsonschema
+
+      - name: Validate all schemas
+        run: |
+          python validate_schemas.py
