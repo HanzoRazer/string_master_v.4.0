@@ -1,0 +1,13 @@
+# Phrygian Gravity -- Phrygian Gravity -- Complete Session
+# Auto-generated from phrygian_gravity_canonical.json
+
+id: phrygian_gravity_complete_session
+title: "Phrygian Gravity -- Complete Session"
+tags: [phrygian, gravity, zone_theory, flamenco, tritone, transposition]
+
+items:
+  - name: "Phrygian Gravity -- bII to I Zone-Crossing Resolution"
+    file: "programs/phrygian_gravity_bII_to_I_cycle.ztprog"
+
+  - name: "Phrygian Gravity -- Tritone Resolution to Parent Minor"
+    file: "programs/phrygian_gravity_bII_to_I_cycle.ztprog"
