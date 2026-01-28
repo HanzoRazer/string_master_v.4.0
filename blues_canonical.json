@@ -18,6 +18,11 @@
       "id": "turnaround_minor",
       "progression": "iiø7 - V7alt - i7 - bVI7",
       "description": "Minor key turnaround with altered dominant and tritone substitution"
+    },
+    {
+      "id": "delta_blues",
+      "progression": "I-I-I-I-IV-IV-I-I-V-IV-I-V",
+      "description": "Standard 12-bar delta blues form"
     }
   ],
   "exercises": [
@@ -134,12 +139,33 @@
       "harmonic_context": "turnaround_minor",
       "key": "Cm",
       "meter": "4/4",
-      "tempo_range": [
-        50,
-        120
-      ],
+      "tempo_range": [50, 120],
       "difficulty": "advanced",
       "program_ref": "exercises/blues/turnaround_expanding_intervals_minor.ztprog"
+    },
+    {
+      "id": "walkin_blues_riff_C",
+      "title": "Walkin' Blues -- Main Riff + Variation",
+      "style_family": "blues",
+      "technique": "articulation",
+      "harmonic_context": "delta_blues",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [52, 96],
+      "difficulty": "beginner",
+      "program_ref": "programs/bucket_a/walkin_blues_backing_C.ztprog"
+    },
+    {
+      "id": "good_friend_vocal_C",
+      "title": "When You Have a Good Friend -- Vocal Line Etude",
+      "style_family": "blues",
+      "technique": "articulation",
+      "harmonic_context": "delta_blues",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [52, 66],
+      "difficulty": "intermediate",
+      "program_ref": "programs/bucket_a/when_you_have_a_good_friend_C.ztprog"
     }
   ],
   "progressive_paths": [
@@ -170,6 +196,15 @@
         "turnaround_expanding_intervals_minor",
         "turnaround_minor_enclosure",
         "turnaround_minor_enclosure_harmonic_minor"
+      ]
+    },
+    {
+      "id": "delta_blues_progression",
+      "title": "Delta Blues Path",
+      "description": "Riff-based to vocal phrasing",
+      "sequence": [
+        "walkin_blues_riff_C",
+        "good_friend_vocal_C"
       ]
     }
   ],
@@ -236,7 +271,16 @@
       ]
     },
     {
-      "id": "blues_all_8",
+      "id": "blues_delta_session",
+      "title": "Delta Blues Session",
+      "exercises": [
+        "walkin_blues_riff_C",
+        "good_friend_vocal_C"
+      ],
+      "tags": ["blues", "delta", "robert_johnson"]
+    },
+    {
+      "id": "blues_all_10",
       "title": "Blues -- Complete Session",
       "exercises": [
         "albertking_intro_slideup",
@@ -246,39 +290,28 @@
         "turnaround_expanding_intervals",
         "turnaround_expanding_intervals_minor",
         "turnaround_minor_enclosure",
-        "turnaround_minor_enclosure_harmonic_minor"
+        "turnaround_minor_enclosure_harmonic_minor",
+        "walkin_blues_riff_C",
+        "good_friend_vocal_C"
       ],
-      "tags": [
-        "complete",
-        "blues",
-        "all_styles"
-      ]
+      "tags": ["complete", "blues", "all_styles"]
     }
   ],
   "stats": {
-    "total_exercises": 8,
+    "total_exercises": 10,
     "by_style": {
       "lead_phrase": 2,
       "major_turnaround": 3,
-      "minor_turnaround": 3
-    },
-    "by_technique": {
-      "lead_phrase": 2,
-      "turnaround_phrase": 4,
-      "chromatic_phrase": 1,
-      "melodic_study": 1
+      "minor_turnaround": 3,
+      "delta_blues": 2
     },
     "by_difficulty": {
-      "beginner": 1,
-      "intermediate": 4,
+      "beginner": 2,
+      "intermediate": 5,
       "advanced": 3
     },
-    "keys": [
-      "G",
-      "E",
-      "Cm"
-    ],
-    "playlist_count": 5
+    "keys": ["G", "E", "Cm", "C"],
+    "playlist_count": 6
   },
   "taxonomy_ref": "taxonomy.json"
 }
