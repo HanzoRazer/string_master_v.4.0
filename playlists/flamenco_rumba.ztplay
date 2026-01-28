@@ -1,0 +1,25 @@
+id: flamenco_rumba
+title: "Flamenco: Rumba Session"
+category: palo_session
+tags: [flamenco, rumba, phrygian_dominant]
+
+defaults:
+  tempo: 106
+  style: flamenco
+
+items:
+  - name: "Rumba Flamenca - A Phrygian Dominant Party Etude"
+    file: "exercises/flamenco/rumba_A_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "Rasgueado patterns, Latin-influenced rhythmic drive"
+
+  - name: "Rumba Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 2
+    notes: "Festive phrasing with bII resolution, rhythmic placement"
+
+  - name: "Rumba Etude - Variation Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 2
+    notes: "Variation on rumba etude, dynamic contrast"
+

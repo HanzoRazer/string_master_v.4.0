@@ -1,0 +1,20 @@
+id: flamenco_mode_phrygian_dominant_mixed
+title: "Flamenco: Modal Mixing (G/G# Contrast)"
+category: mode_session
+tags: [flamenco, phrygian_dominant_mixed, modal_study]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)"
+    file: "exercises/flamenco/fandango_E_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "G vs G# modal switching, waltz-feel phrasing in 3/4"
+
+  - name: "Malaguena Etude - Intro Falseta (Free Meter)"
+    file: "exercises/flamenco/malaguena_backing.ztprog"
+    repeats: 2
+    notes: "Rubato phrasing, expressive descending lines, G/G# modal contrast"
+

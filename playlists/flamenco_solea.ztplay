@@ -1,0 +1,25 @@
+id: flamenco_solea
+title: "Flamenco: Solea Session"
+category: palo_session
+tags: [flamenco, solea, phrygian]
+
+defaults:
+  tempo: 70
+  style: flamenco
+
+items:
+  - name: "Solea Etude - 2-Compas Falseta in E Phrygian"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Accent placement on beats 3, 6, 10 within 12-beat cycle"
+
+  - name: "Solea Etude - Full Falseta with A/B Sections"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Dynamic contrast between A (flowing) and B (rhythmic/accented) sections"
+
+  - name: "Solea Etude - Variation with Ornamentation"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Ornamentation and variation development on falseta theme"
+

@@ -1,0 +1,15 @@
+id: flamenco_compas_free
+title: "Flamenco: Free Meter (Malaguena)"
+category: compas_session
+tags: [flamenco, free, compas_study]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Malaguena Etude - Intro Falseta (Free Meter)"
+    file: "exercises/flamenco/malaguena_backing.ztprog"
+    repeats: 2
+    notes: "Rubato phrasing, expressive descending lines, G/G# modal contrast"
+

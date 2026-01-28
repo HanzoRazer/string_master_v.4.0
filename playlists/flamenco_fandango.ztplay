@@ -1,0 +1,15 @@
+id: flamenco_fandango
+title: "Flamenco: Fandango Session"
+category: palo_session
+tags: [flamenco, fandango, phrygian_dominant_mixed]
+
+defaults:
+  tempo: 96
+  style: flamenco
+
+items:
+  - name: "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)"
+    file: "exercises/flamenco/fandango_E_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "G vs G# modal switching, waltz-feel phrasing in 3/4"
+

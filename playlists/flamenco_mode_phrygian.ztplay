@@ -1,0 +1,50 @@
+id: flamenco_mode_phrygian
+title: "Flamenco: Natural Phrygian (Dark, Solemn)"
+category: mode_session
+tags: [flamenco, phrygian, modal_study]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Bulerias Etude - Syncopated 12-Beat Falseta"
+    file: "exercises/flamenco/bulerias_compas_loop.ztprog"
+    repeats: 2
+    notes: "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10"
+
+  - name: "Andalusian Cadence Study - iv-III-II-I in A Phrygian"
+    file: "programs/andalusian_Am.ztprog"
+    repeats: 2
+    notes: "Root awareness through iv-III-II-I cadence (Am-G-F-E)"
+
+  - name: "Solea Etude - 2-Compas Falseta in E Phrygian"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Accent placement on beats 3, 6, 10 within 12-beat cycle"
+
+  - name: "Solea Etude - Full Falseta with A/B Sections"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Dynamic contrast between A (flowing) and B (rhythmic/accented) sections"
+
+  - name: "Solea Etude - Variation with Ornamentation"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Ornamentation and variation development on falseta theme"
+
+  - name: "Tientos Etude - Expressive Falseta at 68 BPM"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 2
+    notes: "Long-tone phrasing, behind-the-beat feel, bII-I gravity"
+
+  - name: "Tientos Etude - Variation with Descent"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 2
+    notes: "Descending line variation, target resolution notes"
+
+  - name: "Tientos - Slow Expressive Phrygian Study"
+    file: "exercises/flamenco/tientos_E_phrygian.ztprog"
+    repeats: 2
+    notes: "Slow-tempo phrasing, natural Phrygian (NOT Dominant), ornamental dynamics"
+

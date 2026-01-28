@@ -1,0 +1,15 @@
+id: flamenco_bulerias
+title: "Flamenco: Bulerias Session"
+category: palo_session
+tags: [flamenco, bulerias, phrygian]
+
+defaults:
+  tempo: 173
+  style: flamenco
+
+items:
+  - name: "Bulerias Etude - Syncopated 12-Beat Falseta"
+    file: "exercises/flamenco/bulerias_compas_loop.ztprog"
+    repeats: 2
+    notes: "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10"
+

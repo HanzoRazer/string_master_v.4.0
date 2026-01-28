@@ -1,0 +1,55 @@
+id: flamenco_mode_phrygian_dominant
+title: "Flamenco: Phrygian Dominant (Bright, Exotic)"
+category: mode_session
+tags: [flamenco, phrygian_dominant, modal_study]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Rumba Flamenca - A Phrygian Dominant Party Etude"
+    file: "exercises/flamenco/rumba_A_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "Rasgueado patterns, Latin-influenced rhythmic drive"
+
+  - name: "Rumba Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 2
+    notes: "Festive phrasing with bII resolution, rhythmic placement"
+
+  - name: "Rumba Etude - Variation Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 2
+    notes: "Variation on rumba etude, dynamic contrast"
+
+  - name: "Tangos - A Phrygian Dominant Study"
+    file: "exercises/flamenco/tangos_A_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "Melodic targets (b2, 3, b7), technique focus (legato, bends)"
+
+  - name: "Tangos Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/tangos_phrygian_loop.ztprog"
+    repeats: 2
+    notes: "Rhythmic phrasing with bII-I resolution, accent displacement"
+
+  - name: "Tangos Etude - Variation Development in E"
+    file: "exercises/flamenco/tangos_phrygian_loop.ztprog"
+    repeats: 2
+    notes: "Variation building on etude phrase, rhythmic contrast"
+
+  - name: "Zambra Etude - Rubato Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 2
+    notes: "Rubato melodic phrasing, long-tone control, modal tension"
+
+  - name: "Zambra Etude - Variation Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 2
+    notes: "Melodic contrast, chromatic figures, dynamic descent"
+
+  - name: "Zambra - C# Phrygian Dominant Study (Moorish)"
+    file: "exercises/flamenco/zambra_Cs_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "Augmented 2nd interval (D-E#), Moorish modal color"
+

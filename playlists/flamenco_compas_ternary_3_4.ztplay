@@ -1,0 +1,15 @@
+id: flamenco_compas_ternary_3_4
+title: "Flamenco: Ternary 3/4 (Fandango)"
+category: compas_session
+tags: [flamenco, ternary_3_4, compas_study]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)"
+    file: "exercises/flamenco/fandango_E_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "G vs G# modal switching, waltz-feel phrasing in 3/4"
+

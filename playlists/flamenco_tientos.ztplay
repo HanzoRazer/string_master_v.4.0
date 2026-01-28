@@ -1,0 +1,25 @@
+id: flamenco_tientos
+title: "Flamenco: Tientos Session"
+category: palo_session
+tags: [flamenco, tientos, phrygian]
+
+defaults:
+  tempo: 61
+  style: flamenco
+
+items:
+  - name: "Tientos - Slow Expressive Phrygian Study"
+    file: "exercises/flamenco/tientos_E_phrygian.ztprog"
+    repeats: 2
+    notes: "Slow-tempo phrasing, natural Phrygian (NOT Dominant), ornamental dynamics"
+
+  - name: "Tientos Etude - Expressive Falseta at 68 BPM"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 2
+    notes: "Long-tone phrasing, behind-the-beat feel, bII-I gravity"
+
+  - name: "Tientos Etude - Variation with Descent"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 2
+    notes: "Descending line variation, target resolution notes"
+

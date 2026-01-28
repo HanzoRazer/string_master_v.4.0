@@ -1,0 +1,30 @@
+id: flamenco_compas_12_beat
+title: "Flamenco: 12-Beat Compas (Solea/Bulerias)"
+category: compas_session
+tags: [flamenco, 12_beat, compas_study]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Bulerias Etude - Syncopated 12-Beat Falseta"
+    file: "exercises/flamenco/bulerias_compas_loop.ztprog"
+    repeats: 2
+    notes: "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10"
+
+  - name: "Solea Etude - 2-Compas Falseta in E Phrygian"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Accent placement on beats 3, 6, 10 within 12-beat cycle"
+
+  - name: "Solea Etude - Full Falseta with A/B Sections"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Dynamic contrast between A (flowing) and B (rhythmic/accented) sections"
+
+  - name: "Solea Etude - Variation with Ornamentation"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 2
+    notes: "Ornamentation and variation development on falseta theme"
+

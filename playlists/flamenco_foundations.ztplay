@@ -1,0 +1,15 @@
+id: flamenco_foundations
+title: "Flamenco: Andalusian Cadence Foundations"
+category: foundations
+tags: [flamenco, andalusian, cadence, phrygian]
+
+defaults:
+  tempo: 90
+  style: flamenco
+
+items:
+  - name: "Andalusian Cadence Study - iv-III-II-I in A Phrygian"
+    file: "programs/andalusian_Am.ztprog"
+    repeats: 3
+    notes: "Root awareness through iv-III-II-I cadence (Am-G-F-E)"
+

@@ -1,0 +1,75 @@
+id: flamenco_progressive
+title: "Flamenco: Progressive Path (Foundations to Advanced)"
+category: progressive_path
+tags: [flamenco, progressive, curriculum]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Andalusian Cadence Study - iv-III-II-I in A Phrygian"
+    file: "programs/andalusian_Am.ztprog"
+    repeats: 3
+    notes: "Root awareness through iv-III-II-I cadence (Am-G-F-E)"
+
+  - name: "Solea Etude - 2-Compas Falseta in E Phrygian"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 3
+    notes: "Accent placement on beats 3, 6, 10 within 12-beat cycle"
+
+  - name: "Tientos - Slow Expressive Phrygian Study"
+    file: "exercises/flamenco/tientos_E_phrygian.ztprog"
+    repeats: 3
+    notes: "Slow-tempo phrasing, natural Phrygian (NOT Dominant), ornamental dynamics"
+
+  - name: "Tientos Etude - Expressive Falseta at 68 BPM"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 3
+    notes: "Long-tone phrasing, behind-the-beat feel, bII-I gravity"
+
+  - name: "Tangos - A Phrygian Dominant Study"
+    file: "exercises/flamenco/tangos_A_phrygian_dom.ztprog"
+    repeats: 3
+    notes: "Melodic targets (b2, 3, b7), technique focus (legato, bends)"
+
+  - name: "Tangos Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/tangos_phrygian_loop.ztprog"
+    repeats: 3
+    notes: "Rhythmic phrasing with bII-I resolution, accent displacement"
+
+  - name: "Rumba Flamenca - A Phrygian Dominant Party Etude"
+    file: "exercises/flamenco/rumba_A_phrygian_dom.ztprog"
+    repeats: 3
+    notes: "Rasgueado patterns, Latin-influenced rhythmic drive"
+
+  - name: "Rumba Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 3
+    notes: "Festive phrasing with bII resolution, rhythmic placement"
+
+  - name: "Bulerias Etude - Syncopated 12-Beat Falseta"
+    file: "exercises/flamenco/bulerias_compas_loop.ztprog"
+    repeats: 3
+    notes: "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10"
+
+  - name: "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)"
+    file: "exercises/flamenco/fandango_E_phrygian_dom.ztprog"
+    repeats: 3
+    notes: "G vs G# modal switching, waltz-feel phrasing in 3/4"
+
+  - name: "Malaguena Etude - Intro Falseta (Free Meter)"
+    file: "exercises/flamenco/malaguena_backing.ztprog"
+    repeats: 3
+    notes: "Rubato phrasing, expressive descending lines, G/G# modal contrast"
+
+  - name: "Zambra - C# Phrygian Dominant Study (Moorish)"
+    file: "exercises/flamenco/zambra_Cs_phrygian_dom.ztprog"
+    repeats: 3
+    notes: "Augmented 2nd interval (D-E#), Moorish modal color"
+
+  - name: "Zambra Etude - Rubato Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 3
+    notes: "Rubato melodic phrasing, long-tone control, modal tension"
+

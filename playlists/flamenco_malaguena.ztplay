@@ -1,0 +1,15 @@
+id: flamenco_malaguena
+title: "Flamenco: Malaguena Session"
+category: palo_session
+tags: [flamenco, malaguena, phrygian_mixed]
+
+defaults:
+  tempo: 58
+  style: flamenco
+
+items:
+  - name: "Malaguena Etude - Intro Falseta (Free Meter)"
+    file: "exercises/flamenco/malaguena_backing.ztprog"
+    repeats: 2
+    notes: "Rubato phrasing, expressive descending lines, G/G# modal contrast"
+

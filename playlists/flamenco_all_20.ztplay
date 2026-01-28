@@ -1,0 +1,105 @@
+id: flamenco_all_20
+title: "Flamenco: Complete 20-Exercise Session"
+category: complete_session
+tags: [flamenco, complete, all_palos]
+
+defaults:
+  tempo: 80
+  style: flamenco
+
+items:
+  - name: "Andalusian Cadence Study - iv-III-II-I in A Phrygian"
+    file: "programs/andalusian_Am.ztprog"
+    repeats: 1
+    notes: "Root awareness through iv-III-II-I cadence (Am-G-F-E)"
+
+  - name: "Solea Etude - 2-Compas Falseta in E Phrygian"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 1
+    notes: "Accent placement on beats 3, 6, 10 within 12-beat cycle"
+
+  - name: "Solea Etude - Full Falseta with A/B Sections"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 1
+    notes: "Dynamic contrast between A (flowing) and B (rhythmic/accented) sections"
+
+  - name: "Solea Etude - Variation with Ornamentation"
+    file: "exercises/flamenco/solea_compas_loop.ztprog"
+    repeats: 1
+    notes: "Ornamentation and variation development on falseta theme"
+
+  - name: "Bulerias Etude - Syncopated 12-Beat Falseta"
+    file: "exercises/flamenco/bulerias_compas_loop.ztprog"
+    repeats: 1
+    notes: "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10"
+
+  - name: "Tangos - A Phrygian Dominant Study"
+    file: "exercises/flamenco/tangos_A_phrygian_dom.ztprog"
+    repeats: 1
+    notes: "Melodic targets (b2, 3, b7), technique focus (legato, bends)"
+
+  - name: "Tangos Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/tangos_phrygian_loop.ztprog"
+    repeats: 1
+    notes: "Rhythmic phrasing with bII-I resolution, accent displacement"
+
+  - name: "Tangos Etude - Variation Development in E"
+    file: "exercises/flamenco/tangos_phrygian_loop.ztprog"
+    repeats: 1
+    notes: "Variation building on etude phrase, rhythmic contrast"
+
+  - name: "Tientos - Slow Expressive Phrygian Study"
+    file: "exercises/flamenco/tientos_E_phrygian.ztprog"
+    repeats: 1
+    notes: "Slow-tempo phrasing, natural Phrygian (NOT Dominant), ornamental dynamics"
+
+  - name: "Tientos Etude - Expressive Falseta at 68 BPM"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 1
+    notes: "Long-tone phrasing, behind-the-beat feel, bII-I gravity"
+
+  - name: "Tientos Etude - Variation with Descent"
+    file: "exercises/flamenco/tientos_groove_loop.ztprog"
+    repeats: 1
+    notes: "Descending line variation, target resolution notes"
+
+  - name: "Rumba Flamenca - A Phrygian Dominant Party Etude"
+    file: "exercises/flamenco/rumba_A_phrygian_dom.ztprog"
+    repeats: 1
+    notes: "Rasgueado patterns, Latin-influenced rhythmic drive"
+
+  - name: "Rumba Etude - Phrygian Dominant Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 1
+    notes: "Festive phrasing with bII resolution, rhythmic placement"
+
+  - name: "Rumba Etude - Variation Phrase in E"
+    file: "exercises/flamenco/rumba_phrygian_loop.ztprog"
+    repeats: 1
+    notes: "Variation on rumba etude, dynamic contrast"
+
+  - name: "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)"
+    file: "exercises/flamenco/fandango_E_phrygian_dom.ztprog"
+    repeats: 1
+    notes: "G vs G# modal switching, waltz-feel phrasing in 3/4"
+
+  - name: "Malaguena Etude - Intro Falseta (Free Meter)"
+    file: "exercises/flamenco/malaguena_backing.ztprog"
+    repeats: 1
+    notes: "Rubato phrasing, expressive descending lines, G/G# modal contrast"
+
+  - name: "Zambra - C# Phrygian Dominant Study (Moorish)"
+    file: "exercises/flamenco/zambra_Cs_phrygian_dom.ztprog"
+    repeats: 1
+    notes: "Augmented 2nd interval (D-E#), Moorish modal color"
+
+  - name: "Zambra Etude - Rubato Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 1
+    notes: "Rubato melodic phrasing, long-tone control, modal tension"
+
+  - name: "Zambra Etude - Variation Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 1
+    notes: "Melodic contrast, chromatic figures, dynamic descent"
+

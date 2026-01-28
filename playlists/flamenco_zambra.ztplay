@@ -1,0 +1,25 @@
+id: flamenco_zambra
+title: "Flamenco: Zambra Session"
+category: palo_session
+tags: [flamenco, zambra, phrygian_dominant]
+
+defaults:
+  tempo: 33
+  style: flamenco
+
+items:
+  - name: "Zambra - C# Phrygian Dominant Study (Moorish)"
+    file: "exercises/flamenco/zambra_Cs_phrygian_dom.ztprog"
+    repeats: 2
+    notes: "Augmented 2nd interval (D-E#), Moorish modal color"
+
+  - name: "Zambra Etude - Rubato Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 2
+    notes: "Rubato melodic phrasing, long-tone control, modal tension"
+
+  - name: "Zambra Etude - Variation Phrase in D Phrygian Dominant"
+    file: "exercises/flamenco/zambra_groove_loop.ztprog"
+    repeats: 2
+    notes: "Melodic contrast, chromatic figures, dynamic descent"
+
