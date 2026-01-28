@@ -2,20 +2,20 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://zone-tritone.dev/schemas/ztplay.schema.json",
   "title": "Zone-Tritone Playlist (.ztplay)",
-  "description": "Schema for Zone-Tritone playlist files that sequence multiple programs for extended practice sessions.",
+  "description": "Schema for Zone-Tritone playlist files that sequence multiple programs for extended practice sessions. Two variants: simple (name + programs) and session (id + title + items).",
   "type": "object",
   "oneOf": [
     {
       "$ref": "#/definitions/simplePlaylist"
     },
     {
-      "$ref": "#/definitions/comparisonPlaylist"
+      "$ref": "#/definitions/sessionPlaylist"
     }
   ],
   "definitions": {
     "simplePlaylist": {
       "type": "object",
-      "description": "Simple playlist with program sequence.",
+      "description": "Simple playlist with program sequence. Uses 'name' + 'programs'.",
       "required": ["name", "programs"],
       "properties": {
         "name": {
@@ -44,9 +44,9 @@
       },
       "additionalProperties": false
     },
-    "comparisonPlaylist": {
+    "sessionPlaylist": {
       "type": "object",
-      "description": "Comparison playlist for A/B testing different configurations.",
+      "description": "Session playlist with named items, tags, and defaults. Uses 'id' + 'title' + 'items'.",
       "required": ["id", "title", "items"],
       "properties": {
         "id": {
@@ -63,11 +63,37 @@
         },
         "category": {
           "type": "string",
-          "description": "Playlist category (e.g., 'groove', 'comparison')."
+          "description": "Playlist category (e.g., 'archetype_session', 'twelve_key_cycle')."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Searchable tags for categorization.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "defaults": {
+          "type": "object",
+          "description": "Default settings applied to all items.",
+          "properties": {
+            "tempo": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 400
+            },
+            "bars_per_chord": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "style": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
         },
         "items": {
           "type": "array",
-          "description": "Named items for comparison.",
+          "description": "Named items in this session playlist.",
           "items": {
             "$ref": "#/definitions/playlistItem"
           },
@@ -83,20 +109,24 @@
       "properties": {
         "config": {
           "type": "string",
-          "description": "Relative path to .ztprog file."
+          "description": "Relative path to .ztprog or .ztex file."
         },
         "repeat": {
           "type": "integer",
           "description": "Number of times to repeat this program.",
           "minimum": 1,
           "default": 1
+        },
+        "notes": {
+          "type": "string",
+          "description": "Practice notes or context for this program in the session."
         }
       },
       "additionalProperties": false
     },
     "playlistItem": {
       "type": "object",
-      "description": "Named playlist item for comparison playlists.",
+      "description": "Named playlist item for session playlists.",
       "required": ["name", "file"],
       "properties": {
         "name": {
@@ -112,6 +142,10 @@
           "description": "Number of times to repeat this item.",
           "minimum": 1,
           "default": 1
+        },
+        "notes": {
+          "type": "string",
+          "description": "Practice notes or context for this item in the session."
         }
       },
       "additionalProperties": false

@@ -2,29 +2,48 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://zone-tritone.dev/schemas/ztprog.schema.json",
   "title": "Zone-Tritone Program (.ztprog)",
-  "description": "Schema for Zone-Tritone program configuration files defining chord progressions, styles, and MIDI output settings.",
+  "description": "Schema for Zone-Tritone program configuration files defining chord progressions, styles, and MIDI output settings. Supports standard backings (name + chords), extended study programs (id + title + instruments), and all variants in between.",
   "type": "object",
-  "required": ["name", "chords", "tempo", "bars_per_chord", "outfile"],
+  "anyOf": [
+    { "required": ["name"] },
+    { "required": ["id"] }
+  ],
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for this program."
+    },
     "name": {
       "type": "string",
       "description": "Human-readable name for this program."
     },
+    "title": {
+      "type": "string",
+      "description": "Display title for this program."
+    },
     "chords": {
-      "type": "array",
-      "description": "Array of chord symbols in standard notation (e.g., 'Cm7', 'G7', 'Dmaj7').",
-      "items": {
-        "type": "string",
-        "pattern": "^[A-G][#b]?(maj|min|m|dim|aug|sus[24]?)?[0-9]*(b5|#5|b9|#9|b11|#11|b13|#13)*(/[A-G][#b]?)?$"
-      },
-      "minItems": 1
+      "description": "Chord symbols: either a space-separated string or an array of chord symbols.",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "Space-separated chord symbols (e.g., 'C7 F7 C7 G7')."
+        },
+        {
+          "type": "array",
+          "description": "Array of chord symbols in standard notation.",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      ]
     },
     "style": {
       "description": "Either a style preset name (string) or an object with detailed style settings.",
       "oneOf": [
         {
           "type": "string",
-          "description": "Name of a built-in style preset (e.g., 'bossa_basic', 'swing')."
+          "description": "Name of a built-in style preset (e.g., 'swing_basic', 'bossa_basic')."
         },
         {
           "type": "object",
@@ -38,76 +57,60 @@
               "type": "string",
               "description": "Comping style preset name."
             },
+            "bass": {
+              "type": "string",
+              "description": "Bass line style preset name."
+            },
             "swing_ratio": {
               "type": "number",
-              "description": "Swing ratio (0.0 = straight, 0.5 = triplet swing, 1.0 = max swing).",
               "minimum": 0.0,
               "maximum": 1.0
             },
             "bar_steps": {
               "type": "integer",
-              "description": "Number of subdivision steps per bar (e.g., 16 for sixteenth notes in 4/4).",
               "minimum": 4,
               "maximum": 64
             },
             "ghost_hits": {
               "type": "object",
-              "description": "Ghost note configuration for Brazilian feel.",
               "properties": {
-                "enabled": {
-                  "type": "boolean",
-                  "description": "Enable ghost hit generation."
-                },
-                "vel": {
-                  "type": "integer",
-                  "description": "Velocity for ghost hits (0-127).",
-                  "minimum": 0,
-                  "maximum": 127
-                },
-                "steps": {
-                  "type": "array",
-                  "description": "Step positions for ghost hits (0-indexed within bar).",
-                  "items": {
-                    "type": "integer",
-                    "minimum": 0
-                  }
-                }
+                "enabled": { "type": "boolean" },
+                "vel": { "type": "integer", "minimum": 0, "maximum": 127 },
+                "steps": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
               }
             },
             "vel_contour": {
               "type": "object",
-              "description": "Velocity contouring/shaping configuration.",
               "properties": {
-                "enabled": {
-                  "type": "boolean",
-                  "description": "Enable velocity contouring."
-                },
-                "preset": {
-                  "type": "string",
-                  "description": "Velocity contour preset name (e.g., 'brazil_samba')."
-                }
+                "enabled": { "type": "boolean" },
+                "preset": { "type": "string" }
               }
             },
-            "pickup_beat": {
-              "type": "number",
-              "description": "Beat position for pickup note before bar 1.",
-              "minimum": 0.0
-            },
-            "pickup_vel": {
-              "type": "integer",
-              "description": "Velocity for pickup note (0-127).",
-              "minimum": 0,
-              "maximum": 127
-            }
-          }
+            "pickup_beat": { "type": "number", "minimum": 0.0 },
+            "pickup_vel": { "type": "integer", "minimum": 0, "maximum": 127 }
+          },
+          "additionalProperties": true
         }
       ]
     },
-    "tempo": {
+    "tempo_bpm": {
       "type": "number",
       "description": "Tempo in beats per minute (BPM).",
       "minimum": 20,
       "maximum": 400
+    },
+    "tempo": {
+      "type": "number",
+      "description": "Tempo in BPM (legacy alias for tempo_bpm).",
+      "minimum": 20,
+      "maximum": 400
+    },
+    "tempo_range": {
+      "description": "Min/max tempo range for difficulty scaling.",
+      "type": "array",
+      "items": { "type": "number", "minimum": 0, "maximum": 400 },
+      "minItems": 2,
+      "maxItems": 2
     },
     "time_signature": {
       "type": "string",
@@ -124,8 +127,7 @@
     "tritone_mode": {
       "type": "string",
       "description": "How tritone substitutions are applied.",
-      "enum": ["off", "probabilistic", "deterministic"],
-      "default": "off"
+      "enum": ["off", "none", "probabilistic", "deterministic", "all_doms"]
     },
     "tritone_strength": {
       "type": "number",
@@ -134,14 +136,83 @@
       "maximum": 1.0
     },
     "tritone_seed": {
-      "type": "integer",
-      "description": "Random seed for reproducible tritone substitution patterns."
+      "description": "Random seed for reproducible tritone substitution patterns.",
+      "oneOf": [
+        { "type": "integer" },
+        { "type": "null" }
+      ]
     },
     "outfile": {
       "type": "string",
       "description": "Output MIDI filename.",
       "pattern": "^.+\\.mid$"
+    },
+    "levels": {
+      "type": "object",
+      "description": "Difficulty levels with tempo and comping overrides.",
+      "properties": {
+        "beginner": { "$ref": "#/definitions/levelSpec" },
+        "intermediate": { "$ref": "#/definitions/levelSpec" },
+        "advanced": { "$ref": "#/definitions/levelSpec" }
+      },
+      "additionalProperties": { "$ref": "#/definitions/levelSpec" }
+    },
+    "notes": {
+      "type": "array",
+      "description": "Free-form notes about this program.",
+      "items": { "type": "string" }
+    },
+    "tags": {
+      "description": "Searchable tags.",
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "object", "additionalProperties": true }
+      ]
+    },
+    "root": {
+      "type": "string",
+      "description": "Root key for the program (e.g., 'G', 'Am')."
+    },
+    "loop_bars": {
+      "type": "integer",
+      "description": "Number of bars in the loop.",
+      "minimum": 1
+    },
+    "instruments": {
+      "type": "array",
+      "description": "Instrument configuration for study programs.",
+      "items": { "$ref": "#/definitions/instrumentSpec" }
     }
   },
-  "additionalProperties": false
+  "additionalProperties": true,
+  "definitions": {
+    "levelSpec": {
+      "type": "object",
+      "description": "Difficulty level settings.",
+      "properties": {
+        "tempo_bpm": {
+          "type": "number",
+          "minimum": 20,
+          "maximum": 400
+        },
+        "comping": {
+          "type": "string",
+          "description": "Comping pattern for this level."
+        }
+      },
+      "additionalProperties": true
+    },
+    "instrumentSpec": {
+      "type": "object",
+      "description": "Instrument definition for study programs.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Instrument type (e.g., 'drum_kit', 'shell_voicings', 'walking_bass')."
+        }
+      },
+      "required": ["type"],
+      "additionalProperties": true
+    }
+  }
 }
