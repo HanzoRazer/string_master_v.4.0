@@ -1,0 +1,60 @@
+id: blues_motives_12key_cycle_rock_blues_hybrid
+title: "12-Key Cycle: Rock-Blues Hybrid"
+category: twelve_key_cycle
+tags: [barrett_40, blues, rock_blues_hybrid, 12key_cycle]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  # Minor keys — Intro 15 (Easy)
+  - name: "Intro 15 in Cm"
+    file: "programs/blues_motives/blues_12bar_Cm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in C#m"
+    file: "programs/blues_motives/blues_12bar_C#m.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Dm"
+    file: "programs/blues_motives/blues_12bar_Dm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Ebm"
+    file: "programs/blues_motives/blues_12bar_Ebm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Em"
+    file: "programs/blues_motives/blues_12bar_Em.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Fm"
+    file: "programs/blues_motives/blues_12bar_Fm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in F#m"
+    file: "programs/blues_motives/blues_12bar_F#m.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Gm"
+    file: "programs/blues_motives/blues_12bar_Gm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Abm"
+    file: "programs/blues_motives/blues_12bar_Abm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Am"
+    file: "programs/blues_motives/blues_12bar_Am.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Bbm"
+    file: "programs/blues_motives/blues_12bar_Bbm.ztprog"
+    repeats: 2
+
+  - name: "Intro 15 in Bm"
+    file: "programs/blues_motives/blues_12bar_Bm.ztprog"
+    repeats: 2
+

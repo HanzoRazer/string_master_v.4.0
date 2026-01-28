@@ -1,0 +1,34 @@
+id: intro_12_d
+title: "Barrett Intro 12: Pentatonic Lead (D, from E)"
+program_ref: ../../../programs/blues_motives/blues_12bar_D.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Phrase pentatonic lines with rhythmic variety"
+  - "Target chord tones on strong beats"
+  - "Transpose from native key E — same shapes, new position"
+  - "Primary technique focus: Bend Quarter"
+
+practice_steps:
+  - "Play at slow tempo, isolating each quarter-tone bend"
+  - "Quarter-tone target is BETWEEN frets — use your ear, not a tuner"
+  - "Practice the 'blues curl': push just enough to blur the zone boundary"
+
+tags:
+  archetype: PENTATONIC_LEAD
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: intro
+  key: D
+  native_key: E
+  source: Barrett_40_Motives
+  pack: 12key
+  articulation_model: bend_quarter
+
+assessment:
+  what_to_measure:
+    - quarter_tone_pitch_accuracy
+    - timing_consistency_ms
+  pass_criteria:
+    quarter_tone_deviation_cents: 10
+    max_timing_deviation_ms: 35

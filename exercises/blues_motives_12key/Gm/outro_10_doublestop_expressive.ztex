@@ -1,0 +1,30 @@
+id: outro_10_gm
+title: "Barrett Outro 10: Double-Stop Expressive (Gm)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Gm.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Execute double-stops with parallel voice motion"
+  - "Control bend pitch when two strings move together"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: DOUBLESTOP_EXPRESSIVE
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: outro
+  key: Gm
+  native_key: Gm
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

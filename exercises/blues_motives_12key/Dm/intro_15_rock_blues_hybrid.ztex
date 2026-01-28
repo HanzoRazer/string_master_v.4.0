@@ -1,0 +1,31 @@
+id: intro_15_dm
+title: "Barrett Intro 15: Rock-Blues Hybrid (Dm, from Cm)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Dm.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Drive the rhythm with rock-influenced attack and energy"
+  - "Keep the straight-four feel tight and punchy"
+  - "Transpose from native key Cm — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: ROCK_BLUES_HYBRID
+  gravity: static
+  difficulty: easy
+  phrase_type: intro
+  key: Dm
+  native_key: Cm
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

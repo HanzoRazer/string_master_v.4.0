@@ -1,0 +1,30 @@
+id: intro_18_a
+title: "Barrett Intro 18: Double-Stop Expressive (A)"
+program_ref: ../../../programs/blues_motives/blues_12bar_A.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Execute double-stops with parallel voice motion"
+  - "Control bend pitch when two strings move together"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: DOUBLESTOP_EXPRESSIVE
+  gravity: static
+  difficulty: advanced
+  phrase_type: intro
+  key: A
+  native_key: A
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

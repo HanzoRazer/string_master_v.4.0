@@ -1,0 +1,31 @@
+id: intro_19_eb
+title: "Barrett Intro 19: Chordal Color (Eb, from C)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Eb.ztprog
+exercise_type: voicing_memory
+
+goals:
+  - "Memorize extended voicing shapes (9ths, 13ths, #9)"
+  - "Voice-lead smoothly between color chords"
+  - "Transpose from native key C — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: CHORDAL_COLOR
+  gravity: front_door
+  difficulty: easy
+  phrase_type: intro
+  key: Eb
+  native_key: C
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

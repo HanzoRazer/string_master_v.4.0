@@ -1,0 +1,31 @@
+id: outro_12_f
+title: "Barrett Outro 12: Pentatonic Lead (F, from E)"
+program_ref: ../../../programs/blues_motives/blues_12bar_F.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Phrase pentatonic lines with rhythmic variety"
+  - "Target chord tones on strong beats"
+  - "Transpose from native key E — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: PENTATONIC_LEAD
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: outro
+  key: F
+  native_key: E
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

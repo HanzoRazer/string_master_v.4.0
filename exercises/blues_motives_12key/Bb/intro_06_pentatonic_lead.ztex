@@ -1,0 +1,31 @@
+id: intro_06_bb
+title: "Barrett Intro 06: Pentatonic Lead (Bb, from A)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Bb.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Phrase pentatonic lines with rhythmic variety"
+  - "Target chord tones on strong beats"
+  - "Transpose from native key A — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: PENTATONIC_LEAD
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: intro
+  key: Bb
+  native_key: A
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

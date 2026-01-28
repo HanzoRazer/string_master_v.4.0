@@ -1,0 +1,35 @@
+id: outro_20_b
+title: "Barrett Outro 20: Double-Stop Expressive (B, from C)"
+program_ref: ../../../programs/blues_motives/blues_12bar_B.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Execute double-stops with parallel voice motion"
+  - "Control bend pitch when two strings move together"
+  - "Transpose from native key C — same shapes, new position"
+  - "Primary technique focus: Bend Vibrato"
+
+practice_steps:
+  - "Play at slow tempo, nailing bend targets first"
+  - "Add vibrato only after the bend reaches pitch"
+  - "Vibrato should oscillate evenly — time it to the pulse"
+
+tags:
+  archetype: DOUBLESTOP_EXPRESSIVE
+  gravity: expressive
+  difficulty: advanced
+  phrase_type: outro
+  key: B
+  native_key: C
+  source: Barrett_40_Motives
+  pack: 12key
+  articulation_model: bend_vibrato
+
+assessment:
+  what_to_measure:
+    - bend_pitch_accuracy
+    - vibrato_evenness
+    - timing_consistency_ms
+  pass_criteria:
+    bend_pitch_deviation_cents: 15
+    max_timing_deviation_ms: 35

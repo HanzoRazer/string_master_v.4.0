@@ -1,0 +1,31 @@
+id: intro_14_f
+title: "Barrett Intro 14: Descending Line Turnaround (F, from Bb)"
+program_ref: ../../../programs/blues_motives/blues_12bar_F.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Execute descending chromatic/diatonic line with even timing"
+  - "Feel the zone-crossing gravity as each half-step pulls toward resolution"
+  - "Transpose from native key Bb — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: DESC_LINE_TURNAROUND
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: intro
+  key: F
+  native_key: Bb
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

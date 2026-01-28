@@ -1,0 +1,34 @@
+id: outro_14_eb
+title: "Barrett Outro 14: Pentatonic Lead (Eb, from Bb)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Eb.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Phrase pentatonic lines with rhythmic variety"
+  - "Target chord tones on strong beats"
+  - "Transpose from native key Bb — same shapes, new position"
+  - "Primary technique focus: Bend"
+
+practice_steps:
+  - "Play at slow tempo, isolating each bend"
+  - "Check bend pitch against fretted reference note"
+  - "Gradually increase tempo while maintaining pitch accuracy"
+
+tags:
+  archetype: PENTATONIC_LEAD
+  gravity: expressive
+  difficulty: advanced
+  phrase_type: outro
+  key: Eb
+  native_key: Bb
+  source: Barrett_40_Motives
+  pack: 12key
+  articulation_model: bend
+
+assessment:
+  what_to_measure:
+    - bend_pitch_accuracy
+    - timing_consistency_ms
+  pass_criteria:
+    bend_pitch_deviation_cents: 15
+    max_timing_deviation_ms: 35

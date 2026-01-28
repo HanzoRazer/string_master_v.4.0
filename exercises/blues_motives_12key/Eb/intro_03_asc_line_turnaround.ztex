@@ -1,0 +1,31 @@
+id: intro_03_eb
+title: "Barrett Intro 03: Ascending Line Turnaround (Eb, from G)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Eb.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Walk the ascending bass line with rhythmic precision"
+  - "Build energy toward the V chord arrival"
+  - "Transpose from native key G — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: ASC_LINE_TURNAROUND
+  gravity: front_door
+  difficulty: easy
+  phrase_type: intro
+  key: Eb
+  native_key: G
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

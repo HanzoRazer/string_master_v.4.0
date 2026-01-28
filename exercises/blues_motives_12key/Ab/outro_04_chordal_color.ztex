@@ -1,0 +1,34 @@
+id: outro_04_ab
+title: "Barrett Outro 04: Chordal Color (Ab, from G)"
+program_ref: ../../../programs/blues_motives/blues_12bar_Ab.ztprog
+exercise_type: voicing_memory
+
+goals:
+  - "Memorize extended voicing shapes (9ths, 13ths, #9)"
+  - "Voice-lead smoothly between color chords"
+  - "Transpose from native key G — same shapes, new position"
+  - "Primary technique focus: Fingerstyle"
+
+practice_steps:
+  - "Practice thumb-and-fingers plucking on isolated chords"
+  - "All notes in a chord should sound simultaneously"
+  - "Work for even dynamics across all plucked strings"
+
+tags:
+  archetype: CHORDAL_COLOR
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: outro
+  key: Ab
+  native_key: G
+  source: Barrett_40_Motives
+  pack: 12key
+  articulation_model: fingerstyle
+
+assessment:
+  what_to_measure:
+    - note_separation_ms
+    - timing_consistency_ms
+    - dynamic_evenness
+  pass_criteria:
+    max_timing_deviation_ms: 30

@@ -1,0 +1,60 @@
+id: blues_motives_12key_cycle_asc_line_turnaround
+title: "12-Key Cycle: Ascending Line Turnaround"
+category: twelve_key_cycle
+tags: [barrett_40, blues, asc_line_turnaround, 12key_cycle]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  # Major keys — Intro 03 (Easy)
+  - name: "Intro 03 in C"
+    file: "programs/blues_motives/blues_12bar_C.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in Db"
+    file: "programs/blues_motives/blues_12bar_Db.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in D"
+    file: "programs/blues_motives/blues_12bar_D.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in Eb"
+    file: "programs/blues_motives/blues_12bar_Eb.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in E"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in F"
+    file: "programs/blues_motives/blues_12bar_F.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in Gb"
+    file: "programs/blues_motives/blues_12bar_Gb.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in G"
+    file: "programs/blues_motives/blues_12bar_G.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in Ab"
+    file: "programs/blues_motives/blues_12bar_Ab.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in A"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in Bb"
+    file: "programs/blues_motives/blues_12bar_Bb.ztprog"
+    repeats: 2
+
+  - name: "Intro 03 in B"
+    file: "programs/blues_motives/blues_12bar_B.ztprog"
+    repeats: 2
+

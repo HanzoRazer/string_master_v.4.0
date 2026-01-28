@@ -1,0 +1,60 @@
+id: blues_motives_12key_cycle_static_riff
+title: "12-Key Cycle: Static Riff"
+category: twelve_key_cycle
+tags: [barrett_40, blues, static_riff, 12key_cycle]
+
+defaults:
+  tempo: 80
+  bars_per_chord: 1
+  style: swing_basic
+
+items:
+  # Major keys — Intro 07 (Easy)
+  - name: "Intro 07 in C"
+    file: "programs/blues_motives/blues_12bar_C.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in Db"
+    file: "programs/blues_motives/blues_12bar_Db.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in D"
+    file: "programs/blues_motives/blues_12bar_D.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in Eb"
+    file: "programs/blues_motives/blues_12bar_Eb.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in E"
+    file: "programs/blues_motives/blues_12bar_E.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in F"
+    file: "programs/blues_motives/blues_12bar_F.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in Gb"
+    file: "programs/blues_motives/blues_12bar_Gb.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in G"
+    file: "programs/blues_motives/blues_12bar_G.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in Ab"
+    file: "programs/blues_motives/blues_12bar_Ab.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in A"
+    file: "programs/blues_motives/blues_12bar_A.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in Bb"
+    file: "programs/blues_motives/blues_12bar_Bb.ztprog"
+    repeats: 2
+
+  - name: "Intro 07 in B"
+    file: "programs/blues_motives/blues_12bar_B.ztprog"
+    repeats: 2
+

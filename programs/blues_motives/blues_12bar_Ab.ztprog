@@ -1,0 +1,20 @@
+name: "12-Bar Ab Blues (Barrett Motives)"
+chords: Ab7 Ab7 Ab7 Ab7 Db7 Db7 Ab7 Ab7 Eb7 Db7 Ab7 Eb7
+style: swing_basic
+bars_per_chord: 1
+tritone_mode: none
+outfile: blues_12bar_Ab_backing.mid
+tempo_bpm: 80
+tempo_range:
+- 52
+- 140
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 80
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 140
+    comping: syncopated

@@ -1,0 +1,30 @@
+id: outro_07_e
+title: "Barrett Outro 07: Descending Line Turnaround (E)"
+program_ref: ../../../programs/blues_motives/blues_12bar_E.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Execute descending chromatic/diatonic line with even timing"
+  - "Feel the zone-crossing gravity as each half-step pulls toward resolution"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: DESC_LINE_TURNAROUND
+  gravity: front_door
+  difficulty: easy
+  phrase_type: outro
+  key: E
+  native_key: E
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

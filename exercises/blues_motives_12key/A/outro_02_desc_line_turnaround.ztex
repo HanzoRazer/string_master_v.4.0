@@ -1,0 +1,34 @@
+id: outro_02_a
+title: "Barrett Outro 02: Descending Line Turnaround (A, from E)"
+program_ref: ../../../programs/blues_motives/blues_12bar_A.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Execute descending chromatic/diatonic line with even timing"
+  - "Feel the zone-crossing gravity as each half-step pulls toward resolution"
+  - "Transpose from native key E — same shapes, new position"
+  - "Primary technique focus: Fingerstyle"
+
+practice_steps:
+  - "Practice thumb-and-fingers plucking on isolated chords"
+  - "All notes in a chord should sound simultaneously"
+  - "Work for even dynamics across all plucked strings"
+
+tags:
+  archetype: DESC_LINE_TURNAROUND
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: outro
+  key: A
+  native_key: E
+  source: Barrett_40_Motives
+  pack: 12key
+  articulation_model: fingerstyle
+
+assessment:
+  what_to_measure:
+    - note_separation_ms
+    - timing_consistency_ms
+    - dynamic_evenness
+  pass_criteria:
+    max_timing_deviation_ms: 30

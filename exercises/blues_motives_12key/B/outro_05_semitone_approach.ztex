@@ -1,0 +1,32 @@
+id: outro_05_b
+title: "Barrett Outro 05: Semitone Approach (B, from A)"
+program_ref: ../../../programs/blues_motives/blues_12bar_B.ztprog
+exercise_type: phrase_accuracy
+
+goals:
+  - "Land the bII-to-I semitone resolution with conviction"
+  - "Feel the maximum zone-crossing gravity of the half-step cadence"
+  - "Transpose from native key A — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: SEMITONE_APPROACH
+  gravity: semitone
+  difficulty: easy
+  phrase_type: outro
+  key: B
+  native_key: A
+  source: Barrett_40_Motives
+  pack: 12key
+  gravity_secondary: front_door
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

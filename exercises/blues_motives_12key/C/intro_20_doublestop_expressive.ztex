@@ -1,0 +1,33 @@
+id: intro_20_c
+title: "Barrett Intro 20: Double-Stop Expressive (C)"
+program_ref: ../../../programs/blues_motives/blues_12bar_C.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Execute double-stops with parallel voice motion"
+  - "Control bend pitch when two strings move together"
+  - "Primary technique focus: Bend Quarter"
+
+practice_steps:
+  - "Play at slow tempo, isolating each quarter-tone bend"
+  - "Quarter-tone target is BETWEEN frets — use your ear, not a tuner"
+  - "Practice the 'blues curl': push just enough to blur the zone boundary"
+
+tags:
+  archetype: DOUBLESTOP_EXPRESSIVE
+  gravity: front_door
+  difficulty: advanced
+  phrase_type: intro
+  key: C
+  native_key: C
+  source: Barrett_40_Motives
+  pack: 12key
+  articulation_model: bend_quarter
+
+assessment:
+  what_to_measure:
+    - quarter_tone_pitch_accuracy
+    - timing_consistency_ms
+  pass_criteria:
+    quarter_tone_deviation_cents: 10
+    max_timing_deviation_ms: 35

@@ -1,0 +1,31 @@
+id: intro_10_csm
+title: "Barrett Intro 10: Expressive Minimal (C#m, from Gm)"
+program_ref: ../../../programs/blues_motives/blues_12bar_C#m.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Wring maximum emotion from minimum notes"
+  - "Focus on bend accuracy, vibrato evenness, and dynamic control"
+  - "Transpose from native key Gm — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: EXPRESSIVE_MINIMAL
+  gravity: expressive
+  difficulty: advanced
+  phrase_type: intro
+  key: C#m
+  native_key: Gm
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

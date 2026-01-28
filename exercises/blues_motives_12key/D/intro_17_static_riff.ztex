@@ -1,0 +1,31 @@
+id: intro_17_d
+title: "Barrett Intro 17: Static Riff (D, from A)"
+program_ref: ../../../programs/blues_motives/blues_12bar_D.ztprog
+exercise_type: lead_phrase
+
+goals:
+  - "Lock the riff into a steady groove without rushing"
+  - "Build rhythmic intensity without harmonic motion"
+  - "Transpose from native key A — same shapes, new position"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: STATIC_RIFF
+  gravity: static
+  difficulty: easy
+  phrase_type: intro
+  key: D
+  native_key: A
+  source: Barrett_40_Motives
+  pack: 12key
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

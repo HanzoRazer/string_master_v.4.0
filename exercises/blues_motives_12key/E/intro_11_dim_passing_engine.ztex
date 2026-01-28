@@ -1,0 +1,31 @@
+id: intro_11_e
+title: "Barrett Intro 11: Diminished Passing Engine (E)"
+program_ref: ../../../programs/blues_motives/blues_12bar_E.ztprog
+exercise_type: voicing_memory
+
+goals:
+  - "Voice the diminished passing chord cleanly between dominants"
+  - "Hear how the diminished bridges two tritone axes"
+
+practice_steps:
+  - "Play at slow tempo (beginner level)"
+  - "Loop 4 times, then increase tempo"
+  - "Focus on phrasing and articulation"
+
+tags:
+  archetype: DIM_PASSING_ENGINE
+  gravity: front_door
+  difficulty: easy
+  phrase_type: intro
+  key: E
+  native_key: E
+  source: Barrett_40_Motives
+  pack: 12key
+  gravity_secondary: dim_chromatic
+
+assessment:
+  what_to_measure:
+    - timing_consistency_ms
+    - phrase_length_control
+  pass_criteria:
+    max_timing_deviation_ms: 35

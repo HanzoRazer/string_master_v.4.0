@@ -1,0 +1,20 @@
+name: "12-Bar Fm Minor Blues (Barrett Motives)"
+chords: Fm7 Fm7 Fm7 Fm7 Bbm7 Bbm7 Fm7 Fm7 Cm7 Bbm7 Fm7 Cm7
+style: swing_basic
+bars_per_chord: 1
+tritone_mode: none
+outfile: blues_12bar_Fm_backing.mid
+tempo_bpm: 72
+tempo_range:
+- 52
+- 140
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 140
+    comping: syncopated

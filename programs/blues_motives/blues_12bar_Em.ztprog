@@ -1,0 +1,20 @@
+name: "12-Bar Em Minor Blues (Barrett Motives)"
+chords: Em7 Em7 Em7 Em7 Am7 Am7 Em7 Em7 Bm7 Am7 Em7 Bm7
+style: swing_basic
+bars_per_chord: 1
+tritone_mode: none
+outfile: blues_12bar_Em_backing.mid
+tempo_bpm: 72
+tempo_range:
+- 52
+- 140
+levels:
+  beginner:
+    tempo_bpm: 52
+    comping: whole_notes
+  intermediate:
+    tempo_bpm: 72
+    comping: rhythmic
+  advanced:
+    tempo_bpm: 140
+    comping: syncopated
