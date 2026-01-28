@@ -144,6 +144,35 @@ MANUAL_GRAVITY = {
 }
 
 
+# ── Phase 4: Articulation Model ──
+# articulation_model = set ONLY when Barrett explicitly makes the technique
+# the practice objective ("are crucial", "are the key", "all important",
+# "strictest attention", "importance of", "milks", "absorb the details").
+# Everything else detected in text becomes articulation_tags (secondary).
+#
+# Values: bend, bend_quarter, bend_vibrato, fingerstyle, or None.
+
+MANUAL_ARTICULATION_MODEL = {
+    # ── Intros ──
+    # intro_01..08: no technique flagged as THE learning target
+    ("Intro",  9): "bend_vibrato",    # "bends and vibrato. These details are crucial"
+    # intro_10: intense/muscle memory, but no named technique as objective
+    ("Intro", 12): "bend_quarter",    # "quarter-tone bends are all important"
+    ("Intro", 16): "bend_vibrato",    # "Bends and vibrato are again the key"
+    ("Intro", 20): "bend_quarter",    # "don't neglect the all-important quarter-tone 'blues curl'"
+    # ── Outros ──
+    ("Outro",  2): "fingerstyle",     # "best played with thumb and fingers to sound all the notes"
+    ("Outro",  4): "fingerstyle",     # "Use thumb and fingers for simultaneous notes"
+    ("Outro",  8): "bend_vibrato",    # "vibrato, whole and quarter-tone bends...strictest attention"
+    ("Outro",  9): "bend_vibrato",    # "Watch out for the usual bend/vibrato issues"
+    ("Outro", 14): "bend",            # "importance of string bending"
+    ("Outro", 16): "bend",            # "milks those string bends"
+    ("Outro", 17): "bend_quarter",    # "quarter-tone bend...Sometimes, that's all it takes"
+    ("Outro", 18): "bend_quarter",    # "quarter-tone bends that are a classic blues fingerprint"
+    ("Outro", 20): "bend_vibrato",    # "absorb the vib/bend details"
+}
+
+
 def refined_cadential_intent(kind, num, desc):
     d = desc.lower()
     if kind == "Intro":
@@ -184,6 +213,8 @@ def refined_articulation(desc):
 canonical = []
 for d in data:
     k = (d["kind"], d["num"])
+    art_model = MANUAL_ARTICULATION_MODEL.get(k)
+    art_tags = refined_articulation(d["description"])
     entry = {
         "id": f"{d['kind'].lower()}_{d['num']:02d}",
         "kind": d["kind"],
@@ -197,7 +228,8 @@ for d in data:
         "cadential_intent": refined_cadential_intent(
             d["kind"], d["num"], d["description"]
         ),
-        "articulation_tags": refined_articulation(d["description"]),
+        "articulation_model": art_model,
+        "articulation_tags": art_tags,
         "description": d["description"],
     }
     canonical.append(entry)
@@ -218,11 +250,18 @@ print("Gravity distribution:")
 for g, c in sorted(grav_counts.items(), key=lambda x: -x[1]):
     print(f"  {g:<16} {c}")
 
+print()
+model_counts = Counter(e["articulation_model"] for e in canonical)
+print("Articulation model distribution:")
+for m, c in sorted(model_counts.items(), key=lambda x: (-x[1], str(x[0]))):
+    label = m if m else "(none)"
+    print(f"  {label:<20} {c}")
+
 # ── Write ──
 with open("blues_40_motives_canonical.json", "w", encoding="utf-8") as f:
     json.dump(
         {
-            "schema_version": "1.0",
+            "schema_version": "1.1",
             "source": "40 Essential Blues Guitar Intros and Outros (Richard Barrett, Guitar Techniques, 2011)",
             "archetypes": sorted(set(MANUAL_ARCHETYPE.values())),
             "motives": canonical,
