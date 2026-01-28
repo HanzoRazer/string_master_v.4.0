@@ -543,3 +543,77 @@ def tags_to_annotation_list(
                 "technique_tags": list(tag_tuple),
             })
     return annotations
+
+
+# =============================================================================
+# SIDECAR JSON WRITER (no dependencies)
+# =============================================================================
+
+def sidecar_json_path(outfile: str) -> str:
+    """
+    Standard sidecar filename next to the MIDI output.
+
+    Example: demo.mid -> demo.mid.technique_tags.json
+    """
+    return outfile + ".technique_tags.json"
+
+
+def write_technique_sidecar_json(
+    outfile: str,
+    comp_tags: Sequence[tuple[str, ...]],
+    bass_tags: Sequence[tuple[str, ...]],
+    beats_per_bar: float = 4.0,
+    meter: str = "4/4",
+    version: int = 1,
+    style_params: dict | None = None,
+) -> str:
+    """
+    Write technique tag sidecar as JSON (no dependencies).
+
+    The sidecar format maintains 1:1 alignment with events:
+        comp_tags[i] aligns with comp_events[i]
+        bass_tags[i] aligns with bass_events[i]
+
+    Parameters
+    ----------
+    outfile : str
+        Path to the MIDI file (sidecar will be named <outfile>.technique_tags.json)
+    comp_tags : Sequence[tuple[str, ...]]
+        Parallel tag tuples for comp events.
+    bass_tags : Sequence[tuple[str, ...]]
+        Parallel tag tuples for bass events.
+    beats_per_bar : float
+        Beats per bar (default 4.0).
+    meter : str
+        Time signature string (default "4/4").
+    version : int
+        Schema version (default 1).
+    style_params : dict | None
+        Optional style parameters for self-documentation.
+
+    Returns
+    -------
+    str
+        The written sidecar filepath.
+    """
+    import json
+    from datetime import datetime, timezone
+
+    # Convert tuples to lists for JSON serialization
+    payload: dict = {
+        "version": version,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "meter": meter,
+        "beats_per_bar": float(beats_per_bar),
+        "comp_tags": [list(t) for t in comp_tags],
+        "bass_tags": [list(t) for t in bass_tags],
+    }
+
+    if style_params:
+        payload["style_params"] = style_params
+
+    path = sidecar_json_path(outfile)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+
+    return path

@@ -3,9 +3,7 @@ Accompaniment generation engine with gravity-aware reharmonization.
 """
 from __future__ import annotations
 
-import json
 from dataclasses import replace
-from pathlib import Path
 from typing import Any
 
 from .chords import Chord, chord_bass_pitch, chord_pitches, parse_chord_symbol
@@ -17,7 +15,7 @@ from .midi_out import NoteEvent, write_midi_file
 from .musical_contract import enforce_determinism_inputs, validate_note_events
 from .patterns import STYLE_REGISTRY, StylePattern
 from .rock_articulations import Difficulty, RockStyle
-from .rock_tag_attach import attach_tags_sidecar, tags_to_annotation_list
+from .rock_tag_attach import attach_tags_sidecar, write_technique_sidecar_json
 from .velocity_contour import VelContour, apply_velocity_contour
 
 # Velocity contour presets (must match validate.py)
@@ -332,16 +330,25 @@ def generate_accompaniment(
             seed=tag_seed,
         )
 
-        # Write sidecar annotation file next to MIDI (JSON, zero deps)
+        # Write sidecar annotation file next to MIDI (canonical format)
         if outfile:
-            sidecar_path = Path(outfile).with_suffix(".tags.json")
-            annotations = {
-                "schema": "technique_tags_v1",
-                "beats_per_bar": 4.0,
-                "comp_annotations": tags_to_annotation_list(comp_events, comp_tags),
-                "bass_annotations": tags_to_annotation_list(bass_events, bass_tags),
-            }
-            with open(sidecar_path, "w", encoding="utf-8") as f:
-                json.dump(annotations, f, indent=2)
+            write_technique_sidecar_json(
+                outfile=outfile,
+                comp_tags=comp_tags,
+                bass_tags=bass_tags,
+                beats_per_bar=4.0,
+                meter="4/4",
+                version=1,
+                style_params={
+                    "difficulty": tag_difficulty.value,
+                    "style": tag_style.value,
+                    "density": tag_density,
+                    "aggression": tag_aggression,
+                    "legato_bias": tag_legato_bias,
+                    "style_energy": tag_style_energy,
+                    "leadness": tag_leadness,
+                    "seed": tag_seed,
+                },
+            )
 
     return comp_events, bass_events
