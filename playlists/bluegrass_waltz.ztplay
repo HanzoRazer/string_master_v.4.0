@@ -1,0 +1,20 @@
+id: bluegrass_waltz
+title: "Bluegrass: Waltz Time (3/4) Studies"
+category: meter_session
+tags: ["bluegrass", "waltz", "3_4", "folk"]
+
+defaults:
+  tempo: 76
+  style: waltz
+
+items:
+  - name: "Amazing Grace - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/amazing_grace_backing.ztprog"
+    repeats: 2
+    notes: "Tone control on ballad lines, sustain, 3/4 phrasing"
+
+  - name: "On Top of Old Smokey - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/on_top_of_old_smokey_backing.ztprog"
+    repeats: 2
+    notes: "Waltz time phrasing, tone control, vocal-style folk melody"
+

@@ -1,0 +1,30 @@
+id: bluegrass_folk_melodies
+title: "Bluegrass: Folk Melody Etudes"
+category: category_session
+tags: ["bluegrass", "traditional", "folk", "melody"]
+
+defaults:
+  tempo: 80
+  style: bluegrass
+
+items:
+  - name: "Amazing Grace - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/amazing_grace_backing.ztprog"
+    repeats: 2
+    notes: "Tone control on ballad lines, sustain, 3/4 phrasing"
+
+  - name: "On Top of Old Smokey - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/on_top_of_old_smokey_backing.ztprog"
+    repeats: 2
+    notes: "Waltz time phrasing, tone control, vocal-style folk melody"
+
+  - name: "Red River Valley - 16-Bar Melody Etude"
+    file: "exercises/bluegrass/red_river_valley_backing.ztprog"
+    repeats: 2
+    notes: "Full melody over 16 bars, V-I phrase transitions, even eighths"
+
+  - name: "Shady Grove - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/shady_grove_backing.ztprog"
+    repeats: 2
+    notes: "G Dorian modal style, alternate picking, folk character"
+

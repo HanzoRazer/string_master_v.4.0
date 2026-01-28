@@ -1,0 +1,30 @@
+id: bluegrass_fiddle_tunes
+title: "Bluegrass: Fiddle Tune Studies"
+category: category_session
+tags: ["bluegrass", "fiddle_tune", "flatpicking"]
+
+defaults:
+  tempo: 100
+  style: bluegrass
+
+items:
+  - name: "Blackberry Blossom - A Section Phrase (Bars 8-12)"
+    file: "exercises/bluegrass/blackberry_blossom_study.ztprog"
+    repeats: 2
+    notes: "Scalar and arpeggiated motion over G, downbeat clarity, alternate picking"
+
+  - name: "Blackberry Blossom - B Section Phrase (Bars 10-13)"
+    file: "exercises/bluegrass/blackberry_blossom_study.ztprog"
+    repeats: 2
+    notes: "Phrasing shift at bar 10, rhythmic transition, subdivision time feel"
+
+  - name: "Blackberry Blossom - B Section Variation"
+    file: "exercises/bluegrass/blackberry_blossom_study.ztprog"
+    repeats: 2
+    notes: "Alternate melodic approach to B section, improvisational vocabulary"
+
+  - name: "Old Joe Clark - 8-Bar Etude"
+    file: "exercises/bluegrass/olde_joe_clark_backing.ztprog"
+    repeats: 2
+    notes: "Alternate picking in A major, string skipping, melodic phrasing"
+

@@ -1,0 +1,80 @@
+id: bluegrass_progressive
+title: "Bluegrass: Progressive Path (Licks to Performance)"
+category: progressive_path
+tags: ["bluegrass", "progressive", "curriculum"]
+
+defaults:
+  tempo: 90
+  style: bluegrass
+
+items:
+  - name: "Bluegrass G Lick 1"
+    file: "exercises/bluegrass/g_lick_1.ztprog"
+    repeats: 2
+    notes: "G flatpicking phrasing, syncopated resolution, hammer-ons"
+
+  - name: "Bluegrass G Lick 2"
+    file: "exercises/bluegrass/g_lick_2.ztprog"
+    repeats: 2
+    notes: "G flatpicking phrasing, alternate picking patterns"
+
+  - name: "Bluegrass G Lick 3"
+    file: "exercises/bluegrass/g_lick_3.ztprog"
+    repeats: 2
+    notes: "G flatpicking phrasing, syncopated resolution"
+
+  - name: "Bluegrass G Lick 4"
+    file: "exercises/bluegrass/g_lick_4.ztprog"
+    repeats: 2
+    notes: "G flatpicking phrasing, hammer-ons and pull-offs"
+
+  - name: "Amazing Grace - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/amazing_grace_backing.ztprog"
+    repeats: 2
+    notes: "Tone control on ballad lines, sustain, 3/4 phrasing"
+
+  - name: "On Top of Old Smokey - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/on_top_of_old_smokey_backing.ztprog"
+    repeats: 2
+    notes: "Waltz time phrasing, tone control, vocal-style folk melody"
+
+  - name: "Red River Valley - 16-Bar Melody Etude"
+    file: "exercises/bluegrass/red_river_valley_backing.ztprog"
+    repeats: 2
+    notes: "Full melody over 16 bars, V-I phrase transitions, even eighths"
+
+  - name: "Shady Grove - 8-Bar Melody Etude"
+    file: "exercises/bluegrass/shady_grove_backing.ztprog"
+    repeats: 2
+    notes: "G Dorian modal style, alternate picking, folk character"
+
+  - name: "Blackberry Blossom - A Section Phrase (Bars 8-12)"
+    file: "exercises/bluegrass/blackberry_blossom_study.ztprog"
+    repeats: 2
+    notes: "Scalar and arpeggiated motion over G, downbeat clarity, alternate picking"
+
+  - name: "Blackberry Blossom - B Section Phrase (Bars 10-13)"
+    file: "exercises/bluegrass/blackberry_blossom_study.ztprog"
+    repeats: 2
+    notes: "Phrasing shift at bar 10, rhythmic transition, subdivision time feel"
+
+  - name: "Blackberry Blossom - B Section Variation"
+    file: "exercises/bluegrass/blackberry_blossom_study.ztprog"
+    repeats: 2
+    notes: "Alternate melodic approach to B section, improvisational vocabulary"
+
+  - name: "Old Joe Clark - 8-Bar Etude"
+    file: "exercises/bluegrass/olde_joe_clark_backing.ztprog"
+    repeats: 2
+    notes: "Alternate picking in A major, string skipping, melodic phrasing"
+
+  - name: "Muleskinner Blues - Intro Phrase"
+    file: "exercises/bluegrass/muleskinner_intro_phrase.ztprog"
+    repeats: 2
+    notes: "Classic bluegrass intro lick, downbeat accents, pick direction"
+
+  - name: "Muleskinner Blues - Intro Phrase (4-Bar Extended)"
+    file: "exercises/bluegrass/muleskinner_intro_phrase.ztprog"
+    repeats: 2
+    notes: "Extended 4-bar intro phrase, stamina for longer melodic runs"
+

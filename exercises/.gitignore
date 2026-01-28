@@ -1,3 +1,4 @@
 *.mid
 !flamenco/midi/*.mid
 !enclosures/midi/*.mid
+!bluegrass/midi/*.mid

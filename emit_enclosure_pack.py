@@ -72,7 +72,7 @@ def emit_session_playlist(playlist_id, title, category, tags, defaults,
         f"id: {playlist_id}",
         f"title: {yaml_str(title)}",
         f"category: {category}",
-        f"tags: [{', '.join(tags)}]",
+        f"tags: [{', '.join(yaml_str(t) for t in tags)}]",
         "",
         "defaults:",
     ]

@@ -1,0 +1,20 @@
+id: bluegrass_intro_phrases
+title: "Bluegrass: Intro Phrases & Kick-Offs"
+category: category_session
+tags: ["bluegrass", "intro", "kick_off"]
+
+defaults:
+  tempo: 92
+  style: bluegrass
+
+items:
+  - name: "Muleskinner Blues - Intro Phrase"
+    file: "exercises/bluegrass/muleskinner_intro_phrase.ztprog"
+    repeats: 2
+    notes: "Classic bluegrass intro lick, downbeat accents, pick direction"
+
+  - name: "Muleskinner Blues - Intro Phrase (4-Bar Extended)"
+    file: "exercises/bluegrass/muleskinner_intro_phrase.ztprog"
+    repeats: 2
+    notes: "Extended 4-bar intro phrase, stamina for longer melodic runs"
+

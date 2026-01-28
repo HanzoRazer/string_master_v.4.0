@@ -1,0 +1,30 @@
+id: bluegrass_licks
+title: "Bluegrass: G Flatpicking Licks"
+category: category_session
+tags: ["bluegrass", "flatpicking", "licks", "G"]
+
+defaults:
+  tempo: 90
+  style: bluegrass
+
+items:
+  - name: "Bluegrass G Lick 1"
+    file: "exercises/bluegrass/g_lick_1.ztprog"
+    repeats: 3
+    notes: "G flatpicking phrasing, syncopated resolution, hammer-ons"
+
+  - name: "Bluegrass G Lick 2"
+    file: "exercises/bluegrass/g_lick_2.ztprog"
+    repeats: 3
+    notes: "G flatpicking phrasing, alternate picking patterns"
+
+  - name: "Bluegrass G Lick 3"
+    file: "exercises/bluegrass/g_lick_3.ztprog"
+    repeats: 3
+    notes: "G flatpicking phrasing, syncopated resolution"
+
+  - name: "Bluegrass G Lick 4"
+    file: "exercises/bluegrass/g_lick_4.ztprog"
+    repeats: 3
+    notes: "G flatpicking phrasing, hammer-ons and pull-offs"
+
