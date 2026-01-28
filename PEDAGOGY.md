@@ -368,6 +368,87 @@ The 12-key rotation table is the capstone reference for gravity-based compositio
 
 ---
 
+## Motive Axis Coverage (40 Blues Intros & Outros)
+
+The 40 Essential Blues Guitar Intros and Outros (Richard Barrett, Guitar Techniques, 2011) use 7 native keys across 40 motives. When mapped through the axis rotation table, these 7 keys cover all 6 tritone axes — the complete gravitational space — with no blind spots.
+
+### Native Key Axis Map
+
+| Native Key | Motives | I7 axis | IV7 axis | V7 axis | bVII7 axis (backdoor) |
+|-----------|---------|---------|----------|---------|----------------------|
+| **E** | 12 | D–Ab | Db–G | Eb–A | C–Gb |
+| **A** | 8 | Db–G | C–Gb | D–Ab | F–B |
+| **G** | 4 | F–B | E–Bb | C–Gb | Eb–A |
+| **Gm** | 4 | F–B | E–Bb | C–Gb | Eb–A |
+| **Bb** | 4 | D–Ab | Db–G | Eb–A | C–Gb |
+| **C** | 4 | E–Bb | Eb–A | F–B | D–Ab |
+| **Cm** | 4 | E–Bb | Eb–A | F–B | D–Ab |
+
+### Axis Saturation
+
+All 6 tritone axes appear across the I7, IV7, and V7 roles:
+
+| Axis | Appears as I7 in | Appears as IV7 in | Appears as V7 in |
+|------|-----------------|-------------------|------------------|
+| **C–Gb (0,6)** | — | A | E, G/Gm |
+| **Db–G (1,7)** | A | E, Bb | — |
+| **D–Ab (2,8)** | E, Bb | — | A |
+| **E–Bb (4,10)** | C/Cm | G/Gm | Bb |
+| **Eb–A (3,9)** | — | C/Cm | E, Bb |
+| **F–B (5,11)** | G/Gm | — | C/Cm |
+
+Every axis is exercised in at least two functional roles (I, IV, or V). No axis is confined to a single role.
+
+### 10 Motive Archetypes by Gravity Type
+
+Each of the 40 motives is classified into one of 10 canonical archetypes, each with a primary gravity type:
+
+| Archetype | Count | Primary Gravity | Zone-Tritone Mechanism |
+|-----------|-------|----------------|----------------------|
+| DOUBLESTOP_EXPRESSIVE | 8 | varies | Parallel chromatic double-stops cross zones; bent double-stops create microtonal zone ambiguity |
+| PENTATONIC_LEAD | 6 | varies | Minor pentatonic spans both zones; blue notes add explicit zone-crossing |
+| DESC_LINE_TURNAROUND | 5 | front_door | Descending chromatic steps alternate zones, pulling toward V or I |
+| SEMITONE_APPROACH | 5 | semitone | bII->I is the purest zone-cross cadence; outro-exclusive |
+| CHORDAL_COLOR | 4 | front_door | Extensions (9, 13, #9) add pitch classes from both zones to the voicing |
+| EXPRESSIVE_MINIMAL | 4 | expressive | Bends traverse continuous pitch space between zones; vibrato oscillates across the zone boundary |
+| ASC_LINE_TURNAROUND | 2 | front_door | Ascending chromatic steps cross zones; whole-steps drift laterally until the final half-step pull |
+| DIM_PASSING_ENGINE | 2 | front_door + dim | Diminished 7th contains two interlocking tritones from different axes — a pivot between dominant functions |
+| STATIC_RIFF | 2 | static | Avoids half-step motion; stays within one zone; energy from rhythm, not gravity |
+| ROCK_BLUES_HYBRID | 2 | static | Power chords lack the 3rd, so no tritone, no dominant gravity; purely rhythmic energy |
+
+### Gravity Distribution
+
+| Gravity Type | Motive Count | Percentage |
+|-------------|-------------|------------|
+| **front_door** (V->I) | 22 | 55% |
+| **expressive** (touch/bends) | 8 | 20% |
+| **static** (riff/vamp) | 5 | 12.5% |
+| **semitone** (bII->I) | 5 | 12.5% |
+
+### Structural Findings
+
+1. **Front-door gravity dominates** (55%). The V->I tritone resolution is the spine of blues intro/outro vocabulary — confirming that dominant function, not pentatonic color, is the primary structural engine.
+
+2. **Semitone approach is outro-exclusive.** All 5 SEMITONE_APPROACH motives are outros. The bII->I zone-crossing cadence creates finality — it closes, never opens. This is a structural constraint, not a stylistic preference.
+
+3. **Barrett's key selection covers the full axis space.** 7 keys, 40 motives, 6/6 axes saturated. This was likely intuitive on Barrett's part, but it means the collection is gravitationally complete — a student who works through all 40 motives encounters every tritone axis in multiple functional roles.
+
+4. **Expression-focused archetypes (expressive + static = 32.5%) have no tritone axis.** This marks the boundary where zone-tritone analysis yields to performance pedagogy. Bends, vibrato, and rhythmic attack generate tension through physical technique, not harmonic gravity. The zone-tritone framework *describes* what happens at the pitch level (bends cross zones), but it does not *generate* the motive.
+
+5. **Tritone-apart keys are gravitationally identical.** E and Bb share the same axis set. G/Gm and Db share the same axis set. C/Cm and Gb share the same axis set. Barrett uses E and Bb but not Db or Gb — the "missing" keys are already covered by their tritone partners.
+
+### Pedagogical Placement
+
+This material extends Level 5 (Composition in Gravity). It connects the abstract 12-key rotation table to a real-world motive library, showing that:
+
+- The axis rotation is not just a theoretical symmetry — it governs actual blues vocabulary
+- A well-chosen set of keys covers the entire gravitational space
+- Archetype classification and gravity mapping are principled, not heuristic — they derive from the same zone-tritone primitives used throughout the system
+
+The canonical motive data is in `blues_40_motives_canonical.json`. The archetype definitions are in `ARCHETYPE_DICTIONARY.md`.
+
+---
+
 ## Quick Reference
 
 ### Zone Membership Formula
@@ -421,6 +502,7 @@ The Zone-Tritone System is implemented in src/shared/zone_tritone/:
 
 | Date | Change |
 |------|--------|
+| 2025-01-27 | Added Motive Axis Coverage section: 40 motives mapped to 10 archetypes, gravity types, axis saturation table. |
 | 2025-01-27 | Added 12-Key Axis Rotation section with 6-key cycle, derivation, and pedagogical placement. |
 | 2025-01-25 | Expanded with full Zone-Tritone content from implementation. |
 | 2025-01-25 | Initial sparse outline. |
