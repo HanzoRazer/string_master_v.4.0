@@ -1,0 +1,20 @@
+id: got_rhythm_enclosures
+title: "Got Rhythm: Enclosure Studies"
+category: technique_session
+tags: ["got_rhythm", "bebop", "barry_harris", "enclosure"]
+
+defaults:
+  tempo: 120
+  style: swing
+
+items:
+  - name: "Study 2 – Triplet Enclosure Targeting 3rd of Bb7"
+    file: "exercises/got_rhythm/got_rhythm_enclosure_study2.ztprog"
+    repeats: 3
+    notes: "Practice Barry Harris triplet enclosures targeting chord tones, resolve to 3rd of Bb7 (D)"
+
+  - name: "Study 4 – Ebmaj7 to Ab7 with Chromatic Enclosure"
+    file: "exercises/got_rhythm/got_rhythm_ebmaj7_ab7_study4.ztprog"
+    repeats: 3
+    notes: "Chromatic motion through Eb major to set up resolution, target 3rd of Ab7 (C)"
+

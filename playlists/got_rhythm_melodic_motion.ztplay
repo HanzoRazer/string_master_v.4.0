@@ -1,0 +1,20 @@
+id: got_rhythm_melodic_motion
+title: "Got Rhythm: Melodic Motion Studies"
+category: technique_session
+tags: ["got_rhythm", "bebop", "barry_harris", "melodic_motion"]
+
+defaults:
+  tempo: 120
+  style: swing
+
+items:
+  - name: "Study 1 – Barry Harris Bb7 → Eb7 Phrase"
+    file: "exercises/got_rhythm/got_rhythm_bb7_eb7_study1.ztprog"
+    repeats: 3
+    notes: "Internalize Barry Harris-style dominant to IV movement, target 3rd of Eb7 (G)"
+
+  - name: "Study 3 – Chromatic Motion Fm7 → Bb7"
+    file: "exercises/got_rhythm/got_rhythm_fm7_bb7_study3.ztprog"
+    repeats: 3
+    notes: "Connect Fm7 to Bb7 using chromatic and triplet motion, target 3rd of Bb7 (D)"
+

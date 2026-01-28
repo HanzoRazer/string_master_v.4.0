@@ -1,0 +1,30 @@
+id: got_rhythm_progressive
+title: "Got Rhythm: Progressive Path (Studies 1–4)"
+category: progressive_path
+tags: ["got_rhythm", "bebop", "barry_harris", "progressive", "curriculum"]
+
+defaults:
+  tempo: 120
+  style: swing
+
+items:
+  - name: "Study 1 – Barry Harris Bb7 → Eb7 Phrase"
+    file: "exercises/got_rhythm/got_rhythm_bb7_eb7_study1.ztprog"
+    repeats: 3
+    notes: "Internalize Barry Harris-style dominant to IV movement, target 3rd of Eb7 (G)"
+
+  - name: "Study 2 – Triplet Enclosure Targeting 3rd of Bb7"
+    file: "exercises/got_rhythm/got_rhythm_enclosure_study2.ztprog"
+    repeats: 3
+    notes: "Practice Barry Harris triplet enclosures targeting chord tones, resolve to 3rd of Bb7 (D)"
+
+  - name: "Study 3 – Chromatic Motion Fm7 → Bb7"
+    file: "exercises/got_rhythm/got_rhythm_fm7_bb7_study3.ztprog"
+    repeats: 3
+    notes: "Connect Fm7 to Bb7 using chromatic and triplet motion, target 3rd of Bb7 (D)"
+
+  - name: "Study 4 – Ebmaj7 to Ab7 with Chromatic Enclosure"
+    file: "exercises/got_rhythm/got_rhythm_ebmaj7_ab7_study4.ztprog"
+    repeats: 3
+    notes: "Chromatic motion through Eb major to set up resolution, target 3rd of Ab7 (C)"
+
