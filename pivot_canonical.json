@@ -15,7 +15,7 @@
       "id": "pivot_enclosure_to_root",
       "title": "Pivot Enclosure to Root -- Neighbor Resolution",
       "style_family": "jazz",
-      "technique": "voice_leading",
+      "technique": "harmonic",
       "harmonic_context": "static_major",
       "key": "C",
       "meter": "4/4",

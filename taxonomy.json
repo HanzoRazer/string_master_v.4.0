@@ -54,64 +54,45 @@
 
   "technique_categories": [
     {
-      "id": "chromatic_approach",
-      "label": "Chromatic Approach",
-      "description": "Half-step enclosures, chromatic passing tones, and approach patterns",
-      "subsumes": ["enclosure", "passing_tone", "chromatic_cell", "zone_crossing"]
+      "id": "melodic",
+      "label": "Melodic / Linear",
+      "description": "Line construction: chromatic approach, arpeggiation, scale patterns, and enclosures",
+      "subsumes": [
+        "chromatic_approach", "enclosure", "passing_tone", "chromatic_cell", "zone_crossing",
+        "arpeggiation", "chord_tone_targeting", "arpeggio_shape", "sweep",
+        "scale_patterns", "bebop_scale", "modal_scale", "pentatonic"
+      ]
     },
     {
-      "id": "guide_tones",
-      "label": "Guide Tone Navigation",
-      "description": "3rds and 7ths through changes, voice leading, and shell awareness",
-      "subsumes": ["guide_tone_voicing", "guide_tone_pairs", "shell_voicings", "tritone_awareness"]
+      "id": "harmonic",
+      "label": "Harmonic / Voice Movement",
+      "description": "Chord connection: guide tones, voice leading, resolution patterns, and cadences",
+      "subsumes": [
+        "guide_tones", "guide_tone_voicing", "guide_tone_pairs", "shell_voicings", "tritone_awareness",
+        "voice_leading", "contrary_motion", "parallel_motion", "oblique_motion",
+        "resolution", "tritone_resolution", "b9_targeting", "cadence", "dominant_function"
+      ]
     },
     {
-      "id": "arpeggiation",
-      "label": "Arpeggiation",
-      "description": "Chord tone targeting, sweep patterns, and arpeggio shapes",
-      "subsumes": ["chord_tone_targeting", "arpeggio_shape", "sweep"]
+      "id": "rhythmic",
+      "label": "Rhythmic / Time Feel",
+      "description": "Time and groove: phrasing, syncopation, compas, clave, and metric patterns",
+      "subsumes": [
+        "rhythmic_phrasing", "triplet_chain", "syncopation", "metric_displacement", "swing_feel",
+        "compas", "compas_12", "compas_4", "clave", "rasgueado"
+      ]
     },
     {
-      "id": "scale_patterns",
-      "label": "Scale Patterns",
-      "description": "Bebop scales, modes, and systematic scale practice",
-      "subsumes": ["bebop_scale", "modal_scale", "pentatonic"]
-    },
-    {
-      "id": "rhythmic_phrasing",
-      "label": "Rhythmic Phrasing",
-      "description": "Triplet patterns, syncopation, and metric displacement",
-      "subsumes": ["triplet_chain", "syncopation", "metric_displacement", "swing_feel"]
-    },
-    {
-      "id": "voice_leading",
-      "label": "Voice Leading",
-      "description": "Smooth voice motion, contrary motion, and minimal movement",
-      "subsumes": ["contrary_motion", "parallel_motion", "oblique_motion"]
+      "id": "articulation",
+      "label": "Articulation / Touch",
+      "description": "Physical execution: legato, staccato, bends, vibrato, and ornaments",
+      "subsumes": ["legato", "staccato", "bend", "vibrato", "ornament", "hammer_on", "pull_off", "slide"]
     },
     {
       "id": "transposition",
       "label": "Transposition / 12-Key",
-      "description": "Moving patterns through all keys systematically",
-      "subsumes": ["twelve_key", "modulation", "key_center_awareness"]
-    },
-    {
-      "id": "resolution",
-      "label": "Resolution Patterns",
-      "description": "V-I motion, tritone resolution, b9 targeting, and cadential patterns",
-      "subsumes": ["tritone_resolution", "b9_targeting", "cadence", "dominant_function"]
-    },
-    {
-      "id": "articulation",
-      "label": "Articulation",
-      "description": "Hammer-ons, pull-offs, slides, bends, and ornaments",
-      "subsumes": ["legato", "staccato", "bend", "vibrato", "ornament"]
-    },
-    {
-      "id": "compas",
-      "label": "Compas / Rhythmic Cycle",
-      "description": "Flamenco compas, clave patterns, and cyclic rhythmic structures",
-      "subsumes": ["compas_12", "compas_4", "clave", "rasgueado"]
+      "description": "Practice methodology: systematic key movement and modulation",
+      "subsumes": ["twelve_key", "modulation", "key_center_awareness", "root_awareness"]
     }
   ],
 
@@ -184,32 +165,42 @@
       "samba_latin": "latin"
     },
     "techniques": {
-      "guide_tone_voicing": "guide_tones",
-      "guide_tone_pairs": "guide_tones",
-      "minor_guide_tone_voicing": "guide_tones",
-      "shell_voicings": "guide_tones",
-      "tritone_awareness": "guide_tones",
-      "voicing": "guide_tones",
-      "triplet_targeting": "rhythmic_phrasing",
-      "groove": "rhythmic_phrasing",
-      "chromatic_cell_construction": "chromatic_approach",
-      "chromatic_phrase": "chromatic_approach",
-      "sixth_diminished_scale": "scale_patterns",
-      "scale_fluency": "scale_patterns",
-      "melodic_study": "scale_patterns",
-      "modal_phrase": "scale_patterns",
-      "voice_leading_targeting": "voice_leading",
-      "voicing_memory": "voice_leading",
-      "contrary_motion_technique": "voice_leading",
-      "melodic_motion": "voice_leading",
-      "b9_tritone_targeting": "resolution",
-      "tritone_parent_hearing": "resolution",
-      "zone_crossing_resolution": "resolution",
-      "turnaround_phrase": "resolution",
-      "cadence": "resolution",
+      "guide_tone_voicing": "harmonic",
+      "guide_tone_pairs": "harmonic",
+      "minor_guide_tone_voicing": "harmonic",
+      "shell_voicings": "harmonic",
+      "tritone_awareness": "harmonic",
+      "voicing": "harmonic",
+      "guide_tones": "harmonic",
+      "voice_leading": "harmonic",
+      "voice_leading_targeting": "harmonic",
+      "voicing_memory": "harmonic",
+      "contrary_motion_technique": "harmonic",
+      "resolution": "harmonic",
+      "b9_tritone_targeting": "harmonic",
+      "tritone_parent_hearing": "harmonic",
+      "zone_crossing_resolution": "harmonic",
+      "turnaround_phrase": "harmonic",
+      "cadence": "harmonic",
+      "triplet_targeting": "rhythmic",
+      "groove": "rhythmic",
+      "rhythmic_phrasing": "rhythmic",
+      "compas_awareness": "rhythmic",
+      "rasgueado_pattern": "rhythmic",
+      "compas": "rhythmic",
+      "chromatic_approach": "melodic",
+      "chromatic_cell_construction": "melodic",
+      "chromatic_phrase": "melodic",
+      "scale_patterns": "melodic",
+      "sixth_diminished_scale": "melodic",
+      "scale_fluency": "melodic",
+      "melodic_study": "melodic",
+      "modal_phrase": "melodic",
+      "melodic_motion": "melodic",
+      "arpeggiation": "melodic",
+      "chromatic_triplet": "melodic",
+      "chromatic_motion": "melodic",
       "root_awareness": "transposition",
-      "compas_awareness": "compas",
-      "rasgueado_pattern": "compas",
       "palo_specific_technique": "articulation",
       "lead_phrase": "articulation",
       "phrase_accuracy": "articulation",
