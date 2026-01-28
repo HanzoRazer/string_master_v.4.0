@@ -42,6 +42,7 @@ class DanceFamily(str, Enum):
     BLUES_AMERICAN = "blues_american"
     ROCK_AMERICAN = "rock_american"
     COUNTRY_AMERICAN = "country_american"
+    IBERIAN = "iberian"  # Flamenco, fado, and other Iberian Peninsula styles
     FUSION = "fusion"
 
 

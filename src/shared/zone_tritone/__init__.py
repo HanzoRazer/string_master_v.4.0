@@ -62,6 +62,20 @@ from .zones import (
     zone,
     zone_name,
 )
+from .andalusian import (
+    ANDALUSIAN_OFFSETS,
+    ANDALUSIAN_ROMANS,
+    ANDALUSIAN_STEPS,
+    STYLE_PACKS,
+    AndalusianStylePack,
+    AndalusianChord,
+    andalusian_bass_pcs,
+    andalusian_bass_names,
+    build_andalusian_cadence,
+    build_andalusian_cadence_from_key,
+    backdoor_tag_pcs,
+    build_backdoor_tag,
+)
 
 __all__ = [
     "__version__",
@@ -119,4 +133,17 @@ __all__ = [
     "SubstitutionPolicy",
     "DENSITY_MAP",
     "DIFF_POLICY",
+    # andalusian
+    "ANDALUSIAN_OFFSETS",
+    "ANDALUSIAN_ROMANS",
+    "ANDALUSIAN_STEPS",
+    "STYLE_PACKS",
+    "AndalusianStylePack",
+    "AndalusianChord",
+    "andalusian_bass_pcs",
+    "andalusian_bass_names",
+    "build_andalusian_cadence",
+    "build_andalusian_cadence_from_key",
+    "backdoor_tag_pcs",
+    "build_backdoor_tag",
 ]

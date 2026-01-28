@@ -27,6 +27,12 @@ class StylePattern:
     comp_hits:   list of comping events (for chord instrument)
     bass_pattern: list of (beat, length, velocity) for bass notes
 
+    Clave alignment params (Afro-Cuban):
+    clave_pattern:   clave pattern this style aligns with (None = no clave alignment)
+                     Afro-Cuban: "son_2_3", "son_3_2", "rumba_2_3", "rumba_3_2"
+                     Brazilian: "surdo_2_4", "surdo_4_4"
+    clave_strict:    if True, all hits must land on clave-valid positions
+
     Ghost hit params (all default OFF):
     ghost_vel:       velocity for ghost taps (0 = disabled, typically 10-25)
     ghost_steps:     tuple of 16th-note grid steps to ghost (e.g., (1,5,9,13) = "e" of each beat)
@@ -47,6 +53,9 @@ class StylePattern:
     description: str
     comp_hits: list[CompEventSpec]
     bass_pattern: list[tuple[float, float, int]]
+    # Clave alignment params (Afro-Cuban patterns)
+    clave_pattern: str | None = None  # Afro-Cuban: "son_2_3", "son_3_2", "rumba_2_3", "rumba_3_2" | Brazilian: "surdo_2_4", "surdo_4_4"
+    clave_strict: bool = False
     # Ghost hit params (OFF by default)
     ghost_vel: int = 0
     ghost_steps: tuple[int, ...] = ()
@@ -121,6 +130,7 @@ BALLAD_BASIC = StylePattern(
 SAMBA_4_4 = StylePattern(
     name="samba_4_4",
     description="Brazilian samba in 4/4: partido alto comp, surdo-style bass.",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.5, length_beats=0.5, velocity=85),   # "and" of 1
         CompEventSpec(beat=1.0, length_beats=0.5, velocity=90),   # beat 2 (strong)
@@ -143,6 +153,7 @@ SAMBA_4_4 = StylePattern(
 SAMBA_2_4 = StylePattern(
     name="samba_2_4",
     description="Authentic Brazilian samba in 2/4: tamborim comp, surdo bass (use time_signature: 2/4).",
+    clave_pattern="surdo_2_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.0, length_beats=0.25, velocity=85),   # beat 1 (accent)
         CompEventSpec(beat=0.5, length_beats=0.25, velocity=80),   # "and" of 1
@@ -161,6 +172,7 @@ SAMBA_2_4 = StylePattern(
 SAMBA_FUNK = StylePattern(
     name="samba_funk",
     description="Brazilian samba-funk/samba-rock: 4/4 groove with funk backbeat.",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.0, length_beats=0.5, velocity=85),    # beat 1
         CompEventSpec(beat=0.75, length_beats=0.25, velocity=70),  # 16th before 2
@@ -190,6 +202,7 @@ SAMBA_FUNK = StylePattern(
 SAMBA_BASIC = StylePattern(
     name="samba_basic",
     description="2/4 samba comp: short stab on 1, syncopated push on &2.",
+    clave_pattern="surdo_2_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.0, length_beats=0.25, velocity=80),   # beat 1 (short stab)
         CompEventSpec(beat=0.5, length_beats=0.25, velocity=75),   # "and" of 1 (ghost)
@@ -204,6 +217,7 @@ SAMBA_BASIC = StylePattern(
 SAMBA_TWO_FEEL = StylePattern(
     name="samba_two_feel",
     description="2/4 samba bass: light beat 1, heavy beat 2 (surdo feel).",
+    clave_pattern="surdo_2_4",  # Brazilian surdo alignment
     comp_hits=[],  # comp handled separately by samba_basic
     bass_pattern=[
         (0.0, 0.5, 65),    # beat 1 -- light ("primeira")
@@ -218,6 +232,7 @@ SAMBA_TWO_FEEL = StylePattern(
 SAMBA_BASIC_4_4 = StylePattern(
     name="samba_basic_4_4",
     description="4/4 samba comp: 1 (light), &2 (push), 3 (light), &4 (push).",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.0, length_beats=0.25, velocity=75),   # beat 1 (light)
         CompEventSpec(beat=1.5, length_beats=0.25, velocity=90),   # "and" of 2 (strong push)
@@ -233,6 +248,7 @@ SAMBA_BASIC_4_4 = StylePattern(
 SAMBA_FOUR_FEEL = StylePattern(
     name="samba_four_feel",
     description="4/4 samba bass: light 1/3, surdo-style push into 2/4.",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[],  # comp handled separately by samba_basic_4_4
     bass_pattern=[
         (0.0, 0.5, 70),    # beat 1 (light)
@@ -254,6 +270,7 @@ SAMBA_FOUR_FEEL = StylePattern(
 SAMBA_BASIC_4_4_PICKUP = StylePattern(
     name="samba_basic_4_4_pickup",
     description="4/4 samba comp with pickup anticipation + ghost taps (Brazilian feel).",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.0, length_beats=0.25, velocity=75),   # beat 1 (light)
         CompEventSpec(beat=1.5, length_beats=0.25, velocity=90),   # "and" of 2 (strong push)
@@ -276,6 +293,7 @@ SAMBA_BASIC_4_4_PICKUP = StylePattern(
 SAMBA_FOUR_FEEL_PICKUP = StylePattern(
     name="samba_four_feel_pickup",
     description="4/4 samba bass with anticipation (surdo + pickup).",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[],
     bass_pattern=[
         (0.0, 0.5, 70),    # beat 1 (light)
@@ -292,6 +310,7 @@ SAMBA_FOUR_FEEL_PICKUP = StylePattern(
 SAMBA_BRAZIL_FULL = StylePattern(
     name="samba_brazil_full",
     description="Full Brazilian samba: pickup + ghost + velocity contour (breathing feel).",
+    clave_pattern="surdo_4_4",  # Brazilian surdo alignment
     comp_hits=[
         CompEventSpec(beat=0.0, length_beats=0.25, velocity=75),   # beat 1 (soft)
         CompEventSpec(beat=1.5, length_beats=0.25, velocity=90),   # &2 (strong)
@@ -315,6 +334,40 @@ SAMBA_BRAZIL_FULL = StylePattern(
 )
 
 
+# ============================================================================
+# AFRO-CUBAN PATTERNS (imported from afro_cuban_patterns.py)
+# ============================================================================
+# Note: Afro-Cuban patterns are defined in a separate module for cleaner
+# organization and imported here for registration in STYLE_REGISTRY.
+
+try:
+    from .afro_cuban_patterns import AFRO_CUBAN_PATTERNS
+except ImportError:
+    AFRO_CUBAN_PATTERNS = {}
+
+# ============================================================================
+# AFRICAN PATTERNS (imported from african_patterns.py)
+# ============================================================================
+# Note: African patterns (soukous, afrobeat, highlife, mbalax, jùjú, amapiano)
+# are defined in a separate module for cleaner organization.
+
+try:
+    from .african_patterns import AFRICAN_PATTERNS
+except ImportError:
+    AFRICAN_PATTERNS = {}
+
+# ============================================================================
+# FLAMENCO PATTERNS (imported from flamenco_patterns.py)
+# ============================================================================
+# Note: Flamenco patterns (tangos, tientos, bulería, soleá, Andalusian cadence)
+# are defined in a separate module with Phrygian/Andalusian alignment.
+
+try:
+    from .flamenco_patterns import FLAMENCO_PATTERNS
+except ImportError:
+    FLAMENCO_PATTERNS = {}
+
+
 STYLE_REGISTRY = {
     "swing_basic": SWING_BASIC,
     "bossa_basic": BOSSA_BASIC,
@@ -332,4 +385,10 @@ STYLE_REGISTRY = {
     "samba_four_feel_pickup": SAMBA_FOUR_FEEL_PICKUP,
     # Bucket A -- Full Brazilian (pickup + ghost + contour)
     "samba_brazil_full": SAMBA_BRAZIL_FULL,
+    # Afro-Cuban patterns (from afro_cuban_patterns.py)
+    **AFRO_CUBAN_PATTERNS,
+    # African patterns (from african_patterns.py)
+    **AFRICAN_PATTERNS,
+    # Flamenco patterns (from flamenco_patterns.py)
+    **FLAMENCO_PATTERNS,
 }
