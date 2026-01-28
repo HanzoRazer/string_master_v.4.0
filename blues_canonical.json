@@ -23,6 +23,21 @@
       "id": "delta_blues",
       "progression": "I-I-I-I-IV-IV-I-I-V-IV-I-V",
       "description": "Standard 12-bar delta blues form"
+    },
+    {
+      "id": "backdoor_turnaround",
+      "progression": "I7 - I7 - ... - bVII7 - I7",
+      "description": "12-bar blues with backdoor resolution at bar 12 (turnaround mode)"
+    },
+    {
+      "id": "backdoor_cadence",
+      "progression": "I7 - I7 - ... - bVII7 - I7 (bars 11-12)",
+      "description": "12-bar blues with backdoor cadence in final two bars"
+    },
+    {
+      "id": "backdoor_tag",
+      "progression": "I7 - bVII7 - I7 (tag ending)",
+      "description": "12-bar blues with strong bVII7-I7 tag ending"
     }
   ],
   "exercises": [
@@ -166,6 +181,360 @@
       "tempo_range": [52, 66],
       "difficulty": "intermediate",
       "program_ref": "programs/bucket_a/when_you_have_a_good_friend_C.ztprog"
+    },
+    {
+      "id": "zone_tritone_hidden_turnaround_easy",
+      "title": "Zone-Tritone Etude -- Hidden Style, Turnaround (Easy)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-turnaround_density-easy.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-turnaround_density-easy.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_turnaround_medium",
+      "title": "Zone-Tritone Etude -- Hidden Style, Turnaround (Medium)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-turnaround_density-medium.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-turnaround_density-medium.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_turnaround_hard",
+      "title": "Zone-Tritone Etude -- Hidden Style, Turnaround (Hard)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-turnaround_density-hard.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-turnaround_density-hard.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_cadence_easy",
+      "title": "Zone-Tritone Etude -- Hidden Style, Cadence (Easy)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-cadence_density-easy.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-cadence_density-easy.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_cadence_medium",
+      "title": "Zone-Tritone Etude -- Hidden Style, Cadence (Medium)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-cadence_density-medium.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-cadence_density-medium.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_cadence_hard",
+      "title": "Zone-Tritone Etude -- Hidden Style, Cadence (Hard)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-cadence_density-hard.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-cadence_density-hard.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_tag_easy",
+      "title": "Zone-Tritone Etude -- Hidden Style, Tag (Easy)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_tag",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-tag_density-easy.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-tag_density-easy.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_tag_medium",
+      "title": "Zone-Tritone Etude -- Hidden Style, Tag (Medium)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_tag",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-tag_density-medium.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-tag_density-medium.ly"
+    },
+    {
+      "id": "zone_tritone_hidden_tag_hard",
+      "title": "Zone-Tritone Etude -- Hidden Style, Tag (Hard)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_tag",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-tag_density-hard.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_hidden_backdoor-tag_density-hard.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_turnaround_easy",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Turnaround (Easy)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-turnaround_density-easy.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-turnaround_density-easy.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_turnaround_medium",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Turnaround (Medium)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-turnaround_density-medium.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-turnaround_density-medium.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_turnaround_hard",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Turnaround (Hard)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-turnaround_density-hard.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-turnaround_density-hard.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_cadence_easy",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Cadence (Easy)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-cadence_density-easy.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-cadence_density-easy.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_cadence_medium",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Cadence (Medium)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-cadence_density-medium.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-cadence_density-medium.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_cadence_hard",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Cadence (Hard)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_cadence",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-cadence_density-hard.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-cadence_density-hard.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_tag_easy",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Tag (Easy)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_tag",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "beginner",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-tag_density-easy.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-tag_density-easy.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_tag_medium",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Tag (Medium)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_tag",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-tag_density-medium.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-tag_density-medium.ly"
+    },
+    {
+      "id": "zone_tritone_bluesy_tag_hard",
+      "title": "Zone-Tritone Etude -- Bluesy Style, Tag (Hard)",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "backdoor_tag",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [60, 100],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-tag_density-hard.mid",
+      "notation_ref": "exercises/blues/zone_tritone_etudes/etude_C_bluesy_backdoor-tag_density-hard.ly"
+    },
+    {
+      "id": "jazz_variation_etude_1",
+      "title": "Jazz Variation Etude 1",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_1_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_2",
+      "title": "Jazz Variation Etude 2",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_2_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_3",
+      "title": "Jazz Variation Etude 3",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_3_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_4",
+      "title": "Jazz Variation Etude 4",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_4_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_5",
+      "title": "Jazz Variation Etude 5",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_5_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_6",
+      "title": "Jazz Variation Etude 6",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "intermediate",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_6_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_7",
+      "title": "Jazz Variation Etude 7",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_7_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_8",
+      "title": "Jazz Variation Etude 8",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_8_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_9",
+      "title": "Jazz Variation Etude 9",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_9_Jazz_Variation.mid"
+    },
+    {
+      "id": "jazz_variation_etude_10",
+      "title": "Jazz Variation Etude 10",
+      "style_family": "blues",
+      "technique": "melodic",
+      "harmonic_context": "blues_major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [80, 140],
+      "difficulty": "advanced",
+      "midi_ref": "exercises/blues/jazz_variations/Etude_10_Jazz_Variation.mid"
     }
   ],
   "progressive_paths": [
@@ -205,6 +574,55 @@
       "sequence": [
         "walkin_blues_riff_C",
         "good_friend_vocal_C"
+      ]
+    },
+    {
+      "id": "zone_tritone_hidden_progression",
+      "title": "Zone-Tritone Hidden Style Path",
+      "description": "Chord-tone resolution etudes with hidden blues vocabulary (easy to hard)",
+      "sequence": [
+        "zone_tritone_hidden_turnaround_easy",
+        "zone_tritone_hidden_turnaround_medium",
+        "zone_tritone_hidden_turnaround_hard",
+        "zone_tritone_hidden_cadence_easy",
+        "zone_tritone_hidden_cadence_medium",
+        "zone_tritone_hidden_cadence_hard",
+        "zone_tritone_hidden_tag_easy",
+        "zone_tritone_hidden_tag_medium",
+        "zone_tritone_hidden_tag_hard"
+      ]
+    },
+    {
+      "id": "zone_tritone_bluesy_progression",
+      "title": "Zone-Tritone Bluesy Style Path",
+      "description": "Blue note destination etudes with overt blues vocabulary (easy to hard)",
+      "sequence": [
+        "zone_tritone_bluesy_turnaround_easy",
+        "zone_tritone_bluesy_turnaround_medium",
+        "zone_tritone_bluesy_turnaround_hard",
+        "zone_tritone_bluesy_cadence_easy",
+        "zone_tritone_bluesy_cadence_medium",
+        "zone_tritone_bluesy_cadence_hard",
+        "zone_tritone_bluesy_tag_easy",
+        "zone_tritone_bluesy_tag_medium",
+        "zone_tritone_bluesy_tag_hard"
+      ]
+    },
+    {
+      "id": "jazz_variation_progression",
+      "title": "Jazz Variation Etudes Path",
+      "description": "Progressive jazz-blues melodic etudes (1-10)",
+      "sequence": [
+        "jazz_variation_etude_1",
+        "jazz_variation_etude_2",
+        "jazz_variation_etude_3",
+        "jazz_variation_etude_4",
+        "jazz_variation_etude_5",
+        "jazz_variation_etude_6",
+        "jazz_variation_etude_7",
+        "jazz_variation_etude_8",
+        "jazz_variation_etude_9",
+        "jazz_variation_etude_10"
       ]
     }
   ],
@@ -281,7 +699,7 @@
     },
     {
       "id": "blues_all_10",
-      "title": "Blues -- Complete Session",
+      "title": "Blues -- Original 10",
       "exercises": [
         "albertking_intro_slideup",
         "srv_outro_bb_bend",
@@ -294,24 +712,100 @@
         "walkin_blues_riff_C",
         "good_friend_vocal_C"
       ],
-      "tags": ["complete", "blues", "all_styles"]
+      "tags": ["blues", "core"]
+    },
+    {
+      "id": "zone_tritone_hidden_session",
+      "title": "Zone-Tritone Hidden Style Session",
+      "exercises": [
+        "zone_tritone_hidden_turnaround_easy",
+        "zone_tritone_hidden_turnaround_medium",
+        "zone_tritone_hidden_turnaround_hard",
+        "zone_tritone_hidden_cadence_easy",
+        "zone_tritone_hidden_cadence_medium",
+        "zone_tritone_hidden_cadence_hard",
+        "zone_tritone_hidden_tag_easy",
+        "zone_tritone_hidden_tag_medium",
+        "zone_tritone_hidden_tag_hard"
+      ],
+      "tags": ["blues", "zone_tritone", "hidden", "backdoor"]
+    },
+    {
+      "id": "zone_tritone_bluesy_session",
+      "title": "Zone-Tritone Bluesy Style Session",
+      "exercises": [
+        "zone_tritone_bluesy_turnaround_easy",
+        "zone_tritone_bluesy_turnaround_medium",
+        "zone_tritone_bluesy_turnaround_hard",
+        "zone_tritone_bluesy_cadence_easy",
+        "zone_tritone_bluesy_cadence_medium",
+        "zone_tritone_bluesy_cadence_hard",
+        "zone_tritone_bluesy_tag_easy",
+        "zone_tritone_bluesy_tag_medium",
+        "zone_tritone_bluesy_tag_hard"
+      ],
+      "tags": ["blues", "zone_tritone", "bluesy", "backdoor"]
+    },
+    {
+      "id": "zone_tritone_all_session",
+      "title": "Zone-Tritone Complete Session",
+      "exercises": [
+        "zone_tritone_hidden_turnaround_easy",
+        "zone_tritone_hidden_turnaround_medium",
+        "zone_tritone_hidden_turnaround_hard",
+        "zone_tritone_hidden_cadence_easy",
+        "zone_tritone_hidden_cadence_medium",
+        "zone_tritone_hidden_cadence_hard",
+        "zone_tritone_hidden_tag_easy",
+        "zone_tritone_hidden_tag_medium",
+        "zone_tritone_hidden_tag_hard",
+        "zone_tritone_bluesy_turnaround_easy",
+        "zone_tritone_bluesy_turnaround_medium",
+        "zone_tritone_bluesy_turnaround_hard",
+        "zone_tritone_bluesy_cadence_easy",
+        "zone_tritone_bluesy_cadence_medium",
+        "zone_tritone_bluesy_cadence_hard",
+        "zone_tritone_bluesy_tag_easy",
+        "zone_tritone_bluesy_tag_medium",
+        "zone_tritone_bluesy_tag_hard"
+      ],
+      "tags": ["blues", "zone_tritone", "complete", "backdoor"]
+    },
+    {
+      "id": "jazz_variation_session",
+      "title": "Jazz Variation Etudes Session",
+      "exercises": [
+        "jazz_variation_etude_1",
+        "jazz_variation_etude_2",
+        "jazz_variation_etude_3",
+        "jazz_variation_etude_4",
+        "jazz_variation_etude_5",
+        "jazz_variation_etude_6",
+        "jazz_variation_etude_7",
+        "jazz_variation_etude_8",
+        "jazz_variation_etude_9",
+        "jazz_variation_etude_10"
+      ],
+      "tags": ["blues", "jazz", "etudes", "melodic"]
     }
   ],
   "stats": {
-    "total_exercises": 10,
+    "total_exercises": 38,
     "by_style": {
       "lead_phrase": 2,
       "major_turnaround": 3,
       "minor_turnaround": 3,
-      "delta_blues": 2
+      "delta_blues": 2,
+      "zone_tritone": 18,
+      "jazz_variation": 10
     },
     "by_difficulty": {
-      "beginner": 2,
-      "intermediate": 5,
-      "advanced": 3
+      "beginner": 8,
+      "intermediate": 17,
+      "advanced": 13
     },
     "keys": ["G", "E", "Cm", "C"],
-    "playlist_count": 6
+    "playlist_count": 11
   },
   "taxonomy_ref": "taxonomy.json"
 }
