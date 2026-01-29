@@ -371,6 +371,146 @@ def etude_summary(etude: Etude) -> str:
     )
 
 
+
+# ---------------------------------------------------------------------------
+# MIDI Export
+# ---------------------------------------------------------------------------
+
+def etude_to_midi(
+    etude: Etude,
+    outfile: str,
+    tempo_bpm: int = 120,
+    melody_octave: int = 4,
+    bass_octave: int = 2,
+    swing_ratio: float = 0.0,
+) -> tuple[list, list]:
+    """
+    Export an Etude to a MIDI file.
+
+    Args:
+        etude: Generated Etude object
+        outfile: Output MIDI file path
+        tempo_bpm: Tempo in beats per minute
+        melody_octave: Octave for melody notes (4 = middle C region)
+        bass_octave: Octave for bass notes (2 = low register)
+        swing_ratio: Swing feel (0.0 = straight, 0.33 = light swing, 0.5 = hard swing)
+
+    Returns:
+        (melody_events, bass_events) tuple of NoteEvent lists
+
+    Example:
+        >>> etude = generate_etude(key=0, mode=BackdoorMode.TURNAROUND)
+        >>> melody, bass = etude_to_midi(etude, "my_etude.mid", tempo_bpm=100)
+    """
+    try:
+        from src.zt_band.midi_out import NoteEvent, write_midi_file
+    except ImportError:
+        from ...zt_band.midi_out import NoteEvent, write_midi_file
+
+    melody: list = []
+    bass: list = []
+
+    for bar in etude.bars:
+        bar_start = (bar.bar_number - 1) * 4.0
+
+        # Bass: root on beats 1 and 3
+        root_midi = bar.root + (bass_octave + 1) * 12
+        bass.append(NoteEvent(
+            start_beats=bar_start,
+            duration_beats=2.0,
+            midi_note=root_midi,
+            velocity=78,
+            channel=1,
+        ))
+        bass.append(NoteEvent(
+            start_beats=bar_start + 2.0,
+            duration_beats=2.0,
+            midi_note=root_midi,
+            velocity=70,
+            channel=1,
+        ))
+
+        # Melody: distribute phrase notes evenly across bar
+        notes_in_bar = len(bar.phrase)
+        if notes_in_bar == 0:
+            continue
+
+        note_spacing = 4.0 / notes_in_bar
+        note_dur = note_spacing * 0.9  # Slight gap between notes
+
+        for i, pc in enumerate(bar.phrase):
+            midi_note = pc + (melody_octave + 1) * 12
+            raw_start = bar_start + (i * note_spacing)
+
+            # Apply swing to off-beat notes
+            start = raw_start
+            if swing_ratio > 0.0:
+                beat_position = raw_start % 1.0
+                if 0.4 < beat_position < 0.6:  # Roughly on the "and"
+                    start = raw_start + (swing_ratio * 0.5 * note_spacing)
+
+            # Velocity variation: accent downbeats
+            vel = 86
+            if i == 0:
+                vel = 92  # Downbeat accent
+            elif i % 2 == 1:
+                vel = 78  # Off-beats slightly softer
+
+            melody.append(NoteEvent(
+                start_beats=start,
+                duration_beats=note_dur,
+                midi_note=midi_note,
+                velocity=vel,
+                channel=0,
+            ))
+
+    write_midi_file(melody, bass, tempo_bpm=tempo_bpm, outfile=outfile)
+    return melody, bass
+
+
+def generate_etude_midi(
+    outfile: str,
+    key: PitchClass = 0,
+    mode: BackdoorMode = BackdoorMode.TURNAROUND,
+    style: StyleMode = StyleMode.HIDDEN,
+    difficulty: Difficulty = Difficulty.MEDIUM,
+    tempo_bpm: int = 120,
+    swing_ratio: float = 0.0,
+    seed: Optional[int] = None,
+) -> Etude:
+    """
+    One-shot: generate etude and write MIDI in a single call.
+
+    Args:
+        outfile: Output MIDI file path
+        key: Tonic pitch class (0=C, 1=Db, ..., 11=B)
+        mode: Backdoor bar insertion mode
+        style: HIDDEN or BLUESY resolution style
+        difficulty: EASY/MEDIUM/HARD (affects density)
+        tempo_bpm: Tempo in beats per minute
+        swing_ratio: Swing feel (0.0-0.5)
+        seed: Random seed for reproducibility
+
+    Returns:
+        The generated Etude object
+
+    Example:
+        >>> etude = generate_etude_midi("blues_C.mid", key=0, tempo_bpm=100)
+    """
+    if seed is not None:
+        random.seed(seed)
+
+    etude = generate_etude(
+        key=key,
+        mode=mode,
+        style=style,
+        difficulty=difficulty,
+    )
+
+    etude_to_midi(etude, outfile, tempo_bpm=tempo_bpm, swing_ratio=swing_ratio)
+    return etude
+
+
 __all__ = [
     "generate_phrase",
     "generate_phrase_with_guide_tones",
@@ -380,6 +520,8 @@ __all__ = [
     "tritone_probability",
     "etude_to_pitch_sequence",
     "etude_summary",
+    "etude_to_midi",
+    "generate_etude_midi",
     "Etude",
     "EtudeBar",
     "SubstitutionPolicy",
