@@ -118,16 +118,14 @@ def default_rhythm_4bars() -> List[Tuple[float, float]]:
         (12.0, 0.5), (12.5, 0.5), (13.0, 1.0), (14.0, 0.5), (14.5, 0.5), (15.0, 1.0),
     ]
 
-def default_directional_contour(n_notes: int) -> List[int]:
-    """
-    Direction-only contour: +1=up, -1=down, 0=repeat.
-    Reused for Etude 1 and Etude 2 (controlled comparison).
-    """
-    base = [+1, +1, -1, +1, -1, -1]
-    contour: List[int] = []
-    while len(contour) < n_notes:
-        contour.extend(base)
-    return contour[:n_notes]
+# Fixed melodic DNA: semitone offsets from the opening pitch.
+# All variation now comes from approach tones and articulation tags only.
+MOTIVIC_OFFSETS_SEMITONES: List[int] = [
+    0, +1, 0, +3, +2, +3,      # Bar 1: neighbor, m3 color
+    +7, +8, +7, +5, +4, +5,    # Bar 2: call/response
+    +4, -2, -3, -2, -3, -2,    # Bar 3: dominant hover
+    -3, -4, -3, -5, -3, -3,    # Bar 4: resolution color
+]
 
 # -----------------------------
 # Melody generation with constraints
@@ -157,34 +155,21 @@ def nearest_in_range(target: int, lo: int, hi: int) -> int:
                 best, best_dist = cand, dist
     return clamp(best, lo, hi)
 
-def make_directional_move(prev: int, direction: int, rng: random.Random) -> int:
-    """
-    Direction-only: choose an interval that respects sign, flexible size.
-    """
-    if direction == 0:
-        return prev
-    if direction > 0:
-        opts = [2, 3, 4, 5]
-    else:
-        opts = [-2, -3, -4, -5]
-    return prev + rng.choice(opts)
-
 def build_melody_seed(
     start_degree: int,
     rhythm: List[Tuple[float, float]],
-    contour: List[int],
     rng: random.Random,
     range_span_semitones: int = 14,   # ~9th (default)
     avoid_tonic_pc_in_bar3: bool = True,
 ) -> List[NoteEvent]:
     """
-    4-bar seed melody:
+    4-bar seed melody using fixed MOTIVIC_OFFSETS_SEMITONES:
       - downbeat of bar 1 forced to start_degree
-      - contour directional-only
+      - fixed semitone offsets from opening pitch (no random contour)
       - soft register constraint around the starting pitch
       - bar 3 tonic PC avoidance (C pc=0)
     """
-    assert len(rhythm) == len(contour)
+    assert len(rhythm) == len(MOTIVIC_OFFSETS_SEMITONES)
 
     start_oct = choose_start_octave(rng)
     start_midi = degree_to_midi_C(start_degree, start_oct)
@@ -193,20 +178,15 @@ def build_melody_seed(
     hi = start_midi + range_span_semitones
 
     events: List[NoteEvent] = []
-    prev = start_midi
 
-    for (st, dur), direction in zip(rhythm, contour):
-        if abs(st - 0.0) < 1e-9:
-            midi = start_midi
-        else:
-            midi = make_directional_move(prev, direction, rng)
-            midi = nearest_in_range(midi, lo, hi)
+    for (st, dur), off in zip(rhythm, MOTIVIC_OFFSETS_SEMITONES):
+        midi = nearest_in_range(start_midi + off, lo, hi)
 
         if avoid_tonic_pc_in_bar3 and (8.0 <= st < 12.0) and midi_to_pc(midi) == PC_C:
-            midi += 1 if direction >= 0 else -1
+            midi += 1 if off >= 0 else -1
             midi = nearest_in_range(midi, lo, hi)
             if midi_to_pc(midi) == PC_C:
-                midi += 2 if direction >= 0 else -2
+                midi += 2 if off >= 0 else -2
                 midi = nearest_in_range(midi, lo, hi)
 
         events.append(NoteEvent(
@@ -216,7 +196,6 @@ def build_melody_seed(
             velocity=86,
             channel=0,
         ))
-        prev = midi
 
     return events
 
@@ -224,7 +203,6 @@ def build_melody_seed(
 def build_melody_seed_pc(
     start_pc: int,
     rhythm: List[Tuple[float, float]],
-    contour: List[int],
     rng: random.Random,
     range_span_semitones: int = 14,   # ~9th (default)
     avoid_tonic_pc_in_bar3: bool = True,
@@ -233,13 +211,14 @@ def build_melody_seed_pc(
     """
     Like build_melody_seed, but the forced opening pitch is given as a pitch-class (0-11).
     Used for numeric-degree extensions like b7 (Bb=10) without expanding degree maps.
+    Uses fixed MOTIVIC_OFFSETS_SEMITONES for melodic DNA.
 
     opening_neighbor_on_and_of_1:
       - If True, the first non-downbeat event at start_beats=0.5 ("& of 1")
         is nudged to a chromatic neighbor of the opening pitch (conversational feel)
         while keeping the downbeat pitch intact.
     """
-    assert len(rhythm) == len(contour)
+    assert len(rhythm) == len(MOTIVIC_OFFSETS_SEMITONES)
 
     start_oct = choose_start_octave(rng)
     start_midi = pc_to_midi(start_pc % 12, start_oct)
@@ -248,14 +227,9 @@ def build_melody_seed_pc(
     hi = start_midi + range_span_semitones
 
     events: List[NoteEvent] = []
-    prev = start_midi
 
-    for (st, dur), direction in zip(rhythm, contour):
-        if abs(st - 0.0) < 1e-9:
-            midi = start_midi
-        else:
-            midi = make_directional_move(prev, direction, rng)
-            midi = nearest_in_range(midi, lo, hi)
+    for (st, dur), off in zip(rhythm, MOTIVIC_OFFSETS_SEMITONES):
+        midi = nearest_in_range(start_midi + off, lo, hi)
 
         # Optional conversational neighbor on "& of 1" (st == 0.5)
         if opening_neighbor_on_and_of_1 and abs(st - 0.5) < 1e-9:
@@ -263,10 +237,10 @@ def build_melody_seed_pc(
 
         # Bar 3 tonic PC avoidance (C)
         if avoid_tonic_pc_in_bar3 and (8.0 <= st < 12.0) and midi_to_pc(midi) == PC_C:
-            midi += 1 if direction >= 0 else -1
+            midi += 1 if off >= 0 else -1
             midi = nearest_in_range(midi, lo, hi)
             if midi_to_pc(midi) == PC_C:
-                midi += 2 if direction >= 0 else -2
+                midi += 2 if off >= 0 else -2
                 midi = nearest_in_range(midi, lo, hi)
 
         events.append(NoteEvent(
@@ -276,7 +250,6 @@ def build_melody_seed_pc(
             velocity=86,
             channel=0,
         ))
-        prev = midi
 
     return events
 
@@ -396,7 +369,6 @@ def generate_etude_pair_C_backdoor_seed(
     master = random.Random(seed)
 
     rhythm = default_rhythm_4bars()
-    contour = default_directional_contour(len(rhythm))
 
     def _offset_events(evs: List[NoteEvent], offset: float) -> List[NoteEvent]:
         return [
@@ -417,7 +389,6 @@ def generate_etude_pair_C_backdoor_seed(
         base_seed = build_melody_seed(
             start_degree=start_degree,
             rhythm=rhythm,
-            contour=contour,
             rng=rng,
             range_span_semitones=range_span_semitones,
             avoid_tonic_pc_in_bar3=True,
@@ -465,7 +436,6 @@ def generate_etude_pair_C_backdoor_seed(
         base_seed = build_melody_seed_pc(
             start_pc=start_pc,
             rhythm=rhythm,
-            contour=contour,
             rng=rng,
             range_span_semitones=range_span_semitones,
             avoid_tonic_pc_in_bar3=True,
