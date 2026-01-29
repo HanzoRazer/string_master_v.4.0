@@ -10,11 +10,28 @@ Mode A (sidecar): Returns parallel tag lists aligned 1:1 with events.
 Mode B (wrapped): Returns TaggedNoteEvent with embedded tags.
     Useful for transporting tags through the pipeline.
 
+The tag selection per bar is driven by rock_articulations.sample_tags_for_bar()
+and the distribution onto events uses deterministic heuristics:
+
+- Lead expressive tags (bends/vibrato/slides) favor:
+    * longer notes
+    * later notes in the bar/phrase
+    * higher velocity notes (more "sung")
+- Right-hand drive tags (palm_mute/rake/tremolo/pick_slide) favor:
+    * shorter notes
+    * repeated pitches
+    * attacks after rests (rake)
+- Let-ring favors:
+    * the longest note(s) or last note in bar
+- Ghost/percussive favors:
+    * short duration + low velocity notes
+
 Usage:
     from zt_band.rock_tag_attach import (
         attach_tags_sidecar,
         attach_tags_wrapped,
         TaggedNoteEvent,
+        write_technique_sidecar_json,
     )
 
     # Mode A - sidecar (recommended)
@@ -29,12 +46,10 @@ Usage:
         seed=42,
     )
     # comp_tags[i] belongs to comp_events[i]
-
-    # Mode B - wrapped events
-    comp_wrapped, bass_wrapped = attach_tags_wrapped(...)
 """
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass, field
 from typing import Sequence
 
@@ -52,7 +67,7 @@ from .rock_articulations import (
 # TAGGED NOTE EVENT (Mode B wrapper)
 # =============================================================================
 
-@dataclass
+@dataclass(frozen=True)
 class TaggedNoteEvent:
     """Wrapper that carries technique tags alongside the original NoteEvent."""
     event: NoteEvent
@@ -60,292 +75,214 @@ class TaggedNoteEvent:
 
 
 # =============================================================================
-# TAG CATEGORY SETS
+# INTERNAL HELPERS
 # =============================================================================
 
-# Lead expressive tags - prefer long + late + loud notes
-LEAD_EXPRESSIVE_TAGS = {
-    "articulation.left_hand.bend_quarter",
-    "articulation.left_hand.bend_half",
-    "articulation.left_hand.bend_whole",
-    "articulation.left_hand.bend_release",
-    "articulation.modulation.vibrato_finger",
-    "articulation.modulation.vibrato_wide",
-    "articulation.modulation.vibrato_bar",
-    "articulation.left_hand.slide_legato",
-    "articulation.left_hand.slide_up",
-    "articulation.left_hand.slide_down",
-}
-
-# Right-hand drive tags - distribution varies by tag
-RIGHT_HAND_DRIVE_TAGS = {
-    "articulation.right_hand.palm_mute",
-    "articulation.right_hand.rake",
-    "articulation.right_hand.tremolo_pick",
-    "articulation.right_hand.pick_slide",
-}
-
-# Sustain tags - prefer longest/last note
-SUSTAIN_TAGS = {
-    "articulation.sustain.let_ring",
-}
-
-# Percussive tags - prefer short + low velocity
-PERCUSSIVE_TAGS = {
-    "articulation.dynamics.ghost_note",
-    "articulation.dynamics.percussive_tone",
-}
-
-# Legato connection tags - prefer adjacent notes
-LEGATO_TAGS = {
-    "articulation.left_hand.hammer_on",
-    "articulation.left_hand.pull_off",
-}
-
-# Max tags per single event (prevents tag spiral)
-MAX_TAGS_PER_EVENT = 2
+def _bar_index(start_beats: float, beats_per_bar: float) -> int:
+    return int(start_beats // beats_per_bar)
 
 
-# =============================================================================
-# BAR GROUPING
-# =============================================================================
-
-def _group_events_by_bar(
-    events: Sequence[NoteEvent],
-    beats_per_bar: float = 4.0,
-) -> list[list[tuple[int, NoteEvent]]]:
+def _group_by_bar(events: Sequence[NoteEvent], beats_per_bar: float) -> list[list[int]]:
     """
-    Group events into bars. Returns list of bars, each bar is list of (original_index, event).
+    Returns list of lists of indices, grouped by bar.
     """
     if not events:
         return []
+    max_bar = max(_bar_index(e.start_beats, beats_per_bar) for e in events)
+    groups: list[list[int]] = [[] for _ in range(max_bar + 1)]
+    for i, e in enumerate(events):
+        groups[_bar_index(e.start_beats, beats_per_bar)].append(i)
+    return groups
 
-    # Find total duration
-    max_beat = max(e.start_beats + e.duration_beats for e in events)
-    num_bars = int(max_beat / beats_per_bar) + 1
 
-    bars: list[list[tuple[int, NoteEvent]]] = [[] for _ in range(num_bars)]
+def _normalize(values: list[float]) -> list[float]:
+    """Normalize values to [0, 1] range within the list."""
+    if not values:
+        return values
+    mn, mx = min(values), max(values)
+    if mx - mn < 1e-9:
+        return [0.5 for _ in values]
+    return [(v - mn) / (mx - mn) for v in values]
 
-    for idx, event in enumerate(events):
-        bar_idx = int(event.start_beats / beats_per_bar)
-        bar_idx = min(bar_idx, num_bars - 1)  # Clamp to last bar
-        bars[bar_idx].append((idx, event))
 
-    return bars
+def _event_features(events: Sequence[NoteEvent], idxs: list[int]) -> dict[int, dict[str, float]]:
+    """
+    Compute simple per-event features used for tag placement.
+    Features are normalized within the bar for fair comparison.
+    """
+    durs = [events[i].duration_beats for i in idxs]
+    vels = [events[i].velocity for i in idxs]
+    starts = [events[i].start_beats for i in idxs]
+    notes = [events[i].midi_note for i in idxs]
+
+    ndurs = _normalize(durs)
+    nvels = _normalize(vels)
+    npos = _normalize(starts)  # within bar order-ish
+
+    # Repetition: count occurrences of same pitch in this bar
+    counts: dict[int, int] = {}
+    for n in notes:
+        counts[n] = counts.get(n, 0) + 1
+    rep = [_normalize([counts[n] for n in notes])[k] for k in range(len(notes))]
+
+    feats: dict[int, dict[str, float]] = {}
+    for k, i in enumerate(idxs):
+        feats[i] = {
+            "dur": ndurs[k],     # longer -> closer to 1
+            "vel": nvels[k],     # louder -> closer to 1
+            "pos": npos[k],      # later -> closer to 1
+            "rep": rep[k],       # more repeated pitch -> closer to 1
+        }
+    return feats
+
+
+def _argmax_by_score(scores: dict[int, float], used: set[int]) -> int | None:
+    """Find index with highest score that hasn't been used."""
+    best_i = None
+    best_s = -1e9
+    for i, s in scores.items():
+        if i in used:
+            continue
+        if s > best_s:
+            best_s = s
+            best_i = i
+    return best_i
+
+
+def _pick_k(scored: dict[int, float], k: int, rng: random.Random) -> list[int]:
+    """
+    Pick up to k distinct indices using weighted sampling from scored dict.
+    """
+    items = [(i, max(1e-9, s)) for i, s in scored.items()]
+    chosen: list[int] = []
+    for _ in range(k):
+        if not items:
+            break
+        total = sum(w for _, w in items)
+        r = rng.random() * total
+        acc = 0.0
+        pick_i = 0
+        for j, (_, w) in enumerate(items):
+            acc += w
+            if acc >= r:
+                pick_i = j
+                break
+        idx = items[pick_i][0]
+        chosen.append(idx)
+        items.pop(pick_i)
+    return chosen
 
 
 # =============================================================================
-# DISTRIBUTION HEURISTICS
+# TAG PLACEMENT HEURISTICS
 # =============================================================================
 
-def _score_for_lead(event: NoteEvent, bar_events: list[tuple[int, NoteEvent]]) -> float:
-    """
-    Score event for lead expressive tags (bends, vibrato, slides).
-    Prefer: long + late + loud.
-    """
-    if not bar_events:
-        return 0.0
-
-    # Normalize within bar
-    max_dur = max(e.duration_beats for _, e in bar_events) or 1.0
-    max_vel = max(e.velocity for _, e in bar_events) or 1
-    max_start = max(e.start_beats for _, e in bar_events)
-    min_start = min(e.start_beats for _, e in bar_events)
-    start_range = max_start - min_start or 1.0
-
-    dur_score = event.duration_beats / max_dur
-    vel_score = event.velocity / max_vel
-    late_score = (event.start_beats - min_start) / start_range if start_range > 0 else 0.5
-
-    return 0.4 * dur_score + 0.3 * late_score + 0.3 * vel_score
-
-
-def _score_for_palm_mute(
-    event: NoteEvent,
-    bar_events: list[tuple[int, NoteEvent]],
-    pitch_counts: dict[int, int],
-) -> float:
-    """
-    Score event for palm_mute. Prefer: short + repeated pitch (riff feel).
-    """
-    if not bar_events:
-        return 0.0
-
-    max_dur = max(e.duration_beats for _, e in bar_events) or 1.0
-
-    # Shorter is better for palm mute
-    short_score = 1.0 - (event.duration_beats / max_dur)
-
-    # Repeated pitch bonus
-    repeat_score = min(pitch_counts.get(event.midi_note, 1) / 3.0, 1.0)
-
-    return 0.5 * short_score + 0.5 * repeat_score
-
-
-def _score_for_rake(event: NoteEvent, bar_events: list[tuple[int, NoteEvent]]) -> float:
-    """
-    Score event for rake. Prefer: loud + later attack.
-    """
-    if not bar_events:
-        return 0.0
-
-    max_vel = max(e.velocity for _, e in bar_events) or 1
-    max_start = max(e.start_beats for _, e in bar_events)
-    min_start = min(e.start_beats for _, e in bar_events)
-    start_range = max_start - min_start or 1.0
-
-    vel_score = event.velocity / max_vel
-    late_score = (event.start_beats - min_start) / start_range if start_range > 0 else 0.5
-
-    return 0.6 * vel_score + 0.4 * late_score
-
-
-def _score_for_tremolo(event: NoteEvent, bar_events: list[tuple[int, NoteEvent]]) -> float:
-    """
-    Score event for tremolo_pick. Prefer: medium-short duration, loud.
-    """
-    if not bar_events:
-        return 0.0
-
-    max_dur = max(e.duration_beats for _, e in bar_events) or 1.0
-    max_vel = max(e.velocity for _, e in bar_events) or 1
-
-    # Medium duration is ideal (not too short, not too long)
-    dur_ratio = event.duration_beats / max_dur
-    dur_score = 1.0 - abs(dur_ratio - 0.4) * 2  # Peak at 40% of max
-    dur_score = max(0.0, dur_score)
-
-    vel_score = event.velocity / max_vel
-
-    return 0.5 * dur_score + 0.5 * vel_score
-
-
-def _score_for_pick_slide(event: NoteEvent, bar_events: list[tuple[int, NoteEvent]]) -> float:
-    """
-    Score event for pick_slide. Prefer: last loud attack in bar.
-    """
-    if not bar_events:
-        return 0.0
-
-    max_vel = max(e.velocity for _, e in bar_events) or 1
-    max_start = max(e.start_beats for _, e in bar_events)
-    min_start = min(e.start_beats for _, e in bar_events)
-    start_range = max_start - min_start or 1.0
-
-    vel_score = event.velocity / max_vel
-    # Strongly prefer last event
-    late_score = ((event.start_beats - min_start) / start_range) ** 2 if start_range > 0 else 0.5
-
-    return 0.4 * vel_score + 0.6 * late_score
-
-
-def _score_for_sustain(event: NoteEvent, bar_events: list[tuple[int, NoteEvent]]) -> float:
-    """
-    Score event for let_ring. Prefer: longest + last note.
-    """
-    if not bar_events:
-        return 0.0
-
-    max_dur = max(e.duration_beats for _, e in bar_events) or 1.0
-    max_start = max(e.start_beats for _, e in bar_events)
-    min_start = min(e.start_beats for _, e in bar_events)
-    start_range = max_start - min_start or 1.0
-
-    dur_score = event.duration_beats / max_dur
-    late_score = (event.start_beats - min_start) / start_range if start_range > 0 else 0.5
-
-    return 0.6 * dur_score + 0.4 * late_score
-
-
-def _score_for_ghost(event: NoteEvent, bar_events: list[tuple[int, NoteEvent]]) -> float:
-    """
-    Score event for ghost_note / percussive_tone. Prefer: short + low velocity.
-    """
-    if not bar_events:
-        return 0.0
-
-    max_dur = max(e.duration_beats for _, e in bar_events) or 1.0
-    max_vel = max(e.velocity for _, e in bar_events) or 1
-
-    # Short and quiet
-    short_score = 1.0 - (event.duration_beats / max_dur)
-    quiet_score = 1.0 - (event.velocity / max_vel)
-
-    return 0.5 * short_score + 0.5 * quiet_score
-
-
-# =============================================================================
-# TAG DISTRIBUTION
-# =============================================================================
-
-def _distribute_tags_in_bar(
-    bar_events: list[tuple[int, NoteEvent]],
+def _place_bar_tags_on_events(
+    events: Sequence[NoteEvent],
+    idxs: list[int],
     bar_tags: list[str],
+    rng: random.Random,
 ) -> dict[int, list[str]]:
     """
-    Distribute bar-level tags onto specific events in the bar.
-    Returns mapping of original_index -> list of tags for that event.
+    Given indices for a single bar and the sampled bar-level tags,
+    return a mapping: event_index -> list of tags assigned to that event.
     """
-    if not bar_events or not bar_tags:
-        return {}
+    assigned: dict[int, list[str]] = {i: [] for i in idxs}
+    if not idxs or not bar_tags:
+        return assigned
 
-    # Track tags per event (keyed by original index)
-    event_tags: dict[int, list[str]] = {idx: [] for idx, _ in bar_events}
+    feats = _event_features(events, idxs)
+    used: set[int] = set()
 
-    # Build pitch frequency map for palm_mute scoring
-    pitch_counts: dict[int, int] = {}
-    for _, evt in bar_events:
-        pitch_counts[evt.midi_note] = pitch_counts.get(evt.midi_note, 0) + 1
+    # 1) Sustain: let_ring to the longest + latest note (or chord hit)
+    if "articulation.sustain.let_ring" in bar_tags:
+        scores = {i: 0.65 * feats[i]["dur"] + 0.35 * feats[i]["pos"] for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append("articulation.sustain.let_ring")
+            used.add(i_best)
 
-    # Process each tag
-    for tag in bar_tags:
-        # Find best event for this tag
-        best_idx: int | None = None
-        best_score = -1.0
+    # 2) Leadness tags: bends/vibrato/slides -> long + late + loud
+    lead_tags = [t for t in bar_tags if t in LEADNESS_TAGS]
+    for t in lead_tags:
+        scores = {i: 0.45 * feats[i]["dur"] + 0.35 * feats[i]["pos"] + 0.20 * feats[i]["vel"] for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append(t)
+            used.add(i_best)
 
-        for orig_idx, evt in bar_events:
-            # Skip if event already has max tags
-            if len(event_tags[orig_idx]) >= MAX_TAGS_PER_EVENT:
-                continue
+    # 3) Style-energy tags: palm mute / rake / tremolo / pick slide
+    energy_tags = [t for t in bar_tags if t in STYLE_ENERGY_TAGS]
 
-            # Score based on tag category
-            if tag in LEAD_EXPRESSIVE_TAGS or tag in LEADNESS_TAGS:
-                score = _score_for_lead(evt, bar_events)
-            elif tag == "articulation.right_hand.palm_mute":
-                score = _score_for_palm_mute(evt, bar_events, pitch_counts)
-            elif tag == "articulation.right_hand.rake":
-                score = _score_for_rake(evt, bar_events)
-            elif tag == "articulation.right_hand.tremolo_pick":
-                score = _score_for_tremolo(evt, bar_events)
-            elif tag == "articulation.right_hand.pick_slide":
-                score = _score_for_pick_slide(evt, bar_events)
-            elif tag in SUSTAIN_TAGS:
-                score = _score_for_sustain(evt, bar_events)
-            elif tag in PERCUSSIVE_TAGS:
-                score = _score_for_ghost(evt, bar_events)
-            elif tag in LEGATO_TAGS:
-                # Legato tags: prefer middle events (not first, not last)
-                bar_positions = [i for i, _ in enumerate(bar_events)]
-                pos = [i for i, (oi, _) in enumerate(bar_events) if oi == orig_idx][0]
-                if len(bar_positions) > 2 and 0 < pos < len(bar_positions) - 1:
-                    score = 0.8
-                else:
-                    score = 0.3
-            else:
-                # Default: prefer louder events
-                max_vel = max(e.velocity for _, e in bar_events) or 1
-                score = evt.velocity / max_vel
+    # palm mute: short + repeated, apply to up to 2 events
+    if "articulation.right_hand.palm_mute" in energy_tags:
+        scores = {i: 0.55 * (1.0 - feats[i]["dur"]) + 0.45 * feats[i]["rep"] for i in idxs}
+        picks = _pick_k(scores, k=min(2, len(idxs)), rng=rng)
+        for i in picks:
+            assigned[i].append("articulation.right_hand.palm_mute")
+            used.add(i)
 
-            if score > best_score:
-                best_score = score
-                best_idx = orig_idx
+    # rake: attacks after gaps (approximate by "not late but accented")
+    if "articulation.right_hand.rake" in energy_tags:
+        scores = {i: 0.55 * feats[i]["vel"] + 0.45 * feats[i]["pos"] for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append("articulation.right_hand.rake")
+            used.add(i_best)
 
-        # Assign tag to best event
-        if best_idx is not None:
-            event_tags[best_idx].append(tag)
+    # tremolo: short-to-medium duration + loud; put on one event
+    if "articulation.right_hand.tremolo_pick" in energy_tags:
+        scores = {i: 0.50 * feats[i]["vel"] + 0.50 * (1.0 - abs(feats[i]["dur"] - 0.5)) for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append("articulation.right_hand.tremolo_pick")
+            used.add(i_best)
 
-    # Filter out empty entries
-    return {k: v for k, v in event_tags.items() if v}
+    # pick slide: last loud attack (often end of bar)
+    if "articulation.right_hand.pick_slide" in energy_tags:
+        scores = {i: 0.60 * feats[i]["pos"] + 0.40 * feats[i]["vel"] for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append("articulation.right_hand.pick_slide")
+            used.add(i_best)
+
+    # 4) Ghost/percussive: short + low velocity
+    if "articulation.percussive.ghost_note" in bar_tags:
+        scores = {i: 0.60 * (1.0 - feats[i]["vel"]) + 0.40 * (1.0 - feats[i]["dur"]) for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append("articulation.percussive.ghost_note")
+            used.add(i_best)
+
+    if "articulation.percussive.percussive_tone" in bar_tags:
+        scores = {i: 0.55 * (1.0 - feats[i]["dur"]) + 0.45 * (1.0 - feats[i]["vel"]) for i in idxs}
+        i_best = _argmax_by_score(scores, used)
+        if i_best is not None:
+            assigned[i_best].append("articulation.percussive.percussive_tone")
+            used.add(i_best)
+
+    # 5) Any remaining tags not handled explicitly:
+    # Attach them to the "most prominent" note: long+late+loud
+    remaining = [t for t in bar_tags if t not in set(lead_tags + energy_tags) and t not in {
+        "articulation.sustain.let_ring",
+        "articulation.percussive.ghost_note",
+        "articulation.percussive.percussive_tone",
+    }]
+    if remaining:
+        scores = {i: 0.45 * feats[i]["dur"] + 0.35 * feats[i]["pos"] + 0.20 * feats[i]["vel"] for i in idxs}
+        for t in remaining:
+            i_best = _argmax_by_score(scores, used)
+            if i_best is None:
+                i_best = max(idxs)  # fallback
+            assigned[i_best].append(t)
+            used.add(i_best)
+
+    # Enforce per-event max tags (keep it sane)
+    for i in idxs:
+        if len(assigned[i]) > 2:
+            assigned[i] = assigned[i][:2]
+
+    return assigned
 
 
 # =============================================================================
@@ -364,13 +301,9 @@ def attach_tags_sidecar(
     style_energy: float = 0.5,
     leadness: float = 0.5,
     seed: int | None = None,
-) -> tuple[list[tuple[str, ...]], list[tuple[str, ...]]]:
+) -> tuple[list[list[str]], list[list[str]]]:
     """
-    Attach technique tags to events using sidecar mode.
-
-    Returns parallel tag tuples aligned 1:1 with input events:
-        comp_tags[i] belongs to comp_events[i]
-        bass_tags[i] belongs to bass_events[i]
+    Non-breaking attachment: returns sidecar lists of tags aligned 1:1 with events.
 
     Parameters
     ----------
@@ -399,23 +332,25 @@ def attach_tags_sidecar(
 
     Returns
     -------
-    (comp_tags, bass_tags) : tuple[list[tuple[str, ...]], list[tuple[str, ...]]]
+    (comp_tags, bass_tags) : tuple[list[list[str]], list[list[str]]]
         Parallel tag lists for each track.
+        comp_tags[i] is a list[str] for comp_events[i]
     """
-    # Initialize output with empty tuples
-    comp_tags: list[tuple[str, ...]] = [() for _ in comp_events]
-    bass_tags: list[tuple[str, ...]] = [() for _ in bass_events]
+    rng = random.Random(seed)
 
-    # Process comp track
-    comp_bars = _group_events_by_bar(list(comp_events), beats_per_bar)
-    for bar_idx, bar_events in enumerate(comp_bars):
-        if not bar_events:
+    comp_tags: list[list[str]] = [[] for _ in comp_events]
+    bass_tags: list[list[str]] = [[] for _ in bass_events]
+
+    # Group by bar
+    comp_groups = _group_by_bar(list(comp_events), beats_per_bar)
+    bass_groups = _group_by_bar(list(bass_events), beats_per_bar)
+
+    # Process comp bars
+    for bar_idx, idxs in enumerate(comp_groups):
+        if not idxs:
             continue
-
-        # Sample tags for this bar
-        bar_seed = (seed * 1000 + bar_idx) if seed is not None else None
-        tags = sample_tags_for_bar(
-            note_count=len(bar_events),
+        bar_tags = sample_tags_for_bar(
+            note_count=len(idxs),
             difficulty=difficulty,
             style=style,
             density=density,
@@ -423,37 +358,30 @@ def attach_tags_sidecar(
             legato_bias=legato_bias,
             style_energy=style_energy,
             leadness=leadness,
-            seed=bar_seed,
+            seed=None if seed is None else (seed * 10000 + bar_idx * 97 + 1),
         )
+        placed = _place_bar_tags_on_events(comp_events, idxs, bar_tags, rng=rng)
+        for i in idxs:
+            comp_tags[i] = placed.get(i, [])
 
-        # Distribute tags onto events
-        distributed = _distribute_tags_in_bar(bar_events, tags)
-        for orig_idx, event_tag_list in distributed.items():
-            comp_tags[orig_idx] = tuple(event_tag_list)
-
-    # Process bass track (typically fewer articulations)
-    bass_bars = _group_events_by_bar(list(bass_events), beats_per_bar)
-    for bar_idx, bar_events in enumerate(bass_bars):
-        if not bar_events:
+    # Process bass bars (usually fewer ornaments; scale down a bit)
+    for bar_idx, idxs in enumerate(bass_groups):
+        if not idxs:
             continue
-
-        # Bass gets reduced articulation density
-        bar_seed = (seed * 2000 + bar_idx) if seed is not None else None
-        tags = sample_tags_for_bar(
-            note_count=len(bar_events),
+        bar_tags = sample_tags_for_bar(
+            note_count=len(idxs),
             difficulty=difficulty,
             style=style,
-            density=density * 0.3,  # Bass is more sparse
-            aggression=aggression * 0.5,
+            density=max(0.0, density - 0.15),  # bass is typically simpler
+            aggression=aggression,
             legato_bias=legato_bias,
-            style_energy=style_energy * 0.4,
-            leadness=leadness * 0.2,
-            seed=bar_seed,
+            style_energy=style_energy,
+            leadness=max(0.0, leadness - 0.20),  # bass less "vocal"
+            seed=None if seed is None else (seed * 10000 + bar_idx * 97 + 777),
         )
-
-        distributed = _distribute_tags_in_bar(bar_events, tags)
-        for orig_idx, event_tag_list in distributed.items():
-            bass_tags[orig_idx] = tuple(event_tag_list)
+        placed = _place_bar_tags_on_events(bass_events, idxs, bar_tags, rng=rng)
+        for i in idxs:
+            bass_tags[i] = placed.get(i, [])
 
     return comp_tags, bass_tags
 
@@ -476,9 +404,7 @@ def attach_tags_wrapped(
     seed: int | None = None,
 ) -> tuple[list[TaggedNoteEvent], list[TaggedNoteEvent]]:
     """
-    Attach technique tags to events using wrapped mode.
-
-    Returns TaggedNoteEvent wrappers with embedded tags.
+    Wrapper attachment: returns TaggedNoteEvent lists while preserving NoteEvent untouched.
 
     Parameters
     ----------
@@ -489,7 +415,7 @@ def attach_tags_wrapped(
     (comp_wrapped, bass_wrapped) : tuple[list[TaggedNoteEvent], list[TaggedNoteEvent]]
         Wrapped events with technique_tags field.
     """
-    comp_tags, bass_tags = attach_tags_sidecar(
+    comp_side, bass_side = attach_tags_sidecar(
         comp_events=comp_events,
         bass_events=bass_events,
         beats_per_bar=beats_per_bar,
@@ -502,17 +428,8 @@ def attach_tags_wrapped(
         leadness=leadness,
         seed=seed,
     )
-
-    comp_wrapped = [
-        TaggedNoteEvent(event=evt, technique_tags=tags)
-        for evt, tags in zip(comp_events, comp_tags)
-    ]
-
-    bass_wrapped = [
-        TaggedNoteEvent(event=evt, technique_tags=tags)
-        for evt, tags in zip(bass_events, bass_tags)
-    ]
-
+    comp_wrapped = [TaggedNoteEvent(e, tuple(tags)) for e, tags in zip(comp_events, comp_side)]
+    bass_wrapped = [TaggedNoteEvent(e, tuple(tags)) for e, tags in zip(bass_events, bass_side)]
     return comp_wrapped, bass_wrapped
 
 
@@ -522,7 +439,7 @@ def attach_tags_wrapped(
 
 def tags_to_annotation_list(
     events: Sequence[NoteEvent],
-    tags: Sequence[tuple[str, ...]],
+    tags: Sequence[list[str]],
 ) -> list[dict]:
     """
     Convert parallel (events, tags) to exportable annotation list.
@@ -534,13 +451,13 @@ def tags_to_annotation_list(
         ]
     """
     annotations = []
-    for evt, tag_tuple in zip(events, tags):
-        if tag_tuple:
+    for evt, tag_list in zip(events, tags):
+        if tag_list:
             annotations.append({
                 "start_beats": evt.start_beats,
                 "duration_beats": evt.duration_beats,
                 "midi_note": evt.midi_note,
-                "technique_tags": list(tag_tuple),
+                "technique_tags": list(tag_list),
             })
     return annotations
 
@@ -560,8 +477,8 @@ def sidecar_json_path(outfile: str) -> str:
 
 def write_technique_sidecar_json(
     outfile: str,
-    comp_tags: Sequence[tuple[str, ...]],
-    bass_tags: Sequence[tuple[str, ...]],
+    comp_tags: Sequence[list[str]],
+    bass_tags: Sequence[list[str]],
     beats_per_bar: float = 4.0,
     meter: str = "4/4",
     version: int = 1,
@@ -578,10 +495,10 @@ def write_technique_sidecar_json(
     ----------
     outfile : str
         Path to the MIDI file (sidecar will be named <outfile>.technique_tags.json)
-    comp_tags : Sequence[tuple[str, ...]]
-        Parallel tag tuples for comp events.
-    bass_tags : Sequence[tuple[str, ...]]
-        Parallel tag tuples for bass events.
+    comp_tags : Sequence[list[str]]
+        Parallel tag lists for comp events.
+    bass_tags : Sequence[list[str]]
+        Parallel tag lists for bass events.
     beats_per_bar : float
         Beats per bar (default 4.0).
     meter : str
@@ -599,9 +516,8 @@ def write_technique_sidecar_json(
     import json
     from datetime import datetime, timezone
 
-    # Convert tuples to lists for JSON serialization
     payload: dict = {
-        "version": version,
+        "version": int(version),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "meter": meter,
         "beats_per_bar": float(beats_per_bar),
@@ -609,7 +525,7 @@ def write_technique_sidecar_json(
         "bass_tags": [list(t) for t in bass_tags],
     }
 
-    if style_params:
+    if style_params is not None:
         payload["style_params"] = style_params
 
     path = sidecar_json_path(outfile)
