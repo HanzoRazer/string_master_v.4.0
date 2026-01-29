@@ -121,14 +121,10 @@ def default_rhythm_4bars() -> List[Tuple[float, float]]:
 # Fixed melodic DNA: semitone offsets from the opening pitch.
 # All variation now comes from approach tones and articulation tags only.
 MOTIVIC_OFFSETS_SEMITONES: List[int] = [
-    # Bar 1 (beats 0-4): neighbor, m3 color
-    0, +1, 0, +3, +2, +3,
-    # Bar 2 (beats 4-8): blues conversational answer (9->root->b7->5->4->5)
-    +5, +3, +1, -2, -4, -2,
-    # Bar 3 (beats 8-12): dominant hover
-    +4, -2, -3, -2, -3, -2,
-    # Bar 4 (beats 12-16): resolution color
-    -3, -4, -3, -5, -3, -3,
+    0, +1, 0, +3, +2, +3,      # Bar 1: neighbor, m3 color
+    +7, +8, +7, +5, +4, +5,    # Bar 2: call/response
+    +4, -2, -3, -2, -3, -2,    # Bar 3: dominant hover
+    -3, -4, -3, -5, -3, -3,    # Bar 4: resolution color
 ]
 
 # -----------------------------
