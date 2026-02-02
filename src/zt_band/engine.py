@@ -4,7 +4,7 @@ Accompaniment generation engine with gravity-aware reharmonization.
 from __future__ import annotations
 
 from dataclasses import replace
-from typing import Any
+from typing import Any, Tuple
 
 from .chords import Chord, chord_bass_pitch, chord_pitches, parse_chord_symbol
 from .expressive_layer import apply_velocity_profile
@@ -112,6 +112,7 @@ def generate_accompaniment(
     tritone_seed: int | None = None,
     expressive: ExpressiveSpec | None = None,
     style_overrides: dict[str, Any] | None = None,
+    meter: Tuple[int, int] = (4, 4),
 ) -> tuple[list[NoteEvent], list[NoteEvent]]:
     """
     Generate comping + bass MIDI note events for a simple chord progression.
@@ -140,6 +141,9 @@ def generate_accompaniment(
     style_overrides:
         Optional dict of style knob overrides from .ztprog config.
         Supports nested sugar (ghost_hits, vel_contour) or flat canonical fields.
+    meter:
+        Time signature as (numerator, denominator), e.g. (4, 4) or (3, 4).
+        Phase 6.0+: Affects bar length calculation and MIDI time signature.
 
     Returns
     -------
@@ -177,12 +181,16 @@ def generate_accompaniment(
 
     current_bar = 0
 
+    # Phase 6.0: Calculate beats per bar from meter
+    meter_num, meter_denom = meter
+    beats_per_bar = meter_num * (4.0 / meter_denom)
+
     for chord in chords:
         pitches = chord_pitches(chord, octave=4)
         bass_pitch = chord_bass_pitch(chord, octave=2)
 
         for bar_offset in range(bars_per_chord):
-            bar_start_beats = (current_bar + bar_offset) * 4.0  # assume 4/4
+            bar_start_beats = (current_bar + bar_offset) * beats_per_bar
 
             # Collect bar events before adding ghosts
             bar_comp_events: list[NoteEvent] = []
@@ -283,7 +291,7 @@ def generate_accompaniment(
         if expressive is not None:
             comp_events = apply_expressive(comp_events, spec=expressive, tempo_bpm=tempo_bpm)
             bass_events = apply_expressive(bass_events, spec=expressive, tempo_bpm=tempo_bpm)
-        write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=outfile)
+        write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=outfile, meter=meter)
 
     # ---- Technique Tag Attachment (sidecar mode, via style_overrides) ----
     tt_cfg = None

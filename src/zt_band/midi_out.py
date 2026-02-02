@@ -4,6 +4,7 @@ MIDI file generation and output utilities.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Tuple
 
 try:
     import mido
@@ -36,6 +37,7 @@ def write_midi_file(
     bass_events: list[NoteEvent],
     tempo_bpm: int = 120,
     outfile: str = "backing.mid",
+    meter: Tuple[int, int] = (4, 4),
 ) -> None:
     """
     Write MIDI note events to a .mid file with enforced stability invariants.
@@ -43,7 +45,7 @@ def write_midi_file(
     Invariants enforced:
     - SMF Type 1 (multiple tracks)
     - Tempo meta-event at time 0
-    - Time signature meta-event at time 0 (4/4)
+    - Time signature meta-event at time 0
     - Stable track names ("Comping", "Bass")
     - No stuck notes (verified after rendering)
 
@@ -52,6 +54,8 @@ def write_midi_file(
         bass_events: List of bass track events
         tempo_bpm: Tempo in beats per minute
         outfile: Output filename
+        meter: Time signature as (numerator, denominator), e.g. (4, 4) or (3, 4).
+               Phase 6.0+: Used for MIDI time signature meta event.
 
     Raises:
         ImportError: If mido library is not installed
@@ -74,7 +78,9 @@ def write_midi_file(
     tempo_track = mido.MidiTrack()
     mid.tracks.append(tempo_track)
     tempo_track.append(mido.MetaMessage('set_tempo', tempo=mido.bpm2tempo(tempo_bpm), time=0))
-    tempo_track.append(mido.MetaMessage('time_signature', numerator=4, denominator=4, time=0))
+    # Phase 6.0: Use meter parameter for time signature
+    meter_num, meter_denom = meter
+    tempo_track.append(mido.MetaMessage('time_signature', numerator=meter_num, denominator=meter_denom, time=0))
 
     # Track 1: Comping (piano/guitar)
     comp_track = mido.MidiTrack()

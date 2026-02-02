@@ -43,7 +43,7 @@ import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 from uuid import uuid4
 
 from .midi_out import NoteEvent, write_midi_file
@@ -57,7 +57,7 @@ try:
         ClipBundle,
         ClipArtifact,
         ClipRunLog,
-        ClipRunAttempt,
+        ClipAttempt,
     )
     SG_SPEC_AVAILABLE = True
 except ImportError:
@@ -278,6 +278,7 @@ def write_clip_bundle(
     assignment: Optional[Any] = None,
     # Style metadata
     meter: str = "4/4",
+    meter_tuple: Tuple[int, int] = (4, 4),  # Phase 6.0: For MIDI time signature
     beats_per_bar: float = 4.0,
     style_params: Optional[Dict[str, Any]] = None,
     # Optional: require coach file even if no assignment
@@ -360,7 +361,7 @@ def write_clip_bundle(
         # ====================================================================
         midi_path_tmp = tmp_dir / "clip.mid"
         midi_path_final = bundle_dir / "clip.mid"
-        write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=str(midi_path_tmp))
+        write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=str(midi_path_tmp), meter=meter_tuple)
 
         midi_bytes = midi_path_tmp.read_bytes()
         midi_sha256 = _compute_sha256(midi_bytes)
@@ -371,20 +372,64 @@ def write_clip_bundle(
             size_bytes=len(midi_bytes),
         )
 
+        # sg-spec TechniqueSidecar wants raw hex without "sha256:" prefix
+        source_midi_sha256_hex = midi_sha256.split("sha256:", 1)[-1]
+
+        # Helper: flatten tags safely to a per-role list[str]
+        def _flatten_tags(tag_groups: Optional[Sequence[List[str]]]) -> List[str]:
+            if not tag_groups:
+                return []
+            flat: List[str] = []
+            for group in tag_groups:
+                if not group:
+                    continue
+                for t in group:
+                    if t and isinstance(t, str):
+                        flat.append(t)
+            # stable + dedup
+            return sorted(set(flat))
+
+        comp_technique_tags = _flatten_tags(comp_tags)
+        bass_technique_tags = _flatten_tags(bass_tags)
+
         # ====================================================================
         # 2. Write clip.tags.json (always emit, even if no tags)
         # ====================================================================
         tags_path_tmp = tmp_dir / "clip.tags.json"
         tags_path_final = bundle_dir / "clip.tags.json"
+
+        # TechniqueSidecar v1: annotations as list-of-objects
+        annotations: List[Dict[str, Any]] = []
+        for e in comp_events:
+            annotations.append(
+                {
+                    "start_beats": float(e.start_beats),
+                    "duration_beats": float(e.duration_beats),
+                    "midi_note": int(getattr(e, "midi_note")),
+                    "role": "comp",
+                    "technique_tags": comp_technique_tags,
+                }
+            )
+        for e in bass_events:
+            annotations.append(
+                {
+                    "start_beats": float(e.start_beats),
+                    "duration_beats": float(e.duration_beats),
+                    "midi_note": int(getattr(e, "midi_note")),
+                    "role": "bass",
+                    "technique_tags": bass_technique_tags,
+                }
+            )
+
         tags_payload = {
             "schema_id": "technique_sidecar",
             "schema_version": "v1",
             "generated_at_utc": generated_at_str,
+            "source_midi_sha256": source_midi_sha256_hex,
             "meter": meter,
             "beats_per_bar": beats_per_bar,
-            "annotations": [],  # Future: structured TechniqueAnnotation list
-            "comp_tags": [list(t) for t in (comp_tags or [])],
-            "bass_tags": [list(t) for t in (bass_tags or [])],
+            "tempo_bpm": float(tempo_bpm),
+            "annotations": annotations,
         }
         if style_params:
             tags_payload["style_params"] = style_params
@@ -442,7 +487,8 @@ def write_clip_bundle(
         duration_ms = int((time.time() - start_time) * 1000)
 
         # Calculate validation summary
-        total_notes = len(comp_events) + len(bass_events)
+        note_count_comp = len(comp_events)
+        note_count_bass = len(bass_events)
         max_end = 0.0
         for e in comp_events + bass_events:
             end = e.start_beats + e.duration_beats
@@ -467,10 +513,10 @@ def write_clip_bundle(
             },
             "validation": {
                 "contract_passed": True,
-                "note_count": total_notes,
                 "duration_beats": max_end,
-                "comp_event_count": len(comp_events),
-                "bass_event_count": len(bass_events),
+                "note_count_comp": note_count_comp,
+                "note_count_bass": note_count_bass,
+                "warnings": [],
             },
             "attempts": [
                 {
@@ -513,15 +559,14 @@ def write_clip_bundle(
                 ClipArtifact(
                     artifact_id=name.replace(".", "_"),
                     kind=kind_map.get(name, "attachment"),
-                    filename=name,
+                    path=str(ref.path),
                     sha256=ref.sha256,
                 )
                 for name, ref in artifacts.items()
             ]
             clip_bundle = ClipBundle(
                 clip_id=clip_id,
-                created_at_utc=created_at_utc,
-                bundle_dir=str(bundle_dir),
+                bundle_path=str(bundle_dir),
                 artifacts=artifact_list,
             )
 
@@ -561,6 +606,7 @@ def write_clip_bundle_default(
     assignment: Optional[Any] = None,
     # Style metadata
     meter: str = "4/4",
+    meter_tuple: Tuple[int, int] = (4, 4),  # Phase 6.0: For MIDI time signature
     beats_per_bar: float = 4.0,
     style_params: Optional[Dict[str, Any]] = None,
     require_coach_file: bool = False,
@@ -617,6 +663,7 @@ def write_clip_bundle_default(
         inputs=inputs,
         assignment=assignment,
         meter=meter,
+        meter_tuple=meter_tuple,
         beats_per_bar=beats_per_bar,
         style_params=style_params,
         require_coach_file=require_coach_file,
