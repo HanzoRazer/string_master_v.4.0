@@ -20,14 +20,24 @@ Usage (default convention):
     bundle = write_clip_bundle_default(..., clip_id="clip_abc123", ...)
 
 Atomic Write Guarantee:
-    All files are written to temp paths first, then renamed to final paths.
-    DAW imports never see partial files.
+    All files are written to a temporary directory first, then the entire
+    bundle directory is renamed atomically to the final path. This ensures:
+    - DAW imports never see partial bundles
+    - Either the complete bundle exists, or nothing exists
+    - Crash-safety: no partial state on filesystem
+
+Collision Policy:
+    By default, collision_policy='fail' raises BundleCollisionError if the
+    target bundle directory already exists. This fail-fast behavior protects
+    reproducibility. Use collision_policy='overwrite' to replace existing.
 """
 from __future__ import annotations
 
 import hashlib
 import json
 import os
+import secrets
+import shutil
 import tempfile
 import time
 from dataclasses import dataclass
@@ -65,6 +75,27 @@ except ImportError:
 # ============================================================================
 
 ZT_BAND_VERSION = "0.1.0"
+
+
+# ============================================================================
+# Exceptions
+# ============================================================================
+
+class BundleCollisionError(Exception):
+    """
+    Raised when a bundle directory already exists and collision_policy is 'fail'.
+
+    Fail-fast prevents silent overwrites and protects reproducibility.
+    If you need to overwrite, explicitly delete the existing bundle first,
+    or use collision_policy='overwrite'.
+    """
+    def __init__(self, bundle_dir: Path):
+        self.bundle_dir = bundle_dir
+        super().__init__(
+            f"Bundle directory already exists: {bundle_dir}\n"
+            "Use collision_policy='overwrite' to allow overwrites, "
+            "or delete the existing bundle first."
+        )
 
 
 # ============================================================================
@@ -109,6 +140,45 @@ def _atomic_write_bytes(path: Path, data: bytes) -> None:
         if os.path.exists(tmp_path):
             os.unlink(tmp_path)
         raise
+
+
+def _atomic_publish_dir(
+    tmp_dir: Path,
+    final_dir: Path,
+    collision_policy: str = "fail",
+) -> None:
+    """
+    Atomically publish a directory by renaming.
+
+    This provides whole-bundle atomicity: consumers never see
+    partial bundles. All files are written to a temp directory
+    first, then the entire directory is renamed in one atomic
+    operation.
+
+    Parameters
+    ----------
+    tmp_dir : Path
+        Temporary directory containing the complete bundle.
+    final_dir : Path
+        Target directory path for the published bundle.
+    collision_policy : str
+        - 'fail': Raise BundleCollisionError if final_dir exists.
+        - 'overwrite': Remove existing directory and replace.
+
+    Raises
+    ------
+    BundleCollisionError
+        If final_dir exists and collision_policy='fail'.
+    """
+    final_dir.parent.mkdir(parents=True, exist_ok=True)
+
+    if final_dir.exists():
+        if collision_policy == "fail":
+            raise BundleCollisionError(final_dir)
+        # overwrite: remove existing before rename
+        shutil.rmtree(final_dir)
+
+    os.replace(str(tmp_dir), str(final_dir))
 
 
 # ============================================================================
@@ -212,6 +282,8 @@ def write_clip_bundle(
     style_params: Optional[Dict[str, Any]] = None,
     # Optional: require coach file even if no assignment
     require_coach_file: bool = False,
+    # Collision policy: 'fail' (recommended) or 'overwrite'
+    collision_policy: str = "fail",
 ) -> BundleResult:
     """
     Write a complete clip bundle with explicit base directory.
@@ -249,190 +321,222 @@ def write_clip_bundle(
         Style parameters for tags sidecar.
     require_coach_file : bool
         If True, emit clip.coach.json even without assignment.
+    collision_policy : str
+        How to handle existing bundle directories:
+        - 'fail' (default): Raise BundleCollisionError. Recommended for reproducibility.
+        - 'overwrite': Silently overwrite existing files.
 
     Returns
     -------
     BundleResult
         Contains bundle_dir, clip_id, artifacts, and typed ClipBundle.
+
+    Raises
+    ------
+    BundleCollisionError
+        If bundle directory already exists and collision_policy='fail'.
     """
     start_time = time.time()
     generated_at_str = _iso_utc(created_at_utc)
 
-    # Create bundle directory
+    # Compute bundle directory path
     date_str = created_at_utc.strftime("%Y-%m-%d")
-    bundle_dir = base_dir / date_str / clip_id
-    bundle_dir.mkdir(parents=True, exist_ok=True)
+    date_dir = base_dir / date_str
+    bundle_dir = date_dir / clip_id
 
-    artifacts: Dict[str, ArtifactRef] = {}
+    # Create date directory (needed for temp dir to be on same filesystem)
+    date_dir.mkdir(parents=True, exist_ok=True)
 
-    # ========================================================================
-    # 1. Write clip.mid (delegates to canonical midi_out.py)
-    # ========================================================================
-    midi_path = bundle_dir / "clip.mid"
-    write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=str(midi_path))
+    # Create temp directory alongside final destination
+    # Using same parent ensures rename stays on same filesystem (atomic)
+    tmp_dir = date_dir / f".tmp_{clip_id}_{secrets.token_hex(4)}"
+    tmp_dir.mkdir(parents=True, exist_ok=True)
 
-    midi_bytes = midi_path.read_bytes()
-    midi_sha256 = _compute_sha256(midi_bytes)
-    artifacts["clip.mid"] = ArtifactRef(
-        filename="clip.mid",
-        path=midi_path,
-        sha256=midi_sha256,
-        size_bytes=len(midi_bytes),
-    )
+    try:
+        artifacts: Dict[str, ArtifactRef] = {}
 
-    # ========================================================================
-    # 2. Write clip.tags.json (always emit, even if no tags)
-    # ========================================================================
-    tags_path = bundle_dir / "clip.tags.json"
-    tags_payload = {
-        "schema_id": "technique_sidecar",
-        "schema_version": "v1",
-        "generated_at_utc": generated_at_str,
-        "meter": meter,
-        "beats_per_bar": beats_per_bar,
-        "annotations": [],  # Future: structured TechniqueAnnotation list
-        "comp_tags": [list(t) for t in (comp_tags or [])],
-        "bass_tags": [list(t) for t in (bass_tags or [])],
-    }
-    if style_params:
-        tags_payload["style_params"] = style_params
+        # ====================================================================
+        # 1. Write clip.mid (delegates to canonical midi_out.py)
+        # ====================================================================
+        midi_path_tmp = tmp_dir / "clip.mid"
+        midi_path_final = bundle_dir / "clip.mid"
+        write_midi_file(comp_events, bass_events, tempo_bpm=tempo_bpm, outfile=str(midi_path_tmp))
 
-    tags_bytes = json.dumps(tags_payload, indent=2, sort_keys=True).encode("utf-8")
-    _atomic_write_bytes(tags_path, tags_bytes)
-    tags_sha256 = _compute_sha256(tags_bytes)
-    artifacts["clip.tags.json"] = ArtifactRef(
-        filename="clip.tags.json",
-        path=tags_path,
-        sha256=tags_sha256,
-        size_bytes=len(tags_bytes),
-    )
-
-    # ========================================================================
-    # 3. Write clip.coach.json (optional in v1)
-    # ========================================================================
-    coach_sha256: Optional[str] = None
-    emit_coach = require_coach_file or assignment is not None
-
-    if emit_coach:
-        coach_path = bundle_dir / "clip.coach.json"
-
-        if assignment is not None:
-            # Serialize assignment
-            if hasattr(assignment, "model_dump"):
-                coach_payload = assignment.model_dump(mode="json")
-            elif hasattr(assignment, "dict"):
-                coach_payload = assignment.dict()
-            else:
-                coach_payload = dict(assignment) if isinstance(assignment, dict) else {}
-        else:
-            # Empty placeholder when require_coach_file=True but no assignment
-            coach_payload = {
-                "schema_id": "practice_assignment",
-                "schema_version": "v1",
-                "status": "pending",
-                "clip_id": clip_id,
-            }
-
-        coach_bytes = json.dumps(coach_payload, indent=2, sort_keys=True).encode("utf-8")
-        _atomic_write_bytes(coach_path, coach_bytes)
-        coach_sha256 = _compute_sha256(coach_bytes)
-        artifacts["clip.coach.json"] = ArtifactRef(
-            filename="clip.coach.json",
-            path=coach_path,
-            sha256=coach_sha256,
-            size_bytes=len(coach_bytes),
+        midi_bytes = midi_path_tmp.read_bytes()
+        midi_sha256 = _compute_sha256(midi_bytes)
+        artifacts["clip.mid"] = ArtifactRef(
+            filename="clip.mid",
+            path=midi_path_final,  # Final path (after publish)
+            sha256=midi_sha256,
+            size_bytes=len(midi_bytes),
         )
 
-    # ========================================================================
-    # 4. Write clip.runlog.json (provenance/audit trail)
-    # ========================================================================
-    duration_ms = int((time.time() - start_time) * 1000)
-
-    # Calculate validation summary
-    total_notes = len(comp_events) + len(bass_events)
-    max_end = 0.0
-    for e in comp_events + bass_events:
-        end = e.start_beats + e.duration_beats
-        if end > max_end:
-            max_end = end
-
-    runlog_payload = {
-        "schema_id": "clip_runlog",
-        "schema_version": "v1",
-        "clip_id": clip_id,
-        "generated_at_utc": generated_at_str,
-        "generator": {
-            "module": "zt_band.bundle_writer",
-            "function": "write_clip_bundle",
-            "version": ZT_BAND_VERSION,
-        },
-        "inputs": inputs or {},
-        "outputs": {
-            "clip_mid_sha256": midi_sha256,
-            "clip_tags_sha256": tags_sha256,
-            "clip_coach_sha256": coach_sha256,
-        },
-        "validation": {
-            "contract_passed": True,
-            "note_count": total_notes,
-            "duration_beats": max_end,
-            "comp_event_count": len(comp_events),
-            "bass_event_count": len(bass_events),
-        },
-        "attempts": [
-            {
-                "attempt": 1,
-                "status": "ok",
-                "duration_ms": duration_ms,
-            }
-        ],
-    }
-
-    runlog_path = bundle_dir / "clip.runlog.json"
-    runlog_bytes = json.dumps(runlog_payload, indent=2, sort_keys=True).encode("utf-8")
-    _atomic_write_bytes(runlog_path, runlog_bytes)
-    runlog_sha256 = _compute_sha256(runlog_bytes)
-    artifacts["clip.runlog.json"] = ArtifactRef(
-        filename="clip.runlog.json",
-        path=runlog_path,
-        sha256=runlog_sha256,
-        size_bytes=len(runlog_bytes),
-    )
-
-    # ========================================================================
-    # Build typed ClipBundle if sg-spec available
-    # ========================================================================
-    clip_bundle = None
-    if SG_SPEC_AVAILABLE:
-        kind_map = {
-            "clip.mid": "midi",
-            "clip.tags.json": "tags",
-            "clip.coach.json": "coach",
-            "clip.runlog.json": "runlog",
+        # ====================================================================
+        # 2. Write clip.tags.json (always emit, even if no tags)
+        # ====================================================================
+        tags_path_tmp = tmp_dir / "clip.tags.json"
+        tags_path_final = bundle_dir / "clip.tags.json"
+        tags_payload = {
+            "schema_id": "technique_sidecar",
+            "schema_version": "v1",
+            "generated_at_utc": generated_at_str,
+            "meter": meter,
+            "beats_per_bar": beats_per_bar,
+            "annotations": [],  # Future: structured TechniqueAnnotation list
+            "comp_tags": [list(t) for t in (comp_tags or [])],
+            "bass_tags": [list(t) for t in (bass_tags or [])],
         }
-        artifact_list = [
-            ClipArtifact(
-                artifact_id=name.replace(".", "_"),
-                kind=kind_map.get(name, "attachment"),
-                filename=name,
-                sha256=ref.sha256,
+        if style_params:
+            tags_payload["style_params"] = style_params
+
+        tags_bytes = json.dumps(tags_payload, indent=2, sort_keys=True).encode("utf-8")
+        tags_path_tmp.write_bytes(tags_bytes)
+        tags_sha256 = _compute_sha256(tags_bytes)
+        artifacts["clip.tags.json"] = ArtifactRef(
+            filename="clip.tags.json",
+            path=tags_path_final,
+            sha256=tags_sha256,
+            size_bytes=len(tags_bytes),
+        )
+
+        # ====================================================================
+        # 3. Write clip.coach.json (optional in v1)
+        # ====================================================================
+        coach_sha256: Optional[str] = None
+        emit_coach = require_coach_file or assignment is not None
+
+        if emit_coach:
+            coach_path_tmp = tmp_dir / "clip.coach.json"
+            coach_path_final = bundle_dir / "clip.coach.json"
+
+            if assignment is not None:
+                # Serialize assignment
+                if hasattr(assignment, "model_dump"):
+                    coach_payload = assignment.model_dump(mode="json")
+                elif hasattr(assignment, "dict"):
+                    coach_payload = assignment.dict()
+                else:
+                    coach_payload = dict(assignment) if isinstance(assignment, dict) else {}
+            else:
+                # Empty placeholder when require_coach_file=True but no assignment
+                coach_payload = {
+                    "schema_id": "practice_assignment",
+                    "schema_version": "v1",
+                    "status": "pending",
+                    "clip_id": clip_id,
+                }
+
+            coach_bytes = json.dumps(coach_payload, indent=2, sort_keys=True).encode("utf-8")
+            coach_path_tmp.write_bytes(coach_bytes)
+            coach_sha256 = _compute_sha256(coach_bytes)
+            artifacts["clip.coach.json"] = ArtifactRef(
+                filename="clip.coach.json",
+                path=coach_path_final,
+                sha256=coach_sha256,
+                size_bytes=len(coach_bytes),
             )
-            for name, ref in artifacts.items()
-        ]
-        clip_bundle = ClipBundle(
+
+        # ====================================================================
+        # 4. Write clip.runlog.json (provenance/audit trail)
+        # ====================================================================
+        duration_ms = int((time.time() - start_time) * 1000)
+
+        # Calculate validation summary
+        total_notes = len(comp_events) + len(bass_events)
+        max_end = 0.0
+        for e in comp_events + bass_events:
+            end = e.start_beats + e.duration_beats
+            if end > max_end:
+                max_end = end
+
+        runlog_payload = {
+            "schema_id": "clip_runlog",
+            "schema_version": "v1",
+            "clip_id": clip_id,
+            "generated_at_utc": generated_at_str,
+            "generator": {
+                "module": "zt_band.bundle_writer",
+                "function": "write_clip_bundle",
+                "version": ZT_BAND_VERSION,
+            },
+            "inputs": inputs or {},
+            "outputs": {
+                "clip_mid_sha256": midi_sha256,
+                "clip_tags_sha256": tags_sha256,
+                "clip_coach_sha256": coach_sha256,
+            },
+            "validation": {
+                "contract_passed": True,
+                "note_count": total_notes,
+                "duration_beats": max_end,
+                "comp_event_count": len(comp_events),
+                "bass_event_count": len(bass_events),
+            },
+            "attempts": [
+                {
+                    "attempt": 1,
+                    "status": "ok",
+                    "duration_ms": duration_ms,
+                }
+            ],
+        }
+
+        runlog_path_tmp = tmp_dir / "clip.runlog.json"
+        runlog_path_final = bundle_dir / "clip.runlog.json"
+        runlog_bytes = json.dumps(runlog_payload, indent=2, sort_keys=True).encode("utf-8")
+        runlog_path_tmp.write_bytes(runlog_bytes)
+        runlog_sha256 = _compute_sha256(runlog_bytes)
+        artifacts["clip.runlog.json"] = ArtifactRef(
+            filename="clip.runlog.json",
+            path=runlog_path_final,
+            sha256=runlog_sha256,
+            size_bytes=len(runlog_bytes),
+        )
+
+        # ====================================================================
+        # Atomically publish the complete bundle directory
+        # ====================================================================
+        _atomic_publish_dir(tmp_dir, bundle_dir, collision_policy)
+
+        # ====================================================================
+        # Build typed ClipBundle if sg-spec available
+        # ====================================================================
+        clip_bundle = None
+        if SG_SPEC_AVAILABLE:
+            kind_map = {
+                "clip.mid": "midi",
+                "clip.tags.json": "tags",
+                "clip.coach.json": "coach",
+                "clip.runlog.json": "runlog",
+            }
+            artifact_list = [
+                ClipArtifact(
+                    artifact_id=name.replace(".", "_"),
+                    kind=kind_map.get(name, "attachment"),
+                    filename=name,
+                    sha256=ref.sha256,
+                )
+                for name, ref in artifacts.items()
+            ]
+            clip_bundle = ClipBundle(
+                clip_id=clip_id,
+                created_at_utc=created_at_utc,
+                bundle_dir=str(bundle_dir),
+                artifacts=artifact_list,
+            )
+
+        return BundleResult(
+            bundle_dir=bundle_dir,
             clip_id=clip_id,
             created_at_utc=created_at_utc,
-            bundle_dir=str(bundle_dir),
-            artifacts=artifact_list,
+            artifacts=artifacts,
+            clip_bundle=clip_bundle,
         )
 
-    return BundleResult(
-        bundle_dir=bundle_dir,
-        clip_id=clip_id,
-        created_at_utc=created_at_utc,
-        artifacts=artifacts,
-        clip_bundle=clip_bundle,
-    )
+    except Exception:
+        # Clean up temp directory on any failure
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+        raise
 
 
 # ============================================================================
@@ -460,6 +564,8 @@ def write_clip_bundle_default(
     beats_per_bar: float = 4.0,
     style_params: Optional[Dict[str, Any]] = None,
     require_coach_file: bool = False,
+    # Collision policy
+    collision_policy: str = "fail",
 ) -> BundleResult:
     """
     Write clip bundle using default path convention.
@@ -514,6 +620,7 @@ def write_clip_bundle_default(
         beats_per_bar=beats_per_bar,
         style_params=style_params,
         require_coach_file=require_coach_file,
+        collision_policy=collision_policy,
     )
 
 
@@ -536,6 +643,7 @@ def generate_and_bundle(
     clip_id: Optional[str] = None,
     assignment: Optional[Any] = None,
     require_coach_file: bool = False,
+    collision_policy: str = "fail",
 ) -> BundleResult:
     """
     Generate accompaniment and write complete bundle in one call.
@@ -624,6 +732,7 @@ def generate_and_bundle(
             assignment=assignment,
             style_params=style_params,
             require_coach_file=require_coach_file,
+            collision_policy=collision_policy,
         )
     else:
         # Default path convention
@@ -638,5 +747,6 @@ def generate_and_bundle(
             assignment=assignment,
             style_params=style_params,
             require_coach_file=require_coach_file,
+            collision_policy=collision_policy,
         )
 

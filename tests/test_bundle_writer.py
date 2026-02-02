@@ -690,13 +690,49 @@ class TestWriteClipBundleDefault:
 class TestEdgeCases:
     """Tests for edge cases and collision handling."""
 
-    def test_existing_bundle_dir_ok(
+    def test_collision_raises_by_default(
         self,
         tmp_path: Path,
         sample_events: Tuple[List[NoteEvent], List[NoteEvent]],
         fixed_timestamp: datetime,
     ) -> None:
-        """Writing to existing bundle dir should succeed (overwrite)."""
+        """Writing to existing bundle dir should fail-fast by default."""
+        from zt_band.bundle_writer import BundleCollisionError
+
+        comp, bass = sample_events
+
+        # First write succeeds
+        write_clip_bundle(
+            comp_events=comp,
+            bass_events=bass,
+            tempo_bpm=120,
+            base_dir=tmp_path,
+            clip_id="collision_test",
+            created_at_utc=fixed_timestamp,
+        )
+
+        # Second write to same location should fail
+        with pytest.raises(BundleCollisionError) as exc_info:
+            write_clip_bundle(
+                comp_events=comp,
+                bass_events=bass,
+                tempo_bpm=140,
+                base_dir=tmp_path,
+                clip_id="collision_test",
+                created_at_utc=fixed_timestamp,
+            )
+
+        # Error should include the bundle directory
+        assert "collision_test" in str(exc_info.value)
+        assert "overwrite" in str(exc_info.value).lower()
+
+    def test_overwrite_policy_allows_collision(
+        self,
+        tmp_path: Path,
+        sample_events: Tuple[List[NoteEvent], List[NoteEvent]],
+        fixed_timestamp: datetime,
+    ) -> None:
+        """Explicit overwrite policy allows writing to existing bundle dir."""
         comp, bass = sample_events
 
         # First write
@@ -709,7 +745,7 @@ class TestEdgeCases:
             created_at_utc=fixed_timestamp,
         )
 
-        # Second write to same location
+        # Second write to same location with overwrite policy
         result2 = write_clip_bundle(
             comp_events=comp,
             bass_events=bass,
@@ -717,6 +753,7 @@ class TestEdgeCases:
             base_dir=tmp_path,
             clip_id="collision_test",
             created_at_utc=fixed_timestamp,
+            collision_policy="overwrite",
         )
 
         # Both should succeed

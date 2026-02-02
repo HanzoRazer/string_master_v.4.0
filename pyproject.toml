@@ -37,6 +37,12 @@ dev = [
   "mypy>=1.7",
   "types-PyYAML",
 ]
+# sg-agentd HTTP server dependencies
+agentd = [
+  "fastapi>=0.100.0",
+  "uvicorn>=0.23.0",
+  "httpx>=0.24.0",  # For TestClient
+]
 
 [project.urls]
 Homepage = "https://github.com/HanzoRazer/string_master_v.4.0"
