@@ -5,7 +5,8 @@
 **Dual-nature project**: Music theory framework + Python library (`smart-guitar` v0.1.0).
 
 - **Theory side**: Immutable axioms (CANON.md), frozen terminology (GLOSSARY.md)
-- **Code side**: Python ≥3.10 with CLIs `zt-gravity` (analysis) and `zt-band` (MIDI generation)
+- **Code side**: Python ≥3.10 with CLIs `zt-gravity` (analysis), `zt-band` (MIDI generation), `sgc` (coach)
+- **Ecosystem**: Depends on `sg-spec` (Pydantic schema contracts) and integrates with `sg-coach` (practice coaching)
 
 **Protected files** (require governance approval): `CANON.md`, `GLOSSARY.md`, `PEDAGOGY.md`, `GOVERNANCE.md`
 
@@ -14,9 +15,9 @@
 ## Quick Start
 
 ```bash
-pip install -e .                    # Editable install
-python -m pytest tests/ -v          # Run test suite
-python verify_lock.py               # Verify core stability
+pip install -e ".[dev]"             # Editable install with dev deps
+python -m pytest tests/ -v          # Run test suite (~160 tests)
+python verify_lock.py               # Verify core stability (5 tests)
 zt-gravity gravity --root G --steps 7
 zt-band play --program autumn_leaves.ztprog
 ```
@@ -32,13 +33,19 @@ src/
 │   ├── zones.py            # Zone 1 (even) / Zone 2 (odd)
 │   ├── tritones.py         # 6 tritone axes
 │   ├── gravity.py          # Dominant chains (cycle of 4ths)
+│   ├── generator.py        # Etude/phrase generator
 │   └── corpus.py           # Chord symbol parsing
 │
 └── zt_band/                # MIDI accompaniment engine
     ├── engine.py           # Main pipeline: .ztprog → .mid
     ├── midi_out.py         # LOCKED: deterministic writer (tpb=480)
     ├── musical_contract.py # LOCKED: runtime validation
-    └── patterns.py         # Style registry (swing, bossa, salsa)
+    ├── patterns.py         # Style registry (swing, bossa, salsa)
+    ├── dance_pack.py       # Declarative dance form bundles (Pydantic)
+    ├── adapters/           # Groove → MIDI/Arranger adapters
+    ├── groove/             # Intent providers (Manual, Analyzer)
+    ├── arranger/           # Pattern selection engine
+    └── e2e/                # End-to-end replay gates
 ```
 
 **Data flow**: `.ztprog` YAML → `engine.py` → contract validation → `midi_out.py` → `.mid`
@@ -55,7 +62,14 @@ from .pc import pc_from_name
 **In `src/zt_band/` and `tests/`** — use ABSOLUTE:
 ```python
 from shared.zone_tritone.pc import pc_from_name
-from shared.zone_tritone import gravity_chain
+from zt_band.engine import generate_accompaniment
+from zt_band.adapters import build_midi_control_plan
+```
+
+**Cross-repo schemas** (from `sg-spec`):
+```python
+from sg_spec.schemas.groove_layer import GrooveProfileV1, GrooveControlIntentV1
+from sg_spec.ai.coach.schemas import SessionRecord, CoachEvaluation
 ```
 
 ---
@@ -69,74 +83,72 @@ Changes to these require `verify_lock.py` passing:
 
 ---
 
-## Domain Conventions
+## Determinism Contract
 
-**Pitch classes**: Always `int % 12` (0=C, 11=B)
-```python
-pc_from_name("F#")  # → 6
-zone(0)             # → 1 (Zone 1 = even PCs: C,D,E,F#,G#,A#)
-zone(7)             # → 2 (Zone 2 = odd PCs: C#,D#,F,G,A,B)
+**Critical invariant**: Same inputs → byte-identical MIDI output.
+
+- Probabilistic mode (`tritone_mode: probabilistic`) MUST provide `tritone_seed`
+- Use `int(beat * 480 + 0.5)` for tick conversion (round half up)
+- All random operations require explicit seeds
+
+---
+
+## Golden Vector & Replay Gates
+
+**Replay gates** enforce byte-identical output for regression prevention:
+
+```bash
+# Run e2e replay gate
+python -m zt_band.e2e.e2e_replay_gate_v1 fixtures/golden/e2e_vectors
+
+# Update goldens (requires changelog entry)
+python -m zt_band.e2e.e2e_replay_gate_v1 fixtures/golden/e2e_vectors --update-golden
 ```
 
-**Tritone mode**: `"none"` = deterministic, `"probabilistic"` requires `tritone_seed`
-
----
-
-## File Formats
-
-**`.ztprog`** (YAML):
-```yaml
-chords: [Dm7, G7, Cmaj7]
-style: swing_basic
-tempo: 140
-tritone_mode: none
-outfile: output.mid
-```
-
-**`.ztex`**: Practice exercises | **`.ztplay`**: Playlists
-
----
-
-## Canonical Terminology (Never Redefine)
-
-- **Zone-Crossing** = half-step motion between zones
-- **Tritone Anchor** = active tritone defining gravity  
-- **Gravity Chain** = chromatic tritone drift → dominant cycles in 4ths
-- **Anchor Exchange** = tritone substitution
-
----
-
-## Adding Code
-
-1. Create file in `src/zt_band/` (use absolute imports from `shared.zone_tritone`)
-2. Add test in `tests/test_<module>.py`
-3. Run `pytest tests/` before committing
-
-New `.ztprog` files go in `programs/` — validate with `zt-band validate`
+**Vector structure** (`fixtures/golden/*/vector_*/`):
+- `input.json` — Input profile/request
+- `expected_output.json` — Expected deterministic output
+- `vector_meta_v1.json` — Provenance + ENGINE_IDENTITY
 
 ---
 
 ## Testing & Verification
 
-**Always run before committing:**
 ```bash
-python -m pytest tests/ -v           # Full suite (35+ tests)
+python -m pytest tests/ -v           # Full suite (~160 tests)
 python verify_lock.py                # Core stability (5 tests)
+python -m pytest tests/test_e2e_replay_gate_v1.py  # E2E determinism
 ```
 
-**Test naming**: `tests/test_<module>.py` mirrors `src/zt_band/<module>.py`
-
-**Contract tests** (`test_musical_contract.py`): Verify `ContractViolation` is raised for invalid events (negative start, zero duration, out-of-range MIDI).
+**Test categories**:
+- `test_musical_contract.py` — Contract violation detection
+- `test_*_replay_gate*.py` — Determinism gates
+- `test_dance_pack.py` — Dance pack loading/validation
+- `test_groove_*.py` — Groove layer integration
 
 ---
 
-## MIDI Generation Invariants
+## Key Abstractions
 
-All generated MIDI must satisfy (enforced by `musical_contract.py`):
-- `start_beats ≥ 0`, `duration_beats > 0`
-- `midi_note` in 0–127, `velocity` in 1–127, `channel` in 0–15
-- Probabilistic mode (`tritone_mode: probabilistic`) MUST provide `tritone_seed`
-- Deterministic rounding: `int(beat * 480 + 0.5)` for tick conversion
+**StylePattern** (`patterns.py`): Encodes rhythm patterns with ghost hits, clave alignment, velocity contours.
+
+**DancePackV1** (`dance_pack.py`): Declarative dance form bundles (groove, harmony constraints, behavioral nuance).
+
+**Adapters** (`adapters/`):
+- `build_midi_control_plan()` — GrooveControlIntentV1 → CC messages, clock mode
+- `build_arranger_control_plan()` — GrooveControlIntentV1 → style, density, energy
+
+---
+
+## CLI Commands
+
+```bash
+zt-band play --program <name.ztprog>  # Play/generate from program
+zt-band validate <file.ztprog>        # Validate program file
+zt-band daw-export --midi out.mid     # Export DAW-ready MIDI
+zt-band pack validate <pack.json>     # Validate dance pack
+zt-gravity analyze --chords "Dm7 G7"  # Analyze chord progression
+```
 
 ---
 
@@ -144,8 +156,9 @@ All generated MIDI must satisfy (enforced by `musical_contract.py`):
 
 | Doc | Purpose |
 |-----|---------|
-| [DEVELOPER_GUIDE.md](../DEVELOPER_GUIDE.md) | Full architecture |
+| [DEVELOPER_GUIDE.md](../DEVELOPER_GUIDE.md) | Full architecture & imports |
 | [CLI_DOCUMENTATION.md](../CLI_DOCUMENTATION.md) | CLI reference |
 | [docs/contracts/CORE_LOCK_REPORT.md](../docs/contracts/CORE_LOCK_REPORT.md) | Stability guarantees |
-| [CANON.md](../CANON.md) | 5 immutable axioms |
+| [CANON.md](../CANON.md) | 5 immutable axioms (theory) |
+| [GLOSSARY.md](../GLOSSARY.md) | Frozen terminology |
 | [GLOSSARY.md](../GLOSSARY.md) | Frozen terminology |

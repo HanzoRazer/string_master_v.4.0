@@ -1,0 +1,133 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+
+  "metadata": {
+    "id": "flamenco_por_medio_v1",
+    "display_name": "Flamenco Por Medio (A)",
+    "dance_family": "iberian",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": ["flamenco", "phrygian", "andalusian", "por_medio", "tangos", "solea"]
+  },
+
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 1,
+    "subdivision": "binary",
+    "tempo_range_bpm": [80, 140],
+    "swing_ratio": 0.0,
+
+    "accent_grid": {
+      "strong_beats": [1, 3],
+      "secondary_beats": [2, 4],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.5
+    },
+
+    "clave": {
+      "type": "implicit",
+      "pattern": [1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0],
+      "direction": "forward"
+    }
+  },
+
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 2,
+      "min_beats_between_changes": 2,
+      "change_on_strong_beat": "preferred"
+    },
+
+    "dominant_behavior": {
+      "allowed": false,
+      "resolution_strength": "none",
+      "secondary_dominants": false
+    },
+
+    "tritone_usage": {
+      "allowed": false,
+      "weight": "none",
+      "forbidden_on_beats": []
+    },
+
+    "chromatic_drift": {
+      "allowed": true,
+      "max_semitones": 1
+    },
+
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "common_tones"
+    }
+  },
+
+  "performance_profile": {
+    "velocity_range": {
+      "min": 55,
+      "max": 115,
+      "ghost_max": 30,
+      "accent_min": 85
+    },
+
+    "pickup_bias": {
+      "probability": 0.7,
+      "max_offset_beats": 0.5
+    },
+
+    "contour_preference": {
+      "stepwise_weight": 0.6,
+      "leap_weight": 0.4,
+      "max_leap_interval": 5
+    },
+
+    "ornament_density": "moderate",
+    "register_bias": "mid",
+
+    "articulation": {
+      "default_duration_ratio": 0.7,
+      "staccato_probability": 0.3,
+      "legato_probability": 0.1
+    }
+  },
+
+  "practice_mapping": {
+    "primary_focus": [
+      "groove_lock",
+      "dynamic_control",
+      "syncopation"
+    ],
+
+    "evaluation_weights": {
+      "timing_accuracy": 0.30,
+      "harmonic_choice": 0.25,
+      "dynamic_control": 0.25,
+      "groove_feel": 0.20
+    },
+
+    "common_errors": [
+      "rushed_tempo",
+      "accent_too_soft",
+      "lost_pulse"
+    ],
+
+    "difficulty_rating": "medium",
+    "prerequisite_forms": []
+  },
+
+  "extensions": {
+    "cadence_type": "andalusian",
+    "cadence_skeleton": ["iv", "bIII", "bII", "I"],
+    "bass_offsets_from_tonic": [5, 3, 1, 0],
+    "tonic_gravity": "phrygian",
+    "resolution_target": "bII_to_I",
+    "tonic_pc": 9,
+    "style_pack": "por_medio",
+    "patterns": {
+      "comp": "tangos_basic",
+      "bass": "andalusian_bass"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+
+  "metadata": {
+    "id": "boogaloo_latin_soul_v1",
+    "display_name": "Boogaloo (Latin Soul)",
+    "dance_family": "afro_cuban",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": ["boogaloo", "latin_soul", "nyc", "1960s", "joe_cuba", "pete_rodriguez", "funk"]
+  },
+
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 1,
+    "subdivision": "binary",
+    "tempo_range_bpm": [100, 130],
+    "swing_ratio": 0.0,
+
+    "accent_grid": {
+      "strong_beats": [2, 4],
+      "secondary_beats": [1, 3],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.6
+    },
+
+    "clave": {
+      "type": "implicit",
+      "pattern": [1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0],
+      "direction": "forward"
+    }
+  },
+
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 2,
+      "min_beats_between_changes": 2,
+      "change_on_strong_beat": "preferred"
+    },
+
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "medium",
+      "secondary_dominants": true
+    },
+
+    "tritone_usage": {
+      "allowed": true,
+      "weight": "moderate",
+      "forbidden_on_beats": []
+    },
+
+    "chromatic_drift": {
+      "allowed": true,
+      "max_semitones": 2
+    },
+
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "common_tones"
+    }
+  },
+
+  "performance_profile": {
+    "velocity_range": {
+      "min": 55,
+      "max": 110,
+      "ghost_max": 35,
+      "accent_min": 85
+    },
+
+    "pickup_bias": {
+      "probability": 0.6,
+      "max_offset_beats": 0.5
+    },
+
+    "contour_preference": {
+      "stepwise_weight": 0.5,
+      "leap_weight": 0.5,
+      "max_leap_interval": 6
+    },
+
+    "ornament_density": "moderate",
+    "register_bias": "mid",
+
+    "articulation": {
+      "default_duration_ratio": 0.75,
+      "staccato_probability": 0.2,
+      "legato_probability": 0.15
+    }
+  },
+
+  "practice_mapping": {
+    "primary_focus": [
+      "groove_lock",
+      "syncopation",
+      "dynamic_control"
+    ],
+
+    "evaluation_weights": {
+      "timing_accuracy": 0.35,
+      "harmonic_choice": 0.25,
+      "dynamic_control": 0.20,
+      "groove_feel": 0.20
+    },
+
+    "common_errors": [
+      "rushed_tempo",
+      "accent_too_soft",
+      "lost_pulse"
+    ],
+
+    "difficulty_rating": "medium",
+    "prerequisite_forms": []
+  },
+
+  "extensions": {
+    "clave_type": "son_2_3_loose",
+    "fusion_elements": ["latin", "soul", "r&b"],
+    "patterns": {
+      "comp": "boogaloo_basic",
+      "bass": "boogaloo_bass"
+    }
+  }
+}

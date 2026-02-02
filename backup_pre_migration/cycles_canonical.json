@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "cycles",
+  "title": "Cycle Training",
+  "description": "Circle of 5ths, 4ths, 3rds, dominants, and tritone substitution cycles. Root awareness, guide-tone voice leading, and tritone recognition drills over all 12 keys.",
+
+  "style_taxonomy": {
+    "families": [
+      {
+        "id": "cycle_fifths",
+        "label": "Cycle of Fifths",
+        "description": "Circle of fifths root and harmonic movement through all 12 keys"
+      },
+      {
+        "id": "cycle_thirds",
+        "label": "Cycle of Thirds",
+        "description": "Minor-third (diminished axis) interval cycles through dominant harmony"
+      },
+      {
+        "id": "cycle_fourths",
+        "label": "Cycle of Fourths",
+        "description": "Circle of fourths, ii-V-I chains, and dominant resolution cycles"
+      }
+    ]
+  },
+
+  "technique_taxonomy": {
+    "categories": [
+      {
+        "id": "root_awareness",
+        "label": "Root Awareness",
+        "description": "Root identification, anticipation, and tracking through cycle movement"
+      },
+      {
+        "id": "guide_tone_voicing",
+        "label": "Guide Tone Voicing",
+        "description": "Playing 3rds and 7ths with voice-leading awareness through harmonic cycles"
+      },
+      {
+        "id": "tritone_awareness",
+        "label": "Tritone Awareness",
+        "description": "Recognition and use of tritone relationships and substitutions within cycles"
+      }
+    ]
+  },
+
+  "harmonic_contexts": [
+    {
+      "id": "cycle_fifths_diatonic",
+      "progression": "Cmaj7-Fmaj7-Bbmaj7-Ebmaj7-Abmaj7-Dbmaj7-Gbmaj7-Bmaj7-Emaj7-Amaj7-Dmaj7-Gmaj7",
+      "description": "Circle of 5ths with diatonic maj7 chords, 2 bars per chord"
+    },
+    {
+      "id": "cycle_fifths_roots",
+      "progression": "C-F-Bb-Eb-Ab-Db-Gb-B-E-A-D-G",
+      "description": "Circle of 5ths with bare root notes, 1 bar per chord"
+    },
+    {
+      "id": "cycle_fourths_ii_v_i",
+      "progression": "Dm7-G7-Cmaj7 | Cm7-F7-Bbmaj7 | ... (all 12 keys)",
+      "description": "Full ii-V-I cadence in all 12 keys cycling in fourths, 1 bar per chord"
+    },
+    {
+      "id": "cycle_thirds_dominant",
+      "progression": "C7-Eb7-F#7-A7-C7",
+      "description": "Diminished-axis dominant cycle in minor thirds, 2 bars per chord"
+    },
+    {
+      "id": "cycle_thirds_tritone",
+      "progression": "C7-Eb7-Gb7-A7",
+      "description": "All-dominant tritone symmetry cycle, 2 bars per chord"
+    },
+    {
+      "id": "cycle_dominants_in_fourths",
+      "progression": "C7-F7-Bb7-Eb7-Ab7-Db7-Gb7-B7-E7-A7-D7-G7-C7",
+      "description": "Dominant 7th cycle through fourths with probabilistic tritone substitutions, 1 bar per chord"
+    }
+  ],
+
+  "exercises": [
+    {
+      "id": "cycle_fifths_roots",
+      "title": "Cycle of Fifths -- Roots (All Keys)",
+      "style_family": "cycle_fifths",
+      "technique": "root_awareness",
+      "harmonic_context": "cycle_fifths_diatonic",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [65, 150],
+      "difficulty": "intermediate",
+      "task_mode": "play_roots",
+      "program_ref": "programs/cycle_fifths_all_keys.ztprog"
+    },
+    {
+      "id": "cycle_fifths_roots_awareness",
+      "title": "Cycle of Fifths -- Root Awareness",
+      "style_family": "cycle_fifths",
+      "technique": "root_awareness",
+      "harmonic_context": "cycle_fifths_roots",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [78, 180],
+      "difficulty": "intermediate",
+      "task_mode": "play_roots",
+      "program_ref": "programs/cycle_fifths_roots.ztprog"
+    },
+    {
+      "id": "cycle_fourths_ii_v_i_guidetones",
+      "title": "Cycle of 4ths -- ii-V-I Guide Tones",
+      "style_family": "cycle_fourths",
+      "technique": "guide_tone_voicing",
+      "harmonic_context": "cycle_fourths_ii_v_i",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [78, 180],
+      "difficulty": "intermediate",
+      "task_mode": "play_shells",
+      "program_ref": "programs/cycle_fourths_ii_v_i.ztprog"
+    },
+    {
+      "id": "cycle_thirds_guidetones",
+      "title": "Cycle of Thirds -- Guide Tones",
+      "style_family": "cycle_thirds",
+      "technique": "guide_tone_voicing",
+      "harmonic_context": "cycle_thirds_dominant",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [71, 165],
+      "difficulty": "intermediate",
+      "task_mode": "play_shells",
+      "program_ref": "programs/cycle_thirds_dominant.ztprog"
+    },
+    {
+      "id": "cycle_thirds_tritone",
+      "title": "Cycle of Thirds -- Tritone Awareness",
+      "style_family": "cycle_thirds",
+      "technique": "tritone_awareness",
+      "harmonic_context": "cycle_thirds_tritone",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [78, 180],
+      "difficulty": "advanced",
+      "task_mode": "play_shells",
+      "program_ref": "programs/cycle_thirds_symmetry.ztprog"
+    },
+    {
+      "id": "cycle_dominants_tritone_subs",
+      "title": "Cycle of Dominants -- Tritone Subs (Guide Tone Mission)",
+      "style_family": "cycle_fourths",
+      "technique": "tritone_awareness",
+      "harmonic_context": "cycle_dominants_in_fourths",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [78, 180],
+      "difficulty": "advanced",
+      "task_mode": "play_shells",
+      "program_ref": "programs/cycle_dominants_fourths.ztprog"
+    }
+  ],
+
+  "progressive_paths": [
+    {
+      "id": "cycle_foundation_to_mastery",
+      "title": "Cycle Foundation to Mastery",
+      "description": "Root awareness through fifths, guide-tone voicing through fourths and thirds, to tritone substitution mastery",
+      "sequence": [
+        "cycle_fifths_roots",
+        "cycle_fifths_roots_awareness",
+        "cycle_fourths_ii_v_i_guidetones",
+        "cycle_thirds_guidetones",
+        "cycle_thirds_tritone",
+        "cycle_dominants_tritone_subs"
+      ]
+    },
+    {
+      "id": "cycle_tritone_deep_dive",
+      "title": "Tritone Deep Dive",
+      "description": "Guide-tone foundation in thirds leading to tritone awareness and dominant substitution",
+      "sequence": [
+        "cycle_thirds_guidetones",
+        "cycle_thirds_tritone",
+        "cycle_dominants_tritone_subs"
+      ]
+    }
+  ],
+
+  "playlists": [
+    {
+      "id": "cycle_complete_session",
+      "title": "Cycle Training -- Complete Session",
+      "exercises": [
+        "cycle_fifths_roots",
+        "cycle_fifths_roots_awareness",
+        "cycle_fourths_ii_v_i_guidetones",
+        "cycle_thirds_guidetones",
+        "cycle_thirds_tritone",
+        "cycle_dominants_tritone_subs"
+      ],
+      "tags": ["cycle", "theory", "guide_tones", "tritone", "transposition"]
+    },
+    {
+      "id": "cycle_root_awareness_warmup",
+      "title": "Cycle Training -- Root Awareness Warmup",
+      "exercises": [
+        "cycle_fifths_roots",
+        "cycle_fifths_roots_awareness"
+      ],
+      "tags": ["cycle", "fifths", "roots", "warmup"]
+    }
+  ],
+
+  "stats": {
+    "total_exercises": 6,
+    "by_style": {
+      "cycle_fifths": 2,
+      "cycle_thirds": 2,
+      "cycle_fourths": 2
+    },
+    "by_technique": {
+      "root_awareness": 2,
+      "guide_tone_voicing": 2,
+      "tritone_awareness": 2
+    },
+    "by_difficulty": {
+      "intermediate": 4,
+      "advanced": 2
+    },
+    "keys": ["C"],
+    "playlist_count": 2
+  }
+}

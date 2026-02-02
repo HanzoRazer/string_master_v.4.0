@@ -1,0 +1,127 @@
+{
+  "schema_id": "dance_pack",
+  "schema_version": "v1",
+
+  "metadata": {
+    "id": "afrobeat_fela_style_v1",
+    "display_name": "Afrobeat (Fela Style)",
+    "dance_family": "african",
+    "version": "1.0.0",
+    "author": "system",
+    "license": "core",
+    "engine_compatibility": ">=0.2.0",
+    "tags": ["afrobeat", "nigerian", "fela", "tony_allen", "horns", "groove"]
+  },
+
+  "groove": {
+    "meter": "4/4",
+    "cycle_bars": 1,
+    "subdivision": "binary",
+    "tempo_range_bpm": [100, 130],
+    "swing_ratio": 0.0,
+
+    "accent_grid": {
+      "strong_beats": [1],
+      "secondary_beats": [3],
+      "ghost_allowed": true,
+      "offbeat_emphasis": 0.6
+    },
+
+    "clave": {
+      "type": "none",
+      "pattern": [],
+      "direction": "forward"
+    }
+  },
+
+  "harmony_constraints": {
+    "harmonic_rhythm": {
+      "max_changes_per_cycle": 2,
+      "min_beats_between_changes": 4,
+      "change_on_strong_beat": "required"
+    },
+
+    "dominant_behavior": {
+      "allowed": true,
+      "resolution_strength": "medium",
+      "secondary_dominants": false
+    },
+
+    "tritone_usage": {
+      "allowed": true,
+      "weight": "light",
+      "forbidden_on_beats": []
+    },
+
+    "chromatic_drift": {
+      "allowed": false,
+      "max_semitones": 0
+    },
+
+    "modal_constraints": {
+      "parallel_minor_allowed": true,
+      "modal_interchange_level": "none"
+    }
+  },
+
+  "performance_profile": {
+    "velocity_range": {
+      "min": 60,
+      "max": 110,
+      "ghost_max": 40,
+      "accent_min": 90
+    },
+
+    "pickup_bias": {
+      "probability": 0.5,
+      "max_offset_beats": 0.5
+    },
+
+    "contour_preference": {
+      "stepwise_weight": 0.6,
+      "leap_weight": 0.4,
+      "max_leap_interval": 5
+    },
+
+    "ornament_density": "sparse",
+    "register_bias": "mid",
+
+    "articulation": {
+      "default_duration_ratio": 0.8,
+      "staccato_probability": 0.15,
+      "legato_probability": 0.2
+    }
+  },
+
+  "practice_mapping": {
+    "primary_focus": [
+      "groove_lock",
+      "timing_accuracy",
+      "dynamic_control"
+    ],
+
+    "evaluation_weights": {
+      "timing_accuracy": 0.35,
+      "harmonic_choice": 0.20,
+      "dynamic_control": 0.25,
+      "groove_feel": 0.20
+    },
+
+    "common_errors": [
+      "accent_too_soft",
+      "rushed_tempo",
+      "over_ornamentation"
+    ],
+
+    "difficulty_rating": "medium",
+    "prerequisite_forms": []
+  },
+
+  "extensions": {
+    "timeline_type": "afrobeat_one",
+    "patterns": {
+      "comp": "afrobeat_basic",
+      "bass": "afrobeat_basic"
+    }
+  }
+}
