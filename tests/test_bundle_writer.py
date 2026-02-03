@@ -34,7 +34,7 @@ from zt_band.midi_out import NoteEvent
 # Optional: validate emitted JSON against sg-spec models when available.
 try:
     from sg_spec.schemas.technique_sidecar import TechniqueSidecar
-    from sg_spec.schemas.clip_bundle import ClipRunLog
+    from sg_spec.schemas.clip_bundle import ClipRunLog, ClipBundle
     SG_SPEC_AVAILABLE = True
 except ImportError:
     SG_SPEC_AVAILABLE = False
@@ -863,3 +863,142 @@ class TestEdgeCases:
 
         assert tags["style_params"]["name"] == "swing 'classic'"
         assert "\u2605" in tags["style_params"]["description"]
+
+
+# ============================================================================
+# Manifest Tests (PR6): clip.bundle.json
+# ============================================================================
+
+
+@pytest.mark.skipif(not SG_SPEC_AVAILABLE, reason="sg-spec not installed")
+class TestManifestWriting:
+    """Tests for clip.bundle.json manifest generation (requires sg-spec)."""
+
+    def test_bundle_manifest_written_and_conforms(
+        self,
+        tmp_path: Path,
+        sample_events: Tuple[List[NoteEvent], List[NoteEvent]],
+        fixed_timestamp: datetime,
+    ) -> None:
+        """Manifest is written, validates against ClipBundle schema, and hashes match."""
+        from zt_band.bundle_writer import _compute_sha256
+
+        comp, bass = sample_events
+
+        result = write_clip_bundle(
+            comp_events=comp,
+            bass_events=bass,
+            tempo_bpm=120,
+            base_dir=tmp_path,
+            clip_id="manifest_test",
+            created_at_utc=fixed_timestamp,
+        )
+
+        # 1. Manifest exists in artifacts
+        assert "clip.bundle.json" in result.artifacts
+
+        # 2. File exists on disk
+        manifest_ref = result.artifacts["clip.bundle.json"]
+        assert manifest_ref.path.exists()
+
+        # 3. SHA256 matches file content
+        manifest_bytes = manifest_ref.path.read_bytes()
+        computed_sha = _compute_sha256(manifest_bytes)
+        assert manifest_ref.sha256 == computed_sha
+
+        # 4. Validates against ClipBundle schema
+        manifest_payload = json.loads(manifest_bytes)
+        validated = ClipBundle.model_validate(manifest_payload)
+
+        # 5. Bundle path matches result
+        assert validated.bundle_path == str(result.bundle_dir)
+
+        # 6. Clip ID matches
+        assert validated.clip_id == "manifest_test"
+
+        # 7. All artifacts in manifest have valid sha256 pattern
+        import re
+        sha_pattern = re.compile(r"^sha256:[a-f0-9]{64}$")
+        for artifact in validated.artifacts:
+            assert sha_pattern.match(artifact.sha256), f"Invalid sha256: {artifact.sha256}"
+
+        # 8. Core artifacts present in manifest
+        artifact_kinds = {a.kind for a in validated.artifacts}
+        assert "midi" in artifact_kinds
+        assert "tags" in artifact_kinds
+        assert "runlog" in artifact_kinds
+
+        # 9. Manifest includes itself (self-describing)
+        manifest_in_list = any(
+            "clip.bundle.json" in a.path for a in validated.artifacts
+        )
+        assert manifest_in_list, "Manifest should include itself in artifacts list"
+
+    def test_manifest_artifacts_reflect_coach_presence(
+        self,
+        tmp_path: Path,
+        sample_events: Tuple[List[NoteEvent], List[NoteEvent]],
+        fixed_timestamp: datetime,
+    ) -> None:
+        """Manifest artifacts list mirrors coach file presence."""
+        from sg_spec.ai.coach.schemas import (
+            PracticeAssignment,
+            ProgramRef,
+            ProgramType,
+            AssignmentConstraints,
+            AssignmentFocus,
+            SuccessCriteria,
+        )
+
+        comp, bass = sample_events
+
+        # --- Without assignment: no coach artifact ---
+        result_no_coach = write_clip_bundle(
+            comp_events=comp,
+            bass_events=bass,
+            tempo_bpm=120,
+            base_dir=tmp_path,
+            clip_id="no_coach_manifest",
+            created_at_utc=fixed_timestamp,
+            assignment=None,
+        )
+
+        manifest_path = result_no_coach.bundle_dir / "clip.bundle.json"
+        manifest_payload = json.loads(manifest_path.read_bytes())
+        manifest_no_coach = ClipBundle.model_validate(manifest_payload)
+
+        artifact_kinds_no_coach = {a.kind for a in manifest_no_coach.artifacts}
+        assert "coach" not in artifact_kinds_no_coach
+
+        # --- With assignment: coach artifact present ---
+        assignment = PracticeAssignment(
+            assignment_id="asgn_manifest_test",
+            session_id="sess_manifest_test",
+            program=ProgramRef(
+                type=ProgramType.ZTPROG,
+                name="manifest_test.ztprog",
+            ),
+            constraints=AssignmentConstraints(
+                tempo_start=80,
+                tempo_target=120,
+            ),
+            focus=AssignmentFocus(),
+            success_criteria=SuccessCriteria(),
+        )
+
+        result_with_coach = write_clip_bundle(
+            comp_events=comp,
+            bass_events=bass,
+            tempo_bpm=120,
+            base_dir=tmp_path,
+            clip_id="with_coach_manifest",
+            created_at_utc=fixed_timestamp,
+            assignment=assignment,
+        )
+
+        manifest_path_coach = result_with_coach.bundle_dir / "clip.bundle.json"
+        manifest_payload_coach = json.loads(manifest_path_coach.read_bytes())
+        manifest_with_coach = ClipBundle.model_validate(manifest_payload_coach)
+
+        artifact_kinds_with_coach = {a.kind for a in manifest_with_coach.artifacts}
+        assert "coach" in artifact_kinds_with_coach

@@ -114,6 +114,7 @@ def generate_accompaniment(
     style_overrides: dict[str, Any] | None = None,
     meter: Tuple[int, int] = (4, 4),
     density_bucket: str | None = None,
+    syncopation_bucket: str | None = None,
 ) -> tuple[list[NoteEvent], list[NoteEvent]]:
     """
     Generate comping + bass MIDI note events for a simple chord progression.
@@ -149,6 +150,10 @@ def generate_accompaniment(
         Optional density bucket: "sparse", "medium", or "dense".
         Phase 6.2+: Applies deterministic thinning to comp events.
         sparse=50%, medium=75%, dense=100% (no thinning).
+    syncopation_bucket:
+        Optional syncopation bucket: "straight", "light", or "heavy".
+        Phase 6.3+: Applies timing offsets to comp events.
+        straight=0 offset, light=small anticipations, heavy=more offbeats.
 
     Returns
     -------
@@ -375,5 +380,24 @@ def generate_accompaniment(
                 if (h % 100) < keep_pct:
                     thinned.append(ev)
             comp_events = thinned
+
+    # Phase 6.3: Deterministic syncopation offsets (comp only, bass untouched)
+    if syncopation_bucket in ("straight", "light", "heavy"):
+        # Offset amounts in beats: straight=0, light=small push, heavy=bigger push
+        offset_map = {"straight": 0.0, "light": -0.125, "heavy": -0.25}
+        base_offset = offset_map.get(syncopation_bucket, 0.0)
+        if base_offset != 0.0:
+            synced = []
+            for i, ev in enumerate(comp_events):
+                # Deterministic: apply offset to ~60% of events for light, ~80% for heavy
+                apply_pct = 60 if syncopation_bucket == "light" else 80
+                h = (i * 2654435761) & 0xFFFFFFFF
+                if (h % 100) < apply_pct:
+                    # Push note slightly early (anticipation)
+                    new_start = max(0.0, ev.start_beats + base_offset)
+                    synced.append(replace(ev, start_beats=new_start))
+                else:
+                    synced.append(ev)
+            comp_events = synced
 
     return comp_events, bass_events

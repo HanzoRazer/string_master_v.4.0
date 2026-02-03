@@ -570,6 +570,40 @@ def write_clip_bundle(
                 artifacts=artifact_list,
             )
 
+            # ----------------------------------------------------------------
+            # Write manifest to disk + add to artifacts (self-describing)
+            # ----------------------------------------------------------------
+            manifest_path = bundle_dir / "clip.bundle.json"
+            manifest_bytes = clip_bundle.model_dump_json(indent=2).encode("utf-8")
+            _atomic_write_bytes(manifest_path, manifest_bytes)
+
+            manifest_sha = _compute_sha256(manifest_bytes)
+            manifest_size = len(manifest_bytes)
+
+            # Add manifest to artifacts dict
+            artifacts["clip.bundle.json"] = ArtifactRef(
+                filename="clip.bundle.json",
+                path=manifest_path,
+                sha256=manifest_sha,
+                size_bytes=manifest_size,
+            )
+
+            # Update clip_bundle to include itself in artifacts list
+            artifact_list.append(
+                ClipArtifact(
+                    artifact_id="clip_bundle_json",
+                    kind="attachment",
+                    path=str(manifest_path),
+                    sha256=manifest_sha,
+                )
+            )
+            # Rebuild with self-reference
+            clip_bundle = ClipBundle(
+                clip_id=clip_id,
+                bundle_path=str(bundle_dir),
+                artifacts=artifact_list,
+            )
+
         return BundleResult(
             bundle_dir=bundle_dir,
             clip_id=clip_id,
