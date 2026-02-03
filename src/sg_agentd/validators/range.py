@@ -28,6 +28,17 @@ class RangeResult:
     warnings: list[str]
 
 
+def _get_event_pitch(event: Any) -> Optional[int]:
+    """
+    Extract MIDI pitch from an event.
+    Prefer zt_band NoteEvent.midi_note; fall back to legacy/mock .note.
+    """
+    pitch = getattr(event, "midi_note", None)
+    if pitch is None:
+        pitch = getattr(event, "note", None)
+    return pitch
+
+
 def validate_pitch_range(
     comp_events: list[Any],
     bass_events: list[Any],
@@ -47,17 +58,17 @@ def validate_pitch_range(
     Returns:
         RangeResult with validation outcome
     """
-    # Extract MIDI pitches from events
-    # NoteEvent has .note attribute (MIDI pitch 0-127)
     all_notes: list[int] = []
     
     for event in comp_events:
-        if hasattr(event, "note"):
-            all_notes.append(event.note)
+        pitch = _get_event_pitch(event)
+        if pitch is not None:
+            all_notes.append(pitch)
     
     for event in bass_events:
-        if hasattr(event, "note"):
-            all_notes.append(event.note)
+        pitch = _get_event_pitch(event)
+        if pitch is not None:
+            all_notes.append(pitch)
     
     # Handle empty case
     if not all_notes:

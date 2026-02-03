@@ -134,6 +134,11 @@ def generate_endpoint(payload: Dict[str, Any]):
     tritone_strength = request.tritone.strength
     tritone_seed = request.tritone.seed
 
+    # Contract intent → engine implementation mapping
+    # sg-spec uses "subs" (intent). zt_band expects "all_doms" (impl detail).
+    if tritone_mode == "subs":
+        tritone_mode = "all_doms"
+
     attempt_budget = request.constraints.attempt_budget
     pitch_range_limit = extract_range_limit(request.constraints)
 
@@ -193,6 +198,7 @@ def generate_endpoint(payload: Dict[str, Any]):
                 "tritone_mode": tritone_mode,
                 "tritone_seed": selected.seed_used,
             },
+            assignment=request.assignment,  # Coach integration (PR5)
             collision_policy="fail",
         )
     except Exception as e:
@@ -227,6 +233,12 @@ def generate_endpoint(payload: Dict[str, Any]):
         art = bundle_result.artifacts["clip.runlog.json"]
         runlog_artifact = JsonArtifact(path=str(art.path), sha256=art.sha256)
 
+    # ---- Coach artifact (conditional) ----
+    coach_artifact = None
+    if "clip.coach.json" in bundle_result.artifacts:
+        art = bundle_result.artifacts["clip.coach.json"]
+        coach_artifact = JsonArtifact(path=str(art.path), sha256=art.sha256)
+
     # ---- Collect warnings from all attempts ----
     all_warnings = []
     for attempt in loop_outcome.attempts:
@@ -240,6 +252,7 @@ def generate_endpoint(payload: Dict[str, Any]):
         midi=midi_artifact,
         tags=tags_artifact,
         runlog=runlog_artifact,
+        coach=coach_artifact,
         validation=ValidationReport(
             passed=(loop_outcome.status == "ok"),
             violations=selected.violations,

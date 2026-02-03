@@ -113,6 +113,7 @@ def generate_accompaniment(
     expressive: ExpressiveSpec | None = None,
     style_overrides: dict[str, Any] | None = None,
     meter: Tuple[int, int] = (4, 4),
+    density_bucket: str | None = None,
 ) -> tuple[list[NoteEvent], list[NoteEvent]]:
     """
     Generate comping + bass MIDI note events for a simple chord progression.
@@ -144,6 +145,10 @@ def generate_accompaniment(
     meter:
         Time signature as (numerator, denominator), e.g. (4, 4) or (3, 4).
         Phase 6.0+: Affects bar length calculation and MIDI time signature.
+    density_bucket:
+        Optional density bucket: "sparse", "medium", or "dense".
+        Phase 6.2+: Applies deterministic thinning to comp events.
+        sparse=50%, medium=75%, dense=100% (no thinning).
 
     Returns
     -------
@@ -358,5 +363,17 @@ def generate_accompaniment(
                     "seed": tag_seed,
                 },
             )
+
+    # Phase 6.2: Deterministic density thinning (comp only, bass untouched)
+    if density_bucket in ("sparse", "medium", "dense"):
+        keep_pct = {"sparse": 50, "medium": 75, "dense": 100}.get(density_bucket, 100)
+        if keep_pct < 100:
+            thinned = []
+            for i, ev in enumerate(comp_events):
+                # Deterministic hash based on event index (no RNG)
+                h = (i * 2654435761) & 0xFFFFFFFF
+                if (h % 100) < keep_pct:
+                    thinned.append(ev)
+            comp_events = thinned
 
     return comp_events, bass_events

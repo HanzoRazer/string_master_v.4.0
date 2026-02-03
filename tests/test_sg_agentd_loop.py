@@ -134,6 +134,21 @@ class TestRangeValidator:
         assert result.actual_span is None
         assert len(result.warnings) == 1
 
+    def test_range_validator_uses_midi_note_attribute(self):
+        """Validator correctly reads zt_band NoteEvent.midi_note (P0 regression)."""
+        try:
+            from sg_agentd.validators.range import validate_pitch_range
+            from zt_band.midi_out import NoteEvent
+        except ImportError:
+            pytest.skip("sg_agentd or zt_band not available")
+
+        comp = [NoteEvent(start_beats=0.0, duration_beats=1.0, midi_note=60, velocity=90)]
+        bass = [NoteEvent(start_beats=0.0, duration_beats=1.0, midi_note=36, velocity=90)]
+        # span = 24 should pass with default limit 24
+        out = validate_pitch_range(comp, bass, limit=24)
+        assert out.passed is True
+        assert out.actual_span == 24
+
 
 # ============================================================================
 # Loop Orchestration Tests

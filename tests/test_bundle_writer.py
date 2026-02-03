@@ -31,6 +31,22 @@ from zt_band.bundle_writer import (
 )
 from zt_band.midi_out import NoteEvent
 
+# Optional: validate emitted JSON against sg-spec models when available.
+try:
+    from sg_spec.schemas.technique_sidecar import TechniqueSidecar
+    from sg_spec.schemas.clip_bundle import ClipRunLog
+    SG_SPEC_AVAILABLE = True
+except ImportError:
+    SG_SPEC_AVAILABLE = False
+
+
+def _assert_sg_spec_conformance(tags_payload: dict, runlog_payload: dict) -> None:
+    """Validate payloads against sg-spec models, skip if sg-spec not installed."""
+    if not SG_SPEC_AVAILABLE:
+        return  # silently skip conformance check
+    TechniqueSidecar.model_validate(tags_payload)
+    ClipRunLog.model_validate(runlog_payload)
+
 
 # ============================================================================
 # Fixtures
@@ -451,9 +467,9 @@ class TestWriteClipBundle:
 
         validation = runlog["validation"]
         assert validation["contract_passed"] is True
-        assert validation["note_count"] == 6  # 4 comp + 2 bass
-        assert validation["comp_event_count"] == 4
-        assert validation["bass_event_count"] == 2
+        assert validation["note_count_comp"] == 4
+        assert validation["note_count_bass"] == 2
+        assert validation["warnings"] == []
 
     def test_inputs_captured_in_runlog(
         self,
@@ -523,8 +539,31 @@ class TestWriteClipBundle:
         assert tags["schema_version"] == "v1"
         assert tags["meter"] == "4/4"
         assert tags["beats_per_bar"] == 4.0
-        assert len(tags["comp_tags"]) == 4
-        assert tags["comp_tags"][2] == ["articulation.dynamics.ghost"]
+        assert tags["tempo_bpm"] == 120.0
+        assert "source_midi_sha256" in tags
+        assert isinstance(tags["source_midi_sha256"], str)
+        # raw hex, no sha256: prefix
+        assert not tags["source_midi_sha256"].startswith("sha256:")
+        assert len(tags["source_midi_sha256"]) == 64
+
+        # annotations are list-of-objects, 4 comp + 2 bass
+        assert "annotations" in tags
+        assert isinstance(tags["annotations"], list)
+        assert len(tags["annotations"]) == 6
+
+        # spot-check one comp annotation carries technique_tags
+        comp_ann = [a for a in tags["annotations"] if a["role"] == "comp"]
+        assert len(comp_ann) == 4
+        # technique tags should include ghost and accent (flattened + deduped)
+        tech = comp_ann[0]["technique_tags"]
+        assert "articulation.dynamics.ghost" in tech
+        assert "articulation.dynamics.accent" in tech
+
+        # sg-spec conformance check (skips if sg-spec not installed)
+        runlog_path = result.bundle_dir / "clip.runlog.json"
+        with open(runlog_path) as f:
+            runlog = json.load(f)
+        _assert_sg_spec_conformance(tags, runlog)
 
     def test_outputs_sha256_in_runlog(
         self,
@@ -574,7 +613,8 @@ class TestWriteClipBundle:
         with open(runlog_path) as f:
             runlog = json.load(f)
 
-        assert runlog["validation"]["note_count"] == 0
+        assert runlog["validation"]["note_count_comp"] == 0
+        assert runlog["validation"]["note_count_bass"] == 0
 
 
 # ============================================================================
