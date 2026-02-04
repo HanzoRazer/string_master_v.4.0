@@ -28,14 +28,22 @@
 --   SG_AGENTD/action_struggle_regen
 --   SG_AGENTD/action_timeline
 --   SG_AGENTD/action_trend
+--   SG_AGENTD/host_port
 --
 -- Failure behavior:
 --   - If anything fails, show "stale" state but don't crash
 --   - Panel continues running even without server
 -- ============================================================================
 
-local API_BASE = "http://127.0.0.1:8420"
 local EXT_SECTION = "SG_AGENTD"
+
+-- Build API_BASE from ExtState host_port (fallback to 127.0.0.1:8420 if not set)
+local function get_api_base()
+  local hp = reaper.GetExtState(EXT_SECTION, "host_port")
+  if hp == nil or hp == "" then hp = "127.0.0.1:8420" end
+  return "http://" .. hp
+end
+local API_BASE = get_api_base()
 local EXT_LAST_CLIP = "last_clip_id"
 local EXT_SESSION_ID = "session_id"
 
