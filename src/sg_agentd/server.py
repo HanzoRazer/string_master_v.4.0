@@ -84,6 +84,10 @@ app = FastAPI(
     version="0.1.0",
 )
 
+# Register routers (Episode 10+)
+from sg_agentd.routes import feedback_router
+app.include_router(feedback_router)
+
 
 @app.get("/health")
 def health_check():
@@ -239,6 +243,12 @@ def generate_endpoint(payload: Dict[str, Any]):
         art = bundle_result.artifacts["clip.coach.json"]
         coach_artifact = JsonArtifact(path=str(art.path), sha256=art.sha256)
 
+    # ---- Bundle manifest artifact ----
+    bundle_manifest_artifact = None
+    if "clip.bundle.json" in bundle_result.artifacts:
+        art = bundle_result.artifacts["clip.bundle.json"]
+        bundle_manifest_artifact = JsonArtifact(path=str(art.path), sha256=art.sha256)
+
     # ---- Collect warnings from all attempts ----
     all_warnings = []
     for attempt in loop_outcome.attempts:
@@ -253,6 +263,7 @@ def generate_endpoint(payload: Dict[str, Any]):
         tags=tags_artifact,
         runlog=runlog_artifact,
         coach=coach_artifact,
+        bundle_manifest=bundle_manifest_artifact,
         validation=ValidationReport(
             passed=(loop_outcome.status == "ok"),
             violations=selected.violations,
@@ -265,7 +276,8 @@ def generate_endpoint(payload: Dict[str, Any]):
             attempts_used=len(loop_outcome.attempts),
             seed_used=selected.seed_used,
         ),
-        bundle_path=str(bundle_result.bundle_dir),
+        bundle_dir=str(bundle_result.bundle_dir),
+        bundle_path=str(bundle_result.bundle_dir),  # deprecated alias
     )
 
     return result.model_dump(mode="json")
