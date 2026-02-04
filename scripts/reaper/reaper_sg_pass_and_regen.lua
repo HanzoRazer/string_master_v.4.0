@@ -7,6 +7,26 @@
   Episode 11: Displays coach_hint narrative after success.
   
   Usage: Bind to a key (e.g., F9) in Reaper Actions.
+  
+  ============================================================================
+  CONTRACT NOTES (v1.0.0-offline)
+  ============================================================================
+  
+  Response fields used:
+    - status: "ok" | "partial" | "failed"
+    - suggested_adjustment.coach_hint: string (deterministic narrative)
+    - clip_id: new clip identifier
+    - bundle_dir: path to generated bundle
+  
+  ExtState keys:
+    - READ:  SG_AGENTD/last_clip_id
+    - WRITE: SG_AGENTD/last_clip_id (updated to new clip)
+  
+  Bundle files read:
+    - (none - reads from server response)
+  
+  Optional fields are optional - script must not fail if extras are missing.
+  ============================================================================
 ]]
 
 local json = require("json")
