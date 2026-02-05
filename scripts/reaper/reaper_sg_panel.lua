@@ -388,6 +388,9 @@ end
 
 -- ------------------------------ main loop ----------------------------------
 local function loop()
+  -- Hot-reload host_port from ExtState (allows live switching between localhost/LAN Pi)
+  API_BASE = "http://" .. (reaper.GetExtState(EXT_SECTION, "host_port") ~= "" and reaper.GetExtState(EXT_SECTION, "host_port") or "127.0.0.1:8420")
+
   local now = reaper.time_precise()
   refresh_session_if_needed(now)
   refresh_coach_if_needed(now)
