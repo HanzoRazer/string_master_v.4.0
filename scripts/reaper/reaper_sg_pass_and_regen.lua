@@ -29,13 +29,53 @@
   ============================================================================
 ]]
 
-local json = require("json")
+-- ============================================================================
+-- Canonical JSON loader (same as reaper_sg_panel.lua)
+-- ============================================================================
+local json
+do
+  local script_path = ({reaper.get_action_context()})[2] or ""
+  local script_dir = script_path:match("(.*[\\/])") or ""
+  
+  -- Try 1: json.lua in same folder
+  local json_path = script_dir .. "json.lua"
+  local f = io.open(json_path, "r")
+  if f then
+    f:close()
+    json = dofile(json_path)
+  end
+  
+  -- Try 2: dkjson (Reaper bundled)
+  if not json then
+    local ok, dkjson = pcall(require, "dkjson")
+    if ok and dkjson then json = dkjson end
+  end
+  
+  -- Fallback: stub that fails gracefully
+  if not json then
+    json = {
+      encode = function() return "{}" end,
+      decode = function() return nil, "no JSON library available" end,
+    }
+  end
+end
 
 -- ============================================================================
 -- Configuration
 -- ============================================================================
 
-local SG_AGENTD_URL = "http://localhost:7878"
+local EXT_SECTION = "SG_AGENTD"
+local DEFAULT_HOST_PORT = "127.0.0.1:8420"
+
+local function get_host_port()
+  local hp = reaper.GetExtState(EXT_SECTION, "host_port")
+  hp = tostring(hp or ""):gsub("^%s+",""):gsub("%s+$","")
+  if hp == "" then hp = DEFAULT_HOST_PORT end
+  if not hp:match("^[%w%.%-]+:%d+$") then
+    hp = DEFAULT_HOST_PORT
+  end
+  return hp
+end
 local ENDPOINT = "/feedback_and_regen"
 local VERDICT = "pass"
 
@@ -47,30 +87,31 @@ local function msg(s)
   reaper.ShowConsoleMsg(tostring(s) .. "\n")
 end
 
-local function http_post(url, body)
-  -- Use ReaScript's built-in HTTP (requires js_ReaScriptAPI or similar)
-  -- Fallback: use curl via os.execute
-  local tmp_in = os.tmpname()
-  local tmp_out = os.tmpname()
-  
-  local f = io.open(tmp_in, "w")
+local function http_post(url, body, timeout_ms)
+  timeout_ms = timeout_ms or 5000
+
+  local tmp = os.tmpname()
+  local f = io.open(tmp, "w")
+  if not f then return nil, nil, "temp file error" end
   f:write(body)
   f:close()
-  
+
   local cmd = string.format(
-    'curl -s -X POST "%s" -H "Content-Type: application/json" -d @"%s" -o "%s"',
-    url, tmp_in, tmp_out
+    'curl -s -X POST "%s" -H "Content-Type: application/json" --data-binary @"%s" -w "
+%%{http_code}"',
+    url, tmp
   )
-  os.execute(cmd)
-  
-  local f2 = io.open(tmp_out, "r")
-  local response = f2 and f2:read("*a") or ""
-  if f2 then f2:close() end
-  
-  os.remove(tmp_in)
-  os.remove(tmp_out)
-  
-  return response
+
+  local rv, out = reaper.ExecProcess(cmd, timeout_ms)
+  os.remove(tmp)
+
+  if rv ~= 0 or not out then
+    return nil, nil, "timeout or curl failure"
+  end
+
+  local resp, code = out:match("^(.*)
+(%d%d%d)$")
+  return resp or "", tonumber(code), nil
 end
 
 local function get_current_clip_id()
@@ -131,22 +172,22 @@ local function main()
   }
   
   local body = json.encode(request)
-  local url = SG_AGENTD_URL .. ENDPOINT
+  local url = "http://" .. get_host_port() .. ENDPOINT
   
   -- Send request
-  local response = http_post(url, body)
-  
-  if not response or response == "" then
-    msg("SG: ERROR - No response from server")
+  local response, code, post_err = http_post(url, body, 5000)
+  if not response then
+    msg("SG ERR: " .. tostring(post_err))
+    return
+  end
+  if code and code >= 400 then
+    msg("SG ERR: HTTP " .. tostring(code))
+    msg(response)
     return
   end
   
   -- Decode response
-  local ok, decoded = pcall(json.decode, response)
-  if not ok then
-    msg("SG: ERROR - Failed to parse response: " .. tostring(decoded))
-    return
-  end
+  local decoded = json.decode(response)
   
   -- Check status
   if decoded.status ~= "ok" then

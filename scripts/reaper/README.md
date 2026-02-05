@@ -19,7 +19,7 @@ FAST feedback scripts for Reaper DAW integration with sg-agentd.
 ## Requirements
 
 - `curl` in PATH (for HTTP requests)
-- sg-agentd running on `localhost:7878`
+- sg-agentd running on `localhost:8420` (or ExtState host_port)
 
 ## Episode 11: Coach Hints
 

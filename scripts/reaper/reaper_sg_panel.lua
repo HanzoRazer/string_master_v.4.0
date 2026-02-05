@@ -2,7 +2,7 @@
 -- Episode 13A: Visual SG Panel (Reaper gfx window)
 --
 -- Requirements:
---   - dkjson.lua in same folder as script
+--   - json.lua in same folder as script
 --   - Reaper ExtState keys set for action IDs (optional but recommended):
 --       SG_AGENTD/action_generate
 --       SG_AGENTD/action_pass_regen
@@ -78,11 +78,35 @@ local function file_exists(path)
   return false
 end
 
--- ------------------------------ dkjson -------------------------------------
-local script_dir = ({reaper.get_action_context()})[2]:match("(.*/)")
-                or ({reaper.get_action_context()})[2]:match("(.+\\)")
-                or ""
-local json = dofile(script_dir .. "dkjson.lua")
+-- ------------------------------ json (canonical loader) --------------------
+-- Canonical JSON loader: prefers json.lua in script folder, falls back to dkjson
+local json
+do
+  local script_path = ({reaper.get_action_context()})[2] or ""
+  local script_dir = script_path:match("(.*[\\/])") or ""
+  
+  -- Try 1: json.lua in same folder
+  local json_path = script_dir .. "json.lua"
+  local f = io.open(json_path, "r")
+  if f then
+    f:close()
+    json = dofile(json_path)
+  end
+  
+  -- Try 2: dkjson (Reaper bundled)
+  if not json then
+    local ok, dkjson = pcall(require, "dkjson")
+    if ok and dkjson then json = dkjson end
+  end
+  
+  -- Fallback: stub that fails gracefully
+  if not json then
+    json = {
+      encode = function() return "{}" end,
+      decode = function() return nil, "no JSON library available" end,
+    }
+  end
+end
 
 -- ------------------------------ http ---------------------------------------
 local function url_encode(s)

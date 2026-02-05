@@ -2,7 +2,7 @@
 -- Episode 12: FTUE / Setup Doctor (guided first run)
 --
 -- What it does:
---  1) Verifies script directory + dkjson.lua presence/load
+--  1) Verifies script directory + json.lua presence/load
 --  2) Checks sg-agentd reachable (GET /status) on http://127.0.0.1:8420
 --  3) Ensures SG_COMP / SG_BASS tracks exist (creates if missing)
 --  4) Checks chord markers (and time selection chord markers) exist
@@ -24,7 +24,7 @@ local function warn(s) msg("SG WARN:" .. s) end
 local function err(s) msg("SG ERR:" .. s) end
 
 -- ---------------------------------------------------------------------------
--- Script directory + dkjson load
+-- Script directory + json load
 -- ---------------------------------------------------------------------------
 local function get_script_dir()
   local p = ({reaper.get_action_context()})[2] or ""
@@ -40,11 +40,11 @@ local function file_exists(path)
   return false
 end
 
-local function try_load_dkjson(script_dir)
-  local path = script_dir .. "dkjson.lua"
-  if not file_exists(path) then return nil, "dkjson.lua not found: " .. path end
+local function try_load_json(script_dir)
+  local path = script_dir .. "json.lua"
+  if not file_exists(path) then return nil, "json.lua not found: " .. path end
   local ok_load, lib = pcall(dofile, path)
-  if not ok_load then return nil, "dkjson.lua failed to load: " .. tostring(lib) end
+  if not ok_load then return nil, "json.lua failed to load: " .. tostring(lib) end
   return lib, nil
 end
 
@@ -156,13 +156,13 @@ msg("============================================================")
 local script_dir = get_script_dir()
 ok("Script dir: " .. (script_dir ~= "" and script_dir or "(unknown)"))
 
--- 1) dkjson
-local json, json_err = try_load_dkjson(script_dir)
+-- 1) json
+local json, json_err = try_load_json(script_dir)
 if json then
-  ok("dkjson.lua: present + loadable")
+  ok("json.lua: present + loadable")
 else
-  err("dkjson.lua: " .. tostring(json_err))
-  msg("      Fix: put dkjson.lua in the same folder as this script.")
+  err("json.lua: " .. tostring(json_err))
+  msg("      Fix: put json.lua in the same folder as this script.")
 end
 
 -- 2) Server status

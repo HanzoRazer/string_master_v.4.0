@@ -8,7 +8,7 @@
 -- Notes:
 --  - Uses Reaper Actions by command ID string:
 --      reaper.NamedCommandLookup("_RS...") -> numeric command id
---  - Requires dkjson.lua in same folder (only for other scripts; Doctor itself doesn't need json decode)
+--  - Requires json.lua in same folder (only for other scripts; Doctor itself doesn't need json decode)
 --  - Server check uses curl GET /status at API_BASE
 
 local API_BASE = "http://127.0.0.1:8420"
@@ -29,7 +29,7 @@ local function err(s) msg("SG ERR:" .. s) end
 local function trim(s) return (tostring(s or ""):gsub("^%s+", ""):gsub("%s+$", "")) end
 
 -- ---------------------------------------------------------------------------
--- Script directory + dkjson presence check (load not required here)
+-- Script directory + json presence check (load not required here)
 -- ---------------------------------------------------------------------------
 local function get_script_dir()
   local p = ({reaper.get_action_context()})[2] or ""
@@ -153,12 +153,12 @@ local dry_run = (tonumber(trim(dry_s)) or 0) == 1
 local script_dir = get_script_dir()
 ok("Script dir: " .. (script_dir ~= "" and script_dir or "(unknown)"))
 
-local dk = script_dir .. "dkjson.lua"
-if file_exists(dk) then
-  ok("dkjson.lua: present")
+local jf = script_dir .. "json.lua"
+if file_exists(jf) then
+  ok("json.lua: present")
 else
-  warn("dkjson.lua: missing (recommended for timeline/trend scripts)")
-  msg("      Fix: put dkjson.lua in the same folder as scripts.")
+  warn("json.lua: missing (recommended for timeline/trend scripts)")
+  msg("      Fix: put json.lua in the same folder as scripts.")
 end
 
 do
