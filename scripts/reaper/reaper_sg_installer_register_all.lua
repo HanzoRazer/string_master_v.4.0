@@ -71,8 +71,8 @@ local MAP = {
   { key = "action_generate",       label = "Generate",       file = "reaper_sg_generate.lua" },
   { key = "action_pass_regen",     label = "PASS+REGEN",     file = "reaper_sg_pass_and_regen.lua" },
   { key = "action_struggle_regen", label = "STRUGGLE+REGEN", file = "reaper_sg_struggle_and_regen.lua" },
-  { key = "action_timeline",       label = "Timeline",       file = "reaper_sg_session_timeline.lua" },
-  { key = "action_trend",          label = "Trend",          file = "reaper_sg_session_trend_summary.lua" },
+  { key = "action_timeline",       label = "Timeline",       file = "reaper_sg_timeline.lua" },
+  { key = "action_trend",          label = "Trend",          file = "reaper_sg_trend.lua" },
 }
 
 -- ---------------------------------------------------------------------------
