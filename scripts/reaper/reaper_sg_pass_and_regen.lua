@@ -1,3 +1,4 @@
+-- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
 --[[
   Smart Guitar: PASS and Regenerate (FAST)
   
@@ -30,14 +31,13 @@
 ]]
 
 -- ============================================================================
--- Canonical JSON loader (same as reaper_sg_panel.lua)
+-- Canonical JSON loader (json.lua only per CONTRACT V1)
 -- ============================================================================
 local json
 do
   local script_path = ({reaper.get_action_context()})[2] or ""
   local script_dir = script_path:match("(.*[\\/])") or ""
   
-  -- Try 1: json.lua in same folder
   local json_path = script_dir .. "json.lua"
   local f = io.open(json_path, "r")
   if f then
@@ -45,17 +45,11 @@ do
     json = dofile(json_path)
   end
   
-  -- Try 2: dkjson (Reaper bundled)
-  if not json then
-    local ok, dkjson = pcall(require, "dkjson")
-    if ok and dkjson then json = dkjson end
-  end
-  
   -- Fallback: stub that fails gracefully
   if not json then
     json = {
       encode = function() return "{}" end,
-      decode = function() return nil, "no JSON library available" end,
+      decode = function() return nil, "json.lua not found" end,
     }
   end
 end
@@ -131,25 +125,28 @@ local function get_current_clip_id()
 end
 
 local function extract_coach_hint(decoded)
-  -- Episode 11: Extract coach_hint from response
-  local coach_hint = nil
+  -- CONTRACT V1: coach_hint priority chain
+  if type(decoded) ~= "table" then return nil end
   
-  -- Preferred: server returns top-level suggested block
-  if decoded.suggested and decoded.suggested.coach_hint then
-    coach_hint = decoded.suggested.coach_hint
+  -- 1) Canonical V1: suggested_adjustment.coach_hint
+  if type(decoded.suggested_adjustment) == "table" and type(decoded.suggested_adjustment.coach_hint) == "string" then
+    local s = decoded.suggested_adjustment.coach_hint:gsub("^%s+",""):gsub("%s+$","")
+    if s ~= "" then return s end
   end
   
-  -- Alternate: nested under regen
-  if (not coach_hint) and decoded.regen and decoded.regen.suggested and decoded.regen.suggested.coach_hint then
-    coach_hint = decoded.regen.suggested.coach_hint
+  -- 2) Backward compat: regen.suggested.coach_hint
+  if type(decoded.regen) == "table" and type(decoded.regen.suggested) == "table" and type(decoded.regen.suggested.coach_hint) == "string" then
+    local s = decoded.regen.suggested.coach_hint:gsub("^%s+",""):gsub("%s+$","")
+    if s ~= "" then return s end
   end
   
-  -- Alternate: top-level coach_hint (ultra-minimal)
-  if (not coach_hint) and decoded.coach_hint then
-    coach_hint = decoded.coach_hint
+  -- 3) Backward compat: top-level coach_hint
+  if type(decoded.coach_hint) == "string" then
+    local s = decoded.coach_hint:gsub("^%s+",""):gsub("%s+$","")
+    if s ~= "" then return s end
   end
   
-  return coach_hint
+  return nil
 end
 
 -- ============================================================================

@@ -1,0 +1,71 @@
+# SG Reaper Contract V1
+
+This document is the single source of truth for Smart Guitar Reaper scripts.
+
+## Scope
+Applies to:
+- scripts/reaper/*.lua
+- sg-agentd endpoints used by those scripts
+
+## ExtState Contract (SG_AGENTD section)
+All keys live under:
+- ExtState section: `SG_AGENTD`
+
+### Keys written by the canonical shipper
+The canonical shipper script must write these persistent keys (persist=true):
+- `action_generate`         (string, _RS... command id)
+- `action_pass_regen`       (string, _RS... command id)
+- `action_struggle_regen`   (string, _RS... command id)
+- `action_timeline`         (string, _RS... command id)
+- `action_trend`            (string, _RS... command id)
+- `session_id`              (string, non-empty)
+- `host_port`               (string, host:port)
+
+### Defaults / fallbacks
+If `host_port` is unset or invalid, scripts must fallback to:
+- `127.0.0.1:8420`
+
+### Validation rules
+- host_port must match: `^[%w%.%-]+:%d+$`
+- action ids must typically start with `_RS` (warn if not)
+- action ids must resolve via `reaper.NamedCommandLookup(id)` (fail if present but not resolvable)
+
+## JSON Dependency
+All scripts must load:
+- `scripts/reaper/json.lua` (rxi json; provides `json.encode` and `json.decode`)
+
+No script may reference `dkjson.lua` in V1.
+
+## HTTP Dependency
+All network scripts must use:
+- `curl` via `reaper.ExecProcess(cmd, timeout_ms)`
+
+No hotkey-bound script may use `os.execute` (prevents indefinite hang).
+
+### Timeouts
+- hotkeys (PASS/STRUGGLE): 5000 ms
+- panel/doctor: 2500–8000 ms depending on polling behavior
+
+## sg-agentd Endpoints Used by Reaper
+- `GET /status` (doctor reachability check)
+- verdict/regen endpoint(s) consumed by PASS/STRUGGLE scripts (implementation-defined)
+
+Scripts must:
+- build API base as `http://` + host_port
+- never assume https or path prefixes in V1
+
+## coach_hint Contract (canonical output + backward compatibility)
+Canonical location for coach hint:
+1) `suggested_adjustment.coach_hint`
+
+Backward-compat fallbacks supported:
+2) `regen.suggested.coach_hint`
+3) `coach_hint`
+
+Scripts must implement lookup in that priority order.
+
+If no coach hint exists, scripts must not error; they may print no narrative.
+
+## Versioning
+- Scripts must include: `-- CONTRACT: SG_REAPER_CONTRACT_V1`
+- Any breaking change requires a V2 doc and matching header bump in scripts.

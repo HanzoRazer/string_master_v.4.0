@@ -1,4 +1,6 @@
--- scripts/reaper_sg_panel.lua
+-- scripts/reaper/reaper_sg_panel.lua
+-- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
+--
 -- Episode 13A: Visual SG Panel (Reaper gfx window)
 --
 -- Requirements:
@@ -79,13 +81,12 @@ local function file_exists(path)
 end
 
 -- ------------------------------ json (canonical loader) --------------------
--- Canonical JSON loader: prefers json.lua in script folder, falls back to dkjson
+-- CONTRACT V1: json.lua only (no dkjson fallback)
 local json
 do
   local script_path = ({reaper.get_action_context()})[2] or ""
   local script_dir = script_path:match("(.*[\\/])") or ""
   
-  -- Try 1: json.lua in same folder
   local json_path = script_dir .. "json.lua"
   local f = io.open(json_path, "r")
   if f then
@@ -93,17 +94,11 @@ do
     json = dofile(json_path)
   end
   
-  -- Try 2: dkjson (Reaper bundled)
-  if not json then
-    local ok, dkjson = pcall(require, "dkjson")
-    if ok and dkjson then json = dkjson end
-  end
-  
   -- Fallback: stub that fails gracefully
   if not json then
     json = {
       encode = function() return "{}" end,
-      decode = function() return nil, "no JSON library available" end,
+      decode = function() return nil, "json.lua not found" end,
     }
   end
 end

@@ -1,4 +1,6 @@
--- scripts/reaper_sg_setup_autorun_generate_then_pass.lua
+-- scripts/reaper/reaper_sg_setup_autorun_generate_then_pass.lua
+-- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
+--
 -- Episode 12.1 (Zero-prompt): Always run Generate then PASS+REGEN
 --
 -- Requirements:

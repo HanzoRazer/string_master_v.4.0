@@ -1,4 +1,6 @@
 -- scripts/reaper/reaper_sg_setup_doctor.lua
+-- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
+--
 -- Smart Guitar — Setup Doctor (Gatekeeper)
 --
 -- Produces a single PASS/FAIL receipt line at end.

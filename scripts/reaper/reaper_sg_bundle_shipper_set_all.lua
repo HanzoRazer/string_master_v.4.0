@@ -1,4 +1,6 @@
--- scripts/reaper_sg_bundle_shipper_set_all.lua
+-- scripts/reaper/reaper_sg_bundle_shipper_set_all.lua
+-- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
+--
 -- Zero-prompt "bundle shipper" setter:
 --   - stores all 5 action IDs
 --   - stores session_id + host_port
