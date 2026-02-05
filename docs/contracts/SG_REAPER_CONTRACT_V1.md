@@ -36,6 +36,19 @@ All scripts must load:
 
 No script may reference `dkjson.lua` in V1.
 
+## Shared Helper Library (Phase 6)
+`scripts/reaper/sg_http.lua` centralizes:
+- ExtState reads/writes (host_port, session_id, action ids)
+- HTTP via `reaper.ExecProcess` + curl (with timeouts)
+- JSON loading (`sg.load_json()`)
+- coach_hint extraction (`sg.pick_coach_hint(decoded)`)
+
+Scripts using `sg_http.lua` must:
+- `dofile(script_dir .. "sg_http.lua")` at top of script
+- Use `sg.http_post_json(path, body, timeout_ms)` for POST calls
+- Use `sg.http_get(path, timeout_ms)` for GET calls
+- Use `sg.pick_coach_hint(decoded)` for coach hint extraction
+
 ## HTTP Dependency
 All network scripts must use:
 - `curl` via `reaper.ExecProcess(cmd, timeout_ms)`

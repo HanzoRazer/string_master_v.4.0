@@ -3,6 +3,16 @@
 This folder is the **single blessed bundle** for Reaper integration with sg-agentd.
 
 ## Canonical setup order (recommended)
+
+### Option A: Auto-installer (Phase 6)
+1. `reaper_sg_installer_register_all.lua`  
+   Auto-registers core scripts, captures `_RS...` IDs, and ships ExtState.
+   Run once. Re-running is safe (overwrites action IDs, preserves existing host/session).
+
+2. `reaper_sg_setup_doctor.lua`  
+   Verify installation health.
+
+### Option B: Manual setup
 1. `reaper_sg_bundle_shipper_set_all.lua`  
    One-time config shipper. Writes persistent ExtState keys:
    - action IDs (5)
@@ -25,12 +35,14 @@ This folder is the **single blessed bundle** for Reaper integration with sg-agen
 ## Scripts (blessed)
 | Script | Purpose | Requires ExtState |
 |---|---|---|
-| `reaper_sg_bundle_shipper_set_all.lua` | One-time config shipper | writes all |
+| `sg_http.lua` | **Shared helper** — HTTP, ExtState, JSON, coach_hint | (library, not standalone) |
+| `reaper_sg_installer_register_all.lua` | **Auto-installer** — registers scripts + ships ExtState | writes all |
+| `reaper_sg_bundle_shipper_set_all.lua` | One-time config shipper (manual) | writes all |
 | `reaper_sg_setup_doctor.lua` | Installation verifier | reads host_port (fallback ok) |
 | `reaper_sg_setup_doctor_autorun.lua` | Guided setup + autorun helper | reads/writes some keys |
 | `reaper_sg_panel.lua` | Panel UI + session tools | reads host_port/session_id/actions |
-| `reaper_sg_pass_and_regen.lua` | PASS verdict + regen | reads host_port (fallback ok) |
-| `reaper_sg_struggle_and_regen.lua` | STRUGGLE verdict + regen | reads host_port (fallback ok) |
+| `reaper_sg_pass_and_regen.lua` | PASS verdict + regen | via `sg_http.lua` |
+| `reaper_sg_struggle_and_regen.lua` | STRUGGLE verdict + regen | via `sg_http.lua` |
 | `reaper_sg_setup_autorun_generate_then_pass.lua` | zero-prompt generate→pass | reads action_generate/action_pass_regen |
 
 ## Deprecated
