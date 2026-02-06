@@ -62,6 +62,13 @@ jobs:
           echo "OK: deterministic (sha256 matches)."
         shell: bash
 
+      - name: Structure lint (zip)
+        run: |
+          python scripts/release/lint_lab_pack_zip.py
+        shell: bash
+        env:
+          CI_TAG: ${{ github.ref_name }}
+
   build-lab-pack:
     name: Build Lab Pack (${{ matrix.os }})
     needs: [determinism-test]
@@ -92,6 +99,13 @@ jobs:
         run: |
           python scripts/release/check_lab_pack_policy.py
         shell: bash
+
+      - name: Structure lint (zip)
+        run: |
+          python scripts/release/lint_lab_pack_zip.py
+        shell: bash
+        env:
+          CI_TAG: ${{ github.ref_name }}
 
       - name: Verify outputs exist
         run: |
