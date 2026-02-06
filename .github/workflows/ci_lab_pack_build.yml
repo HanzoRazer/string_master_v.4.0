@@ -1,0 +1,44 @@
+name: CI - Lab Pack Build (PR)
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  lab-pack-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build Lab Pack + metadata
+        run: |
+          python --version
+          python scripts/release/build_lab_pack.py
+          python scripts/release/generate_checksums.py
+          ls -lah dist
+
+      - name: Verify outputs exist
+        run: |
+          ZIP_PATH="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          test -n "$ZIP_PATH"
+          test -f "${ZIP_PATH}.sha256"
+          test -f "${ZIP_PATH}.manifest.txt"
+
+      - name: Upload build artifacts (for inspection)
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-pack-pr-build
+          path: |
+            dist/Lab_Pack_SG_*.zip
+            dist/Lab_Pack_SG_*.zip.sha256
+            dist/Lab_Pack_SG_*.manifest.txt
+          if-no-files-found: error
+          retention-days: 7
