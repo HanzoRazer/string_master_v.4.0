@@ -8,9 +8,13 @@ Creates a deterministic zip file for laboratory deployment.
 
 ```bash
 python scripts/release/build_lab_pack.py
+python scripts/release/generate_checksums.py
 ```
 
-**Output**: `dist/Lab_Pack_SG_<bundle_version>.zip`
+**Outputs**: 
+- `dist/Lab_Pack_SG_<bundle_version>.zip`
+- `dist/Lab_Pack_SG_<bundle_version>.zip.sha256`
+- `dist/Lab_Pack_SG_<bundle_version>.manifest.txt`
 
 **Contents**:
 - `README_LAB.txt` - Installation instructions
@@ -46,9 +50,35 @@ BLESSED_REAPER_FILES = [
     "SG_BUNDLE_VERSION.txt",
     "json.lua",
     "sg_http.lua",
-    # ... add new files here ...
-]
+   Verify Release
+
+Verify downloaded Lab Pack integrity:
+
+```bash
+# Linux/macOS
+sha256sum -c Lab_Pack_SG_<bundle_version>.zip.sha256
+
+# Windows PowerShell
+$hash = (Get-FileHash -Algorithm SHA256 Lab_Pack_SG_<bundle_version>.zip).Hash.ToLower()
+$expected = (Get-Content Lab_Pack_SG_<bundle_version>.zip.sha256).Split()[0]
+if ($hash -eq $expected) { Write-Host "OK: checksum verified" } else { Write-Host "FAIL: checksum mismatch" }
 ```
+
+## CI/CD Integration
+
+### GitHub Actions
+
+Workflow: `.github/workflows/release_lab_pack.yml`
+- Triggers on tags: `v*`, `labpack-*`, `reaper-bundle-*`
+- Builds zip, generates checksums/manifest
+- Creates GitHub Release with all artifacts
+
+### GitLab CI
+
+Config: `.gitlab-ci.yml`
+- Same tag trigger patterns
+- Outputs artifacts to job storage
+- Creates GitLab Release with asset links
 
 ## CI/CD Integration (Future)
 

@@ -1,0 +1,50 @@
+stages:
+  - build
+  - release
+
+variables:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+
+build:lab_pack:
+  stage: build
+  image: python:3.11-slim
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - python --version
+    - python scripts/release/build_lab_pack.py
+    - python scripts/release/generate_checksums.py
+    - ls -lah dist
+    - ZIP_PATH="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+    - test -n "$ZIP_PATH"
+    - echo "ZIP_PATH=$ZIP_PATH" >> build.env
+  artifacts:
+    when: always
+    expire_in: 90 days
+    paths:
+      - dist/Lab_Pack_SG_*.zip
+      - dist/Lab_Pack_SG_*.zip.sha256
+      - dist/Lab_Pack_SG_*.manifest.txt
+    reports:
+      dotenv: build.env
+
+release:lab_pack:
+  stage: release
+  image: alpine:3.19
+  needs: ["build:lab_pack"]
+  rules:
+    - if: $CI_COMMIT_TAG
+  before_script:
+    - apk add --no-cache curl
+  script:
+    - echo "Releasing $CI_COMMIT_TAG with asset $ZIP_PATH"
+  release:
+    name: "Lab Pack $CI_COMMIT_TAG"
+    tag_name: "$CI_COMMIT_TAG"
+    description: "Automated Lab Pack build from tag $CI_COMMIT_TAG."
+    assets:
+      links:
+        - name: "Lab Pack Zip"
+          url: "${CI_PROJECT_URL}/-/jobs/${CI_JOB_ID}/artifacts/raw/${ZIP_PATH}"
+          link_type: "package"

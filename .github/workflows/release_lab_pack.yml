@@ -28,6 +28,11 @@ jobs:
           python scripts/release/build_lab_pack.py
           ls -lah dist
 
+      - name: Generate checksums and manifest
+        run: |
+          python scripts/release/generate_checksums.py
+          ls -lah dist
+
       - name: Find Lab Pack zip
         id: find_zip
         run: |
@@ -41,7 +46,10 @@ jobs:
       - name: Create GitHub Release (if needed) and upload asset
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.find_zip.outputs.zip_path }}
+          files: |
+            ${{ steps.find_zip.outputs.zip_path }}
+            ${{ steps.find_zip.outputs.zip_path }}.sha256
+            ${{ steps.find_zip.outputs.zip_path }}.manifest.txt
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
