@@ -104,6 +104,28 @@ local function lan_misconfig_warnings(host)
   return warns
 end
 
+local function lan_ready(host_kind_str, status_code, transport_chosen, transport_error, host_warns)
+  local ok_status = (type(status_code) == "number") and (status_code >= 200 and status_code < 300)
+  local ok_transport = (tostring(transport_chosen) ~= "" and tostring(transport_chosen) ~= "none" and tostring(transport_chosen) ~= "unknown")
+  local ok_transport_err = (trim(transport_error or "") == "")
+
+  -- LAN-ready implies the target is not loopback (unless you explicitly want localhost labs)
+  local not_loopback = (tostring(host_kind_str) ~= "loopback")
+
+  -- If there are any host_port sanity warnings, treat as not LAN-ready by default
+  local warns = (type(host_warns) == "table") and #host_warns or 0
+  local ok_host = (warns == 0) and not_loopback
+
+  local ready = ok_status and ok_transport and ok_transport_err and ok_host
+  return ready, {
+    ok_status = ok_status,
+    ok_transport = ok_transport,
+    ok_transport_err = ok_transport_err,
+    ok_host = ok_host,
+    warns = warns,
+  }
+end
+
 local function ensure_dir(path)
   if reaper.RecursiveCreateDirectory then
     reaper.RecursiveCreateDirectory(path, 0)
@@ -464,6 +486,18 @@ write_known_extstate_snapshot(f)
 write_full_extstate_snapshot_if_possible(f)
 f:write("============================================================\n")
 
+local ready, bits = lan_ready(host_kind_str, status_code, transport_chosen, transport_error, hp_warns_list)
+local lan_ready_str = ready and "yes" or "no"
+f:write("LAN_READY: " .. lan_ready_str .. "\n")
+f:write(string.format("LAN_READY_DETAIL: status_ok=%s transport_ok=%s transport_err_ok=%s host_ok=%s host_warns=%d\n",
+  tostring(bits.ok_status),
+  tostring(bits.ok_transport),
+  tostring(bits.ok_transport_err),
+  tostring(bits.ok_host),
+  tonumber(bits.warns or 0)
+))
+
 f:close()
 
 msg("SG OK: wrote report → " .. out_path)
+msg("LAN_READY: " .. lan_ready_str)
