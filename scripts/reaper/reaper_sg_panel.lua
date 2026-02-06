@@ -4,7 +4,7 @@
 -- Episode 13A: Visual SG Panel (Reaper gfx window)
 --
 -- Requirements:
---   - json.lua in same folder as script
+--   - json.lua + sg_http.lua in same folder as script
 --   - Reaper ExtState keys set for action IDs (optional but recommended):
 --       SG_AGENTD/action_generate
 --       SG_AGENTD/action_pass_regen
@@ -39,13 +39,33 @@
 
 local EXT_SECTION = "SG_AGENTD"
 
--- Build API_BASE from ExtState host_port (fallback to 127.0.0.1:8420 if not set)
-local function get_api_base()
-  local hp = reaper.GetExtState(EXT_SECTION, "host_port")
-  if hp == nil or hp == "" then hp = "127.0.0.1:8420" end
-  return "http://" .. hp
+-- Load sg_http.lua helper (canonical loader for json + api_base)
+local script_dir = ({reaper.get_action_context()})[2]:match("(.*/)")
+                or ({reaper.get_action_context()})[2]:match("(.+\\)")
+                or ""
+
+local sg = dofile(script_dir .. "sg_http.lua")
+local json, jerr = sg.load_json()
+if not json then
+  reaper.ShowConsoleMsg("SG ERR: " .. tostring(jerr) .. "\n")
+  return
 end
-local API_BASE = get_api_base()
+
+local function read_bundle_version()
+  local p = script_dir .. "SG_BUNDLE_VERSION.txt"
+  local f = io.open(p, "r")
+  if not f then return nil end
+  local t = f:read("*a")
+  f:close()
+  t = (t or ""):gsub("^%s+",""):gsub("%s+$","")
+  if t == "" then return nil end
+  return t
+end
+
+local SG_BUNDLE_VERSION = read_bundle_version() or "unknown"
+local API_BASE = sg.get_api_base()
+
+reaper.ShowConsoleMsg("SG PANEL: bundle=" .. SG_BUNDLE_VERSION .. " api=" .. API_BASE .. "\n")
 local EXT_LAST_CLIP = "last_clip_id"
 local EXT_SESSION_ID = "session_id"
 
@@ -80,28 +100,7 @@ local function file_exists(path)
   return false
 end
 
--- ------------------------------ json (canonical loader) --------------------
--- CONTRACT V1: json.lua only (no dkjson fallback)
-local json
-do
-  local script_path = ({reaper.get_action_context()})[2] or ""
-  local script_dir = script_path:match("(.*[\\/])") or ""
-  
-  local json_path = script_dir .. "json.lua"
-  local f = io.open(json_path, "r")
-  if f then
-    f:close()
-    json = dofile(json_path)
-  end
-  
-  -- Fallback: stub that fails gracefully
-  if not json then
-    json = {
-      encode = function() return "{}" end,
-      decode = function() return nil, "json.lua not found" end,
-    }
-  end
-end
+-- json is loaded via sg_http.lua above (see sg.load_json())
 
 -- ------------------------------ http ---------------------------------------
 local function url_encode(s)
@@ -408,7 +407,7 @@ end
 -- ------------------------------ main loop ----------------------------------
 local function loop()
   -- Hot-reload host_port from ExtState (allows live switching between localhost/LAN Pi)
-  API_BASE = "http://" .. (reaper.GetExtState(EXT_SECTION, "host_port") ~= "" and reaper.GetExtState(EXT_SECTION, "host_port") or "127.0.0.1:8420")
+  API_BASE = sg.get_api_base()
 
   local now = reaper.time_precise()
   refresh_session_if_needed(now)

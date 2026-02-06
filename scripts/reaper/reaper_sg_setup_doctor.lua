@@ -44,6 +44,16 @@ local function get_script_dir()
   return dir
 end
 
+local function read_bundle_version()
+  local dir = get_script_dir()
+  local p = dir .. "SG_BUNDLE_VERSION.txt"
+  if not file_exists(p) then return nil end
+  local t = read_file(p)
+  t = trim(t)
+  if t == "" then return nil end
+  return t
+end
+
 local function get_host_port()
   local hp = trim(reaper.GetExtState(EXT_SECTION, "host_port"))
   if hp == "" then hp = DEFAULT_HOST_PORT end
@@ -387,6 +397,13 @@ msg("Smart Guitar — Setup Doctor (Gatekeeper + V2 checks + AUTOFIX)")
 msg("============================================================")
 
 local pass_all = true
+
+local bv = read_bundle_version()
+if bv then
+  OK("bundle_version: " .. bv)
+else
+  WARN("bundle_version: missing (SG_BUNDLE_VERSION.txt)")
+end
 
 pass_all = check_curl() and pass_all
 pass_all = check_json() and pass_all
