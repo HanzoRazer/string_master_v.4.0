@@ -1,0 +1,47 @@
+name: Release Lab Pack
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "labpack-*"
+      - "reaper-bundle-*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release-lab-pack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build Lab Pack zip
+        run: |
+          python scripts/release/build_lab_pack.py
+          ls -lah dist
+
+      - name: Find Lab Pack zip
+        id: find_zip
+        run: |
+          ZIP_PATH="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          if [ -z "$ZIP_PATH" ]; then
+            echo "No Lab Pack zip found in dist/"
+            exit 1
+          fi
+          echo "zip_path=$ZIP_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release (if needed) and upload asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.find_zip.outputs.zip_path }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
