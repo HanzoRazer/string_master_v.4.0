@@ -22,6 +22,23 @@ local function iso_stamp()
     t.year, t.month, t.day, t.hour, t.min, t.sec)
 end
 
+local function get_reaper_version()
+  -- Returns version string like "7.XX" (exact formatting depends on Reaper)
+  return tostring(reaper.GetAppVersion() or "unknown")
+end
+
+local function get_os_name()
+  -- package.config path separator is "\" on Windows
+  local sep = package.config:sub(1,1)
+  if sep == "\\" then return "Windows" end
+  -- Reaper exposes OS in GetOS(); keep as extra signal if available
+  if type(reaper.GetOS) == "function" then
+    local os = tostring(reaper.GetOS() or "")
+    if os ~= "" then return os end
+  end
+  return "macOS/Linux"
+end
+
 local function ensure_dir(path)
   if reaper.RecursiveCreateDirectory then
     reaper.RecursiveCreateDirectory(path, 0)
@@ -80,6 +97,9 @@ end
 local api_base = (type(sg.get_api_base) == "function") and sg.get_api_base() or "unknown"
 local host_port = (type(sg.get_host_port) == "function") and sg.get_host_port() or "unknown"
 local bundle_ver = read_bundle_version(script_dir)
+local reaper_ver = get_reaper_version()
+local os_name = get_os_name()
+local resource_path = tostring(reaper.GetResourcePath() or "unknown")
 
 msg("bundle_version: " .. tostring(bundle_ver))
 msg("api_base:       " .. tostring(api_base))
@@ -235,6 +255,10 @@ end
 f:write("Smart Guitar — Endpoint Probe Report\n")
 f:write("============================================================\n")
 f:write("date_local: " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n")
+f:write("os: " .. tostring(os_name) .. "\n")
+f:write("reaper_version: " .. tostring(reaper_ver) .. "\n")
+f:write("reaper_resource_path: " .. tostring(resource_path) .. "\n")
+f:write("bundle_script_dir: " .. tostring(script_dir) .. "\n")
 f:write("bundle_version: " .. tostring(bundle_ver) .. "\n")
 f:write("host_port: " .. tostring(host_port) .. "\n")
 f:write("api_base: " .. tostring(api_base) .. "\n")
