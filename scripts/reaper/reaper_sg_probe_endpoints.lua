@@ -251,10 +251,12 @@ end
 f:write("------------------------------------------------------------\n")
 f:write("Legend: OK=2xx WARN=3xx/4xx FAIL=timeout/transport/5xx\n")
 
-f:write("============================================================\n")
-write_known_extstate_snapshot(f)
-write_full_extstate_snapshot_if_possible(f)
-f:write("============================================================\n")
+-- ExtState snapshot for SG_AGENTD
+f:write("\nExtState snapshot (SG_AGENTD):\n")
+local ext = extstate_snapshot("SG_AGENTD")
+for k, v in pairs(ext) do
+  f:write("  " .. tostring(k) .. " = " .. tostring(v) .. "\n")
+end
 
 f:close()
 
