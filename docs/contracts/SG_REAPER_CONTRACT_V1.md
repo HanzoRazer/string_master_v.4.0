@@ -21,6 +21,16 @@ The canonical shipper script must write these persistent keys (persist=true):
 - `session_id`              (string, non-empty)
 - `host_port`               (string, host:port)
 
+### Optional configuration keys
+These keys may be set via one-time setter scripts (persist=true):
+- `lan_mode`                (string: "true"|"false", default="false")
+  - Controls LAN readiness evaluation in probe scripts
+  - true: localhost/127.0.0.1 targets considered LAN-ready (per-machine labs)
+  - false: loopback targets considered misconfigured for LAN deployment
+- `transport`               (string: "curl"|"powershell"|empty)
+  - Administrative override for HTTP transport selection
+  - Empty/unset: auto-detect (curl preferred, powershell fallback)
+
 ### Defaults / fallbacks
 If `host_port` is unset or invalid, scripts must fallback to:
 - `127.0.0.1:8420`

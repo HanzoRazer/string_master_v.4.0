@@ -104,17 +104,18 @@ local function lan_misconfig_warnings(host)
   return warns
 end
 
-local function lan_ready(host_kind_str, status_code, transport_chosen, transport_error, host_warns)
+local function lan_ready(host_kind_str, status_code, transport_chosen, transport_error, host_warns, lan_mode)
   local ok_status = (type(status_code) == "number") and (status_code >= 200 and status_code < 300)
   local ok_transport = (tostring(transport_chosen) ~= "" and tostring(transport_chosen) ~= "none" and tostring(transport_chosen) ~= "unknown")
   local ok_transport_err = (trim(transport_error or "") == "")
 
-  -- LAN-ready implies the target is not loopback (unless you explicitly want localhost labs)
-  local not_loopback = (tostring(host_kind_str) ~= "loopback")
+  -- LAN-ready: loopback ok if lan_mode=true (per-machine local agentd labs)
+  local is_loopback = (tostring(host_kind_str) == "loopback")
+  local loopback_ok = (lan_mode == true)
 
   -- If there are any host_port sanity warnings, treat as not LAN-ready by default
   local warns = (type(host_warns) == "table") and #host_warns or 0
-  local ok_host = (warns == 0) and not_loopback
+  local ok_host = (warns == 0) and (not is_loopback or loopback_ok)
 
   local ready = ok_status and ok_transport and ok_transport_err and ok_host
   return ready, {
@@ -124,6 +125,12 @@ local function lan_ready(host_kind_str, status_code, transport_chosen, transport
     ok_host = ok_host,
     warns = warns,
   }
+end
+
+local function get_lan_mode()
+  local v = trim(reaper.GetExtState("SG_AGENTD", "lan_mode") or "")
+  v = v:lower()
+  return v == "true" or v == "1" or v == "yes" or v == "on"
 end
 
 local function ensure_dir(path)
@@ -285,7 +292,12 @@ end
 
 local session_id = (type(sg.get_ext) == "function") and sg.get_ext("session_id") or ""
 if session_id == "" then session_id = "reaper_session" end
+
+local lan_mode = get_lan_mode()
+local lan_mode_str = lan_mode and "true" or "false"
+
 msg("session_id:    " .. tostring(session_id))
+msg("lan_mode:      " .. lan_mode_str)
 msg("------------------------------------------------------------")
 
 -- Report buffer (string builder)
@@ -454,6 +466,7 @@ else
 end
 f:write("api_base: " .. tostring(api_base) .. "\n")
 f:write("session_id: " .. tostring(session_id) .. "\n")
+f:write("lan_mode: " .. tostring(lan_mode_str) .. "\n")
 f:write("transport_override: " .. tostring(transport_override) .. "\n")
 f:write("transport_chosen: " .. tostring(transport_chosen) .. "\n")
 f:write("transport_probe_ms: " .. tostring(transport_probe_ms or 0) .. "\n")
@@ -486,7 +499,7 @@ write_known_extstate_snapshot(f)
 write_full_extstate_snapshot_if_possible(f)
 f:write("============================================================\n")
 
-local ready, bits = lan_ready(host_kind_str, status_code, transport_chosen, transport_error, hp_warns_list)
+local ready, bits = lan_ready(host_kind_str, status_code, transport_chosen, transport_error, hp_warns_list, lan_mode)
 local lan_ready_str = ready and "yes" or "no"
 f:write("LAN_READY: " .. lan_ready_str .. "\n")
 f:write(string.format("LAN_READY_DETAIL: status_ok=%s transport_ok=%s transport_err_ok=%s host_ok=%s host_warns=%d\n",
