@@ -1,3 +1,17 @@
+<!--
+================================================================================
+ARCHIVED DESIGN DOCUMENT
+================================================================================
+Status: SUPERSEDED
+Superseded by: https://github.com/HanzoRazer/sg-agentd
+Date: 2026-02-02
+Reason: Coaching functionality absorbed into sg-agentd unified bundle pipeline
+
+This document is preserved for historical reference only.
+Do not implement features based on this spec - refer to sg-agentd instead.
+================================================================================
+-->
+
 Absolutely — here’s a complete file tree + production-minded code skeleton for Mode 1 Coach v1 (models/policies/serializer/tests). It’s deterministic, explainable, UUID-safe for firmware/OTA, and includes a golden snapshot harness.
 ________________________________________
 File tree (drop-in)
