@@ -63,6 +63,62 @@ local function read_bundle_version(script_dir)
   return t
 end
 
+local function ext_get(section, key)
+  return trim(reaper.GetExtState(section, key))
+end
+
+local function write_known_extstate_snapshot(f)
+  local S = "SG_AGENTD"
+  local known = {
+    "host_port",
+    "session_id",
+    "transport",
+    "last_clip_id",
+    "action_generate",
+    "action_pass_regen",
+    "action_struggle_regen",
+    "action_timeline",
+    "action_trend",
+  }
+
+  f:write("ExtState Snapshot (Known Keys)\n")
+  f:write("------------------------------------------------------------\n")
+  for _, k in ipairs(known) do
+    local v = ext_get(S, k)
+    if v == "" then v = "(empty)" end
+    f:write(string.format("%s/%s = %s\n", S, k, v))
+  end
+end
+
+local function write_full_extstate_snapshot_if_possible(f)
+  local S = "SG_AGENTD"
+
+  -- Some environments may have enumeration (not guaranteed).
+  -- If unavailable, we report that and still provide Known Keys above.
+  if type(reaper.EnumExtState) ~= "function" then
+    f:write("\nExtState Snapshot (Full Enumeration)\n")
+    f:write("------------------------------------------------------------\n")
+    f:write("EnumExtState unavailable in this Reaper build; full key enumeration not possible.\n")
+    return
+  end
+
+  f:write("\nExtState Snapshot (Full Enumeration)\n")
+  f:write("------------------------------------------------------------\n")
+  local i = 0
+  while true do
+    local key = reaper.EnumExtState(S, i)
+    if not key then break end
+    local v = ext_get(S, key)
+    if v == "" then v = "(empty)" end
+    f:write(string.format("%s/%s = %s\n", S, key, v))
+    i = i + 1
+    if i > 5000 then
+      f:write("...stopped after 5000 keys (safety cap)\n")
+      break
+    end
+  end
+end
+
 local script_path = ({reaper.get_action_context()})[2] or ""
 local script_dir = script_path:match("(.*/)")
                 or script_path:match("(.+\\)")
@@ -275,12 +331,10 @@ end
 f:write("------------------------------------------------------------\n")
 f:write("Legend: OK=2xx WARN=3xx/4xx FAIL=timeout/transport/5xx\n")
 
--- ExtState snapshot for SG_AGENTD
-f:write("\nExtState snapshot (SG_AGENTD):\n")
-local ext = extstate_snapshot("SG_AGENTD")
-for k, v in pairs(ext) do
-  f:write("  " .. tostring(k) .. " = " .. tostring(v) .. "\n")
-end
+f:write("============================================================\n")
+write_known_extstate_snapshot(f)
+write_full_extstate_snapshot_if_possible(f)
+f:write("============================================================\n")
 
 f:close()
 
