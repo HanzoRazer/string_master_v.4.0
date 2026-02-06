@@ -1,22 +1,20 @@
 -- scripts/reaper/reaper_sg_setup_doctor.lua
 -- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
 --
--- Setup Doctor (Gatekeeper + V2 checks)
+-- Setup Doctor (Gatekeeper + V2 checks + AUTOFIX)
 -- Produces a single PASS/FAIL receipt line at end.
 --
--- Checks:
---   1) curl present
---   2) json.lua present + loadable
---   3) sg_http.lua present + loadable
---   4) host_port sane (ExtState) or fallback
---   5) sg-agentd reachable (/status)
---   6) session_id present (WARN if missing)
---   7-11) action IDs resolve (generate, pass, struggle, timeline, trend)
---   12) action IDs match current folder registrations (stale-id detection)
---   13) static safety: PASS/STRUGGLE scripts forbid dkjson/os.execute/legacy-port and require ExecProcess usage
+-- AUTOFIX:
+-- - If stale action IDs are detected, doctor will automatically run:
+--     reaper_sg_installer_register_all.lua
+--   (expected to be the Phase 6.5 repair+cleanup installer)
+-- - No prompts.
 
 local EXT_SECTION = "SG_AGENTD"
 local DEFAULT_HOST_PORT = "127.0.0.1:8420"
+
+-- Toggle: set to false if you want doctor to only warn, not repair.
+local AUTOFIX_ENABLED = true
 
 local function trim(s)
   return (tostring(s or ""):gsub("^%s+",""):gsub("%s+$",""))
@@ -220,9 +218,7 @@ local function check_actions_all()
   return ok_all
 end
 
--- Stale ID detection:
--- Compare ExtState stored _RS... to the "desired" id for scripts in THIS folder.
--- We compute desired by registering the script path (idempotent) and comparing.
+-- compute "desired" _RS id for scripts in THIS folder (idempotent add)
 local function register_script(fullpath, section_id)
   section_id = section_id or 0
   local cmd_id = reaper.AddRemoveReaScript(true, section_id, fullpath, true)
@@ -233,39 +229,48 @@ local function register_script(fullpath, section_id)
   return rs
 end
 
-local function check_action_ids_match_folder()
-  local dir = get_script_dir()
-
-  local map = {
+local function stale_map()
+  return {
     { key="action_generate",       file="reaper_sg_generate.lua",            label="Generate" },
     { key="action_pass_regen",     file="reaper_sg_pass_and_regen.lua",      label="PASS+REGEN" },
     { key="action_struggle_regen", file="reaper_sg_struggle_and_regen.lua",  label="STRUGGLE+REGEN" },
     { key="action_timeline",       file="reaper_sg_timeline.lua",            label="Timeline" },
     { key="action_trend",          file="reaper_sg_trend.lua",               label="Trend" },
   }
+end
 
-  local any_fail = false
-  for _, it in ipairs(map) do
+local function detect_stale_ids()
+  local dir = get_script_dir()
+  local stale = {}
+  for _, it in ipairs(stale_map()) do
     local stored = get_action_id(it.key)
     if stored ~= "" then
       local full = dir .. it.file
       if file_exists(full) then
         local desired = register_script(full, 0)
         if desired and desired ~= stored then
-          WARN(("stale id detected for %s: stored=%s desired=%s (run installer to repair)"):format(it.label, stored, desired))
+          table.insert(stale, { label=it.label, key=it.key, stored=stored, desired=desired })
         end
       end
     end
   end
-
-  if not any_fail then
-    OK("action IDs: folder match check complete (warnings may indicate repair needed)")
-    return true
-  end
-  return false
+  return stale
 end
 
--- Static checks: ensure scripts don't regress to forbidden patterns
+local function check_action_ids_match_folder()
+  local stale = detect_stale_ids()
+  if #stale == 0 then
+    OK("action IDs: match current folder (no repair needed)")
+    return true, false
+  end
+
+  for _, s in ipairs(stale) do
+    WARN(("stale id for %s: stored=%s desired=%s"):format(s.label, s.stored, s.desired))
+  end
+  WARN("action IDs: stale detected (autofix may run)")
+  return true, true
+end
+
 local function static_check_file(relname, rules)
   local dir = get_script_dir()
   local path = dir .. relname
@@ -331,14 +336,58 @@ local function check_static_safety()
 end
 
 -- ---------------------------------------------------------------------------
+-- AUTOFIX: run installer repair+cleanup and re-check stale IDs once
+-- ---------------------------------------------------------------------------
+local function run_autofix_if_needed(stale_needed)
+  if not AUTOFIX_ENABLED then
+    WARN("AUTOFIX: disabled")
+    return false
+  end
+  if not stale_needed then
+    return false
+  end
+
+  local dir = get_script_dir()
+  local installer = dir .. "reaper_sg_installer_register_all.lua"
+  if not file_exists(installer) then
+    FAIL("AUTOFIX: installer missing (" .. installer .. ")")
+    return false
+  end
+
+  msg("------------------------------------------------------------")
+  msg("SG DOCTOR: AUTOFIX START — running installer repair+cleanup")
+  msg("------------------------------------------------------------")
+
+  local ok_run, err = pcall(dofile, installer)
+  if not ok_run then
+    FAIL("AUTOFIX: installer threw error: " .. tostring(err))
+    return false
+  end
+
+  -- Re-check staleness after installer
+  local stale_after = detect_stale_ids()
+  if #stale_after == 0 then
+    OK("SG DOCTOR: AUTOFIX APPLIED — stale IDs repaired")
+    return true
+  end
+
+  WARN("SG DOCTOR: AUTOFIX INCOMPLETE — stale IDs remain:")
+  for _, s in ipairs(stale_after) do
+    WARN(("still stale: %s stored=%s desired=%s"):format(s.label, s.stored, s.desired))
+  end
+  return false
+end
+
+-- ---------------------------------------------------------------------------
 -- MAIN
 -- ---------------------------------------------------------------------------
 reaper.ClearConsole()
 msg("============================================================")
-msg("Smart Guitar — Setup Doctor (Gatekeeper + V2 checks)")
+msg("Smart Guitar — Setup Doctor (Gatekeeper + V2 checks + AUTOFIX)")
 msg("============================================================")
 
 local pass_all = true
+
 pass_all = check_curl() and pass_all
 pass_all = check_json() and pass_all
 pass_all = check_sg_http() and pass_all
@@ -346,7 +395,20 @@ pass_all = check_host_port() and pass_all
 pass_all = check_agentd_reachable() and pass_all
 pass_all = check_session_id() and pass_all
 pass_all = check_actions_all() and pass_all
-pass_all = check_action_ids_match_folder() and pass_all
+
+local _, stale_needed = check_action_ids_match_folder()
+local autofix_applied = run_autofix_if_needed(stale_needed)
+
+-- If autofix ran, re-run the "folder match" check and action resolve check once
+if autofix_applied then
+  pass_all = check_actions_all() and pass_all
+  local ok_match, still_needed = check_action_ids_match_folder()
+  pass_all = ok_match and pass_all
+  if still_needed then
+    WARN("AUTOFIX: stale still detected after repair (check filenames + installer MAP)")
+  end
+end
+
 pass_all = check_static_safety() and pass_all
 
 msg("------------------------------------------------------------")

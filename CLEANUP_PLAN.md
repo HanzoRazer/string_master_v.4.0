@@ -85,20 +85,27 @@ mv voicings_canonical.json data/corpus/
 
 ---
 
-## Phase 3: Delete Session Dumps
+## Phase 3: Relocate Design Specs + Delete True Dumps
 
-These are ephemeral notes, not documentation:
-
+**KEEP (relocate to docs/design_specs/):**
 ```bash
-rm "Backdoor Cadence Engine.txt"
-rm "Mode 1_Coach v1_models_policies_serializer_tests.txt"
-rm "Por Medio_A flamenco_Andalusian cadence.txt"
+mkdir -p docs/design_specs
+
+mv "Backdoor Cadence Engine.txt" docs/design_specs/backdoor_cadence_engine_spec.md
+mv "Por Medio_A flamenco_Andalusian cadence.txt" docs/design_specs/andalusian_cadence_engine_spec.md
+
+# PENDING REVIEW - see docs/BOOKMARK_SG_COACH_SPEC_REVIEW.md
+mv "Mode 1_Coach v1_models_policies_serializer_tests.txt" docs/design_specs/sg_coach_v1_spec.md
+```
+
+**DELETE (true ephemeral dumps):**
+```bash
 rm progression.txt
 rm test_chords.txt
 rm text_output.txt
 ```
 
-**Impact:** -6 files
+**Impact:** -3 files deleted, 3 files relocated
 
 ---
 
@@ -220,7 +227,7 @@ mv demo.py scripts/examples/
 | 0 | Delete staging dirs | -11 dirs |
 | 1 | Move MIDIs | -30 files |
 | 2 | Move canonical JSON | -17 files |
-| 3 | Delete session dumps | -6 files |
+| 3 | Relocate specs + delete dumps | -3 files (3 relocated) |
 | 4 | Move docs | -30+ files |
 | 5 | Consolidate packs | -2 dirs |
 | 6 | Gitignore runtime | -2 items |
