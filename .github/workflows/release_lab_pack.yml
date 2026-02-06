@@ -11,8 +11,55 @@ permissions:
   contents: write
 
 jobs:
+  determinism-test:
+    name: Determinism Test (Ubuntu builds twice)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build #1
+        run: |
+          rm -rf dist
+          python scripts/release/build_lab_pack.py
+          python scripts/release/make_release_metadata.py
+          ZIP1="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          SHA1="$(cat "${ZIP1}.sha256" | awk '{print $1}')"
+          echo "ZIP1=$ZIP1" >> $GITHUB_ENV
+          echo "SHA1=$SHA1" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Build #2
+        run: |
+          rm -rf dist
+          python scripts/release/build_lab_pack.py
+          python scripts/release/make_release_metadata.py
+          ZIP2="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          SHA2="$(cat "${ZIP2}.sha256" | awk '{print $1}')"
+          echo "ZIP2=$ZIP2" >> $GITHUB_ENV
+          echo "SHA2=$SHA2" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Assert deterministic
+        run: |
+          echo "SHA1=$SHA1"
+          echo "SHA2=$SHA2"
+          if [ "$SHA1" != "$SHA2" ]; then
+            echo "ERROR: Lab Pack zip is NOT deterministic on the same runner."
+            exit 1
+          fi
+          echo "OK: deterministic (sha256 matches)."
+        shell: bash
+
   build-lab-pack:
     name: Build Lab Pack (${{ matrix.os }})
+    needs: [determinism-test]
     strategy:
       fail-fast: false
       matrix:
