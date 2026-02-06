@@ -38,6 +38,26 @@ local function get_script_dir()
   return p:match("(.*/)") or p:match("(.+\\)") or ""
 end
 
+local script_dir = get_script_dir()
+
+-- Load sg_http.lua for HTTP helpers (Phase 8.1 hardened)
+local sg_http_path = script_dir .. "sg_http.lua"
+local sg = nil
+if io.open(sg_http_path, "r") then
+  local ok_load, lib = pcall(dofile, sg_http_path)
+  if ok_load and type(lib) == "table" then
+    sg = lib
+  end
+end
+
+-- Use sg_http's API base if available (respects ExtState host_port)
+local function get_api_base()
+  if sg and sg.get_api_base then
+    return sg.get_api_base()
+  end
+  return API_BASE
+end
+
 local function file_exists(path)
   local f = io.open(path, "rb")
   if f then f:close(); return true end
@@ -45,9 +65,21 @@ local function file_exists(path)
 end
 
 -- ---------------------------------------------------------------------------
--- HTTP GET via curl, capture status code
+-- HTTP GET via sg_http (hardened) or fallback to direct curl
 -- ---------------------------------------------------------------------------
 local function get_url(url, timeout_ms)
+  -- Try to use sg_http if available (path-based; needs to extract path from full URL)
+  if sg then
+    -- Extract path from URL (e.g., "http://127.0.0.1:8420/status" -> "/status")
+    local path = url:match("^https?://[^/]+(/[^%s]*)$") or url:match("^https?://[^/]+()$")
+    if path and path ~= "" then
+      local body, code, sg_err = sg.http_get(path, timeout_ms or 8000)
+      if body then return body, code, nil end
+      return nil, code, sg_err
+    end
+  end
+  
+  -- Fallback: direct curl (only if sg_http unavailable)
   local cmd = 'curl -s -X GET -w "\\n%{http_code}" "' .. url .. '"'
   local rv, out = reaper.ExecProcess(cmd, timeout_ms or 8000)
   if rv ~= 0 then return nil, nil, "curl failed (rv="..tostring(rv)..")" end
@@ -164,7 +196,7 @@ else
 end
 
 do
-  local body, code, e = get_url(API_BASE .. "/status", 6000)
+  local body, code, e = get_url(get_api_base() .. "/status", 6000)
   if not body then
     err("Server: unreachable (" .. tostring(e) .. ")")
     msg("      Fix: start sg-agentd: uvicorn sg_agentd.main:app --host 127.0.0.1 --port 8420")

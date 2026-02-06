@@ -102,35 +102,32 @@ end
 
 -- json is loaded via sg_http.lua above (see sg.load_json())
 
--- ------------------------------ http ---------------------------------------
-local function url_encode(s)
-  s = tostring(s or "")
-  s = s:gsub("\n", "\r\n")
-  s = s:gsub("([^%w %-%_%.%~])", function(c) return string.format("%%%02X", string.byte(c)) end)
-  s = s:gsub(" ", "%%20")
-  return s
+-- ------------------------------ http (via sg_http.lua) ---------------------
+local TIMEOUT_FAST_MS = 2500     -- status / light polling
+local TIMEOUT_SLOW_MS = 8000     -- heavier endpoints if needed
+
+local function panel_get_json(path, timeout_ms)
+  local decoded, code, err = sg.http_get_json(path, timeout_ms or TIMEOUT_FAST_MS, json)
+  if decoded then return decoded, code, nil end
+  return nil, code, err
 end
 
-local function http_get(url, timeout_ms)
-  local cmd = 'curl -s -X GET -w "\\n%{http_code}" "' .. url .. '"'
-  local rv, out = reaper.ExecProcess(cmd, timeout_ms or 8000)
-  if rv ~= 0 or not out then return nil, nil end
-  local body, code = out:match("^(.*)\n(%d%d%d)$")
-  if not code then body, code = out:match("^(.*)\r\n(%d%d%d)$") end
-  return body, tonumber(code)
+local function panel_post_json(path, payload, timeout_ms)
+  local decoded, code, err = sg.http_post_json_decoded(path, payload, timeout_ms or TIMEOUT_SLOW_MS, json)
+  if decoded then return decoded, code, nil end
+  return nil, code, err
 end
 
 -- ------------------------------ actions ------------------------------------
-local function get_ext(key) return trim(reaper.GetExtState(EXT_SECTION, key)) end
 local function resolve_named(cmd_str)
-  cmd_str = trim(cmd_str)
+  cmd_str = sg.trim(cmd_str)
   if cmd_str == "" then return nil end
   local n = reaper.NamedCommandLookup(cmd_str)
   if not n or n == 0 then return nil end
   return n
 end
 local function run_action(ext_key)
-  local cmd = get_ext(ext_key)
+  local cmd = sg.get_ext(ext_key)
   local n = resolve_named(cmd)
   if n then reaper.Main_OnCommand(n, 0) end
 end
@@ -222,24 +219,17 @@ end
 
 -- ------------------------------ refresh ------------------------------------
 local function refresh_session_if_needed(now)
-  local session_id = get_ext(EXT_SESSION_ID)
+  local session_id = sg.get_ext(EXT_SESSION_ID)
   if session_id == "" then session_id = "reaper_session" end
 
   if (now - state.last_session_fetch) < 1.0 then return end
   state.last_session_fetch = now
 
-  local url = API_BASE .. "/session_index?session_id=" .. url_encode(session_id)
-  local body, code = http_get(url, 1000)
-  if not body or (code and code ~= 200) then
-    state.session = nil
-    state.session_err = "session_index unavailable"
-    return
-  end
-
-  local doc, _, dec_err = json.decode(body, 1, nil)
+  local qs = sg.qs({ session_id = session_id })
+  local doc, code, err = panel_get_json("/session_index?" .. qs, TIMEOUT_FAST_MS)
   if not doc then
     state.session = nil
-    state.session_err = "session_index decode failed"
+    state.session_err = "session_index unavailable"
     return
   end
 
@@ -260,7 +250,7 @@ local function resolve_coach_path_from_session(clip_id)
 end
 
 local function refresh_coach_if_needed(now)
-  local clip_id = get_ext(EXT_LAST_CLIP)
+  local clip_id = sg.get_ext(EXT_LAST_CLIP)
   if clip_id == "" then
     state.coach = nil
     state.coach_err = "No last_clip_id yet (run Generate)"

@@ -6,7 +6,7 @@
 
 - **Theory side**: Immutable axioms (CANON.md), frozen terminology (GLOSSARY.md)
 - **Code side**: Python ≥3.10 with CLIs `zt-gravity` (analysis), `zt-band` (MIDI generation), `sgc` (coach)
-- **Ecosystem**: Depends on `sg-spec` (Pydantic schema contracts) and integrates with `sg-coach` (practice coaching)
+- **Ecosystem**: Depends on `sg-spec` (Pydantic schema contracts + coach logic via `sg_spec.ai.coach`)
 
 **Protected files** (require governance approval): `CANON.md`, `GLOSSARY.md`, `PEDAGOGY.md`, `GOVERNANCE.md`
 
@@ -66,10 +66,11 @@ from zt_band.engine import generate_accompaniment
 from zt_band.adapters import build_midi_control_plan
 ```
 
-**Cross-repo schemas** (from `sg-spec`):
+**Cross-repo schemas and coach** (from `sg-spec`):
 ```python
 from sg_spec.schemas.groove_layer import GrooveProfileV1, GrooveControlIntentV1
 from sg_spec.ai.coach.schemas import SessionRecord, CoachEvaluation
+from sg_spec.ai.coach.policy import evaluate_session  # Coach logic lives here
 ```
 
 ---
@@ -152,6 +153,41 @@ zt-gravity analyze --chords "Dm7 G7"  # Analyze chord progression
 
 ---
 
+## Reaper DAW Integration
+
+**Scripts location**: `scripts/reaper/` — designed to be copied as a bundle into Reaper's scripts folder.
+
+**Key scripts**:
+- `reaper_sg_setup_doctor_autorun.lua` — Guided first-run setup with action ID prompts
+- `reaper_sg_panel.lua` — Main control panel
+- `reaper_sg_pass_and_regen.lua` / `reaper_sg_struggle_and_regen.lua` — Verdict hotkeys (F9/F10)
+- `reaper_sg_bundle_shipper_set_all.lua` — Canonical host/port configurator
+
+**Server target** stored in Reaper ExtState:
+```lua
+reaper.SetExtState("SG_AGENTD", "host_port", "127.0.0.1:8420", true)
+```
+
+**Dependencies**: `curl` in PATH, `json.lua` in same folder, `sg-agentd` running.
+
+**Contract**: Scripts follow `SG_REAPER_CONTRACT_V1` (see header comments for spec).
+
+---
+
+## Cross-Repo Ecosystem
+
+```
+sg-spec (schemas + coach logic via sg_spec.ai.coach)
+    ↓
+string_master_v.4.0 / zt-band (MIDI engine) ←→ sg-agentd (HTTP bridge)
+                                                    ↓
+                                               Reaper scripts
+```
+
+**Install order**: `sg-spec` → `string_master_v.4.0` → `sg-agentd`
+
+---
+
 ## Key References
 
 | Doc | Purpose |
@@ -161,4 +197,4 @@ zt-gravity analyze --chords "Dm7 G7"  # Analyze chord progression
 | [docs/contracts/CORE_LOCK_REPORT.md](../docs/contracts/CORE_LOCK_REPORT.md) | Stability guarantees |
 | [CANON.md](../CANON.md) | 5 immutable axioms (theory) |
 | [GLOSSARY.md](../GLOSSARY.md) | Frozen terminology |
-| [GLOSSARY.md](../GLOSSARY.md) | Frozen terminology |
+| [scripts/reaper/README.md](../scripts/reaper/README.md) | Reaper integration guide |

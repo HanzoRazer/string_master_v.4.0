@@ -1,4 +1,4 @@
-name: CI - Lab Pack Build (PR)
+name: CI - Lab Pack Build (PR Matrix)
 
 on:
   pull_request:
@@ -7,7 +7,12 @@ on:
 
 jobs:
   lab-pack-build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -22,8 +27,9 @@ jobs:
         run: |
           python --version
           python scripts/release/build_lab_pack.py
-          python scripts/release/generate_checksums.py
+          python scripts/release/make_release_metadata.py
           ls -lah dist
+        shell: bash
 
       - name: Verify outputs exist
         run: |
@@ -31,14 +37,15 @@ jobs:
           test -n "$ZIP_PATH"
           test -f "${ZIP_PATH}.sha256"
           test -f "${ZIP_PATH}.manifest.txt"
+        shell: bash
 
       - name: Upload build artifacts (for inspection)
         uses: actions/upload-artifact@v4
         with:
-          name: lab-pack-pr-build
+          name: lab-pack-pr-build-${{ matrix.os }}
           path: |
             dist/Lab_Pack_SG_*.zip
             dist/Lab_Pack_SG_*.zip.sha256
-            dist/Lab_Pack_SG_*.manifest.txt
+            dist/Lab_Pack_SG_*.zip.manifest.txt
           if-no-files-found: error
           retention-days: 7
