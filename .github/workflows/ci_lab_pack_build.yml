@@ -6,12 +6,112 @@ on:
       - "**"
 
 jobs:
+  determinism-test:
+    name: Determinism Preflight (Ubuntu builds twice)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build #1 (zip + metadata)
+        id: build1
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          python --version
+          python scripts/release/build_lab_pack.py
+          python scripts/release/make_release_metadata.py
+
+          ZIP1="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          test -n "$ZIP1"
+          test -f "${ZIP1}.sha256"
+          test -f "${ZIP1}.manifest.txt"
+
+          SHA1="$(awk '{print $1}' "${ZIP1}.sha256")"
+          echo "ZIP1=$ZIP1" >> "$GITHUB_ENV"
+          echo "SHA1=$SHA1" >> "$GITHUB_ENV"
+
+          # Save a copy to compare against build #2
+          cp -f "${ZIP1}.sha256" /tmp/labpack_1.sha256
+          cp -f "${ZIP1}.manifest.txt" /tmp/labpack_1.manifest.txt
+
+          echo "Build #1 zip: $ZIP1"
+          echo "Build #1 sha: $SHA1"
+        shell: bash
+
+      - name: Build #2 (zip + metadata)
+        id: build2
+        run: |
+          set -euo pipefail
+          rm -rf dist
+          python scripts/release/build_lab_pack.py
+          python scripts/release/make_release_metadata.py
+
+          ZIP2="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          test -n "$ZIP2"
+          test -f "${ZIP2}.sha256"
+          test -f "${ZIP2}.manifest.txt"
+
+          SHA2="$(awk '{print $1}' "${ZIP2}.sha256")"
+          echo "ZIP2=$ZIP2" >> "$GITHUB_ENV"
+          echo "SHA2=$SHA2" >> "$GITHUB_ENV"
+
+          cp -f "${ZIP2}.sha256" /tmp/labpack_2.sha256
+          cp -f "${ZIP2}.manifest.txt" /tmp/labpack_2.manifest.txt
+
+          echo "Build #2 zip: $ZIP2"
+          echo "Build #2 sha: $SHA2"
+        shell: bash
+
+      - name: Assert deterministic (sha256 + manifest)
+        run: |
+          set -euo pipefail
+
+          echo "SHA1=$SHA1"
+          echo "SHA2=$SHA2"
+
+          if [ "$SHA1" != "$SHA2" ]; then
+            echo "ERROR: Lab Pack zip is NOT deterministic (sha256 mismatch)."
+            echo "Compare:"
+            echo "  /tmp/labpack_1.sha256"
+            echo "  /tmp/labpack_2.sha256"
+            exit 1
+          fi
+
+          # Also assert manifest identical (normalize CRLF just in case)
+          tr -d '\r' < /tmp/labpack_1.manifest.txt > /tmp/labpack_1.man
+          tr -d '\r' < /tmp/labpack_2.manifest.txt > /tmp/labpack_2.man
+          diff -u /tmp/labpack_1.man /tmp/labpack_2.man
+
+          echo "OK: deterministic (sha256 + manifest match)."
+        shell: bash
+
+      - name: Upload preflight artifacts (debug only)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-pack-determinism-debug
+          path: |
+            /tmp/labpack_1.sha256
+            /tmp/labpack_2.sha256
+            /tmp/labpack_1.manifest.txt
+            /tmp/labpack_2.manifest.txt
+          if-no-files-found: warn
+          retention-days: 7
+
   lab-pack-build:
+    name: Lab Pack Build (${{ matrix.os }})
+    needs: [determinism-test]
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -25,7 +125,9 @@ jobs:
 
       - name: Build Lab Pack + metadata
         run: |
+          set -euo pipefail
           python --version
+          rm -rf dist
           python scripts/release/build_lab_pack.py
           python scripts/release/make_release_metadata.py
           ls -lah dist
@@ -33,6 +135,7 @@ jobs:
 
       - name: Verify outputs exist
         run: |
+          set -euo pipefail
           ZIP_PATH="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
           test -n "$ZIP_PATH"
           test -f "${ZIP_PATH}.sha256"
