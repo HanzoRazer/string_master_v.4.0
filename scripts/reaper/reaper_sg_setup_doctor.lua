@@ -417,9 +417,11 @@ local good = ok_count
 local bad  = fail_count
 local warn = warn_count
 
+local autofix_flag = (autofix_applied and "yes") or "no"
+
 if bad == 0 then
-  msg(("SG DOCTOR: PASS (%d/%d checks) — %d warn"):format(good, checks, warn))
+  msg(("SG DOCTOR: PASS (%d/%d checks) — %d warn — AUTOFIX: %s"):format(good, checks, warn, autofix_flag))
 else
-  msg(("SG DOCTOR: FAIL (%d/%d checks) — %d fail, %d warn"):format(good, checks, bad, warn))
+  msg(("SG DOCTOR: FAIL (%d/%d checks) — %d fail, %d warn — AUTOFIX: %s"):format(good, checks, bad, warn, autofix_flag))
 end
 msg("============================================================")
