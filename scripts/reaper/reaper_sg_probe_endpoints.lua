@@ -15,6 +15,13 @@ local function now_ms()
   return math.floor(reaper.time_precise() * 1000)
 end
 
+local function truncate(s, max_chars)
+  s = tostring(s or "")
+  max_chars = tonumber(max_chars or 2000)
+  if #s <= max_chars then return s, false end
+  return s:sub(1, max_chars), true
+end
+
 local function iso_stamp()
   -- Local time-ish stamp: YYYYMMDD_HHMMSS
   local t = os.date("*t")
@@ -160,6 +167,14 @@ local resource_path = tostring(reaper.GetResourcePath() or "unknown")
 msg("bundle_version: " .. tostring(bundle_ver))
 msg("api_base:       " .. tostring(api_base))
 
+-- Capture transport probe timing
+local probe_t0 = now_ms()
+if type(sg.choose_transport) == "function" then
+  sg.choose_transport()
+end
+local probe_dt = now_ms() - probe_t0
+local transport_probe_ms = probe_dt
+
 -- Transport info (Phase 8.5+)
 local transport_override, transport_chosen, transport_error = "unknown", "unknown", ""
 if type(sg.transport_info) == "function" then
@@ -169,6 +184,7 @@ if type(sg.transport_info) == "function" then
   transport_error = tostring(info.error or "")
   msg("transport_override: " .. transport_override)
   msg("transport_chosen:   " .. transport_chosen)
+  msg("transport_probe_ms: " .. tostring(transport_probe_ms))
   if transport_error ~= "" then
     msg("transport_error:    " .. transport_error)
   end
@@ -258,8 +274,17 @@ msg(header); rep(header)
 local sep = string.rep("-", 86)
 msg(sep); rep(sep)
 
--- 1) Health
-probe_get("/status", 2500)
+-- 1) Health - capture raw /status body
+local status_t0 = now_ms()
+local status_body, status_code, status_err = sg.http_get("/status", 2500)
+local status_dt = now_ms() - status_t0
+
+do
+  local result, note = classify(status_code, status_err)
+  if result == "OK" and trim(status_body or "") == "" then note = "empty body" end
+  local line = row_line("GET", "/status", status_code, result, note, status_dt)
+  msg(line); rep(line)
+end
 
 -- 2) Session index + optional trend/timeline
 local qs = (type(sg.qs) == "function") and sg.qs({ session_id = session_id }) or ("session_id=" .. session_id)
@@ -321,8 +346,23 @@ f:write("api_base: " .. tostring(api_base) .. "\n")
 f:write("session_id: " .. tostring(session_id) .. "\n")
 f:write("transport_override: " .. tostring(transport_override) .. "\n")
 f:write("transport_chosen: " .. tostring(transport_chosen) .. "\n")
+f:write("transport_probe_ms: " .. tostring(transport_probe_ms or 0) .. "\n")
 if trim(transport_error) ~= "" then
   f:write("transport_error: " .. tostring(transport_error) .. "\n")
+end
+f:write("------------------------------------------------------------\n")
+f:write("/status raw (truncated)\n")
+f:write("status_http: " .. tostring(status_code or "nil") .. "\n")
+f:write("status_time_ms: " .. tostring(status_dt or 0) .. "\n")
+if status_err and tostring(status_err) ~= "" then
+  f:write("status_error: " .. tostring(status_err) .. "\n")
+end
+
+local raw, truncated = truncate(status_body or "", 2000)
+f:write("status_body:\n")
+f:write(raw .. "\n")
+if truncated then
+  f:write("(truncated)\n")
 end
 f:write("------------------------------------------------------------\n")
 for _, line in ipairs(report) do
