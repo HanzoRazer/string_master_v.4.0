@@ -15,6 +15,37 @@ local function now_ms()
   return math.floor(reaper.time_precise() * 1000)
 end
 
+local function iso_stamp()
+  -- Local time-ish stamp: YYYYMMDD_HHMMSS
+  local t = os.date("*t")
+  return string.format("%04d%02d%02d_%02d%02d%02d",
+    t.year, t.month, t.day, t.hour, t.min, t.sec)
+end
+
+local function ensure_dir(path)
+  if reaper.RecursiveCreateDirectory then
+    reaper.RecursiveCreateDirectory(path, 0)
+    return true
+  end
+  return true
+end
+
+local function read_file(path)
+  local f = io.open(path, "r")
+  if not f then return nil end
+  local t = f:read("*a")
+  f:close()
+  return t
+end
+
+local function read_bundle_version(script_dir)
+  local p = script_dir .. "SG_BUNDLE_VERSION.txt"
+  local t = read_file(p)
+  t = trim(t or "")
+  if t == "" then return "unknown" end
+  return t
+end
+
 local script_path = ({reaper.get_action_context()})[2] or ""
 local script_dir = script_path:match("(.*/)")
                 or script_path:match("(.+\\)")
@@ -47,23 +78,34 @@ if type(sg.load_json) == "function" then
 end
 
 local api_base = (type(sg.get_api_base) == "function") and sg.get_api_base() or "unknown"
-msg("api_base: " .. tostring(api_base))
+local host_port = (type(sg.get_host_port) == "function") and sg.get_host_port() or "unknown"
+local bundle_ver = read_bundle_version(script_dir)
+
+msg("bundle_version: " .. tostring(bundle_ver))
+msg("api_base:       " .. tostring(api_base))
 
 -- Transport info (Phase 8.5+)
+local transport_override, transport_chosen, transport_error = "unknown", "unknown", ""
 if type(sg.transport_info) == "function" then
   local info = sg.transport_info() or {}
-  msg("transport_override: " .. tostring(info.override))
-  msg("transport_chosen:   " .. tostring(info.transport))
-  if info.error and tostring(info.error) ~= "" then
-    msg("transport_error:    " .. tostring(info.error))
+  transport_override = tostring(info.override)
+  transport_chosen = tostring(info.transport)
+  transport_error = tostring(info.error or "")
+  msg("transport_override: " .. transport_override)
+  msg("transport_chosen:   " .. transport_chosen)
+  if transport_error ~= "" then
+    msg("transport_error:    " .. transport_error)
   end
 end
 
 local session_id = (type(sg.get_ext) == "function") and sg.get_ext("session_id") or ""
 if session_id == "" then session_id = "reaper_session" end
-
-msg("session_id: " .. tostring(session_id))
+msg("session_id:    " .. tostring(session_id))
 msg("------------------------------------------------------------")
+
+-- Report buffer (string builder)
+local report = {}
+local function rep(s) report[#report + 1] = tostring(s) end
 
 local function classify(code, err)
   if err then return "FAIL", err end
@@ -135,8 +177,10 @@ end
 -- PROBE SET
 -- ---------------------------
 
-msg(string.format("%-4s  %-38s  %-4s  %-5s  %7s  %s", "METH", "PATH", "HTTP", "RES", "TIME", "NOTE"))
-msg(string.rep("-", 86))
+local header = string.format("%-4s  %-38s  %-4s  %-5s  %7s  %s", "METH", "PATH", "HTTP", "RES", "TIME", "NOTE")
+msg(header); rep(header)
+local sep = string.rep("-", 86)
+msg(sep); rep(sep)
 
 -- 1) Health
 probe_get("/status", 2500)
@@ -170,3 +214,42 @@ msg("  OK   = endpoint reachable + responded 2xx")
 msg("  WARN = endpoint responded but may require different params/body (4xx) or redirected (3xx)")
 msg("  FAIL = timeout/transport failure or server error (5xx)")
 msg("============================================================")
+
+-- ---------------------------
+-- Write report file
+-- ---------------------------
+local resource = reaper.GetResourcePath()
+local out_dir = resource .. (resource:sub(-1) == "\\" and "" or "") .. "/SG_reports"
+out_dir = out_dir:gsub("\\/", "/")
+ensure_dir(out_dir)
+
+local fname = "SG_probe_" .. iso_stamp() .. ".txt"
+local out_path = out_dir .. "/" .. fname
+
+local f = io.open(out_path, "w")
+if not f then
+  msg("SG WARN: could not write report file: " .. tostring(out_path))
+  return
+end
+
+f:write("Smart Guitar — Endpoint Probe Report\n")
+f:write("============================================================\n")
+f:write("date_local: " .. os.date("%Y-%m-%d %H:%M:%S") .. "\n")
+f:write("bundle_version: " .. tostring(bundle_ver) .. "\n")
+f:write("host_port: " .. tostring(host_port) .. "\n")
+f:write("api_base: " .. tostring(api_base) .. "\n")
+f:write("session_id: " .. tostring(session_id) .. "\n")
+f:write("transport_override: " .. tostring(transport_override) .. "\n")
+f:write("transport_chosen: " .. tostring(transport_chosen) .. "\n")
+if trim(transport_error) ~= "" then
+  f:write("transport_error: " .. tostring(transport_error) .. "\n")
+end
+f:write("------------------------------------------------------------\n")
+for _, line in ipairs(report) do
+  f:write(line .. "\n")
+end
+f:write("------------------------------------------------------------\n")
+f:write("Legend: OK=2xx WARN=3xx/4xx FAIL=timeout/transport/5xx\n")
+f:close()
+
+msg("SG OK: wrote report → " .. out_path)
