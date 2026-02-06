@@ -33,10 +33,16 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def list_zip_contents(zip_path: Path) -> list[tuple[str, int]]:
-    """Return list of (filename, size) from zip."""
+def manifest_from_zip(zip_path: Path) -> str:
+    """Generate manifest with per-file hashes."""
+    lines = []
     with zipfile.ZipFile(zip_path, "r") as z:
-        return [(info.filename, info.file_size) for info in sorted(z.infolist(), key=lambda i: i.filename)]
+        infos = sorted(z.infolist(), key=lambda i: i.filename)
+        for i in infos:
+            data = z.read(i.filename)
+            h = hashlib.sha256(data).hexdigest()
+            lines.append(f"{i.file_size:>10}  {h}  {i.filename}")
+    return "\n".join(lines) + "\n"
 
 
 def generate_manifest(zip_path: Path, sha256: str) -> str:
@@ -48,16 +54,16 @@ def generate_manifest(zip_path: Path, sha256: str) -> str:
         f"Size: {zip_path.stat().st_size:,} bytes",
         f"SHA256: {sha256}",
         "",
-        "Contents:",
+        "Contents (size, sha256, filename):",
         "-" * 60,
     ]
 
     try:
-        contents = list_zip_contents(zip_path)
-        for filename, size in contents:
-            lines.append(f"  {size:>10,} bytes  {filename}")
+        file_manifest = manifest_from_zip(zip_path)
+        lines.append(file_manifest.rstrip())
+        file_count = len(file_manifest.strip().split("\n"))
         lines.append("-" * 60)
-        lines.append(f"Total files: {len(contents)}")
+        lines.append(f"Total files: {file_count}")
     except Exception as e:
         lines.append(f"ERROR: Failed to list zip contents: {e}")
 

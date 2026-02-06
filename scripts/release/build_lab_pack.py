@@ -21,6 +21,7 @@ from __future__ import annotations
 import os
 import shutil
 import sys
+import time
 import zipfile
 from pathlib import Path
 
@@ -85,14 +86,42 @@ def safe_copy(src: Path, dst: Path) -> None:
     dst.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(src, dst)
 
-def zip_dir(src_dir: Path, zip_path: Path) -> None:
+def zip_dir_deterministic(src_dir: Path, zip_path: Path) -> None:
+    """
+    Create a deterministic zip:
+    - stable file ordering
+    - normalized paths (posix)
+    - fixed timestamp for each entry
+    - fixed permissions
+    """
     zip_path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Fixed DOS timestamp: 1980-01-01 00:00:00 (zip's minimum representable date)
+    FIXED_DT = (1980, 1, 1, 0, 0, 0)
+
+    def file_mode_to_zip_external_attr() -> int:
+        # 0o100644 regular file with 644 perms (POSIX). Stored in upper 16 bits.
+        return (0o100644 & 0xFFFF) << 16
+
+    files = []
+    for p in src_dir.rglob("*"):
+        if p.is_file():
+            rel = p.relative_to(src_dir).as_posix()
+            files.append((rel, p))
+    files.sort(key=lambda t: t[0])
+
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as z:
-        for p in sorted(src_dir.rglob("*")):
-            if p.is_dir():
-                continue
-            rel = p.relative_to(src_dir)
-            z.write(p, rel.as_posix())
+        for rel, p in files:
+            data = p.read_bytes()
+
+            zi = zipfile.ZipInfo(filename=rel, date_time=FIXED_DT)
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            zi.external_attr = file_mode_to_zip_external_attr()
+
+            # Ensure consistent UTF-8 filename flag
+            zi.flag_bits |= 0x800
+
+            z.writestr(zi, data)
 
 def main() -> int:
     if not SRC_REAPER.exists():
@@ -129,7 +158,7 @@ def main() -> int:
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     if out_zip.exists():
         out_zip.unlink()
-    zip_dir(BUILD_DIR, out_zip)
+    zip_dir_deterministic(BUILD_DIR, out_zip)
 
     print("OK: built lab pack:")
     print(f"  {out_zip}")
