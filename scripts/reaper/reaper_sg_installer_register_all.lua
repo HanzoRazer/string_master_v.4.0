@@ -1,23 +1,32 @@
 -- scripts/reaper/reaper_sg_installer_register_all.lua
 -- CONTRACT: SG_REAPER_CONTRACT_V1 (see docs/contracts/SG_REAPER_CONTRACT_V1.md)
 --
--- One-click installer (self-validating + duplicate-avoid + repair mode):
+-- One-click installer (self-validating + duplicate-avoid + repair + optional cleanup):
 -- - Writes ExtState keys:
 --     action_generate, action_pass_regen, action_struggle_regen, action_timeline, action_trend
 --     session_id, host_port
 -- - Self-validating MAP:
 --     If preferred file missing, scans folder for reaper_sg_*.lua and auto-selects best match by keywords.
 -- - Avoid duplicates:
---     Prevents the same script filename being selected for multiple action keys (prints FAIL).
+--     Prevents the same script filename being selected for multiple action keys.
 -- - Repair mode (no prompts):
---     If ExtState has a resolvable command ID but it does NOT point to the current folder version,
---     it will re-register from THIS folder and update ExtState.
+--     If ExtState resolves but doesn't match current folder version, re-registers current file and updates ExtState.
+-- - Cleanup mode (optional, no prompts, safe):
+--     Attempts to remove stale script registrations that point to old paths.
+--     Best-effort: if a path can't be determined, it prints WARN and continues.
 --
--- Rationale:
--- - Reaper action IDs depend on script path. Moving/copying scripts can leave ExtState pointing to old IDs.
--- - This script makes "re-copy bundle then run installer" always fix itself.
+-- Safety model:
+-- - Never deletes files. Only unregisters scripts from Actions.
+-- - Cleanup is conservative: only targets scripts matching our known filenames.
 
 local EXT_SECTION = "SG_AGENTD"
+
+-- ---------------------------------------------------------------------------
+-- OPTIONAL CLEANUP TOGGLES
+-- ---------------------------------------------------------------------------
+local CLEANUP_STALE_REGISTRATIONS = true      -- master toggle
+local CLEANUP_SCAN_ACTION_LIST    = true      -- scan action list for duplicates by filename
+local CLEANUP_SECTION_ID          = 0         -- Main section
 
 local function msg(s) reaper.ShowConsoleMsg(tostring(s) .. "\n") end
 local function trim(s) return (tostring(s or ""):gsub("^%s+",""):gsub("%s+$","")) end
@@ -65,9 +74,9 @@ local function resolve_rs_id(rs)
 end
 
 local function register_script(fullpath, section_id)
-  section_id = section_id or 0 -- Main
+  section_id = section_id or CLEANUP_SECTION_ID
   local cmd_id = reaper.AddRemoveReaScript(true, section_id, fullpath, true)
-  if not cmd_id or cmd_id == 0 then return nil, "AddRemoveReaScript failed" end
+  if not cmd_id or cmd_id == 0 then return nil, "AddRemoveReaScript(add) failed" end
 
   local rs = reaper.ReverseNamedCommandLookup(cmd_id)
   rs = trim(rs)
@@ -75,15 +84,28 @@ local function register_script(fullpath, section_id)
   return rs, nil
 end
 
+local function unregister_script(fullpath, section_id)
+  section_id = section_id or CLEANUP_SECTION_ID
+  local cmd_id = reaper.AddRemoveReaScript(false, section_id, fullpath, true)
+  if not cmd_id then
+    return false, "AddRemoveReaScript(remove) returned nil"
+  end
+  -- returns command id (0 if not removed / not found), behavior varies; treat nonzero as success
+  if cmd_id ~= 0 then
+    return true, nil
+  end
+  return false, "not removed (maybe not registered for this path)"
+end
+
 local function banner()
   reaper.ClearConsole()
   msg("============================================================")
-  msg("Smart Guitar — Installer (Register + ExtState ship) [6.4 repair]")
+  msg("Smart Guitar — Installer (Register + Repair + Cleanup) [6.5]")
   msg("============================================================")
 end
 
 -- ---------------------------------------------------------------------------
--- EDITABLE DEFAULTS (safe)
+-- DEFAULTS
 -- ---------------------------------------------------------------------------
 local DEFAULT_SESSION_ID = "reaper_session"
 local DEFAULT_HOST_PORT  = "127.0.0.1:8420"
@@ -145,26 +167,126 @@ local function validate_or_autofix(dir, item, lua_files)
 end
 
 -- ---------------------------------------------------------------------------
--- Repair detection: does an existing _RS id point to THIS folder version?
--- We do this by comparing the stored ExtState _RS id to what ReverseNamedCommandLookup returns
--- AFTER registering the script from the current folder (without prompts).
---
--- Key idea:
--- - If ExtState resolves, that only proves it's registered somewhere.
--- - We want it registered for the current folder path.
--- - So we compute the "desired" _RS id by registering current file, then compare.
---
--- Duplicate risk:
--- - AddRemoveReaScript(true, ...) is idempotent-ish: it will add if not there; if already added it may
---   still return an existing command id. Practically, it is safe to call for repair.
---
--- We will only call "repair registration" when:
---   - ExtState resolves, AND
---   - ExtState _RS id != desired _RS id for this folder file
+-- Cleanup helpers
 -- ---------------------------------------------------------------------------
-local function compute_desired_rs_for_file(fullpath)
-  local rs, err = register_script(fullpath, 0)
-  return rs, err
+
+-- Attempt to extract a script path from the action text.
+-- Often includes "Script: <path>".
+local function extract_lua_path_from_action_text(txt)
+  txt = tostring(txt or "")
+  local lo = lower(txt)
+  local lua_pos = lo:find(".lua", 1, true)
+  if not lua_pos then return nil end
+
+  -- Try common format: "Script: /path/to/file.lua"
+  local script_tag = lo:find("script:", 1, true)
+  if script_tag then
+    local after = txt:sub(script_tag + 7)
+    -- trim leading spaces
+    after = after:gsub("^%s+", "")
+    -- take up to .lua
+    local endpos = lower(after):find(".lua", 1, true)
+    if endpos then
+      local cand = after:sub(1, endpos + 3)
+      cand = trim(cand)
+      if cand ~= "" then return cand end
+    end
+  end
+
+  -- Fallback: take last token ending in .lua (handles some variants)
+  local best = nil
+  for token in txt:gmatch("%S+") do
+    if lower(token):match("%.lua$") then
+      best = token
+    end
+  end
+  if best then
+    best = best:gsub('^"+', ""):gsub('"+$', "")
+    best = trim(best)
+    if best ~= "" then return best end
+  end
+  return nil
+end
+
+local function action_text_from_cmd(cmd_id, section_id)
+  section_id = section_id or CLEANUP_SECTION_ID
+  -- returns a user-facing name for the command; for scripts it typically includes "Script: ..."
+  local txt = reaper.kbd_getTextFromCmd(cmd_id, section_id)
+  return txt
+end
+
+local function try_remove_by_cmd_id(cmd_id, current_fullpath, expected_filename)
+  if not CLEANUP_STALE_REGISTRATIONS then return end
+
+  local txt = action_text_from_cmd(cmd_id, CLEANUP_SECTION_ID)
+  local p = extract_lua_path_from_action_text(txt)
+  if not p then
+    msg("SG WARN: cleanup: could not determine old script path from action text for cmd_id=" .. tostring(cmd_id))
+    return
+  end
+
+  -- Normalize quotes
+  p = p:gsub('^"+', ""):gsub('"+$', "")
+  p = trim(p)
+
+  -- Only remove if it looks like the script we're managing (by filename)
+  if expected_filename and lower(p):find(lower(expected_filename), 1, true) == nil then
+    msg("SG WARN: cleanup: extracted path doesn't match expected filename; skipping remove")
+    msg("        expected: " .. tostring(expected_filename))
+    msg("        extracted: " .. tostring(p))
+    return
+  end
+
+  -- Never remove the current folder file registration
+  if current_fullpath and lower(p) == lower(current_fullpath) then
+    return
+  end
+
+  local ok_rm, err = unregister_script(p, CLEANUP_SECTION_ID)
+  if ok_rm then
+    msg("SG OK:   cleanup: unregistered stale script: " .. p)
+  else
+    msg("SG WARN: cleanup: failed to unregister: " .. p .. " (" .. tostring(err) .. ")")
+  end
+end
+
+local function scan_and_cleanup_duplicates(current_fullpath, expected_filename, desired_rs)
+  if not (CLEANUP_STALE_REGISTRATIONS and CLEANUP_SCAN_ACTION_LIST) then return end
+  if not expected_filename or expected_filename == "" then return end
+
+  local removed = 0
+  local scanned = 0
+  local max_scan = 20000
+
+  for i = 0, max_scan do
+    local cmd = reaper.EnumerateActions(CLEANUP_SECTION_ID, i)
+    if not cmd or cmd == 0 then break end
+    scanned = scanned + 1
+
+    local txt = action_text_from_cmd(cmd, CLEANUP_SECTION_ID)
+    if txt and lower(txt):find(lower(expected_filename), 1, true) then
+      local rs = trim(reaper.ReverseNamedCommandLookup(cmd))
+      -- Only consider removing if it's not the desired id for current folder
+      if rs ~= "" and desired_rs and rs ~= desired_rs then
+        local p = extract_lua_path_from_action_text(txt)
+        if p then
+          p = p:gsub('^"+', ""):gsub('"+$', "")
+          p = trim(p)
+          if current_fullpath and lower(p) ~= lower(current_fullpath) then
+            local ok_rm = unregister_script(p, CLEANUP_SECTION_ID)
+            if ok_rm then
+              removed = removed + 1
+              msg("SG OK:   cleanup: removed duplicate registration: " .. p)
+            end
+          end
+        end
+      end
+    end
+  end
+
+  if removed > 0 then
+    msg("SG OK:   cleanup summary: removed " .. tostring(removed) .. " duplicates for " .. expected_filename .. " (scanned " .. tostring(scanned) .. ")")
+  end
 end
 
 -- ---------------------------------------------------------------------------
@@ -193,7 +315,7 @@ else
 end
 
 msg("------------------------------------------------------------")
-msg("Registering scripts (self-validating + repair mode)...")
+msg("Registering scripts (self-validating + repair + cleanup)...")
 msg("------------------------------------------------------------")
 
 local ok = true
@@ -214,27 +336,31 @@ for _, item in ipairs(MAP) do
       used_files[chosen_fn] = item.label
 
       local full = dir .. chosen_fn
-      local existing_rs = get_ext(item.key)
-      local existing_cmd = resolve_rs_id(existing_rs)
 
-      -- Always compute desired _RS for THIS folder file (repair detection)
-      local desired_rs, derr = compute_desired_rs_for_file(full)
+      -- Compute desired _RS id for THIS folder file (register if needed, idempotent)
+      local desired_rs, derr = register_script(full, CLEANUP_SECTION_ID)
       if not desired_rs then
-        msg("SG FAIL: " .. item.label .. " → could not register current file to compute desired id: " .. tostring(derr))
+        msg("SG FAIL: " .. item.label .. " → could not register current file: " .. tostring(derr))
         ok = false
       else
+        local existing_rs = get_ext(item.key)
+        local existing_cmd = resolve_rs_id(existing_rs)
+        local desired_cmd = resolve_rs_id(desired_rs)
+
         if existing_cmd then
           if existing_rs == desired_rs then
-            msg("SG OK:   " .. item.label .. " already correct (ExtState " .. item.key .. " = " .. existing_rs .. ")")
+            msg("SG OK:   " .. item.label .. " already correct (" .. item.key .. " = " .. existing_rs .. ")")
           else
             msg("SG WARN: " .. item.label .. " repairing stale id:")
             msg("        was: " .. existing_rs)
             msg("        now: " .. desired_rs)
+            -- Attempt cleanup of the old registration (best-effort)
+            try_remove_by_cmd_id(existing_cmd, full, chosen_fn)
             set_ext(item.key, desired_rs)
             msg("SG OK:   " .. item.key .. " = " .. get_ext(item.key))
           end
         else
-          -- missing/invalid ExtState; set to desired id (already registered)
+          -- missing/invalid ExtState; set to desired id
           if chosen_fn ~= item.file then
             msg("SG WARN: " .. item.label .. " preferred " .. item.file .. " not found; using " .. chosen_fn .. " (" .. reason .. ")")
           else
@@ -243,6 +369,9 @@ for _, item in ipairs(MAP) do
           set_ext(item.key, desired_rs)
           msg("SG OK:   " .. item.key .. " = " .. get_ext(item.key))
         end
+
+        -- Optional: remove other duplicates of the same script filename in other folders
+        scan_and_cleanup_duplicates(full, chosen_fn, desired_rs)
       end
     end
   end
@@ -250,7 +379,7 @@ end
 
 msg("------------------------------------------------------------")
 if ok then
-  msg("SG INSTALL: PASS — ExtState shipped; repaired stale IDs when needed.")
+  msg("SG INSTALL: PASS — ExtState shipped; repaired stale IDs; cleanup best-effort complete.")
 else
   msg("SG INSTALL: FAIL — missing/ambiguous scripts or registration failures.")
   msg("Fix: ensure required scripts exist in this folder, then rerun installer.")
