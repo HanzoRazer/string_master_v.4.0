@@ -46,6 +46,11 @@ jobs:
           echo "SHA2=$SHA2" >> $GITHUB_ENV
         shell: bash
 
+      - name: Policy check zip contents (preflight)
+        run: |
+          python scripts/release/check_lab_pack_policy.py
+        shell: bash
+
       - name: Assert deterministic
         run: |
           echo "SHA1=$SHA1"
@@ -81,6 +86,11 @@ jobs:
           python scripts/release/build_lab_pack.py
           python scripts/release/make_release_metadata.py
           ls -lah dist
+        shell: bash
+
+      - name: Policy check zip contents
+        run: |
+          python scripts/release/check_lab_pack_policy.py
         shell: bash
 
       - name: Verify outputs exist
