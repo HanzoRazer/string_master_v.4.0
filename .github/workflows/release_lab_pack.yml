@@ -11,8 +11,13 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release-lab-pack:
-    runs-on: ubuntu-latest
+  build-lab-pack:
+    name: Build Lab Pack (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -23,33 +28,122 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build Lab Pack zip
+      - name: Build Lab Pack zip + metadata
         run: |
+          python --version
           python scripts/release/build_lab_pack.py
+          python scripts/release/make_release_metadata.py
           ls -lah dist
+        shell: bash
 
-      - name: Generate checksums and manifest
-        run: |
-          python scripts/release/generate_checksums.py
-          ls -lah dist
-
-      - name: Find Lab Pack zip
-        id: find_zip
+      - name: Verify outputs exist
         run: |
           ZIP_PATH="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
-          if [ -z "$ZIP_PATH" ]; then
-            echo "No Lab Pack zip found in dist/"
-            exit 1
-          fi
-          echo "zip_path=$ZIP_PATH" >> "$GITHUB_OUTPUT"
+          test -n "$ZIP_PATH"
+          test -f "${ZIP_PATH}.sha256"
+          test -f "${ZIP_PATH}.manifest.txt"
+        shell: bash
 
-      - name: Create GitHub Release (if needed) and upload asset
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-pack-tag-${{ matrix.os }}
+          path: |
+            dist/Lab_Pack_SG_*.zip
+            dist/Lab_Pack_SG_*.zip.sha256
+            dist/Lab_Pack_SG_*.zip.manifest.txt
+          if-no-files-found: error
+          retention-days: 14
+
+  guard-compare-builds:
+    name: Guard - Compare OS builds
+    runs-on: ubuntu-latest
+    needs: [build-lab-pack]
+
+    steps:
+      - name: Download Ubuntu artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: lab-pack-tag-ubuntu-latest
+          path: artifacts/ubuntu
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: lab-pack-tag-windows-latest
+          path: artifacts/windows
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: lab-pack-tag-macos-latest
+          path: artifacts/macos
+
+      - name: Normalize and compare manifests + sha256
+        run: |
+          set -euo pipefail
+
+          U_MAN="$(ls -1 artifacts/ubuntu/*.manifest.txt | head -n 1)"
+          W_MAN="$(ls -1 artifacts/windows/*.manifest.txt | head -n 1)"
+          M_MAN="$(ls -1 artifacts/macos/*.manifest.txt | head -n 1)"
+
+          U_SHA="$(ls -1 artifacts/ubuntu/*.sha256 | head -n 1)"
+          W_SHA="$(ls -1 artifacts/windows/*.sha256 | head -n 1)"
+          M_SHA="$(ls -1 artifacts/macos/*.sha256 | head -n 1)"
+
+          # Normalize CRLF just in case (Windows)
+          tr -d '\r' < "$U_MAN" > /tmp/u.man
+          tr -d '\r' < "$W_MAN" > /tmp/w.man
+          tr -d '\r' < "$M_MAN" > /tmp/m.man
+
+          tr -d '\r' < "$U_SHA" > /tmp/u.sha
+          tr -d '\r' < "$W_SHA" > /tmp/w.sha
+          tr -d '\r' < "$M_SHA" > /tmp/m.sha
+
+          echo "Comparing manifests..."
+          diff -u /tmp/u.man /tmp/w.man
+          diff -u /tmp/u.man /tmp/m.man
+
+          echo "Comparing sha256..."
+          diff -u /tmp/u.sha /tmp/w.sha
+          diff -u /tmp/u.sha /tmp/m.sha
+
+          echo "OK: OS builds match (manifest + sha256 identical)."
+
+  publish-ubuntu-only:
+    name: Publish Release (Ubuntu asset only)
+    runs-on: ubuntu-latest
+    needs: [guard-compare-builds]
+
+    steps:
+      - name: Download Ubuntu artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: lab-pack-tag-ubuntu-latest
+          path: dist
+
+      - name: Find Lab Pack assets
+        id: find_assets
+        run: |
+          ZIP_PATH="$(ls -1 dist/Lab_Pack_SG_*.zip | head -n 1)"
+          SHA_PATH="${ZIP_PATH}.sha256"
+          MAN_PATH="${ZIP_PATH}.manifest.txt"
+
+          test -n "$ZIP_PATH"
+          test -f "$SHA_PATH"
+          test -f "$MAN_PATH"
+
+          echo "zip_path=$ZIP_PATH" >> "$GITHUB_OUTPUT"
+          echo "sha_path=$SHA_PATH" >> "$GITHUB_OUTPUT"
+          echo "man_path=$MAN_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release and upload assets
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ${{ steps.find_zip.outputs.zip_path }}
-            ${{ steps.find_zip.outputs.zip_path }}.sha256
-            ${{ steps.find_zip.outputs.zip_path }}.manifest.txt
+            ${{ steps.find_assets.outputs.zip_path }}
+            ${{ steps.find_assets.outputs.sha_path }}
+            ${{ steps.find_assets.outputs.man_path }}
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
