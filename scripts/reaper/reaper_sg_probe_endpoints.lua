@@ -46,6 +46,64 @@ local function get_os_name()
   return "macOS/Linux"
 end
 
+local function parse_host_port(hp)
+  hp = trim(hp or "")
+  local host, port = hp:match("^(.+):(%%d+)$")
+  return host, tonumber(port)
+end
+
+local function is_ipv4(host)
+  if not host then return false end
+  local a,b,c,d = host:match("^(%%d+)%%.(%%d+)%%.(%%d+)%%.(%%d+)$")
+  a,b,c,d = tonumber(a), tonumber(b), tonumber(c), tonumber(d)
+  if not a then return false end
+  if a<0 or a>255 or b<0 or b>255 or c<0 or c>255 or d<0 or d>255 then return false end
+  return true
+end
+
+local function is_private_ipv4(host)
+  if not is_ipv4(host) then return false end
+  local a,b,c,d = host:match("^(%%d+)%%.(%%d+)%%.(%%d+)%%.(%%d+)$")
+  a,b,c,d = tonumber(a), tonumber(b), tonumber(c), tonumber(d)
+  if a == 10 then return true end
+  if a == 172 and b >= 16 and b <= 31 then return true end
+  if a == 192 and b == 168 then return true end
+  return false
+end
+
+local function host_kind(host)
+  host = tostring(host or ""):lower()
+  if host == "localhost" or host == "127.0.0.1" then return "loopback" end
+  if is_ipv4(host) then return "ipv4" end
+  return "hostname"
+end
+
+local function lan_misconfig_warnings(host)
+  local warns = {}
+
+  local hk = host_kind(host)
+  local h = tostring(host or ""):lower()
+
+  if hk == "loopback" then
+    warns[#warns+1] = "host is loopback (localhost/127.0.0.1). If sg-agentd runs on a LAN server, set host_port to that LAN IP/hostname."
+  end
+
+  if hk == "hostname" then
+    -- hostnames without dots often rely on local search domains and fail in labs
+    if not h:find("%%.", 1, true) and h ~= "localhost" then
+      warns[#warns+1] = "hostname has no dot. DNS/search-domain may fail in labs; prefer a LAN IP (e.g., 192.168.x.x) or a full hostname."
+    end
+  end
+
+  if hk == "ipv4" then
+    if not is_private_ipv4(host) and h ~= "127.0.0.1" then
+      warns[#warns+1] = "IPv4 is not private RFC1918. In classrooms this is unusual; confirm routing/firewall rules."
+    end
+  end
+
+  return warns
+end
+
 local function ensure_dir(path)
   if reaper.RecursiveCreateDirectory then
     reaper.RecursiveCreateDirectory(path, 0)
@@ -166,6 +224,19 @@ local resource_path = tostring(reaper.GetResourcePath() or "unknown")
 
 msg("bundle_version: " .. tostring(bundle_ver))
 msg("api_base:       " .. tostring(api_base))
+
+local hp_host, hp_port = parse_host_port(host_port)
+msg("host:          " .. tostring(hp_host or "unknown"))
+msg("port:          " .. tostring(hp_port or "unknown"))
+msg("host_kind:     " .. tostring(host_kind(hp_host)))
+
+local hp_warns = lan_misconfig_warnings(hp_host)
+for _, w in ipairs(hp_warns) do
+  msg("SG WARN: host_port sanity: " .. w)
+end
+
+local host_kind_str = tostring(host_kind(hp_host))
+local hp_warns_list = hp_warns
 
 -- Capture transport probe timing
 local probe_t0 = now_ms()
@@ -342,6 +413,23 @@ f:write("reaper_resource_path: " .. tostring(resource_path) .. "\n")
 f:write("bundle_script_dir: " .. tostring(script_dir) .. "\n")
 f:write("bundle_version: " .. tostring(bundle_ver) .. "\n")
 f:write("host_port: " .. tostring(host_port) .. "\n")
+f:write("host: " .. tostring(hp_host or "unknown") .. "\n")
+f:write("port: " .. tostring(hp_port or "unknown") .. "\n")
+f:write("host_kind: " .. tostring(host_kind_str or "unknown") .. "\n")
+if hp_warns_list and #hp_warns_list > 0 then
+  f:write("host_port_warnings:\n")
+  for _, w in ipairs(hp_warns_list) do
+    f:write("  - " .. tostring(w) .. "\n")
+  end
+end
+f:write("route_hint: ")
+if host_kind(hp_host) == "loopback" then
+  f:write("requests stay on this machine\n")
+elseif host_kind(hp_host) == "ipv4" and is_private_ipv4(hp_host) then
+  f:write("LAN private IP target (check same subnet/VLAN + firewall)\n")
+else
+  f:write("hostname target (check DNS/search domain)\n")
+end
 f:write("api_base: " .. tostring(api_base) .. "\n")
 f:write("session_id: " .. tostring(session_id) .. "\n")
 f:write("transport_override: " .. tostring(transport_override) .. "\n")
