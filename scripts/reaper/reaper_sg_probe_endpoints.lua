@@ -250,6 +250,14 @@ for _, line in ipairs(report) do
 end
 f:write("------------------------------------------------------------\n")
 f:write("Legend: OK=2xx WARN=3xx/4xx FAIL=timeout/transport/5xx\n")
+
+-- ExtState snapshot for SG_AGENTD
+f:write("\nExtState snapshot (SG_AGENTD):\n")
+local ext = extstate_snapshot("SG_AGENTD")
+for k, v in pairs(ext) do
+  f:write("  " .. tostring(k) .. " = " .. tostring(v) .. "\n")
+end
+
 f:close()
 
 msg("SG OK: wrote report → " .. out_path)
