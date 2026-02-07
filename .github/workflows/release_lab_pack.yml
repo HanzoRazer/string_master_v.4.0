@@ -620,7 +620,8 @@ jobs:
         run: |
           set -euo pipefail
           cd work
-          ./verify_release.sh --no-gh
+          # Use strict pin mode to ensure verifier integrity
+          ./verify_release.sh --no-gh --pin strict --pin-file provenance.json
         shell: bash
 
       - name: Verify attestations (release-sourced verifier, policy-aware)

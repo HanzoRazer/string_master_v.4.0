@@ -106,10 +106,71 @@ These are informational but useful for audit.
 
 ---
 
+## 5) Optional: Verifier pinning (self-integrity check)
+
+The `verify_release.sh` script supports self-integrity checking to ensure the verifier itself hasn't been tampered with.
+
+**Modes:**
+- `--pin off` (default): No pin check
+- `--pin warn`: Print warnings if mismatch but continue
+- `--pin strict`: Fail if verifier hash doesn't match pinned hash in provenance.json
+
+**Usage:**
+
+### Linux/macOS
+```bash
+# Strict mode (recommended for automated systems)
+./verify_release.sh --pin strict --pin-file provenance.json
+
+# Warn mode (print warnings only)
+./verify_release.sh --pin warn --pin-file provenance.json
+
+# Default (no pin check)
+./verify_release.sh
+```
+
+**Environment variables:**
+```bash
+export PIN_MODE=strict
+export PIN_FILE=provenance.json
+./verify_release.sh
+```
+
+**What it checks:**
+- Computes SHA256 of `verify_release.sh` itself
+- Compares against `verifier_pins.pins[].sha256` in provenance.json
+- In strict mode, exits with error if mismatch
+- Also checks sibling verifiers (verify_release.ps1, verify_attestations.sh) if present
+
+**Example output (strict mode success):**
+```
+OK: Verifier pin check passed for verify_release.sh
+OK: Sibling verifier pin check passed for verify_release.ps1
+OK: Sibling verifier pin check passed for verify_attestations.sh
+== Files ==
+...
+```
+
+**Example output (strict mode failure):**
+```
+ERR: Verifier integrity mismatch for verify_release.sh
+  Expected: abc123...
+  Actual:   def456...
+  (strict mode: FAIL)
+```
+
+**When to use:**
+- **strict mode**: Automated CI/CD pipelines, production deployments
+- **warn mode**: Development/testing environments where you want visibility but not blocking
+- **off mode**: Manual verification on trusted machines
+
+---
+
 ## Recommended deployment rule
 
 **Only deploy the Lab Pack if:**
 
 ✅ SHA256 OK  
 ✅ cosign bundle verification OK  
-✅ (optional) GitHub attestation checks OK
+✅ (optional) GitHub attestation checks OK  
+✅ (optional, strict environments) Verifier pin check OK

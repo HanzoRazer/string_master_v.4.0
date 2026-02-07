@@ -45,6 +45,9 @@ def sha256_bytes(data: bytes) -> str:
     h.update(data)
     return h.hexdigest()
 
+def sha256_file(path: Path) -> str:
+    return sha256_bytes(path.read_bytes())
+
 def read_bundle_version_from_zip(zip_path: Path) -> str:
     with zipfile.ZipFile(zip_path, "r") as z:
         data = z.read("scripts/reaper/SG_BUNDLE_VERSION.txt")
@@ -158,17 +161,32 @@ def main() -> int:
         },
     }
 
-    # Include verifier artifacts (if present in workspace)
-    ver_list = []
-    for rel in [
-        "scripts/release/verify_release.sh",
-        "scripts/release/verify_release.ps1",
-        "scripts/release/verify_attestations.sh",
-    ]:
+    # Verifier pinning: expected hashes for verification tooling shipped as release assets.
+    verifier_subjects = [
+        ("verify_release.sh", "scripts/release/verify_release.sh"),
+        ("verify_release.ps1", "scripts/release/verify_release.ps1"),
+        ("verify_attestations.sh", "scripts/release/verify_attestations.sh"),
+    ]
+
+    pins = []
+    for name, rel in verifier_subjects:
         p = REPO_ROOT / rel
         if p.exists():
-            ver_list.append({"path": rel, "sha256": sha256_bytes(p.read_bytes())})
-    provenance["verifiers"] = ver_list
+            pins.append({
+                "name": name,
+                "path": rel,
+                "sha256": sha256_file(p),
+                "sigstore_bundle": rel + ".sigstore.json",
+            })
+
+    provenance["verifier_pins"] = {
+        "pinning_enabled": True,
+        "pins": pins,
+        "notes": "These hashes pin the expected verifier scripts shipped as release assets. A verifier may self-check against this data.",
+    }
+
+    # Keep legacy alias for backward compatibility
+    provenance["verifiers"] = pins
 
     (dist / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n", encoding="utf-8")
 
