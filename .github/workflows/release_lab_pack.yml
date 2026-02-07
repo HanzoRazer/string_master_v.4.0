@@ -320,6 +320,35 @@ jobs:
           ls -lah dist
         shell: bash
 
+      - name: Generate verifier SBOM (SPDX)
+        run: |
+          python scripts/release/generate_verifier_sbom.py
+          test -f dist/verifiers.spdx.json
+          ls -lah dist
+        shell: bash
+
+      - name: Install Cosign (for verifier signing)
+        uses: sigstore/cosign-installer@v3
+
+      - name: Cosign sign verifiers (keyless, bundle files)
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          set -euo pipefail
+          for f in \
+            scripts/release/verify_release.sh \
+            scripts/release/verify_release.ps1 \
+            scripts/release/verify_attestations.sh
+          do
+            if [ -f "$f" ]; then
+              cosign sign-blob "$f" --yes --bundle "${f}.sigstore.json"
+              test -f "${f}.sigstore.json"
+              echo "✓ Signed: ${f}"
+            fi
+          done
+          ls -lah scripts/release/*.sigstore.json
+        shell: bash
+
       - name: Verify sigstore bundle exists (created by verify job)
         run: |
           ZIP_PATH="${{ steps.find_assets.outputs.zip_path }}"
@@ -339,6 +368,23 @@ jobs:
           subject-path: ${{ steps.find_assets.outputs.zip_path }}
           sbom-path: dist/labpack.spdx.json
 
+      - name: Attest build provenance (verifiers)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            scripts/release/verify_release.sh
+            scripts/release/verify_release.ps1
+            scripts/release/verify_attestations.sh
+
+      - name: Attest SBOM (verifiers)
+        uses: actions/attest-sbom@v1
+        with:
+          subject-path: |
+            scripts/release/verify_release.sh
+            scripts/release/verify_release.ps1
+            scripts/release/verify_attestations.sh
+          sbom-path: dist/verifiers.spdx.json
+
       - name: Create GitHub Release and upload assets
         uses: softprops/action-gh-release@v2
         with:
@@ -349,10 +395,14 @@ jobs:
             ${{ steps.find_assets.outputs.man_path }}
             dist/provenance.json
             dist/labpack.spdx.json
+            dist/verifiers.spdx.json
             ${{ steps.find_assets.outputs.zip_path }}.sigstore.json
             scripts/release/verify_release.sh
             scripts/release/verify_release.ps1
             scripts/release/verify_attestations.sh
+            scripts/release/verify_release.sh.sigstore.json
+            scripts/release/verify_release.ps1.sigstore.json
+            scripts/release/verify_attestations.sh.sigstore.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -504,6 +554,33 @@ jobs:
           chmod +x verify_release.sh
 
           echo "OK: assets present"
+        shell: bash
+
+      - name: Verify verifier scripts (cosign bundle)
+        run: |
+          set -euo pipefail
+          cd work
+
+          # Verify verifiers exist
+          for f in verify_release.sh verify_attestations.sh; do
+            test -f "$f"
+          done
+
+          # Verify verifier bundles exist
+          test -f "verify_release.sh.sigstore.json"
+          test -f "verify_attestations.sh.sigstore.json"
+
+          # Verify verifier signatures
+          cosign verify-blob --bundle verify_release.sh.sigstore.json verify_release.sh
+          cosign verify-blob --bundle verify_attestations.sh.sigstore.json verify_attestations.sh
+
+          # Verify PowerShell verifier (if present)
+          if [ -f "verify_release.ps1" ]; then
+            test -f "verify_release.ps1.sigstore.json"
+            cosign verify-blob --bundle verify_release.ps1.sigstore.json verify_release.ps1
+          fi
+
+          echo "✓ Verifier scripts verified (cosign bundles)"
         shell: bash
 
       - name: Verify (SHA + cosign bundle) using release-sourced verifier

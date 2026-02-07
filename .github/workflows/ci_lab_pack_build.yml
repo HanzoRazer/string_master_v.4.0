@@ -160,6 +160,12 @@ jobs:
           test -f dist/labpack.spdx.json
         shell: bash
 
+      - name: Generate verifier SBOM (PR check)
+        run: |
+          python scripts/release/generate_verifier_sbom.py
+          test -f dist/verifiers.spdx.json
+        shell: bash
+
       - name: Verify outputs exist
         run: |
           set -euo pipefail
@@ -179,5 +185,6 @@ jobs:
             dist/Lab_Pack_SG_*.zip.manifest.txt
             dist/provenance.json
             dist/labpack.spdx.json
+            dist/verifiers.spdx.json
           if-no-files-found: error
           retention-days: 7

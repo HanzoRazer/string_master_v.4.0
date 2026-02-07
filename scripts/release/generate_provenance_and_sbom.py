@@ -158,6 +158,18 @@ def main() -> int:
         },
     }
 
+    # Include verifier artifacts (if present in workspace)
+    ver_list = []
+    for rel in [
+        "scripts/release/verify_release.sh",
+        "scripts/release/verify_release.ps1",
+        "scripts/release/verify_attestations.sh",
+    ]:
+        p = REPO_ROOT / rel
+        if p.exists():
+            ver_list.append({"path": rel, "sha256": sha256_bytes(p.read_bytes())})
+    provenance["verifiers"] = ver_list
+
     (dist / "provenance.json").write_text(json.dumps(provenance, indent=2) + "\n", encoding="utf-8")
 
     sbom = spdx_doc(zip_path, bundle_version)

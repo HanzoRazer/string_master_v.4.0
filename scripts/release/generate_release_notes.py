@@ -81,6 +81,12 @@ def main(argv: list[str]) -> int:
 {excerpt}
 ```
 
+### Verifiers (download + verify)
+- `verify_release.sh` (+ `.sigstore.json`)
+- `verify_release.ps1` (+ `.sigstore.json`)
+- `verify_attestations.sh` (+ `.sigstore.json`)
+- `verifiers.spdx.json` (SBOM for verifier scripts)
+
 ### Notes
 
 This release is gated by: **policy + lint + determinism + cross-OS parity checks**.
