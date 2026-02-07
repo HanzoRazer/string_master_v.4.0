@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/smartguitar/attestation_schema_min.json",
+  "type": "object",
+  "required": ["predicateType", "subject", "predicate"],
+  "properties": {
+    "predicateType": { "type": "string" },
+    "subject": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "digest"],
+        "properties": {
+          "name": { "type": "string" },
+          "digest": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": { "type": "string" }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["invocation", "buildDefinition"],
+      "properties": {
+        "invocation": {
+          "type": "object",
+          "required": ["configSource"],
+          "properties": {
+            "configSource": {
+              "type": "object",
+              "required": ["uri", "digest"],
+              "properties": {
+                "uri": { "type": "string" },
+                "digest": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": { "type": "string" }
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "buildDefinition": {
+          "type": "object",
+          "required": ["externalParameters", "internalParameters"],
+          "properties": {
+            "externalParameters": { "type": "object", "additionalProperties": true },
+            "internalParameters": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -299,6 +299,42 @@ jobs:
             --repo "${{ github.event.repository.name }}"
         shell: bash
 
+      - name: Policy engine gate (attestation content constraints) - ZIP (11.7.4.b)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          python scripts/release/attestation_policy_engine.py \
+            --subject "verify/dist/Lab_Pack_SG_*.zip" \
+            --repo "${{ github.repository }}" \
+            --tag "${{ github.ref_name }}" \
+            --policy scripts/release/attestation_policy.json \
+            --schema scripts/release/attestation_schema_min.json \
+            --profile lab_pack_zip \
+            --attestation-type provenance
+        shell: bash
+
+      - name: Policy engine gate (attestation content constraints) - Verifiers (11.7.4.b)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          for s in \
+            scripts/release/verify_release.sh \
+            scripts/release/verify_release.ps1 \
+            scripts/release/verify_attestations.sh
+          do
+            python scripts/release/attestation_policy_engine.py \
+              --subject "$s" \
+              --repo "${{ github.repository }}" \
+              --tag "${{ github.ref_name }}" \
+              --policy scripts/release/attestation_policy.json \
+              --schema scripts/release/attestation_schema_min.json \
+              --profile verifiers \
+              --attestation-type provenance
+          done
+        shell: bash
+
       - name: Upload verified assets (ubuntu)
         uses: actions/upload-artifact@v4
         with:
@@ -481,6 +517,9 @@ jobs:
             scripts/release/verify_release.sh.sigstore.json
             scripts/release/verify_release.ps1.sigstore.json
             scripts/release/verify_attestations.sh.sigstore.json
+            scripts/release/attestation_policy_engine.py
+            scripts/release/attestation_policy.json
+            scripts/release/attestation_schema_min.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -740,6 +779,58 @@ jobs:
           echo "OK: strict attestation verification passed (verifiers + zip)"
         shell: bash
 
+      - name: Policy engine gate - ZIP (cold-machine - 11.7.4.b)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          cd work
+          
+          python3 attestation_policy_engine.py \
+            --subject "Lab_Pack_SG_*.zip" \
+            --repo "$REPO" \
+            --tag "$TAG" \
+            --policy attestation_policy.json \
+            --schema attestation_schema_min.json \
+            --profile lab_pack_zip \
+            --attestation-type provenance
+        shell: bash
+
+      - name: Policy engine gate - Verifiers (cold-machine - 11.7.4.b)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          cd work
+          
+          for s in verify_release.sh verify_release.ps1 verify_attestations.sh; do
+            if [ -f "$s" ]; then
+              python3 attestation_policy_engine.py \
+                --subject "$s" \
+                --repo "$REPO" \
+                --tag "$TAG" \
+                --policy attestation_policy.json \
+                --schema attestation_schema_min.json \
+                --profile verifiers \
+                --attestation-type provenance
+            fi
+          done
+        shell: bash
+          gh attestation verify verify_release.ps1 --owner "$OWNER" >/dev/null
+          echo "✓ Verifier attestations verified"
+
+          # Verify the Lab Pack zip itself
+          ZIP="$(ls -1 Lab_Pack_SG_*.zip | head -n 1)"
+          gh attestation verify "$ZIP" --owner "$OWNER" >/dev/null
+          echo "✓ Lab Pack attestation verified"
+
+          echo "OK: strict attestation verification passed (verifiers + zip)"
+        shell: bash
+
       - name: Cold machine simulation success
         run: |
           echo "✅ Cold machine simulation passed"
@@ -752,6 +843,7 @@ jobs:
           echo "   - Verifier bundle pin: OK (strict mode)"
           echo "   - Verifier attestations: OK (strict - 11.7.3)"
           echo "   - Lab Pack attestation: OK (strict)"
+          echo "   - Policy engine: OK (allowlists enforced - 11.7.4.b)"
           echo ""
-          echo "Release is fully verifiable in cold environment with maximum strictness."
+          echo "Release is fully verifiable in cold environment with maximum strictness + policy enforcement."
         shell: bash
