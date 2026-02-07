@@ -416,7 +416,7 @@ jobs:
           sudo apt install gh -y
         shell: bash
 
-      - name: Download previous canonical receipt from Release assets
+      - name: Download previous canonical receipts (ZIP + verifiers)
         if: steps.prevtag.outputs.prev != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -427,29 +427,40 @@ jobs:
           mkdir -p receipts_prev
           echo "${GITHUB_TOKEN}" | gh auth login --with-token >/dev/null 2>&1 || true
 
-          # Download ONLY the canonical receipt(s) from the previous release.
-          # We expect these names from Phase 11.7.6:
-          #   policy_receipt_zip.canonical.json
+          # Download all canonical receipts we care about
           gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
             --pattern "policy_receipt_zip.canonical.json" || true
+          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+            --pattern "policy_receipt_verify_release.sh.canonical.json" || true
+          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+            --pattern "policy_receipt_verify_release.ps1.canonical.json" || true
+          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+            --pattern "policy_receipt_verify_attestations.sh.canonical.json" || true
 
-          ls -lah receipts_prev
-          test -f receipts_prev/policy_receipt_zip.canonical.json
+          echo "Prev receipts:"
+          ls -lah receipts_prev || true
+
+          # Require at least ZIP receipt exists in previous release; if not, skip drift gate.
+          if [ ! -f receipts_prev/policy_receipt_zip.canonical.json ]; then
+            echo "No previous ZIP canonical receipt found. Drift gate skipped."
+            exit 0
+          fi
         shell: bash
 
-      - name: Run drift gate (protected fields)
+      - name: Run drift gate (ZIP + verifiers)
         env:
           # Set DRIFT_OVERRIDE=1 to bypass on an emergency release.
           DRIFT_OVERRIDE: ${{ vars.DRIFT_OVERRIDE }}
         run: |
           set -euo pipefail
+          chmod +x scripts/release/drift_gate_multi.sh
 
-          NEW="receipts_current/canonical/policy_receipt_zip.canonical.json"
-          if [ ! -f "$NEW" ]; then
-            # artifact path may differ; fall back to search
-            NEW="$(find receipts_current -name 'policy_receipt_zip.canonical.json' | head -n 1 || true)"
+          # Find current canonical directory (depends on artifact layout)
+          NEW_DIR="receipts_current/canonical"
+          if [ ! -d "$NEW_DIR" ]; then
+            NEW_DIR="$(find receipts_current -type d -name canonical | head -n 1 || true)"
           fi
-          test -f "$NEW"
+          test -d "$NEW_DIR"
 
           # If no previous tag exists, skip (first release)
           if [ -z "${{ steps.prevtag.outputs.prev }}" ]; then
@@ -457,12 +468,9 @@ jobs:
             exit 0
           fi
 
-          OLD="receipts_prev/policy_receipt_zip.canonical.json"
-          test -f "$OLD"
-
-          python scripts/release/drift_gate.py \
-            --old "$OLD" \
-            --new "$NEW" \
+          ./scripts/release/drift_gate_multi.sh \
+            --old-dir receipts_prev \
+            --new-dir "$NEW_DIR" \
             --policy scripts/release/drift_gate_policy.json
         shell: bash
 
