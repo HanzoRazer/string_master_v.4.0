@@ -32,16 +32,9 @@ import hashlib
 from typing import Any
 
 # Import canonicalization utilities (Phase 11.7.6)
-try:
-    from receipt_canonicalize import canonical_dumps, normalize_receipt, split_receipt
-except ImportError:
-    # Fallback to regular JSON if canonicalize module unavailable
-    def canonical_dumps(obj: Any) -> str:
-        return json.dumps(obj, indent=2) + "\n"
-    def normalize_receipt(obj: Any) -> Any:
-        return obj
-    def split_receipt(obj: Any) -> tuple:
-        return (obj, {})
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT))
+from scripts.release.receipt_canonicalize import normalize_receipt, canonical_dumps
 
 def run(cmd: list[str], *, cwd: Path | None = None) -> str:
     p = subprocess.run(cmd, cwd=str(cwd) if cwd else None, capture_output=True, text=True)
@@ -59,6 +52,17 @@ def sha256_file(p: Path) -> str:
 def truncate(s: str, n: int = 2000) -> str:
     s = s if isinstance(s, str) else str(s)
     return s if len(s) <= n else s[:n] + f"...(truncated {len(s)-n} chars)"
+
+def write_json(path: str, content: str, mode: str) -> None:
+    if not path:
+        return
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    if mode == "append":
+        with p.open("a", encoding="utf-8") as f:
+            f.write(content if content.endswith("\n") else content + "\n")
+    else:
+        p.write_text(content if content.endswith("\n") else content + "\n", encoding="utf-8")
 
 def load_json(p: Path) -> Any:
     return json.loads(p.read_text(encoding="utf-8", errors="replace"))
@@ -183,14 +187,12 @@ def main() -> int:
     ap.add_argument("--schema", required=True)
     ap.add_argument("--profile", required=True, choices=["lab_pack_zip", "verifiers"])
     ap.add_argument("--attestation-type", default="provenance", help="gh attestation type to download (provenance|sbom)")
-    ap.add_argument("--receipt-out", default="", help="Write policy receipt JSON to this path")
-    ap.add_argument("--receipt-mode", default="single", choices=["single", "append"], help="single=overwrite, append=append to JSONL")
+    ap.add_argument("--receipt-runtime-out", default="", help="Write full runtime receipt JSON to this path")
+    ap.add_argument("--receipt-canonical-out", default="", help="Write normalized canonical receipt JSON to this path")
+    ap.add_argument("--canonicalize", action="store_true", help="If set, also emit canonical receipt (recommended)")
+    ap.add_argument("--receipt-mode", default="single", choices=["single", "append"], help="single=overwrite, append=jsonl append")
     ap.add_argument("--receipt-include-attestation-snippets", action="store_true",
                     help="Include truncated attestation excerpts (safe for logs; not full payload)")
-    ap.add_argument("--receipt-canonical", action="store_true",
-                    help="Emit canonical (normalized) receipt for deterministic diffs (11.7.6)")
-    ap.add_argument("--receipt-split", action="store_true",
-                    help="Split into canonical + runtime receipts (requires --receipt-canonical)")
     args = ap.parse_args()
 
     # Resolve subject
@@ -411,47 +413,17 @@ def main() -> int:
         },
     }
 
-    # Write receipt if requested (Phase 11.7.6: canonical option)
-    def write_receipt(path: str, obj: dict[str, Any], mode: str, canonical: bool, split: bool) -> None:
-        if not path:
-            return
-        p = Path(path)
-        p.parent.mkdir(parents=True, exist_ok=True)
-        
-        # Canonicalize if requested
-        if canonical:
-            if split:
-                # Split into canonical + runtime
-                canonical_obj, runtime_obj = split_receipt(obj)
-                # Write canonical
-                if mode == "append":
-                    p.write_text("", encoding="utf-8") if not p.exists() else None
-                    with p.open("a", encoding="utf-8") as f:
-                        f.write(canonical_dumps(canonical_obj).rstrip() + "\n")
-                else:
-                    p.write_text(canonical_dumps(canonical_obj), encoding="utf-8")
-                # Write runtime
-                runtime_path = p.with_suffix(".runtime.json")
-                runtime_path.write_text(canonical_dumps(runtime_obj), encoding="utf-8")
-            else:
-                # Single canonical receipt
-                canonical_obj = normalize_receipt(obj)
-                if mode == "append":
-                    p.write_text("", encoding="utf-8") if not p.exists() else None
-                    with p.open("a", encoding="utf-8") as f:
-                        f.write(canonical_dumps(canonical_obj).rstrip() + "\n")
-                else:
-                    p.write_text(canonical_dumps(canonical_obj), encoding="utf-8")
-        else:
-            # Regular JSON output
-            if mode == "append":
-                p.write_text("", encoding="utf-8") if not p.exists() else None
-                with p.open("a", encoding="utf-8") as f:
-                    f.write(json.dumps(obj) + "\n")
-            else:
-                p.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
+    # Always emit runtime receipt if requested
+    if args.receipt_runtime_out:
+        write_json(args.receipt_runtime_out, json.dumps(receipt, indent=2) + "\n", args.receipt_mode)
 
-    write_receipt(args.receipt_out, receipt, args.receipt_mode, args.receipt_canonical, args.receipt_split)
+    # Emit canonical receipt if requested or --canonicalize
+    if args.receipt_canonical_out or args.canonicalize:
+        canon = normalize_receipt(receipt)
+        canon_text = canonical_dumps(canon)
+        out_path = args.receipt_canonical_out or args.receipt_runtime_out.replace(".json", ".canonical.json")
+        if out_path:
+            write_json(out_path, canon_text, args.receipt_mode)
 
     if ok:
         print(f"POLICY OK: {args.profile} subject={subj_path.name} tag={tag}")

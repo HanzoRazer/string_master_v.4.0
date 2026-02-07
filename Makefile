@@ -5,14 +5,9 @@
 # Attestation policy verification (local / release assets)
 #
 # Usage:
-#   make verify-policy \
-#     ASSETS=release-assets \
-#     REPO=OWNER/REPO \
-#     TAG=v1.2.3
-#
-# Policy receipt verification:
-#   make verify-receipts \
-#     ASSETS=release-assets
+#   make verify-policy TAG=vX.Y.Z [ASSETS=release-assets] [REPO=OWNER/REPO]
+#   make gen-policy-receipts TAG=vX.Y.Z [ASSETS=release-assets] [REPO=OWNER/REPO]
+#   make diff-policy-receipts OLD=old.canonical.json NEW=new.canonical.json
 #
 # Defaults:
 #   ASSETS=release-assets
@@ -23,6 +18,8 @@
 ASSETS ?= release-assets
 REPO ?= $(shell git remote get-url origin 2>/dev/null | sed -E 's#.*github.com[:/](.+)/(.+)(\.git)?#\1/\2#')
 TAG ?=
+OLD ?=
+NEW ?=
 
 .PHONY: verify-policy
 verify-policy:
@@ -106,44 +103,44 @@ verify-receipts:
 	@echo
 	@echo "RECEIPTS OK: all policy receipts cryptographically verified"
 
-.PHONY: diff-receipts
-diff-receipts:
-	@if [ ! -d "$(ASSETS)" ]; then \
-	  echo "ERR: ASSETS directory not found: $(ASSETS)"; \
-	  exit 2; \
-	fi
-	@if [ -z "$(LEFT)" ] || [ -z "$(RIGHT)" ]; then \
-	  echo "ERR: LEFT and RIGHT receipt files required"; \
-	  echo "Usage: make diff-receipts LEFT=v1.2.2/lab_pack.receipt.json RIGHT=v1.2.3/lab_pack.receipt.json"; \
-	  exit 2; \
-	fi
-	@if [ ! -f "$(LEFT)" ] || [ ! -f "$(RIGHT)" ]; then \
-	  echo "ERR: Receipt file(s) not found"; \
-	  exit 2; \
-	fi
-	@echo "== Policy receipt diff (drift detection) =="
-	@echo "Left:  $(LEFT)"
-	@echo "Right: $(RIGHT)"
-	@echo
+.PHONY: gen-policy-receipts
+gen-policy-receipts:
+	@if [ -z "$(TAG)" ]; then echo "ERR: TAG required (TAG=vX.Y.Z)"; exit 2; fi
+	@mkdir -p dist/receipts/runtime dist/receipts/canonical
+	@python scripts/release/attestation_policy_engine.py \
+	  --subject "$(ASSETS)/Lab_Pack_SG_*.zip" \
+	  --repo "$(REPO)" \
+	  --tag "$(TAG)" \
+	  --policy scripts/release/attestation_policy.json \
+	  --schema scripts/release/attestation_schema_min.json \
+	  --profile lab_pack_zip \
+	  --attestation-type provenance \
+	  --canonicalize \
+	  --receipt-runtime-out dist/receipts/runtime/policy_receipt_zip.runtime.json \
+	  --receipt-canonical-out dist/receipts/canonical/policy_receipt_zip.canonical.json
 
-	@python scripts/release/receipt_diff.py "$(LEFT)" "$(RIGHT)" --fail-on-policy-drift || true
-
-	@echo
-	@echo "DIFF COMPLETE: review output above for policy drift"
+.PHONY: diff-policy-receipts
+diff-policy-receipts:
+	@if [ -z "$(OLD)" ] || [ -z "$(NEW)" ]; then \
+	  echo "Usage: make diff-policy-receipts OLD=old.canonical.json NEW=new.canonical.json"; exit 2; \
+	fi
+	@python scripts/release/diff_receipts.py "$(OLD)" "$(NEW)"
 
 .PHONY: help
 help:
 	@echo "Smart Guitar Lab Pack - Local Verification Targets"
 	@echo ""
 	@echo "Available targets:"
-	@echo "  verify-policy    Verify release assets against attestation policy"
-	@echo "  verify-receipts  Verify policy receipt signatures with cosign"
-	@echo "  diff-receipts    Compare receipts to detect policy drift (11.7.6)"
+	@echo "  verify-policy            Verify release assets against attestation policy"
+	@echo "  verify-receipts          Verify policy receipt signatures with cosign"
+	@echo "  gen-policy-receipts      Generate runtime + canonical receipts locally"
+	@echo "  diff-policy-receipts     Compare canonical receipts (drift detection)"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make verify-policy TAG=v1.2.3 [ASSETS=release-assets] [REPO=OWNER/REPO]"
 	@echo "  make verify-receipts [ASSETS=release-assets]"
-	@echo "  make diff-receipts LEFT=v1.2.2/lab_pack.receipt.json RIGHT=v1.2.3/lab_pack.receipt.json"
+	@echo "  make gen-policy-receipts TAG=v1.2.3 [ASSETS=release-assets] [REPO=OWNER/REPO]"
+	@echo "  make diff-policy-receipts OLD=v1.2.2/canonical.json NEW=v1.2.3/canonical.json"
 	@echo ""
 	@echo "Example:"
 	@echo "  # Download release assets"
@@ -156,8 +153,8 @@ help:
 	@echo "  # Verify cryptographic receipt signatures"
 	@echo "  make verify-receipts"
 	@echo ""
-	@echo "  # Compare with previous release"
+	@echo "  # Compare canonical receipts for policy drift"
 	@echo "  mkdir -p v1.2.2 v1.2.3"
-	@echo "  gh release download v1.2.2 --pattern '*.receipt.json' --dir v1.2.2"
-	@echo "  gh release download v1.2.3 --pattern '*.receipt.json' --dir v1.2.3"
-	@echo "  make diff-receipts LEFT=v1.2.2/lab_pack.receipt.json RIGHT=v1.2.3/lab_pack.receipt.json"
+	@echo "  gh release download v1.2.2 --pattern 'policy_receipt_zip.canonical.json' --dir v1.2.2"
+	@echo "  gh release download v1.2.3 --pattern 'policy_receipt_zip.canonical.json' --dir v1.2.3"
+	@echo "  make diff-policy-receipts OLD=v1.2.2/policy_receipt_zip.canonical.json NEW=v1.2.3/policy_receipt_zip.canonical.json"

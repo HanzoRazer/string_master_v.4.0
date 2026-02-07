@@ -299,11 +299,14 @@ jobs:
             --repo "${{ github.event.repository.name }}"
         shell: bash
 
-      - name: Policy engine gate + receipt - ZIP (11.7.6 canonical)
+      - name: Policy receipts (runtime + canonical) — ZIP + verifiers
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          mkdir -p dist/receipts/runtime dist/receipts/canonical
+
+          # ZIP
           python scripts/release/attestation_policy_engine.py \
             --subject "verify/dist/Lab_Pack_SG_*.zip" \
             --repo "${{ github.repository }}" \
@@ -312,109 +315,58 @@ jobs:
             --schema scripts/release/attestation_schema_min.json \
             --profile lab_pack_zip \
             --attestation-type provenance \
-            --receipt-out policy_receipts/lab_pack.receipt.json \
-            --receipt-mode single \
-            --receipt-include-attestation-snippets \
-            --receipt-canonical \
-            --receipt-split
-        shell: bash
+            --canonicalize \
+            --receipt-runtime-out dist/receipts/runtime/policy_receipt_zip.runtime.json \
+            --receipt-canonical-out dist/receipts/canonical/policy_receipt_zip.canonical.json
 
-      - name: Policy engine gate + receipt - Verifiers (11.7.6 canonical)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          mkdir -p policy_receipts
+          # Verifiers
           for s in \
             scripts/release/verify_release.sh \
             scripts/release/verify_release.ps1 \
             scripts/release/verify_attestations.sh
           do
-            s_name="$(basename "$s")"
-            python scripts/release/attestation_policy_engine.py \
-              --subject "$s" \
-              --repo "${{ github.repository }}" \
-              --tag "${{ github.ref_name }}" \
-              --policy scripts/release/attestation_policy.json \
-              --schema scripts/release/attestation_schema_min.json \
-              --profile verifiers \
-              --attestation-type provenance \
-              --receipt-out "policy_receipts/${s_name}.receipt.json" \
-              --receipt-mode single \
-              --receipt-include-attestation-snippets \
-              --receipt-canonical \
-              --receipt-split
+            if [ -f "$s" ]; then
+              base="$(basename "$s")"
+              python scripts/release/attestation_policy_engine.py \
+                --subject "$s" \
+                --repo "${{ github.repository }}" \
+                --tag "${{ github.ref_name }}" \
+                --policy scripts/release/attestation_policy.json \
+                --schema scripts/release/attestation_schema_min.json \
+                --profile verifiers \
+                --attestation-type provenance \
+                --canonicalize \
+                --receipt-runtime-out "dist/receipts/runtime/policy_receipt_${base}.runtime.json" \
+                --receipt-canonical-out "dist/receipts/canonical/policy_receipt_${base}.canonical.json"
+            fi
           done
+
+          echo "Receipts:"
+          ls -lah dist/receipts/runtime dist/receipts/canonical
         shell: bash
 
-      - name: Sign policy receipts with cosign (11.7.5)
+      - name: Sign canonical receipts (cosign bundle)
+        env:
+          COSIGN_EXPERIMENTAL: "true"
         run: |
           set -euo pipefail
           chmod +x scripts/release/sign_policy_receipt.sh
-          for r in policy_receipts/*.receipt.json; do
+          for r in dist/receipts/canonical/*.json; do
             scripts/release/sign_policy_receipt.sh "$r"
           done
-          
-          # Also sign runtime receipts
-          for r in policy_receipts/*.runtime.json; do
-            scripts/release/sign_policy_receipt.sh "$r"
-          done
-          
-          ls -lh policy_receipts/
+          ls -lah dist/receipts/canonical
         shell: bash
 
-      - name: Attest policy receipts with build provenance (optional - 11.7.5)
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: |
-            policy_receipts/*.receipt.json
-            policy_receipts/*.receipt.json.sigstore.json
-            policy_receipts/*.runtime.json
-            policy_receipts/*.runtime.json.sigstore.json
-
-      - name: Upload policy receipts as artifacts
+      - name: Upload policy receipts (runtime + canonical + bundles)
         uses: actions/upload-artifact@v4
         with:
-          name: policy-receipts-ubuntu
-          path: policy_receipts/*
+          name: policy-receipts-verified
+          path: |
+            dist/receipts/runtime/*.json
+            dist/receipts/canonical/*.json
+            dist/receipts/canonical/*.json.sigstore.json
           if-no-files-found: error
-          retention-days: 90
-
-      - name: Policy drift detection (11.7.6 - compare with previous release)
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          
-          # Get previous release tag (sorted by version)
-          PREV_TAG=$(gh release list --repo "${{ github.repository }}" --limit 100 --json tagName --jq '.[].tagName' | grep -v "^${{ github.ref_name }}$" | head -n 1 || true)
-          
-          if [ -z "$PREV_TAG" ]; then
-            echo "No previous release found - skipping drift detection"
-            exit 0
-          fi
-          
-          echo "Comparing with previous release: $PREV_TAG"
-          
-          # Download previous lab pack receipt (canonical)
-          mkdir -p prev_receipts
-          gh release download "$PREV_TAG" --repo "${{ github.repository }}" --pattern "lab_pack.receipt.json" --dir prev_receipts || {
-            echo "Previous release has no canonical receipt - skipping drift detection"
-            exit 0
-          }
-          
-          # Compare receipts
-          chmod +x scripts/release/receipt_diff.py
-          python scripts/release/receipt_diff.py \
-            prev_receipts/lab_pack.receipt.json \
-            policy_receipts/lab_pack.receipt.json \
-            --fail-on-policy-drift || {
-            echo "⚠ POLICY DRIFT DETECTED - allowlists changed since $PREV_TAG"
-            echo "This is informational - not failing the build"
-            echo "Review diff above to understand policy evolution"
-          }
-        shell: bash
-        continue-on-error: true
+          retention-days: 14
 
       - name: Upload verified assets (ubuntu)
         uses: actions/upload-artifact@v4
@@ -444,11 +396,11 @@ jobs:
           name: lab-pack-verified-ubuntu
           path: dist
 
-      - name: Download policy receipts (11.7.5)
+      - name: Download policy receipts
         uses: actions/download-artifact@v4
         with:
-          name: policy-receipts-ubuntu
-          path: dist/policy_receipts
+          name: policy-receipts-verified
+          path: dist/receipts
 
       - name: Find Lab Pack assets
         id: find_assets
@@ -607,8 +559,9 @@ jobs:
             scripts/release/attestation_policy_engine.py
             scripts/release/attestation_policy.json
             scripts/release/attestation_schema_min.json
-            dist/policy_receipts/*.receipt.json
-            dist/policy_receipts/*.receipt.json.sigstore.json
+            dist/receipts/runtime/*.json
+            dist/receipts/canonical/*.json
+            dist/receipts/canonical/*.json.sigstore.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
