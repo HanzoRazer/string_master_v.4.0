@@ -183,10 +183,81 @@ jobs:
 
           echo "OK: OS builds match (manifest + sha256 identical)."
 
+  verify-ubuntu-artifacts:
+    name: Verify Ubuntu artifacts (SHA + cosign bundle) before publish
+    runs-on: ubuntu-latest
+    needs: [guard-compare-builds]
+    permissions:
+      id-token: write  # needed for cosign verification in some environments
+      contents: read
+
+    steps:
+      - name: Checkout (for verify_release.sh script)
+        uses: actions/checkout@v4
+
+      - name: Download Ubuntu artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: lab-pack-tag-ubuntu-latest
+          path: verify/dist
+
+      - name: List downloaded artifacts
+        run: |
+          set -euo pipefail
+          ls -lah verify/dist
+        shell: bash
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Create Sigstore bundle (sign-blob)
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          set -euo pipefail
+          cd verify/dist
+          ZIP="$(ls -1 Lab_Pack_SG_*.zip | head -n 1)"
+          cosign sign-blob "$ZIP" --yes --bundle "${ZIP}.sigstore.json"
+          test -f "${ZIP}.sigstore.json"
+        shell: bash
+
+      - name: Run offline verification (sha256 + cosign bundle)
+        run: |
+          set -euo pipefail
+          cd verify/dist
+
+          # Ensure verifier is executable
+          chmod +x ../../scripts/release/verify_release.sh
+
+          # Run verifier in-place (no download needed; uses local files)
+          ../../scripts/release/verify_release.sh --no-gh
+        shell: bash
+
+      - name: Verify required release-side metadata exists (best-effort)
+        run: |
+          set -euo pipefail
+          cd verify/dist
+
+          ZIP="$(ls -1 Lab_Pack_SG_*.zip | head -n 1)"
+          test -f "${ZIP}.sha256"
+          test -f "${ZIP}.manifest.txt"
+          test -f "${ZIP}.sigstore.json"
+
+          echo "OK: metadata present"
+        shell: bash
+
+      - name: Upload verified assets (ubuntu)
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-pack-verified-ubuntu
+          path: verify/dist/*
+          if-no-files-found: error
+          retention-days: 14
+
   publish-ubuntu-only:
     name: Publish Release (Ubuntu asset only)
     runs-on: ubuntu-latest
-    needs: [determinism-test, guard-compare-builds]
+    needs: [determinism-test, guard-compare-builds, verify-ubuntu-artifacts]
 
     steps:
       - name: Checkout
@@ -197,10 +268,10 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Download Ubuntu artifacts
+      - name: Download verified Ubuntu artifacts
         uses: actions/download-artifact@v4
         with:
-          name: lab-pack-tag-ubuntu-latest
+          name: lab-pack-verified-ubuntu
           path: dist
 
       - name: Find Lab Pack assets
@@ -232,18 +303,11 @@ jobs:
           ls -lah dist
         shell: bash
 
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3
-
-      - name: Cosign sign (keyless) Lab Pack zip
-        env:
-          COSIGN_EXPERIMENTAL: "true"
+      - name: Verify sigstore bundle exists (created by verify job)
         run: |
           ZIP_PATH="${{ steps.find_assets.outputs.zip_path }}"
-          cosign version
-          # Create a Sigstore bundle file (no private key management)
-          cosign sign-blob "$ZIP_PATH" --yes --bundle "${ZIP_PATH}.sigstore.json"
           test -f "${ZIP_PATH}.sigstore.json"
+          echo "✓ Sigstore bundle verified: ${ZIP_PATH}.sigstore.json"
           ls -lah dist
         shell: bash
 
