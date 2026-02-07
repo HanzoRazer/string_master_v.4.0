@@ -126,6 +126,16 @@ diff-policy-receipts:
 	fi
 	@python scripts/release/diff_receipts.py "$(OLD)" "$(NEW)"
 
+.PHONY: drift-gate
+drift-gate:
+	@if [ -z "$(OLD)" ] || [ -z "$(NEW)" ]; then \
+	  echo "Usage: make drift-gate OLD=old.canonical.json NEW=new.canonical.json"; exit 2; \
+	fi
+	@python scripts/release/drift_gate.py \
+	  --old "$(OLD)" \
+	  --new "$(NEW)" \
+	  --policy scripts/release/drift_gate_policy.json
+
 .PHONY: help
 help:
 	@echo "Smart Guitar Lab Pack - Local Verification Targets"
@@ -135,12 +145,14 @@ help:
 	@echo "  verify-receipts          Verify policy receipt signatures with cosign"
 	@echo "  gen-policy-receipts      Generate runtime + canonical receipts locally"
 	@echo "  diff-policy-receipts     Compare canonical receipts (drift detection)"
+	@echo "  drift-gate               Run drift gate (protected fields only, fails on drift)"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make verify-policy TAG=v1.2.3 [ASSETS=release-assets] [REPO=OWNER/REPO]"
 	@echo "  make verify-receipts [ASSETS=release-assets]"
 	@echo "  make gen-policy-receipts TAG=v1.2.3 [ASSETS=release-assets] [REPO=OWNER/REPO]"
 	@echo "  make diff-policy-receipts OLD=v1.2.2/canonical.json NEW=v1.2.3/canonical.json"
+	@echo "  make drift-gate OLD=v1.2.2/canonical.json NEW=v1.2.3/canonical.json"
 	@echo ""
 	@echo "Example:"
 	@echo "  # Download release assets"

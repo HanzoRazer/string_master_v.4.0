@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "protected": [
+    "fingerprints.policy_fingerprint_sha256",
+    "policy.expanded_allowlists",
+    "policy.required_attestation_types",
+    "repo",
+    "profile"
+  ],
+  "protected_regex": [
+    "^attestations\\.[0-9]+\\.extracted\\.workflow_path$",
+    "^attestations\\.[0-9]+\\.extracted\\.runner_environment$",
+    "^attestations\\.[0-9]+\\.extracted\\.configSource_uri$"
+  ],
+  "allow_additional_attestations": true,
+  "fail_on_policy_fingerprint_change": true
+}

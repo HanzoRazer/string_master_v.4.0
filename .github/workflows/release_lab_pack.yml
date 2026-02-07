@@ -376,10 +376,100 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  policy-drift-gate:
+    name: Policy Drift Gate (prev tag vs current)
+    runs-on: ubuntu-latest
+    needs: [verify-ubuntu-artifacts]
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout (for scripts + tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # need tag history
+
+      - name: Download current canonical receipt artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: policy-receipts-verified
+          path: receipts_current
+
+      - name: Determine previous tag
+        id: prevtag
+        run: |
+          set -euo pipefail
+          chmod +x scripts/release/find_prev_tag.sh
+          PREV="$(scripts/release/find_prev_tag.sh "${{ github.ref_name }}")"
+          echo "prev=$PREV" >> "$GITHUB_OUTPUT"
+          echo "Previous tag: $PREV"
+        shell: bash
+
+      - name: Install GitHub CLI
+        if: steps.prevtag.outputs.prev != ''
+        run: |
+          type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
+          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh -y
+        shell: bash
+
+      - name: Download previous canonical receipt from Release assets
+        if: steps.prevtag.outputs.prev != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PREV: ${{ steps.prevtag.outputs.prev }}
+        run: |
+          set -euo pipefail
+          mkdir -p receipts_prev
+          echo "${GITHUB_TOKEN}" | gh auth login --with-token >/dev/null 2>&1 || true
+
+          # Download ONLY the canonical receipt(s) from the previous release.
+          # We expect these names from Phase 11.7.6:
+          #   policy_receipt_zip.canonical.json
+          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+            --pattern "policy_receipt_zip.canonical.json" || true
+
+          ls -lah receipts_prev
+          test -f receipts_prev/policy_receipt_zip.canonical.json
+        shell: bash
+
+      - name: Run drift gate (protected fields)
+        env:
+          # Set DRIFT_OVERRIDE=1 to bypass on an emergency release.
+          DRIFT_OVERRIDE: ${{ vars.DRIFT_OVERRIDE }}
+        run: |
+          set -euo pipefail
+
+          NEW="receipts_current/canonical/policy_receipt_zip.canonical.json"
+          if [ ! -f "$NEW" ]; then
+            # artifact path may differ; fall back to search
+            NEW="$(find receipts_current -name 'policy_receipt_zip.canonical.json' | head -n 1 || true)"
+          fi
+          test -f "$NEW"
+
+          # If no previous tag exists, skip (first release)
+          if [ -z "${{ steps.prevtag.outputs.prev }}" ]; then
+            echo "No previous tag found. Drift gate skipped."
+            exit 0
+          fi
+
+          OLD="receipts_prev/policy_receipt_zip.canonical.json"
+          test -f "$OLD"
+
+          python scripts/release/drift_gate.py \
+            --old "$OLD" \
+            --new "$NEW" \
+            --policy scripts/release/drift_gate_policy.json
+        shell: bash
+
   publish-ubuntu-only:
     name: Publish Release (Ubuntu asset only)
     runs-on: ubuntu-latest
-    needs: [determinism-test, guard-compare-builds, verify-ubuntu-artifacts]
+    needs: [determinism-test, guard-compare-builds, verify-ubuntu-artifacts, policy-drift-gate]
 
     steps:
       - name: Checkout
