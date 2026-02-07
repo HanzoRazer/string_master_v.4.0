@@ -85,7 +85,14 @@ def main(argv: list[str]) -> int:
 - `verify_release.sh` (+ `.sigstore.json`)
 - `verify_release.ps1` (+ `.sigstore.json`)
 - `verify_attestations.sh` (+ `.sigstore.json`)
-- `verifiers.spdx.json` (SBOM for verifier scripts)
+- `verifiers.spdx.json` (combined SBOM for all verifiers)
+
+### Verifier SBOMs (one per subject)
+- `verify_release.sh.spdx.json`
+- `verify_release.ps1.spdx.json`
+- `verify_attestations.sh.spdx.json`
+
+Each SBOM is attested to its corresponding verifier artifact.
 
 ### Notes
 

@@ -368,22 +368,44 @@ jobs:
           subject-path: ${{ steps.find_assets.outputs.zip_path }}
           sbom-path: dist/labpack.spdx.json
 
-      - name: Attest build provenance (verifiers)
+      - name: Generate verifier SBOMs (one per subject)
+        run: |
+          python scripts/release/generate_verifier_sboms_per_subject.py
+          ls -lah dist/verifiers
+        shell: bash
+
+      - name: Attest build provenance (verify_release.sh)
         uses: actions/attest-build-provenance@v1
         with:
-          subject-path: |
-            scripts/release/verify_release.sh
-            scripts/release/verify_release.ps1
-            scripts/release/verify_attestations.sh
+          subject-path: scripts/release/verify_release.sh
 
-      - name: Attest SBOM (verifiers)
+      - name: Attest build provenance (verify_release.ps1)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: scripts/release/verify_release.ps1
+
+      - name: Attest build provenance (verify_attestations.sh)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: scripts/release/verify_attestations.sh
+
+      - name: Attest SBOM (verify_release.sh)
         uses: actions/attest-sbom@v1
         with:
-          subject-path: |
-            scripts/release/verify_release.sh
-            scripts/release/verify_release.ps1
-            scripts/release/verify_attestations.sh
-          sbom-path: dist/verifiers.spdx.json
+          subject-path: scripts/release/verify_release.sh
+          sbom-path: dist/verifiers/verify_release.sh.spdx.json
+
+      - name: Attest SBOM (verify_release.ps1)
+        uses: actions/attest-sbom@v1
+        with:
+          subject-path: scripts/release/verify_release.ps1
+          sbom-path: dist/verifiers/verify_release.ps1.spdx.json
+
+      - name: Attest SBOM (verify_attestations.sh)
+        uses: actions/attest-sbom@v1
+        with:
+          subject-path: scripts/release/verify_attestations.sh
+          sbom-path: dist/verifiers/verify_attestations.sh.spdx.json
 
       - name: Create GitHub Release and upload assets
         uses: softprops/action-gh-release@v2
@@ -396,6 +418,7 @@ jobs:
             dist/provenance.json
             dist/labpack.spdx.json
             dist/verifiers.spdx.json
+            dist/verifiers/*.spdx.json
             ${{ steps.find_assets.outputs.zip_path }}.sigstore.json
             scripts/release/verify_release.sh
             scripts/release/verify_release.ps1
@@ -581,6 +604,16 @@ jobs:
           fi
 
           echo "✓ Verifier scripts verified (cosign bundles)"
+        shell: bash
+
+      - name: Assert per-subject verifier SBOMs present
+        run: |
+          set -euo pipefail
+          cd work
+          test -f "verify_release.sh.spdx.json" || echo "WARN: verify_release.sh.spdx.json missing"
+          test -f "verify_release.ps1.spdx.json" || echo "WARN: verify_release.ps1.spdx.json missing"
+          test -f "verify_attestations.sh.spdx.json" || echo "WARN: verify_attestations.sh.spdx.json missing"
+          echo "✓ Per-subject verifier SBOMs checked"
         shell: bash
 
       - name: Verify (SHA + cosign bundle) using release-sourced verifier
