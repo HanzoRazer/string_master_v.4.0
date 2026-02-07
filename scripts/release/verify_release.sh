@@ -79,6 +79,29 @@ for pin in pins:
   fi
 }
 
+# Helper: extract bundle pin SHA256 for a given verifier name from provenance.json
+get_pin_bundle_sha() {
+  local name="$1"
+  local pin_file="$2"
+  
+  # Try python3 first
+  if command -v python3 >/dev/null 2>&1; then
+    python3 -c "
+import json, sys
+with open('$pin_file', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+pins = data.get('verifier_pins', {}).get('pins', [])
+for pin in pins:
+    if pin.get('name') == '$name':
+        print(pin.get('bundle_sha256', ''))
+        sys.exit(0)
+" 2>/dev/null || true
+  elif command -v jq >/dev/null 2>&1; then
+    # Fallback to jq if available
+    jq -r ".verifier_pins.pins[] | select(.name == \"$name\") | .bundle_sha256 // \"\"" "$pin_file" 2>/dev/null || true
+  fi
+}
+
 # Self-integrity check: verify this verifier script matches pinned hash
 self_pin_check() {
   local mode="$1"
@@ -128,14 +151,60 @@ self_pin_check() {
   else
     echo "OK: Verifier pin check passed for $script_name" >&2
   fi
+  
+  # Optional: bundle pin (only enforced if bundle hash is present in provenance)
+  local bundle_expected
+  bundle_expected="$(get_pin_bundle_sha "$script_name" "$pin_file")"
+  
+  if [[ -n "$bundle_expected" ]]; then
+    local bundle_file="verify_release.sh.sigstore.json"
+    if [[ ! -f "$bundle_file" ]]; then
+      if [[ "$mode" == "strict" ]]; then
+        echo "ERR: pinned bundle hash exists but bundle file missing: $bundle_file" >&2
+        exit 2
+      fi
+      echo "WARN: pinned bundle hash exists but bundle file missing: $bundle_file" >&2
+    else
+      local bundle_actual
+      bundle_actual="$(sha256_of_file "$bundle_file")"
+      if [[ "$bundle_actual" != "$bundle_expected" ]]; then
+        if [[ "$mode" == "strict" ]]; then
+          echo "ERR: verifier bundle pin mismatch for $bundle_file" >&2
+          echo "  Expected: $bundle_expected" >&2
+          echo "  Actual:   $bundle_actual" >&2
+          exit 2
+        fi
+        echo "WARN: verifier bundle pin mismatch for $bundle_file" >&2
+        echo "  Expected: $bundle_expected" >&2
+        echo "  Actual:   $bundle_actual" >&2
+      else
+        echo "OK: Verifier bundle pin check passed" >&2
+      fi
+    fi
+  fi
+  
+  # Always re-verify verifier bundle cryptographically if bundle exists
+  if [[ -f "verify_release.sh.sigstore.json" ]]; then
+    if command -v cosign >/dev/null 2>&1; then
+      cosign verify-blob --bundle verify_release.sh.sigstore.json "$0" >/dev/null
+      echo "OK: Cosign verified verifier bundle" >&2
+    else
+      if [[ "$mode" == "strict" ]]; then
+        echo "ERR: cosign missing; cannot verify verifier bundle" >&2
+        exit 2
+      fi
+      echo "WARN: cosign missing; cannot verify verifier bundle" >&2
+    fi
+  fi
 }
 
-# Optional: check sibling verifier scripts against pins
-check_sibling() {
-  local mode="$1"
-  local pin_file="$2"
+# Optional: check sibling verifier scripts against pins (bundle-aware)
+check_sibling_bundle() {
+  local script_path="$1"
+  local bundle_path="$2"
   local script_name="$3"
-  local script_path="$4"
+  local mode="$4"
+  local pin_file="$5"
   
   if [[ "$mode" == "off" ]]; then
     return 0
@@ -148,23 +217,60 @@ check_sibling() {
   local expected_sha
   expected_sha="$(get_pin_sha "$script_name" "$pin_file")"
   
-  if [[ -z "$expected_sha" ]]; then
-    return 0  # No pin, skip
+  if [[ -n "$expected_sha" ]]; then
+    local actual_sha
+    actual_sha="$(sha256_of_file "$script_path")"
+    if [[ "$actual_sha" != "$expected_sha" ]]; then
+      if [[ "$mode" == "strict" ]]; then
+        echo "ERR: Sibling verifier pin mismatch: $script_name" >&2
+        echo "  Expected: $expected_sha" >&2
+        echo "  Actual:   $actual_sha" >&2
+        exit 2
+      fi
+      echo "WARN: Sibling verifier pin mismatch: $script_name" >&2
+      echo "  Expected: $expected_sha" >&2
+      echo "  Actual:   $actual_sha" >&2
+    else
+      echo "OK: Sibling verifier pin check passed for $script_name" >&2
+    fi
   fi
   
-  local actual_sha
-  actual_sha="$(sha256_of_file "$script_path")"
+  # Check bundle pin if present
+  local bundle_expected
+  bundle_expected="$(get_pin_bundle_sha "$script_name" "$pin_file")"
   
-  if [[ "$actual_sha" != "$expected_sha" ]]; then
-    echo "WARN: Sibling verifier mismatch: $script_name" >&2
-    echo "  Expected: $expected_sha" >&2
-    echo "  Actual:   $actual_sha" >&2
-    if [[ "$mode" == "strict" ]]; then
-      echo "  (strict mode: FAIL)" >&2
-      exit 2
+  if [[ -n "$bundle_expected" ]]; then
+    if [[ ! -f "$bundle_path" ]]; then
+      if [[ "$mode" == "strict" ]]; then
+        echo "ERR: Sibling pinned bundle missing: $bundle_path" >&2
+        exit 2
+      fi
+      echo "WARN: Sibling pinned bundle missing: $bundle_path" >&2
+    else
+      local bundle_actual
+      bundle_actual="$(sha256_of_file "$bundle_path")"
+      if [[ "$bundle_actual" != "$bundle_expected" ]]; then
+        if [[ "$mode" == "strict" ]]; then
+          echo "ERR: Sibling bundle pin mismatch: $bundle_path" >&2
+          echo "  Expected: $bundle_expected" >&2
+          echo "  Actual:   $bundle_actual" >&2
+          exit 2
+        fi
+        echo "WARN: Sibling bundle pin mismatch: $bundle_path" >&2
+        echo "  Expected: $bundle_expected" >&2
+        echo "  Actual:   $bundle_actual" >&2
+      else
+        echo "OK: Sibling bundle pin check passed for $script_name" >&2
+      fi
     fi
-  else
-    echo "OK: Sibling verifier pin check passed for $script_name" >&2
+  fi
+  
+  # Verify bundle cryptographically if both files exist
+  if [[ -f "$bundle_path" && -f "$script_path" ]]; then
+    if command -v cosign >/dev/null 2>&1; then
+      cosign verify-blob --bundle "$bundle_path" "$script_path" >/dev/null
+      echo "OK: Cosign verified sibling bundle for $script_name" >&2
+    fi
   fi
 }
 
@@ -173,8 +279,8 @@ self_pin_check "$PIN_MODE" "$PIN_FILE"
 
 # Check sibling verifiers if in warn/strict mode
 if [[ "$PIN_MODE" != "off" && -f "$PIN_FILE" ]]; then
-  check_sibling "$PIN_MODE" "$PIN_FILE" "verify_release.ps1" "verify_release.ps1"
-  check_sibling "$PIN_MODE" "$PIN_FILE" "verify_attestations.sh" "verify_attestations.sh"
+  check_sibling_bundle "verify_release.ps1" "verify_release.ps1.sigstore.json" "verify_release.ps1" "$PIN_MODE" "$PIN_FILE"
+  check_sibling_bundle "verify_attestations.sh" "verify_attestations.sh.sigstore.json" "verify_attestations.sh" "$PIN_MODE" "$PIN_FILE"
 fi
 
 ZIP="$(ls -1 Lab_Pack_SG_*.zip 2>/dev/null | head -n 1 || true)"

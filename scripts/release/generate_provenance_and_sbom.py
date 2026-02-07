@@ -172,12 +172,17 @@ def main() -> int:
     for name, rel in verifier_subjects:
         p = REPO_ROOT / rel
         if p.exists():
-            pins.append({
+            bundle_rel = rel + ".sigstore.json"
+            bundle_path = REPO_ROOT / bundle_rel
+            pin = {
                 "name": name,
                 "path": rel,
                 "sha256": sha256_file(p),
-                "sigstore_bundle": rel + ".sigstore.json",
-            })
+                "sigstore_bundle": bundle_rel,
+            }
+            if bundle_path.exists():
+                pin["bundle_sha256"] = sha256_file(bundle_path)
+            pins.append(pin)
 
     provenance["verifier_pins"] = {
         "pinning_enabled": True,

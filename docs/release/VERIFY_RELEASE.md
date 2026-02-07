@@ -137,16 +137,30 @@ export PIN_FILE=provenance.json
 ```
 
 **What it checks:**
-- Computes SHA256 of `verify_release.sh` itself
-- Compares against `verifier_pins.pins[].sha256` in provenance.json
-- In strict mode, exits with error if mismatch
-- Also checks sibling verifiers (verify_release.ps1, verify_attestations.sh) if present
+
+**Triple-check security model (Phase 11.7.1):**
+1. **Verifier file pin**: Computes SHA256 of `verify_release.sh` itself and compares against `verifier_pins.pins[].sha256` in provenance.json
+2. **Bundle pin**: If `bundle_sha256` exists in provenance, verifies the `.sigstore.json` bundle file hash matches
+3. **Cosign verification**: Uses cosign to cryptographically verify the bundle signature against the verifier file
+
+This triple-check prevents:
+- Verifier file tampering (pin check #1)
+- Bundle swap attacks (pin check #2)
+- Signature forgery (cosign verification #3)
+
+Also checks sibling verifiers (verify_release.ps1, verify_attestations.sh) with the same triple-check if present.
 
 **Example output (strict mode success):**
 ```
 OK: Verifier pin check passed for verify_release.sh
+OK: Verifier bundle pin check passed
+OK: Cosign verified verifier bundle
 OK: Sibling verifier pin check passed for verify_release.ps1
+OK: Sibling bundle pin check passed for verify_release.ps1
+OK: Cosign verified sibling bundle for verify_release.ps1
 OK: Sibling verifier pin check passed for verify_attestations.sh
+OK: Sibling bundle pin check passed for verify_attestations.sh
+OK: Cosign verified sibling bundle for verify_attestations.sh
 == Files ==
 ...
 ```
