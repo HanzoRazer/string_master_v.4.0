@@ -299,7 +299,7 @@ jobs:
             --repo "${{ github.event.repository.name }}"
         shell: bash
 
-      - name: Policy engine gate + receipt - ZIP (11.7.5)
+      - name: Policy engine gate + receipt - ZIP (11.7.6 canonical)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -314,10 +314,12 @@ jobs:
             --attestation-type provenance \
             --receipt-out policy_receipts/lab_pack.receipt.json \
             --receipt-mode single \
-            --receipt-include-attestation-snippets
+            --receipt-include-attestation-snippets \
+            --receipt-canonical \
+            --receipt-split
         shell: bash
 
-      - name: Policy engine gate + receipt - Verifiers (11.7.5)
+      - name: Policy engine gate + receipt - Verifiers (11.7.6 canonical)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -339,7 +341,9 @@ jobs:
               --attestation-type provenance \
               --receipt-out "policy_receipts/${s_name}.receipt.json" \
               --receipt-mode single \
-              --receipt-include-attestation-snippets
+              --receipt-include-attestation-snippets \
+              --receipt-canonical \
+              --receipt-split
           done
         shell: bash
 
@@ -350,6 +354,12 @@ jobs:
           for r in policy_receipts/*.receipt.json; do
             scripts/release/sign_policy_receipt.sh "$r"
           done
+          
+          # Also sign runtime receipts
+          for r in policy_receipts/*.runtime.json; do
+            scripts/release/sign_policy_receipt.sh "$r"
+          done
+          
           ls -lh policy_receipts/
         shell: bash
 
@@ -359,6 +369,8 @@ jobs:
           subject-path: |
             policy_receipts/*.receipt.json
             policy_receipts/*.receipt.json.sigstore.json
+            policy_receipts/*.runtime.json
+            policy_receipts/*.runtime.json.sigstore.json
 
       - name: Upload policy receipts as artifacts
         uses: actions/upload-artifact@v4
@@ -367,6 +379,42 @@ jobs:
           path: policy_receipts/*
           if-no-files-found: error
           retention-days: 90
+
+      - name: Policy drift detection (11.7.6 - compare with previous release)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          
+          # Get previous release tag (sorted by version)
+          PREV_TAG=$(gh release list --repo "${{ github.repository }}" --limit 100 --json tagName --jq '.[].tagName' | grep -v "^${{ github.ref_name }}$" | head -n 1 || true)
+          
+          if [ -z "$PREV_TAG" ]; then
+            echo "No previous release found - skipping drift detection"
+            exit 0
+          fi
+          
+          echo "Comparing with previous release: $PREV_TAG"
+          
+          # Download previous lab pack receipt (canonical)
+          mkdir -p prev_receipts
+          gh release download "$PREV_TAG" --repo "${{ github.repository }}" --pattern "lab_pack.receipt.json" --dir prev_receipts || {
+            echo "Previous release has no canonical receipt - skipping drift detection"
+            exit 0
+          }
+          
+          # Compare receipts
+          chmod +x scripts/release/receipt_diff.py
+          python scripts/release/receipt_diff.py \
+            prev_receipts/lab_pack.receipt.json \
+            policy_receipts/lab_pack.receipt.json \
+            --fail-on-policy-drift || {
+            echo "⚠ POLICY DRIFT DETECTED - allowlists changed since $PREV_TAG"
+            echo "This is informational - not failing the build"
+            echo "Review diff above to understand policy evolution"
+          }
+        shell: bash
+        continue-on-error: true
 
       - name: Upload verified assets (ubuntu)
         uses: actions/upload-artifact@v4

@@ -106,6 +106,31 @@ verify-receipts:
 	@echo
 	@echo "RECEIPTS OK: all policy receipts cryptographically verified"
 
+.PHONY: diff-receipts
+diff-receipts:
+	@if [ ! -d "$(ASSETS)" ]; then \
+	  echo "ERR: ASSETS directory not found: $(ASSETS)"; \
+	  exit 2; \
+	fi
+	@if [ -z "$(LEFT)" ] || [ -z "$(RIGHT)" ]; then \
+	  echo "ERR: LEFT and RIGHT receipt files required"; \
+	  echo "Usage: make diff-receipts LEFT=v1.2.2/lab_pack.receipt.json RIGHT=v1.2.3/lab_pack.receipt.json"; \
+	  exit 2; \
+	fi
+	@if [ ! -f "$(LEFT)" ] || [ ! -f "$(RIGHT)" ]; then \
+	  echo "ERR: Receipt file(s) not found"; \
+	  exit 2; \
+	fi
+	@echo "== Policy receipt diff (drift detection) =="
+	@echo "Left:  $(LEFT)"
+	@echo "Right: $(RIGHT)"
+	@echo
+
+	@python scripts/release/receipt_diff.py "$(LEFT)" "$(RIGHT)" --fail-on-policy-drift || true
+
+	@echo
+	@echo "DIFF COMPLETE: review output above for policy drift"
+
 .PHONY: help
 help:
 	@echo "Smart Guitar Lab Pack - Local Verification Targets"
@@ -113,10 +138,12 @@ help:
 	@echo "Available targets:"
 	@echo "  verify-policy    Verify release assets against attestation policy"
 	@echo "  verify-receipts  Verify policy receipt signatures with cosign"
+	@echo "  diff-receipts    Compare receipts to detect policy drift (11.7.6)"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make verify-policy TAG=v1.2.3 [ASSETS=release-assets] [REPO=OWNER/REPO]"
 	@echo "  make verify-receipts [ASSETS=release-assets]"
+	@echo "  make diff-receipts LEFT=v1.2.2/lab_pack.receipt.json RIGHT=v1.2.3/lab_pack.receipt.json"
 	@echo ""
 	@echo "Example:"
 	@echo "  # Download release assets"
@@ -129,5 +156,8 @@ help:
 	@echo "  # Verify cryptographic receipt signatures"
 	@echo "  make verify-receipts"
 	@echo ""
-	@echo "  # Verify policy compliance"
-	@echo "  make verify-policy TAG=v1.2.3"
+	@echo "  # Compare with previous release"
+	@echo "  mkdir -p v1.2.2 v1.2.3"
+	@echo "  gh release download v1.2.2 --pattern '*.receipt.json' --dir v1.2.2"
+	@echo "  gh release download v1.2.3 --pattern '*.receipt.json' --dir v1.2.3"
+	@echo "  make diff-receipts LEFT=v1.2.2/lab_pack.receipt.json RIGHT=v1.2.3/lab_pack.receipt.json"

@@ -31,6 +31,18 @@ import sys
 import hashlib
 from typing import Any
 
+# Import canonicalization utilities (Phase 11.7.6)
+try:
+    from receipt_canonicalize import canonical_dumps, normalize_receipt, split_receipt
+except ImportError:
+    # Fallback to regular JSON if canonicalize module unavailable
+    def canonical_dumps(obj: Any) -> str:
+        return json.dumps(obj, indent=2) + "\n"
+    def normalize_receipt(obj: Any) -> Any:
+        return obj
+    def split_receipt(obj: Any) -> tuple:
+        return (obj, {})
+
 def run(cmd: list[str], *, cwd: Path | None = None) -> str:
     p = subprocess.run(cmd, cwd=str(cwd) if cwd else None, capture_output=True, text=True)
     if p.returncode != 0:
@@ -175,6 +187,10 @@ def main() -> int:
     ap.add_argument("--receipt-mode", default="single", choices=["single", "append"], help="single=overwrite, append=append to JSONL")
     ap.add_argument("--receipt-include-attestation-snippets", action="store_true",
                     help="Include truncated attestation excerpts (safe for logs; not full payload)")
+    ap.add_argument("--receipt-canonical", action="store_true",
+                    help="Emit canonical (normalized) receipt for deterministic diffs (11.7.6)")
+    ap.add_argument("--receipt-split", action="store_true",
+                    help="Split into canonical + runtime receipts (requires --receipt-canonical)")
     args = ap.parse_args()
 
     # Resolve subject
@@ -395,20 +411,47 @@ def main() -> int:
         },
     }
 
-    # Write receipt if requested
-    def write_receipt(path: str, obj: dict[str, Any], mode: str) -> None:
+    # Write receipt if requested (Phase 11.7.6: canonical option)
+    def write_receipt(path: str, obj: dict[str, Any], mode: str, canonical: bool, split: bool) -> None:
         if not path:
             return
         p = Path(path)
         p.parent.mkdir(parents=True, exist_ok=True)
-        if mode == "append":
-            p.write_text("", encoding="utf-8") if not p.exists() else None
-            with p.open("a", encoding="utf-8") as f:
-                f.write(json.dumps(obj) + "\n")
+        
+        # Canonicalize if requested
+        if canonical:
+            if split:
+                # Split into canonical + runtime
+                canonical_obj, runtime_obj = split_receipt(obj)
+                # Write canonical
+                if mode == "append":
+                    p.write_text("", encoding="utf-8") if not p.exists() else None
+                    with p.open("a", encoding="utf-8") as f:
+                        f.write(canonical_dumps(canonical_obj).rstrip() + "\n")
+                else:
+                    p.write_text(canonical_dumps(canonical_obj), encoding="utf-8")
+                # Write runtime
+                runtime_path = p.with_suffix(".runtime.json")
+                runtime_path.write_text(canonical_dumps(runtime_obj), encoding="utf-8")
+            else:
+                # Single canonical receipt
+                canonical_obj = normalize_receipt(obj)
+                if mode == "append":
+                    p.write_text("", encoding="utf-8") if not p.exists() else None
+                    with p.open("a", encoding="utf-8") as f:
+                        f.write(canonical_dumps(canonical_obj).rstrip() + "\n")
+                else:
+                    p.write_text(canonical_dumps(canonical_obj), encoding="utf-8")
         else:
-            p.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
+            # Regular JSON output
+            if mode == "append":
+                p.write_text("", encoding="utf-8") if not p.exists() else None
+                with p.open("a", encoding="utf-8") as f:
+                    f.write(json.dumps(obj) + "\n")
+            else:
+                p.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
 
-    write_receipt(args.receipt_out, receipt, args.receipt_mode)
+    write_receipt(args.receipt_out, receipt, args.receipt_mode, args.receipt_canonical, args.receipt_split)
 
     if ok:
         print(f"POLICY OK: {args.profile} subject={subj_path.name} tag={tag}")
