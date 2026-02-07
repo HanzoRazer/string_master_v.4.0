@@ -180,8 +180,14 @@ def main() -> int:
                 "sha256": sha256_file(p),
                 "sigstore_bundle": bundle_rel,
             }
-            if bundle_path.exists():
-                pin["bundle_sha256"] = sha256_file(bundle_path)
+            
+            # 11.7.2 strictness: if the verifier script exists, its bundle MUST exist
+            if not bundle_path.exists():
+                raise RuntimeError(
+                    f"Verifier bundle required but missing: {bundle_rel} (verifier present: {rel})"
+                )
+            
+            pin["bundle_sha256"] = sha256_file(bundle_path)
             pins.append(pin)
 
     provenance["verifier_pins"] = {

@@ -320,6 +320,25 @@ jobs:
           ls -lah dist
         shell: bash
 
+      - name: Assert verifier bundles exist (required by 11.7.2)
+        run: |
+          set -euo pipefail
+          for f in \
+            scripts/release/verify_release.sh \
+            scripts/release/verify_release.ps1 \
+            scripts/release/verify_attestations.sh
+          do
+            if [ -f "$f" ]; then
+              if [ ! -f "${f}.sigstore.json" ]; then
+                echo "ERR: Verifier bundle missing: ${f}.sigstore.json"
+                exit 1
+              fi
+              echo "✓ Bundle exists: ${f}.sigstore.json"
+            fi
+          done
+          echo "OK: All verifier bundles present"
+        shell: bash
+
       - name: Generate verifier SBOM (SPDX)
         run: |
           python scripts/release/generate_verifier_sbom.py
@@ -479,6 +498,24 @@ jobs:
           test -f "labpack.spdx.json" || echo "WARN: labpack.spdx.json missing"
 
           echo "OK: required assets present"
+        shell: bash
+
+      - name: Assert verifier bundle policy (11.7.2)
+        run: |
+          set -euo pipefail
+          cd external_verify
+          
+          for f in verify_release.sh verify_release.ps1 verify_attestations.sh; do
+            if [ -f "$f" ]; then
+              if [ ! -f "${f}.sigstore.json" ]; then
+                echo "ERR: Policy violation - verifier present but bundle missing: ${f}"
+                exit 1
+              fi
+              echo "✓ Policy OK: ${f} has bundle"
+            fi
+          done
+          
+          echo "OK: Verifier bundle policy satisfied"
         shell: bash
 
       - name: Verify release assets (SHA + cosign bundle)
