@@ -10,6 +10,10 @@
 #     REPO=OWNER/REPO \
 #     TAG=v1.2.3
 #
+# Policy receipt verification:
+#   make verify-receipts \
+#     ASSETS=release-assets
+#
 # Defaults:
 #   ASSETS=release-assets
 #   REPO is inferred from git if possible
@@ -72,20 +76,58 @@ verify-policy:
 	@echo
 	@echo "POLICY OK: all checked artifacts satisfy release policy"
 
+.PHONY: verify-receipts
+verify-receipts:
+	@if [ ! -d "$(ASSETS)" ]; then \
+	  echo "ERR: ASSETS directory not found: $(ASSETS)"; \
+	  exit 2; \
+	fi
+	@if ! command -v cosign >/dev/null 2>&1; then \
+	  echo "ERR: cosign not found (required for receipt verification)"; \
+	  exit 2; \
+	fi
+	@echo "== Policy receipt verification =="
+	@echo "Assets dir : $(ASSETS)"
+	@echo
+
+	@echo "-- Verifying policy receipt signatures --"
+	@cd "$(ASSETS)" && \
+	for r in *.receipt.json; do \
+	  if [ -f "$$r" ]; then \
+	    if [ ! -f "$${r}.sigstore.json" ]; then \
+	      echo "ERR: Missing bundle: $${r}.sigstore.json"; \
+	      exit 1; \
+	    fi; \
+	    cosign verify-blob --bundle "$${r}.sigstore.json" "$$r"; \
+	    echo "✓ Receipt signature verified: $$r"; \
+	  fi; \
+	done
+
+	@echo
+	@echo "RECEIPTS OK: all policy receipts cryptographically verified"
+
 .PHONY: help
 help:
 	@echo "Smart Guitar Lab Pack - Local Verification Targets"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  verify-policy    Verify release assets against attestation policy"
+	@echo "  verify-receipts  Verify policy receipt signatures with cosign"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make verify-policy TAG=v1.2.3 [ASSETS=release-assets] [REPO=OWNER/REPO]"
+	@echo "  make verify-receipts [ASSETS=release-assets]"
 	@echo ""
 	@echo "Example:"
 	@echo "  # Download release assets"
 	@echo "  mkdir -p release-assets"
 	@echo "  gh release download v1.2.3 --dir release-assets"
+	@echo ""
+	@echo "  # Verify policy compliance"
+	@echo "  make verify-policy TAG=v1.2.3"
+	@echo ""
+	@echo "  # Verify cryptographic receipt signatures"
+	@echo "  make verify-receipts"
 	@echo ""
 	@echo "  # Verify policy compliance"
 	@echo "  make verify-policy TAG=v1.2.3"

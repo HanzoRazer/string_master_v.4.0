@@ -44,6 +44,10 @@ def sha256_file(p: Path) -> str:
             h.update(chunk)
     return h.hexdigest()
 
+def truncate(s: str, n: int = 2000) -> str:
+    s = s if isinstance(s, str) else str(s)
+    return s if len(s) <= n else s[:n] + f"...(truncated {len(s)-n} chars)"
+
 def load_json(p: Path) -> Any:
     return json.loads(p.read_text(encoding="utf-8", errors="replace"))
 
@@ -167,12 +171,19 @@ def main() -> int:
     ap.add_argument("--schema", required=True)
     ap.add_argument("--profile", required=True, choices=["lab_pack_zip", "verifiers"])
     ap.add_argument("--attestation-type", default="provenance", help="gh attestation type to download (provenance|sbom)")
+    ap.add_argument("--receipt-out", default="", help="Write policy receipt JSON to this path")
+    ap.add_argument("--receipt-mode", default="single", choices=["single", "append"], help="single=overwrite, append=append to JSONL")
+    ap.add_argument("--receipt-include-attestation-snippets", action="store_true",
+                    help="Include truncated attestation excerpts (safe for logs; not full payload)")
     args = ap.parse_args()
 
     # Resolve subject
     subj_path = Path(run(["bash", "-c", f"ls -1 {args.subject} 2>/dev/null | head -n 1"]).strip())
     if not subj_path.exists():
         raise FileNotFoundError(f"Subject not found: {subj_path}")
+
+    # Compute subject digest early for receipt
+    subject_sha = sha256_file(subj_path)
 
     policy = load_json(Path(args.policy))
     schema = load_json(Path(args.schema))
@@ -209,10 +220,11 @@ def main() -> int:
         return 1
 
     # Compute expected digest for subject file (sha256)
-    expected_subject_sha = sha256_file(subj_path)
+    expected_subject_sha = subject_sha
 
     ok = True
     reasons: list[str] = []
+    att_summaries: list[dict[str, Any]] = []
 
     tag = args.tag
     ref = f"refs/tags/{tag}"
@@ -233,11 +245,30 @@ def main() -> int:
     for af in att_files:
         att = load_json(af)
 
+        att_summary: dict[str, Any] = {
+            "attestation_file": str(af),
+            "attestation_file_sha256": sha256_file(af),
+            "predicateType": att.get("predicateType", ""),
+            "extracted": {
+                "configSource_uri": get_config_source_uri(att),
+                "workflow_path": get_workflow_path(att),
+                "runner_environment": get_runner_env(att),
+                "subject_digest": get_subject_digest(att),
+                "configSource_digest": get_config_source_digest(att),
+            },
+            "schema_ok": False,
+            "policy_ok": False,
+            "fail_reason": "",
+        }
+
         try:
             schema_validate(schema, att)
+            att_summary["schema_ok"] = True
         except Exception as e:
             ok = False
+            att_summary["fail_reason"] = f"schema validation failed: {e}"
             reasons.append(f"{af.name}: schema validation failed: {e}")
+            att_summaries.append(att_summary)
             continue
 
         # Subject digest check (attestation subject must match file digest)
@@ -245,7 +276,9 @@ def main() -> int:
         att_sha = subj_dig.get("sha256") or subj_dig.get("SHA256") or ""
         if att_sha.lower() != expected_subject_sha.lower():
             ok = False
+            att_summary["fail_reason"] = f"subject sha256 mismatch (att={att_sha} expected={expected_subject_sha})"
             reasons.append(f"{af.name}: subject sha256 mismatch (att={att_sha} expected={expected_subject_sha})")
+            att_summaries.append(att_summary)
             continue
 
         # Config source uri allowlist
@@ -253,7 +286,9 @@ def main() -> int:
         uri_ok = any(cs_uri.startswith(p) for p in allow.get("source_uri_allow_prefixes", []))
         if not uri_ok:
             ok = False
+            att_summary["fail_reason"] = f"configSource.uri not allowed: {cs_uri}"
             reasons.append(f"{af.name}: configSource.uri not allowed: {cs_uri}")
+            att_summaries.append(att_summary)
             continue
 
         # Config source digest should include git sha; enforce exact match if available
@@ -264,7 +299,9 @@ def main() -> int:
             dig_vals = " ".join([v.lower() for v in cs_dig.values()])
             if git_sha.lower() not in dig_vals:
                 ok = False
+                att_summary["fail_reason"] = "configSource.digest does not contain GITHUB_SHA"
                 reasons.append(f"{af.name}: configSource.digest does not contain GITHUB_SHA")
+                att_summaries.append(att_summary)
                 continue
 
         # Workflow path allowlist (best-effort extract)
@@ -275,11 +312,15 @@ def main() -> int:
             wf_ok = any(a in wf for a in wf_allow)
             if not wf_ok:
                 ok = False
+                att_summary["fail_reason"] = f"workflow path not allowed: {wf}"
                 reasons.append(f"{af.name}: workflow path not allowed: {wf}")
+                att_summaries.append(att_summary)
                 continue
         else:
             ok = False
+            att_summary["fail_reason"] = "could not extract workflow path"
             reasons.append(f"{af.name}: could not extract workflow path")
+            att_summaries.append(att_summary)
             continue
 
         # Runner environment allowlist (best-effort extract)
@@ -288,18 +329,86 @@ def main() -> int:
             renv_ok = renv in allow.get("runner_environment_allow", [])
             if not renv_ok:
                 ok = False
+                att_summary["fail_reason"] = f"runner environment not allowed: {renv}"
                 reasons.append(f"{af.name}: runner environment not allowed: {renv}")
+                att_summaries.append(att_summary)
                 continue
         else:
             ok = False
+            att_summary["fail_reason"] = "could not extract runner environment"
             reasons.append(f"{af.name}: could not extract runner environment")
+            att_summaries.append(att_summary)
             continue
 
+        # Mark this attestation as fully passing policy
+        att_summary["policy_ok"] = True
+        
+        # Add snippet if requested
+        if args.receipt_include_attestation_snippets:
+            att_summary["snippet"] = truncate(json.dumps(att, indent=2), 4000)
+        
+        att_summaries.append(att_summary)
         any_pass = True
 
     if not any_pass:
         ok = False
         reasons.append("no attestation satisfied full policy")
+
+    # Build policy receipt
+    receipt = {
+        "kind": "SmartGuitarAttestationPolicyReceipt",
+        "policy_engine_version": "11.7.5",
+        "profile": args.profile,
+        "repo": args.repo,
+        "tag": args.tag,
+        "ref": f"refs/tags/{args.tag}",
+        "subject": {
+            "path": str(subj_path),
+            "name": subj_path.name,
+            "sha256": subject_sha,
+        },
+        "policy": {
+            "policy_file": args.policy,
+            "schema_file": args.schema,
+            "expanded_allowlists": allow,
+            "strict": policy.get("strict", {}),
+            "required_attestation_types": prof.get("require_attestation_types", []),
+        },
+        "gh": {
+            "run_id": os.environ.get("GITHUB_RUN_ID", ""),
+            "run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", ""),
+            "workflow": os.environ.get("GITHUB_WORKFLOW", ""),
+            "sha": os.environ.get("GITHUB_SHA", ""),
+            "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+            "server_url": os.environ.get("GITHUB_SERVER_URL", ""),
+        },
+        "download": {
+            "attestation_type_requested": args.attestation_type,
+            "download_dir": str(out_dir),
+            "downloaded_count": len(att_files),
+        },
+        "attestations": att_summaries,
+        "result": {
+            "ok": bool(ok),
+            "any_pass": bool(any_pass),
+            "reasons": reasons,
+        },
+    }
+
+    # Write receipt if requested
+    def write_receipt(path: str, obj: dict[str, Any], mode: str) -> None:
+        if not path:
+            return
+        p = Path(path)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        if mode == "append":
+            p.write_text("", encoding="utf-8") if not p.exists() else None
+            with p.open("a", encoding="utf-8") as f:
+                f.write(json.dumps(obj) + "\n")
+        else:
+            p.write_text(json.dumps(obj, indent=2) + "\n", encoding="utf-8")
+
+    write_receipt(args.receipt_out, receipt, args.receipt_mode)
 
     if ok:
         print(f"POLICY OK: {args.profile} subject={subj_path.name} tag={tag}")

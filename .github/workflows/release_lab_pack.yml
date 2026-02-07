@@ -299,7 +299,7 @@ jobs:
             --repo "${{ github.event.repository.name }}"
         shell: bash
 
-      - name: Policy engine gate (attestation content constraints) - ZIP (11.7.4.b)
+      - name: Policy engine gate + receipt - ZIP (11.7.5)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -311,19 +311,24 @@ jobs:
             --policy scripts/release/attestation_policy.json \
             --schema scripts/release/attestation_schema_min.json \
             --profile lab_pack_zip \
-            --attestation-type provenance
+            --attestation-type provenance \
+            --receipt-out policy_receipts/lab_pack.receipt.json \
+            --receipt-mode single \
+            --receipt-include-attestation-snippets
         shell: bash
 
-      - name: Policy engine gate (attestation content constraints) - Verifiers (11.7.4.b)
+      - name: Policy engine gate + receipt - Verifiers (11.7.5)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          mkdir -p policy_receipts
           for s in \
             scripts/release/verify_release.sh \
             scripts/release/verify_release.ps1 \
             scripts/release/verify_attestations.sh
           do
+            s_name="$(basename "$s")"
             python scripts/release/attestation_policy_engine.py \
               --subject "$s" \
               --repo "${{ github.repository }}" \
@@ -331,9 +336,37 @@ jobs:
               --policy scripts/release/attestation_policy.json \
               --schema scripts/release/attestation_schema_min.json \
               --profile verifiers \
-              --attestation-type provenance
+              --attestation-type provenance \
+              --receipt-out "policy_receipts/${s_name}.receipt.json" \
+              --receipt-mode single \
+              --receipt-include-attestation-snippets
           done
         shell: bash
+
+      - name: Sign policy receipts with cosign (11.7.5)
+        run: |
+          set -euo pipefail
+          chmod +x scripts/release/sign_policy_receipt.sh
+          for r in policy_receipts/*.receipt.json; do
+            scripts/release/sign_policy_receipt.sh "$r"
+          done
+          ls -lh policy_receipts/
+        shell: bash
+
+      - name: Attest policy receipts with build provenance (optional - 11.7.5)
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            policy_receipts/*.receipt.json
+            policy_receipts/*.receipt.json.sigstore.json
+
+      - name: Upload policy receipts as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: policy-receipts-ubuntu
+          path: policy_receipts/*
+          if-no-files-found: error
+          retention-days: 90
 
       - name: Upload verified assets (ubuntu)
         uses: actions/upload-artifact@v4
@@ -362,6 +395,12 @@ jobs:
         with:
           name: lab-pack-verified-ubuntu
           path: dist
+
+      - name: Download policy receipts (11.7.5)
+        uses: actions/download-artifact@v4
+        with:
+          name: policy-receipts-ubuntu
+          path: dist/policy_receipts
 
       - name: Find Lab Pack assets
         id: find_assets
@@ -520,6 +559,8 @@ jobs:
             scripts/release/attestation_policy_engine.py
             scripts/release/attestation_policy.json
             scripts/release/attestation_schema_min.json
+            dist/policy_receipts/*.receipt.json
+            dist/policy_receipts/*.receipt.json.sigstore.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -796,6 +837,21 @@ jobs:
             --schema attestation_schema_min.json \
             --profile lab_pack_zip \
             --attestation-type provenance
+        shell: bash
+
+      - name: Verify policy receipt signatures (cold-machine - 11.7.5)
+        run: |
+          set -euo pipefail
+          cd work
+          
+          # Verify all receipt signatures exist and validate
+          for r in *.receipt.json; do
+            test -f "${r}.sigstore.json" || { echo "Missing bundle: ${r}.sigstore.json"; exit 1; }
+            cosign verify-blob --bundle "${r}.sigstore.json" "$r"
+            echo "✓ Receipt signature verified: $r"
+          done
+          
+          echo "OK: all policy receipts cryptographically verified"
         shell: bash
 
       - name: Policy engine gate - Verifiers (cold-machine - 11.7.4.b)
