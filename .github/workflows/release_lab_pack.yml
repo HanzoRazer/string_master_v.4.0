@@ -246,6 +246,23 @@ jobs:
           echo "OK: metadata present"
         shell: bash
 
+      - name: Verify GitHub CLI available
+        run: |
+          gh --version
+        shell: bash
+
+      - name: Verify GitHub attestations exist and verify (policy-aware)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ATTEST_STRICT: "false"   # set to "true" if your org wants hard enforcement
+          ATTEST_OWNER: ${{ github.repository_owner }}
+          ATTEST_REPO: ${{ github.event.repository.name }}
+        run: |
+          set -euo pipefail
+          chmod +x scripts/release/verify_attestations.sh
+          scripts/release/verify_attestations.sh "verify/dist/Lab_Pack_SG_*.zip"
+        shell: bash
+
       - name: Upload verified assets (ubuntu)
         uses: actions/upload-artifact@v4
         with:
