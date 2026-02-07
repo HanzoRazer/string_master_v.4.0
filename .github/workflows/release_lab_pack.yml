@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  attestations: write
 
 jobs:
   determinism-test:
@@ -222,6 +224,40 @@ jobs:
           ls -lah dist
         shell: bash
 
+      - name: Generate provenance + SBOM (SPDX)
+        run: |
+          python scripts/release/generate_provenance_and_sbom.py
+          test -f dist/provenance.json
+          test -f dist/labpack.spdx.json
+          ls -lah dist
+        shell: bash
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Cosign sign (keyless) Lab Pack zip
+        env:
+          COSIGN_EXPERIMENTAL: "true"
+        run: |
+          ZIP_PATH="${{ steps.find_assets.outputs.zip_path }}"
+          cosign version
+          # Create a Sigstore bundle file (no private key management)
+          cosign sign-blob "$ZIP_PATH" --yes --bundle "${ZIP_PATH}.sigstore.json"
+          test -f "${ZIP_PATH}.sigstore.json"
+          ls -lah dist
+        shell: bash
+
+      - name: Attest build provenance (GitHub)
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: ${{ steps.find_assets.outputs.zip_path }}
+
+      - name: Attest SBOM (GitHub)
+        uses: actions/attest-sbom@v1
+        with:
+          subject-path: ${{ steps.find_assets.outputs.zip_path }}
+          sbom-path: dist/labpack.spdx.json
+
       - name: Create GitHub Release and upload assets
         uses: softprops/action-gh-release@v2
         with:
@@ -230,5 +266,8 @@ jobs:
             ${{ steps.find_assets.outputs.zip_path }}
             ${{ steps.find_assets.outputs.sha_path }}
             ${{ steps.find_assets.outputs.man_path }}
+            dist/provenance.json
+            dist/labpack.spdx.json
+            ${{ steps.find_assets.outputs.zip_path }}.sigstore.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

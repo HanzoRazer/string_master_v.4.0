@@ -153,6 +153,13 @@ jobs:
           python scripts/release/lint_lab_pack_zip.py
         shell: bash
 
+      - name: Generate provenance + SBOM (SPDX) (PR check)
+        run: |
+          python scripts/release/generate_provenance_and_sbom.py
+          test -f dist/provenance.json
+          test -f dist/labpack.spdx.json
+        shell: bash
+
       - name: Verify outputs exist
         run: |
           set -euo pipefail
@@ -170,5 +177,7 @@ jobs:
             dist/Lab_Pack_SG_*.zip
             dist/Lab_Pack_SG_*.zip.sha256
             dist/Lab_Pack_SG_*.zip.manifest.txt
+            dist/provenance.json
+            dist/labpack.spdx.json
           if-no-files-found: error
           retention-days: 7
