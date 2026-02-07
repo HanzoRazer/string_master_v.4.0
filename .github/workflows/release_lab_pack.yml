@@ -350,6 +350,9 @@ jobs:
             dist/provenance.json
             dist/labpack.spdx.json
             ${{ steps.find_assets.outputs.zip_path }}.sigstore.json
+            scripts/release/verify_release.sh
+            scripts/release/verify_release.ps1
+            scripts/release/verify_attestations.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -434,4 +437,112 @@ jobs:
           echo "   - Verified GitHub attestations (or soft-skipped on policy block)"
           echo ""
           echo "Release assets are verifiable by external consumers."
+        shell: bash
+
+  cold-machine-simulation:
+    name: Cold machine simulation (container, no checkout)
+    runs-on: ubuntu-latest
+    needs: [publish-ubuntu-only]
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+
+    container:
+      image: alpine:3.19
+
+    steps:
+      - name: Install tools (curl, bash, cosign, gh)
+        env:
+          GH_VERSION: "2.56.0"
+          COSIGN_VERSION: "2.4.1"
+        run: |
+          set -euo pipefail
+          apk add --no-cache ca-certificates curl bash jq coreutils
+          update-ca-certificates
+
+          # Install gh (static-ish tarball)
+          curl -fsSL -o /tmp/gh.tgz "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz"
+          tar -xzf /tmp/gh.tgz -C /tmp
+          mv /tmp/gh_${GH_VERSION}_linux_amd64/bin/gh /usr/local/bin/gh
+
+          # Install cosign
+          curl -fsSL -o /usr/local/bin/cosign "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-amd64"
+          chmod +x /usr/local/bin/cosign
+
+          gh --version
+          cosign version
+        shell: bash
+
+      - name: Download release assets (including verifiers)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          mkdir -p work
+          cd work
+
+          echo "Downloading assets from release: ${REPO} ${TAG}"
+          gh auth login --with-token <<< "${GITHUB_TOKEN}" >/dev/null 2>&1 || true
+
+          # Download everything from the release
+          gh release download "${TAG}" --repo "${REPO}" --dir .
+
+          echo "Downloaded:"
+          ls -lah
+
+          # Assert Lab Pack core assets exist
+          ZIP="$(ls -1 Lab_Pack_SG_*.zip | head -n 1)"
+          test -n "$ZIP"
+          test -f "${ZIP}.sha256"
+          test -f "${ZIP}.sigstore.json"
+
+          # Assert verifiers were uploaded as release assets
+          test -f "verify_release.sh"
+          chmod +x verify_release.sh
+
+          echo "OK: assets present"
+        shell: bash
+
+      - name: Verify (SHA + cosign bundle) using release-sourced verifier
+        run: |
+          set -euo pipefail
+          cd work
+          ./verify_release.sh --no-gh
+        shell: bash
+
+      - name: Verify attestations (release-sourced verifier, policy-aware)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ATTEST_STRICT: "false"   # set true to enforce hard-fail
+          ATTEST_OWNER: ${{ github.repository_owner }}
+          ATTEST_REPO: ${{ github.event.repository.name }}
+        run: |
+          set -euo pipefail
+          cd work
+
+          # Use the verifier fetched from the release (treat as external)
+          if [ -f verify_attestations.sh ]; then
+            chmod +x verify_attestations.sh
+            ./verify_attestations.sh "Lab_Pack_SG_*.zip"
+          else
+            echo "WARN: verify_attestations.sh not present; doing direct gh verify"
+            ZIP="$(ls -1 Lab_Pack_SG_*.zip | head -n 1)"
+            gh attestation verify "$ZIP" --owner "${ATTEST_OWNER}"
+          fi
+        shell: bash
+
+      - name: Cold machine simulation success
+        run: |
+          echo "✅ Cold machine simulation passed"
+          echo "   - Minimal container (Alpine 3.19, no checkout)"
+          echo "   - Downloaded all assets from GitHub Release"
+          echo "   - Verified using release-sourced verifier scripts"
+          echo "   - SHA256 checksum: OK"
+          echo "   - Cosign bundle: OK"
+          echo "   - GitHub attestations: OK (or policy-soft-skipped)"
+          echo ""
+          echo "Release is fully verifiable in cold environment."
         shell: bash
