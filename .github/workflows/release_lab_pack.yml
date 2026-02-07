@@ -357,7 +357,15 @@ jobs:
           ls -lah dist/receipts/canonical
         shell: bash
 
-      - name: Upload policy receipts (runtime + canonical + bundles)
+      - name: Bundle policy receipts archive
+        run: |
+          set -euo pipefail
+          chmod +x scripts/release/bundle_policy_receipts.sh
+          scripts/release/bundle_policy_receipts.sh "${{ github.ref_name }}" "${{ github.repository }}"
+          ls -lah dist/policy-receipts-*.zip
+        shell: bash
+
+      - name: Upload policy receipts (runtime + canonical + bundles + archive)
         uses: actions/upload-artifact@v4
         with:
           name: policy-receipts-verified
@@ -365,6 +373,7 @@ jobs:
             dist/receipts/runtime/*.json
             dist/receipts/canonical/*.json
             dist/receipts/canonical/*.json.sigstore.json
+            dist/policy-receipts-*.zip
           if-no-files-found: error
           retention-days: 14
 
@@ -416,7 +425,7 @@ jobs:
           sudo apt install gh -y
         shell: bash
 
-      - name: Download previous canonical receipts (ZIP + verifiers)
+      - name: Download previous policy receipts archive
         if: steps.prevtag.outputs.prev != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -424,21 +433,31 @@ jobs:
           PREV: ${{ steps.prevtag.outputs.prev }}
         run: |
           set -euo pipefail
-          mkdir -p receipts_prev
+          mkdir -p receipts_prev_temp
           echo "${GITHUB_TOKEN}" | gh auth login --with-token >/dev/null 2>&1 || true
 
-          # Download all canonical receipts we care about
-          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
-            --pattern "policy_receipt_zip.canonical.json" || true
-          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
-            --pattern "policy_receipt_verify_release.sh.canonical.json" || true
-          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
-            --pattern "policy_receipt_verify_release.ps1.canonical.json" || true
-          gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
-            --pattern "policy_receipt_verify_attestations.sh.canonical.json" || true
-
-          echo "Prev receipts:"
-          ls -lah receipts_prev || true
+          # Try to download bundled archive first (11.7.9+)
+          ARCHIVE="policy-receipts-${PREV}.zip"
+          if gh release download "$PREV" --repo "$REPO" --dir receipts_prev_temp --pattern "$ARCHIVE" 2>/dev/null; then
+            echo "Found bundled archive: $ARCHIVE"
+            unzip -q receipts_prev_temp/"$ARCHIVE" -d receipts_prev_temp
+            mv receipts_prev_temp/policy-receipts/canonical receipts_prev
+            rm -rf receipts_prev_temp
+            ls -lah receipts_prev
+          else
+            echo "No bundled archive found. Falling back to individual receipts..."
+            # Fallback: download individual canonical receipts (11.7.7/11.7.8 tags)
+            mkdir -p receipts_prev
+            gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+              --pattern "policy_receipt_zip.canonical.json" || true
+            gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+              --pattern "policy_receipt_verify_release.sh.canonical.json" || true
+            gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+              --pattern "policy_receipt_verify_release.ps1.canonical.json" || true
+            gh release download "$PREV" --repo "$REPO" --dir receipts_prev \
+              --pattern "policy_receipt_verify_attestations.sh.canonical.json" || true
+            ls -lah receipts_prev || true
+          fi
 
           # Require at least ZIP receipt exists in previous release; if not, skip drift gate.
           if [ ! -f receipts_prev/policy_receipt_zip.canonical.json ]; then
@@ -660,6 +679,7 @@ jobs:
             dist/receipts/runtime/*.json
             dist/receipts/canonical/*.json
             dist/receipts/canonical/*.json.sigstore.json
+            dist/policy-receipts-*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
