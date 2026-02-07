@@ -189,6 +189,7 @@ jobs:
     needs: [guard-compare-builds]
     permissions:
       id-token: write  # needed for cosign verification in some environments
+      attestations: write  # needed for attestation verification
       contents: read
 
     steps:
@@ -261,6 +262,41 @@ jobs:
           set -euo pipefail
           chmod +x scripts/release/verify_attestations.sh
           scripts/release/verify_attestations.sh "verify/dist/Lab_Pack_SG_*.zip"
+        shell: bash
+
+      - name: Assert verifier artifacts + bundles exist (11.7.2 mandatory)
+        run: |
+          set -euo pipefail
+          for f in \
+            scripts/release/verify_release.sh \
+            scripts/release/verify_release.ps1 \
+            scripts/release/verify_attestations.sh
+          do
+            test -f "$f"
+            test -f "${f}.sigstore.json"
+          done
+          echo "OK: verifier scripts and bundles present"
+        shell: bash
+
+      - name: Cosign verify verifiers (bundle → verifier)
+        run: |
+          set -euo pipefail
+          cosign version
+          cosign verify-blob --bundle scripts/release/verify_release.sh.sigstore.json scripts/release/verify_release.sh >/dev/null
+          cosign verify-blob --bundle scripts/release/verify_release.ps1.sigstore.json scripts/release/verify_release.ps1 >/dev/null
+          cosign verify-blob --bundle scripts/release/verify_attestations.sh.sigstore.json scripts/release/verify_attestations.sh >/dev/null
+          echo "OK: verifier cosign bundle verification passed"
+        shell: bash
+
+      - name: Verify verifier GitHub attestations (STRICT - 11.7.3)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          chmod +x scripts/release/verify_verifier_attestations_strict.sh
+          scripts/release/verify_verifier_attestations_strict.sh \
+            --owner "${{ github.repository_owner }}" \
+            --repo "${{ github.event.repository.name }}"
         shell: bash
 
       - name: Upload verified assets (ubuntu)
@@ -682,6 +718,28 @@ jobs:
           fi
         shell: bash
 
+      - name: Strict attestation verify (verifiers + zip - 11.7.3)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          cd work
+
+          # Verify verifier attestations (maximum strictness)
+          gh attestation verify verify_release.sh --owner "$OWNER" >/dev/null
+          gh attestation verify verify_attestations.sh --owner "$OWNER" >/dev/null
+          gh attestation verify verify_release.ps1 --owner "$OWNER" >/dev/null
+          echo "✓ Verifier attestations verified"
+
+          # Verify the Lab Pack zip itself
+          ZIP="$(ls -1 Lab_Pack_SG_*.zip | head -n 1)"
+          gh attestation verify "$ZIP" --owner "$OWNER" >/dev/null
+          echo "✓ Lab Pack attestation verified"
+
+          echo "OK: strict attestation verification passed (verifiers + zip)"
+        shell: bash
+
       - name: Cold machine simulation success
         run: |
           echo "✅ Cold machine simulation passed"
@@ -690,7 +748,10 @@ jobs:
           echo "   - Verified using release-sourced verifier scripts"
           echo "   - SHA256 checksum: OK"
           echo "   - Cosign bundle: OK"
-          echo "   - GitHub attestations: OK (or policy-soft-skipped)"
+          echo "   - Verifier pin check: OK (strict mode)"
+          echo "   - Verifier bundle pin: OK (strict mode)"
+          echo "   - Verifier attestations: OK (strict - 11.7.3)"
+          echo "   - Lab Pack attestation: OK (strict)"
           echo ""
-          echo "Release is fully verifiable in cold environment."
+          echo "Release is fully verifiable in cold environment with maximum strictness."
         shell: bash

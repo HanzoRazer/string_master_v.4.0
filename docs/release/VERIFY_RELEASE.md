@@ -180,6 +180,61 @@ ERR: Verifier integrity mismatch for verify_release.sh
 
 ---
 
+## 6) Strict mode (for orgs with attestations enabled - Phase 11.7.3)
+
+If your organization guarantees artifact attestations are enabled, you can require maximum strictness:
+
+**What strict mode enforces:**
+1. Verifier scripts MUST have GitHub Artifact Attestations
+2. Lab Pack zip MUST have GitHub Artifact Attestations
+3. All attestations MUST verify successfully via `gh attestation verify`
+
+**When attestations are enforced:**
+- Pre-publish gate in CI: `verify_verifier_attestations_strict.sh` verifies all verifier attestations
+- Cold-machine simulation: Strict attestation verification for verifiers + Lab Pack
+- No soft-skips or policy fallbacks
+
+**Verifier attestation strict check:**
+```bash
+# Requires gh CLI + GITHUB_TOKEN
+./verify_verifier_attestations_strict.sh --owner OWNER --repo REPO
+```
+
+This verifies attestations exist and pass for:
+- `verify_release.sh`
+- `verify_release.ps1`
+- `verify_attestations.sh`
+
+**Lab Pack attestation check:**
+```bash
+gh attestation verify Lab_Pack_SG_*.zip --owner OWNER
+```
+
+**Full chain of trust (maximum strictness):**
+```
+Verifier pinned → Verifier signature verified → Verifier attestation verified
+    ↓
+Verifier verifies Lab Pack → Lab Pack signature verified → Lab Pack attestation verified
+```
+
+**Common failure modes:**
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `gh attestation verify` returns forbidden | Org policy/plan doesn't allow attestation access | Enable attestations in org settings or use policy-aware mode |
+| Attestation exists for zip but not verifiers | Verifiers not attested | Ensure `actions/attest-build-provenance@v1` runs on verifier scripts |
+| Cosign verifies but attestation fails | Signature valid but attestation missing/invalid | Check workflow has `attestations: write` permission |
+
+**Policy-aware vs strict:**
+- **Policy-aware** (`verify_attestations.sh`): Soft-skip if attestations blocked, continue with warning
+- **Strict** (`verify_verifier_attestations_strict.sh`): Hard fail if attestations missing or blocked
+
+Use strict mode only when your org guarantees attestations are available.
+- **warn mode**: Development/testing environments where you want visibility but not blocking
+- **off mode**: Manual verification on trusted machines
+
+---
+
 ## Recommended deployment rule
 
 **Only deploy the Lab Pack if:**
@@ -187,4 +242,5 @@ ERR: Verifier integrity mismatch for verify_release.sh
 ✅ SHA256 OK  
 ✅ cosign bundle verification OK  
 ✅ (optional) GitHub attestation checks OK  
-✅ (optional, strict environments) Verifier pin check OK
+✅ (optional, strict environments) Verifier pin check OK  
+✅ (optional, maximum strictness) Verifier attestations OK + Lab Pack attestation OK
