@@ -941,14 +941,17 @@ class TestManifestWriting:
         fixed_timestamp: datetime,
     ) -> None:
         """Manifest artifacts list mirrors coach file presence."""
-        from sg_spec.ai.coach.schemas import (
-            PracticeAssignment,
-            ProgramRef,
-            ProgramType,
-            AssignmentConstraints,
-            AssignmentFocus,
-            SuccessCriteria,
-        )
+        try:
+            from sg_spec.ai.coach.schemas import (
+                PracticeAssignment,
+                ProgramRef,
+                ProgramType,
+                AssignmentConstraints,
+                AssignmentFocus,
+                SuccessCriteria,
+            )
+        except ImportError:
+            pytest.skip("sg_spec.ai.coach schemas not available (removed in v2.1)")
 
         comp, bass = sample_events
 
