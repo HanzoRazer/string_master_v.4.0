@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "source": "Zone-Tritone Flamenco Guitar Studies",
   "description": "Canonical catalog of 20 flamenco exercises spanning 8 palos, 3 Phrygian modes, and 12 backing tracks. Exercises exist in two generations: theory-focused (melodic_study) and groove-focused (falseta).",
   "palo_taxonomy": {
@@ -159,15 +159,21 @@
   "exercises": [
     {
       "id": "solea_falseta_etude",
-      "palo": "solea",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Solea Etude - 2-Compas Falseta in E Phrygian",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "solea",
       "key": "E_phrygian",
       "meter": "12/8",
-      "backing_track": "solea_compas_loop.ztprog",
-      "title": "Solea Etude - 2-Compas Falseta in E Phrygian",
-      "focus": "Accent placement on beats 3, 6, 10 within 12-beat cycle",
+      "tempo_range": [
+        60,
+        90
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/solea_compas_loop.ztprog",
+      "palo": "solea",
+      "mode": "phrygian",
+      "generation": "groove",
       "bars": [
         1,
         2,
@@ -181,19 +187,26 @@
         10,
         11,
         12
-      ]
+      ],
+      "focus": "Accent placement on beats 3, 6, 10 within 12-beat cycle"
     },
     {
       "id": "solea_falseta_full_etude",
-      "palo": "solea",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Solea Etude - Full Falseta with A/B Sections",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "solea",
       "key": "E_phrygian",
       "meter": "12/8",
-      "backing_track": "solea_compas_loop.ztprog",
-      "title": "Solea Etude - Full Falseta with A/B Sections",
-      "focus": "Dynamic contrast between A (flowing) and B (rhythmic/accented) sections",
+      "tempo_range": [
+        60,
+        90
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/solea_compas_loop.ztprog",
+      "palo": "solea",
+      "mode": "phrygian",
+      "generation": "groove",
       "bars": [
         1,
         2,
@@ -219,19 +232,26 @@
         22,
         23,
         24
-      ]
+      ],
+      "focus": "Dynamic contrast between A (flowing) and B (rhythmic/accented) sections"
     },
     {
       "id": "solea_falseta_variation",
-      "palo": "solea",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Solea Etude - Variation with Ornamentation",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "solea",
       "key": "E_phrygian",
       "meter": "12/8",
-      "backing_track": "solea_compas_loop.ztprog",
-      "title": "Solea Etude - Variation with Ornamentation",
-      "focus": "Ornamentation and variation development on falseta theme",
+      "tempo_range": [
+        60,
+        90
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/solea_compas_loop.ztprog",
+      "palo": "solea",
+      "mode": "phrygian",
+      "generation": "groove",
       "bars": [
         1,
         2,
@@ -245,19 +265,26 @@
         10,
         11,
         12
-      ]
+      ],
+      "focus": "Ornamentation and variation development on falseta theme"
     },
     {
       "id": "bulerias_falseta_etude",
-      "palo": "bulerias",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Bulerias Etude - Syncopated 12-Beat Falseta",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "bulerias",
       "key": "E_phrygian",
       "meter": "12/8",
-      "backing_track": "bulerias_compas_loop.ztprog",
-      "title": "Bulerias Etude - Syncopated 12-Beat Falseta",
-      "focus": "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10",
+      "tempo_range": [
+        140,
+        240
+      ],
+      "difficulty": "advanced",
+      "program_ref": "programs/bulerias_compas_loop.ztprog",
+      "palo": "bulerias",
+      "mode": "phrygian",
+      "generation": "groove",
       "bars": [
         1,
         2,
@@ -271,272 +298,368 @@
         10,
         11,
         12
-      ]
+      ],
+      "focus": "Syncopation across 12-beat cycle, accent pattern 12-3-6-8-10"
     },
     {
       "id": "malaguena_falseta_etude",
-      "palo": "malaguena",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_mixed",
+      "title": "Malaguena Etude - Intro Falseta (Free Meter)",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "malaguena",
       "key": "E_phrygian",
       "meter": "free",
-      "backing_track": "malaguena_backing.ztprog",
-      "title": "Malaguena Etude - Intro Falseta (Free Meter)",
+      "tempo_range": [
+        60,
+        100
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/malaguena_backing.ztprog",
+      "palo": "malaguena",
+      "mode": "phrygian_mixed",
+      "generation": "groove",
+      "bars": null,
       "focus": "Rubato phrasing, expressive descending lines, G/G# modal contrast"
     },
     {
       "id": "andalusian_cadence",
-      "palo": "cross_palo",
-      "exercise_type": "cadence_study",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Andalusian Cadence Study - iv-III-II-I in A Phrygian",
+      "style_family": "flamenco",
+      "technique": "cadence_study",
+      "harmonic_context": "cross_palo",
       "key": "A_phrygian",
       "meter": "4/4",
-      "backing_track": "../programs/andalusian_Am.ztprog",
-      "title": "Andalusian Cadence Study - iv-III-II-I in A Phrygian",
+      "tempo_range": [
+        60,
+        140
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/../programs/andalusian_Am.ztprog",
+      "palo": "cross_palo",
+      "mode": "phrygian",
+      "generation": "groove",
+      "bars": null,
       "focus": "Root awareness through iv-III-II-I cadence (Am-G-F-E)"
     },
     {
       "id": "andalusian_cadence_all_keys",
-      "palo": "cross_palo",
-      "exercise_type": "cadence_cycle",
-      "generation": "theory",
-      "mode": "phrygian",
+      "title": "Andalusian Cadence - All 12 Keys Cycle",
+      "style_family": "flamenco",
+      "technique": "cadence_cycle",
+      "harmonic_context": "cross_palo",
       "key": "all_keys",
       "meter": "4/4",
-      "backing_track": null,
-      "title": "Andalusian Cadence - All 12 Keys Cycle",
+      "tempo_range": [
+        60,
+        140
+      ],
+      "difficulty": "intermediate",
+      "program_ref": null,
+      "palo": "cross_palo",
+      "mode": "phrygian",
+      "generation": "theory",
+      "bars": null,
       "focus": "Zone-tritone analysis of bII-I resolution in every key"
     },
     {
       "id": "tangos_phrygian_dom_etude",
-      "palo": "tangos",
-      "exercise_type": "melodic_study",
-      "generation": "theory",
-      "mode": "phrygian_dominant",
+      "title": "Tangos - A Phrygian Dominant Study",
+      "style_family": "flamenco",
+      "technique": "melodic_study",
+      "harmonic_context": "tangos",
       "key": "A_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "tangos_A_phrygian_dom.ztprog",
-      "title": "Tangos - A Phrygian Dominant Study",
-      "focus": "Melodic targets (b2, 3, b7), technique focus (legato, bends)",
-      "theory_fields": [
-        "melodic_targets",
-        "technique_focus",
-        "scale_formula"
-      ]
+      "tempo_range": [
+        80,
+        130
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/tangos_A_phrygian_dom.ztprog",
+      "palo": "tangos",
+      "mode": "phrygian_dominant",
+      "generation": "theory",
+      "bars": null,
+      "focus": "Melodic targets (b2, 3, b7), technique focus (legato, bends)"
     },
     {
       "id": "tangos_phrygian_dominant_etude",
-      "palo": "tangos",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_dominant",
+      "title": "Tangos Etude - Phrygian Dominant Phrase in E",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "tangos",
       "key": "E_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "tangos_phrygian_loop.ztprog",
-      "title": "Tangos Etude - Phrygian Dominant Phrase in E",
-      "focus": "Rhythmic phrasing with bII-I resolution, accent displacement",
+      "tempo_range": [
+        80,
+        130
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/tangos_phrygian_loop.ztprog",
+      "palo": "tangos",
+      "mode": "phrygian_dominant",
+      "generation": "groove",
       "bars": [
         1,
         2,
         3,
         4
-      ]
+      ],
+      "focus": "Rhythmic phrasing with bII-I resolution, accent displacement"
     },
     {
       "id": "tangos_phrygian_dominant_variation",
-      "palo": "tangos",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_dominant",
+      "title": "Tangos Etude - Variation Development in E",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "tangos",
       "key": "E_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "tangos_phrygian_loop.ztprog",
-      "title": "Tangos Etude - Variation Development in E",
-      "focus": "Variation building on etude phrase, rhythmic contrast",
+      "tempo_range": [
+        80,
+        130
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/tangos_phrygian_loop.ztprog",
+      "palo": "tangos",
+      "mode": "phrygian_dominant",
+      "generation": "groove",
       "bars": [
         5,
         6,
         7,
         8
-      ]
+      ],
+      "focus": "Variation building on etude phrase, rhythmic contrast"
     },
     {
       "id": "rumba_phrygian_dom_etude",
-      "palo": "rumba",
-      "exercise_type": "melodic_study",
-      "generation": "theory",
-      "mode": "phrygian_dominant",
+      "title": "Rumba Flamenca - A Phrygian Dominant Party Etude",
+      "style_family": "flamenco",
+      "technique": "melodic_study",
+      "harmonic_context": "rumba",
       "key": "A_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "rumba_A_phrygian_dom.ztprog",
-      "title": "Rumba Flamenca - A Phrygian Dominant Party Etude",
-      "focus": "Rasgueado patterns, Latin-influenced rhythmic drive",
-      "theory_fields": [
-        "melodic_targets",
-        "technique_focus",
-        "scale_formula"
-      ]
+      "tempo_range": [
+        90,
+        140
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/rumba_A_phrygian_dom.ztprog",
+      "palo": "rumba",
+      "mode": "phrygian_dominant",
+      "generation": "theory",
+      "bars": null,
+      "focus": "Rasgueado patterns, Latin-influenced rhythmic drive"
     },
     {
       "id": "rumba_phrygian_dominant_etude",
-      "palo": "rumba",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_dominant",
+      "title": "Rumba Etude - Phrygian Dominant Phrase in E",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "rumba",
       "key": "E_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "rumba_phrygian_loop.ztprog",
-      "title": "Rumba Etude - Phrygian Dominant Phrase in E",
-      "focus": "Festive phrasing with bII resolution, rhythmic placement",
+      "tempo_range": [
+        90,
+        140
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/rumba_phrygian_loop.ztprog",
+      "palo": "rumba",
+      "mode": "phrygian_dominant",
+      "generation": "groove",
       "bars": [
         1,
         2,
         3,
         4
-      ]
+      ],
+      "focus": "Festive phrasing with bII resolution, rhythmic placement"
     },
     {
       "id": "rumba_phrygian_dominant_variation",
-      "palo": "rumba",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_dominant",
+      "title": "Rumba Etude - Variation Phrase in E",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "rumba",
       "key": "E_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "rumba_phrygian_loop.ztprog",
-      "title": "Rumba Etude - Variation Phrase in E",
-      "focus": "Variation on rumba etude, dynamic contrast",
+      "tempo_range": [
+        90,
+        140
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/rumba_phrygian_loop.ztprog",
+      "palo": "rumba",
+      "mode": "phrygian_dominant",
+      "generation": "groove",
       "bars": [
         5,
         6,
         7,
         8
-      ]
+      ],
+      "focus": "Variation on rumba etude, dynamic contrast"
     },
     {
       "id": "fandango_phrygian_dom_etude",
-      "palo": "fandango",
-      "exercise_type": "melodic_study",
-      "generation": "theory",
-      "mode": "phrygian_dominant_mixed",
+      "title": "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)",
+      "style_family": "flamenco",
+      "technique": "melodic_study",
+      "harmonic_context": "fandango",
       "key": "E_phrygian_dominant",
       "meter": "3/4",
-      "backing_track": "fandango_E_phrygian_dom.ztprog",
-      "title": "Fandango - Modal Mixing (Phrygian/Phrygian Dominant)",
-      "focus": "G vs G# modal switching, waltz-feel phrasing in 3/4",
-      "theory_fields": [
-        "modal_switch",
-        "technique_focus",
-        "melodic_targets"
-      ]
+      "tempo_range": [
+        80,
+        140
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/fandango_E_phrygian_dom.ztprog",
+      "palo": "fandango",
+      "mode": "phrygian_dominant_mixed",
+      "generation": "theory",
+      "bars": null,
+      "focus": "G vs G# modal switching, waltz-feel phrasing in 3/4"
     },
     {
       "id": "tientos_phrygian_etude",
-      "palo": "tientos",
-      "exercise_type": "melodic_study",
-      "generation": "theory",
-      "mode": "phrygian",
+      "title": "Tientos - Slow Expressive Phrygian Study",
+      "style_family": "flamenco",
+      "technique": "melodic_study",
+      "harmonic_context": "tientos",
       "key": "E_phrygian",
       "meter": "4/4",
-      "backing_track": "tientos_E_phrygian.ztprog",
-      "title": "Tientos - Slow Expressive Phrygian Study",
-      "focus": "Slow-tempo phrasing, natural Phrygian (NOT Dominant), ornamental dynamics",
-      "theory_fields": [
-        "technique_focus",
-        "melodic_targets",
-        "scale_formula"
-      ]
+      "tempo_range": [
+        55,
+        75
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/tientos_E_phrygian.ztprog",
+      "palo": "tientos",
+      "mode": "phrygian",
+      "generation": "theory",
+      "bars": null,
+      "focus": "Slow-tempo phrasing, natural Phrygian (NOT Dominant), ornamental dynamics"
     },
     {
       "id": "tientos_falseta_etude",
-      "palo": "tientos",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Tientos Etude - Expressive Falseta at 68 BPM",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "tientos",
       "key": "E_phrygian",
       "meter": "4/4",
-      "backing_track": "tientos_groove_loop.ztprog",
-      "title": "Tientos Etude - Expressive Falseta at 68 BPM",
-      "focus": "Long-tone phrasing, behind-the-beat feel, bII-I gravity",
+      "tempo_range": [
+        55,
+        75
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/tientos_groove_loop.ztprog",
+      "palo": "tientos",
+      "mode": "phrygian",
+      "generation": "groove",
       "bars": [
         1,
         2,
         3,
         4
-      ]
+      ],
+      "focus": "Long-tone phrasing, behind-the-beat feel, bII-I gravity"
     },
     {
       "id": "tientos_falseta_variation",
-      "palo": "tientos",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian",
+      "title": "Tientos Etude - Variation with Descent",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "tientos",
       "key": "E_phrygian",
       "meter": "4/4",
-      "backing_track": "tientos_groove_loop.ztprog",
-      "title": "Tientos Etude - Variation with Descent",
-      "focus": "Descending line variation, target resolution notes",
+      "tempo_range": [
+        55,
+        75
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/tientos_groove_loop.ztprog",
+      "palo": "tientos",
+      "mode": "phrygian",
+      "generation": "groove",
       "bars": [
         5,
         6,
         7,
         8
-      ]
+      ],
+      "focus": "Descending line variation, target resolution notes"
     },
     {
       "id": "zambra_phrygian_dom_etude",
-      "palo": "zambra",
-      "exercise_type": "melodic_study",
-      "generation": "theory",
-      "mode": "phrygian_dominant",
+      "title": "Zambra - C# Phrygian Dominant Study (Moorish)",
+      "style_family": "flamenco",
+      "technique": "melodic_study",
+      "harmonic_context": "zambra",
       "key": "Cs_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "zambra_Cs_phrygian_dom.ztprog",
-      "title": "Zambra - C# Phrygian Dominant Study (Moorish)",
-      "focus": "Augmented 2nd interval (D-E#), Moorish modal color",
-      "theory_fields": [
-        "interval_highlight",
-        "technique_focus",
-        "melodic_targets"
-      ]
+      "tempo_range": [
+        70,
+        120
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/zambra_Cs_phrygian_dom.ztprog",
+      "palo": "zambra",
+      "mode": "phrygian_dominant",
+      "generation": "theory",
+      "bars": null,
+      "focus": "Augmented 2nd interval (D-E#), Moorish modal color"
     },
     {
       "id": "zambra_falseta_etude",
-      "palo": "zambra",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_dominant",
+      "title": "Zambra Etude - Rubato Phrase in D Phrygian Dominant",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "zambra",
       "key": "D_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "zambra_groove_loop.ztprog",
-      "title": "Zambra Etude - Rubato Phrase in D Phrygian Dominant",
-      "focus": "Rubato melodic phrasing, long-tone control, modal tension",
+      "tempo_range": [
+        70,
+        120
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/zambra_groove_loop.ztprog",
+      "palo": "zambra",
+      "mode": "phrygian_dominant",
+      "generation": "groove",
       "bars": [
         1,
         2,
         3,
         4
-      ]
+      ],
+      "focus": "Rubato melodic phrasing, long-tone control, modal tension"
     },
     {
       "id": "zambra_falseta_variation",
-      "palo": "zambra",
-      "exercise_type": "falseta",
-      "generation": "groove",
-      "mode": "phrygian_dominant",
+      "title": "Zambra Etude - Variation Phrase in D Phrygian Dominant",
+      "style_family": "flamenco",
+      "technique": "falseta",
+      "harmonic_context": "zambra",
       "key": "D_phrygian_dominant",
       "meter": "4/4",
-      "backing_track": "zambra_groove_loop.ztprog",
-      "title": "Zambra Etude - Variation Phrase in D Phrygian Dominant",
-      "focus": "Melodic contrast, chromatic figures, dynamic descent",
+      "tempo_range": [
+        70,
+        120
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/zambra_groove_loop.ztprog",
+      "palo": "zambra",
+      "mode": "phrygian_dominant",
+      "generation": "groove",
       "bars": [
         5,
         6,
         7,
         8
-      ]
+      ],
+      "focus": "Melodic contrast, chromatic figures, dynamic descent"
     }
   ],
   "backing_tracks": [

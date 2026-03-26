@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "source": "enclosures_canonical.json",
   "description": "Bebop enclosure exercises: chromatic approach patterns targeting chord tones over jazz harmony.",
   "enclosure_taxonomy": {
@@ -149,180 +149,229 @@
     {
       "id": "enclosure_upper_to_5",
       "title": "Upper Enclosure to 5th",
+      "style_family": "jazz",
+      "technique": "upper_diatonic",
+      "harmonic_context": "major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/enclosures_enclosure_upper_to_5.ztprog",
       "enclosure_type": "upper_diatonic",
-      "chord_context": "major",
       "difficulty_tier": "foundations",
       "target_note": "5th",
       "target_pitch": "G",
-      "key": "C",
       "chords": [
         "Imaj7",
         "Imaj7"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on 5th (G) beat 1, upper diatonic neighbor approach"
     },
     {
       "id": "enclosure_lower_to_3",
       "title": "Lower Enclosure to 3rd",
+      "style_family": "jazz",
+      "technique": "lower_chromatic",
+      "harmonic_context": "major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/enclosures_enclosure_lower_to_3.ztprog",
       "enclosure_type": "lower_chromatic",
-      "chord_context": "major",
       "difficulty_tier": "foundations",
       "target_note": "3rd",
       "target_pitch": "E",
-      "key": "C",
       "chords": [
         "Imaj7",
         "Imaj7"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on 3rd (E) beat 1, chromatic half-step below"
     },
     {
       "id": "enclosure_double_to_1",
       "title": "Double Enclosure to Root",
+      "style_family": "jazz",
+      "technique": "double_chromatic",
+      "harmonic_context": "major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/enclosures_enclosure_double_to_1.ztprog",
       "enclosure_type": "double_chromatic",
-      "chord_context": "major",
       "difficulty_tier": "foundations",
       "target_note": "root",
       "target_pitch": "C",
-      "key": "C",
       "chords": [
         "Imaj7",
         "Imaj7"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on root (C) beat 1, double chromatic enclosure"
     },
     {
       "id": "enclosure_major_C6_target_3",
       "title": "Major 6 Enclosure - C6 Target 3rd",
+      "style_family": "jazz",
+      "technique": "diatonic_chromatic",
+      "harmonic_context": "major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_enclosure_major_C6_target_3.ztprog",
       "enclosure_type": "diatonic_chromatic",
-      "chord_context": "major",
       "difficulty_tier": "chord_quality",
       "target_note": "3rd",
       "target_pitch": "E",
-      "key": "C",
       "chords": [
         "I6",
         "I6"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on 3rd (E) over C6, diatonic/chromatic combo"
     },
     {
       "id": "enclosure_dom7_G7_target_3",
       "title": "Dominant 7 Enclosure - G7 Target 3rd",
+      "style_family": "jazz",
+      "technique": "diatonic_chromatic",
+      "harmonic_context": "dominant",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_enclosure_dom7_G7_target_3.ztprog",
       "enclosure_type": "diatonic_chromatic",
-      "chord_context": "dominant",
       "difficulty_tier": "chord_quality",
       "target_note": "3rd",
       "target_pitch": "B",
-      "key": "G",
       "chords": [
         "V7",
         "V7"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on 3rd (B) of G7, diatonic upper/chromatic lower"
     },
     {
       "id": "enclosure_dom7_G7_target_b7",
       "title": "Dominant 7 Enclosure - G7 Target b7",
+      "style_family": "jazz",
+      "technique": "chromatic",
+      "harmonic_context": "dominant",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_enclosure_dom7_G7_target_b7.ztprog",
       "enclosure_type": "chromatic",
-      "chord_context": "dominant",
       "difficulty_tier": "chord_quality",
       "target_note": "b7",
       "target_pitch": "F",
-      "key": "G",
       "chords": [
         "V7",
         "V7"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on b7 (F) of G7, chromatic approach"
     },
     {
       "id": "enclosure_minor_Dm7_target_5",
       "title": "Minor 7 Enclosure - Dm7 Target 5th",
+      "style_family": "jazz",
+      "technique": "chromatic",
+      "harmonic_context": "minor",
+      "key": "D",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_enclosure_minor_Dm7_target_5.ztprog",
       "enclosure_type": "chromatic",
-      "chord_context": "minor",
       "difficulty_tier": "chord_quality",
       "target_note": "5th",
       "target_pitch": "A",
-      "key": "D",
       "chords": [
         "i7",
         "i7"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on 5th (A) of Dm7, chromatic approach"
     },
     {
       "id": "enclosure_alt_dom_target_b9",
       "title": "Altered Dominant Enclosure - Target b9",
+      "style_family": "jazz",
+      "technique": "altered_chromatic",
+      "harmonic_context": "dominant",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_enclosure_alt_dom_target_b9.ztprog",
       "enclosure_type": "altered_chromatic",
-      "chord_context": "dominant",
       "difficulty_tier": "chord_quality",
       "target_note": "b9",
       "target_pitch": "Db",
-      "key": "C",
       "chords": [
         "V7alt",
         "V7alt"
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Land on b9 of altered dominant, chromatic altered approach"
     },
     {
       "id": "dominant_enclosure_b7_to_root",
       "title": "Dominant Enclosure - b7 to Root Resolution",
+      "style_family": "jazz",
+      "technique": "double_chromatic",
+      "harmonic_context": "v_i_resolution",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_dominant_enclosure_b7_to_root.ztprog",
       "enclosure_type": "double_chromatic",
-      "chord_context": "v_i_resolution",
       "difficulty_tier": "progressions",
       "target_note": "root",
       "target_pitch": "C",
-      "key": "C",
       "chords": [
         "V7",
         "V7",
@@ -331,21 +380,26 @@
       ],
       "loop_bars": 2,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Double chromatic enclosure resolving b7 to root over V-I"
     },
     {
       "id": "enclosure_ii_v_i_chain",
       "title": "ii-V-I Enclosure Chain",
+      "style_family": "jazz",
+      "technique": "chromatic_chain",
+      "harmonic_context": "ii_v_i",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_enclosure_ii_v_i_chain.ztprog",
       "enclosure_type": "chromatic_chain",
-      "chord_context": "ii_v_i",
       "difficulty_tier": "progressions",
       "target_note": "3rd of each chord",
       "target_pitch": "F/B/E",
-      "key": "C",
       "chords": [
         "ii7",
         "V7",
@@ -354,21 +408,26 @@
       ],
       "loop_bars": 4,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Chromatic chain targeting 3rd of each chord through ii-V-I"
     },
     {
       "id": "ii_v_i_to_3rd_chromatic",
       "title": "ii-V-I Enclosure - Chromatic to 3rd",
+      "style_family": "jazz",
+      "technique": "chromatic_above_below",
+      "harmonic_context": "ii_v_i",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        50,
+        115
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_ii_v_i_to_3rd_chromatic.ztprog",
       "enclosure_type": "chromatic_above_below",
-      "chord_context": "ii_v_i",
       "difficulty_tier": "progressions",
       "target_note": "3rd",
       "target_pitch": "E",
-      "key": "C",
       "chords": [
         "ii7",
         "V7",
@@ -377,21 +436,26 @@
       ],
       "loop_bars": 4,
       "tempo_bpm": 76,
-      "tempo_range": [
-        50,
-        115
-      ],
       "focus": "Chromatic above/below approach to 3rd over ii-V-I"
     },
     {
       "id": "ii_v_i_to_7th_diatonic",
       "title": "ii-V-I Enclosure - Diatonic to 7th",
+      "style_family": "jazz",
+      "technique": "diatonic",
+      "harmonic_context": "ii_v_i",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        45,
+        100
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/enclosures_ii_v_i_to_7th_diatonic.ztprog",
       "enclosure_type": "diatonic",
-      "chord_context": "ii_v_i",
       "difficulty_tier": "progressions",
       "target_note": "7th",
       "target_pitch": "B",
-      "key": "C",
       "chords": [
         "ii7",
         "V7",
@@ -400,21 +464,26 @@
       ],
       "loop_bars": 4,
       "tempo_bpm": 68,
-      "tempo_range": [
-        45,
-        100
-      ],
       "focus": "Diatonic approach to 7th over ii-V-I cadence"
     },
     {
       "id": "bebop_enclosure_descending",
       "title": "Bebop Enclosure Descending",
+      "style_family": "jazz",
+      "technique": "chromatic_descending",
+      "harmonic_context": "turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "advanced",
+      "program_ref": "programs/enclosures_bebop_enclosure_descending.ztprog",
       "enclosure_type": "chromatic_descending",
-      "chord_context": "turnaround",
       "difficulty_tier": "advanced",
       "target_note": "chord tones descending",
       "target_pitch": "varies",
-      "key": "C",
       "chords": [
         "Imaj7",
         "vi7",
@@ -423,21 +492,26 @@
       ],
       "loop_bars": 4,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Descending chromatic enclosures through I-vi-ii-V turnaround"
     },
     {
       "id": "barry_harris_enclosure_examples",
       "title": "Barry Harris Enclosure Examples",
+      "style_family": "jazz",
+      "technique": "barry_harris",
+      "harmonic_context": "major",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        48,
+        110
+      ],
+      "difficulty": "advanced",
+      "program_ref": "programs/enclosures_barry_harris_enclosure_examples.ztprog",
       "enclosure_type": "barry_harris",
-      "chord_context": "major",
       "difficulty_tier": "advanced",
       "target_note": "various",
       "target_pitch": "varies",
-      "key": "C",
       "chords": [
         "Imaj7",
         "Imaj7",
@@ -446,10 +520,6 @@
       ],
       "loop_bars": 4,
       "tempo_bpm": 72,
-      "tempo_range": [
-        48,
-        110
-      ],
       "focus": "Barry Harris 6th-diminished scale chromatic approach patterns"
     }
   ],
