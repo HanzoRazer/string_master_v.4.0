@@ -1,0 +1,397 @@
+{
+  "schema_version": "1.0",
+  "pack_id": "country",
+  "title": "Country & Americana Guitar",
+  "description": "Country, Americana, and Nashville-style exercises demonstrating that the Zone–Tritone framework is genre-agnostic. Chicken-pickin' enclosures, pedal-steel bends, Nashville turnarounds, Travis picking, and country-blues hybrids all operate on the same harmonic physics as jazz and blues.",
+  "zt_rationale": "Country guitar occupies a unique pedagogical position: it shares the dominant cycle and guide-tone mechanisms of jazz, the semitone-approach gravity of flamenco, and the pentatonic + blue-note tension of blues — all delivered in a clean-amp, open-string context that makes zone-crossing motion physically audible without harmonic density obscuring it.",
+  "harmonic_contexts": {
+    "chicken_pickin": {
+      "label": "Chicken-pickin' over I7",
+      "progression": "I7 (country dominant)",
+      "description": "Hybrid picking enclosure patterns over a static dominant-flavor tonic",
+      "zt_mechanism": "Zone-crossing half-step approach to chord tones — same engine as bebop enclosures"
+    },
+    "pedal_steel_bend": {
+      "label": "Pedal-steel double-stop bends",
+      "progression": "I → bII → I  (semitone approach)",
+      "description": "Emulated pedal-steel bends creating chromatic approach from above",
+      "zt_mechanism": "SEMITONE_APPROACH: bII→I zone-crossing, same mechanism as flamenco bII cadence"
+    },
+    "nashville_turnaround": {
+      "label": "Nashville number turnaround",
+      "progression": "I7 – VI7 – ii7 – V7",
+      "description": "Standard country turnaround — identical to jazz rhythm changes A-section",
+      "zt_mechanism": "Dominant cycle in 4ths; each V7 resolves via front-door tritone gravity"
+    },
+    "double_stop_thirds": {
+      "label": "Double-stop 3rds and 6ths",
+      "progression": "I – IV – V (3-chord country)",
+      "description": "Diatonic thirds and sixths across I–IV–V, hybrid or flatpick",
+      "zt_mechanism": "Guide tones (3rd + 6th) track zone membership across chord changes"
+    },
+    "travis_picking": {
+      "label": "Travis picking fingerstyle",
+      "progression": "I – IV – V – I (alternating bass)",
+      "description": "Alternating thumb bass + finger melody, Merle Travis / Chet Atkins style",
+      "zt_mechanism": "Bass line traces root motion (front-door V→I); melody implies chord tones"
+    },
+    "country_blues_hybrid": {
+      "label": "Country blues hybrid",
+      "progression": "I7 – IV7 – V7 (12-bar country blues)",
+      "description": "Cross between Delta blues and country phrasing — hybrid picking + bends",
+      "zt_mechanism": "front_door + semitone approach; same as blues corpus but played clean + twangy"
+    },
+    "iii_vi_ii_v_country": {
+      "label": "iii–vi–ii–V country modulation",
+      "progression": "iii7 – VI7 – ii7 – V7 – I",
+      "description": "Extended dominant cycle resolution — common in country ballads",
+      "zt_mechanism": "Each dominant infers next root via -7 gravity chain; all front-door resolutions"
+    }
+  },
+  "exercises": [
+    {
+      "id": "chickin_pickin_root_enclosure",
+      "title": "Chicken-pickin' root enclosure",
+      "style_family": "country",
+      "technique": "hybrid_picking",
+      "harmonic_context": "chicken_pickin",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        80,
+        160
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/country_chickin_pickin_G.ztprog",
+      "archetype": "ENCLOSURE_CHROMATIC",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Snap-mute string skip to root, chromatic lower approach. Brent Mason style.",
+      "zt_note": "Lower chromatic enclosure to root = zone-crossing half-step, identical to jazz enclosure_lower_to_3."
+    },
+    {
+      "id": "chickin_pickin_5th_enclosure",
+      "title": "Chicken-pickin' 5th enclosure",
+      "style_family": "country",
+      "technique": "hybrid_picking",
+      "harmonic_context": "chicken_pickin",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        80,
+        160
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_chickin_pickin_5th_G.ztprog",
+      "archetype": "ENCLOSURE_CHROMATIC",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Snap to 5th with chromatic approach from below; add open-string pull-off.",
+      "zt_note": "5th is same zone as root (even parity in G: D=2 mod 2=0). Approach is zone-crossing."
+    },
+    {
+      "id": "chickin_pickin_3rd_enclosure",
+      "title": "Chicken-pickin' 3rd enclosure",
+      "style_family": "country",
+      "technique": "hybrid_picking",
+      "harmonic_context": "chicken_pickin",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        100,
+        180
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_chickin_pickin_3rd_G.ztprog",
+      "archetype": "ENCLOSURE_CHROMATIC",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Target major 3rd (B) with double chromatic enclosure, snap dynamic.",
+      "zt_note": "B is zone 1 (odd). Approach from C# (zone 1) above and Bb (zone 1) below — both same zone, approach creates brief zone ambiguity before landing."
+    },
+    {
+      "id": "pedal_steel_bend_g_string",
+      "title": "Pedal-steel double-stop bend (G string)",
+      "style_family": "country",
+      "technique": "string_bend",
+      "harmonic_context": "pedal_steel_bend",
+      "key": "A",
+      "meter": "4/4",
+      "tempo_range": [
+        55,
+        100
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_pedal_steel_bend_A.ztprog",
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": null
+      },
+      "focus": "Bend G+B strings simultaneously one whole step, emulating E9 pedal steel. Target chord tones of I on release.",
+      "zt_note": "Whole-step bend crosses one zone boundary. Landing note is zone 0; departure is zone 1. Pure semitone gravity."
+    },
+    {
+      "id": "pedal_steel_bend_b_string",
+      "title": "Pedal-steel oblique bend (B string hold)",
+      "style_family": "country",
+      "technique": "string_bend",
+      "harmonic_context": "pedal_steel_bend",
+      "key": "D",
+      "meter": "4/4",
+      "tempo_range": [
+        55,
+        100
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_pedal_steel_oblique_D.ztprog",
+      "archetype": "SEMITONE_APPROACH",
+      "gravity": {
+        "primary": "semitone",
+        "secondary": null
+      },
+      "focus": "Hold high B string, bend G string up one step. Creates pedal-held 5th over moving bass.",
+      "zt_note": "Held note (B) is zone 1; bent note moves from zone 0 to zone 1. Resolution creates zone unification = stable landing."
+    },
+    {
+      "id": "nashville_turnaround_G",
+      "title": "Nashville turnaround in G",
+      "style_family": "country",
+      "technique": "melodic",
+      "harmonic_context": "nashville_turnaround",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        90,
+        180
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_nashville_turnaround_G.ztprog",
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "I7–VI7–ii7–V7 two-bar turnaround. Resolve with scalar descent on V7 to I.",
+      "zt_note": "Identical dominant cycle to jazz rhythm changes. Each dominant infers next tonic via gravity_chain(root, steps=1)."
+    },
+    {
+      "id": "nashville_turnaround_C",
+      "title": "Nashville turnaround in C",
+      "style_family": "country",
+      "technique": "melodic",
+      "harmonic_context": "nashville_turnaround",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        90,
+        180
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_nashville_turnaround_C.ztprog",
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "I7–VI7–ii7–V7 in C. Guide tones: track 3rd and 7th of each dominant.",
+      "zt_note": "Tritone axes: C7(E/Bb), A7(C#/G), Dm7 non-dominant, G7(B/F). B/F axis is the gravity resolution into C."
+    },
+    {
+      "id": "iii_vi_ii_v_i_country",
+      "title": "iii–vi–ii–V–I extended country turnaround",
+      "style_family": "country",
+      "technique": "melodic",
+      "harmonic_context": "iii_vi_ii_v_country",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        70,
+        140
+      ],
+      "difficulty": "advanced",
+      "program_ref": "programs/country_extended_turnaround_G.ztprog",
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Bm7–E7–Am7–D7–G four-bar ballad resolution. Each guide tone voice-leads by half step.",
+      "zt_note": "Five-chord chain. E7 tritone (G#/D) resolves to A; D7 tritone (F#/C) resolves to G. Full ZT gravity chain demonstration."
+    },
+    {
+      "id": "double_stop_thirds_G",
+      "title": "Diatonic 3rds across I–IV–V in G",
+      "style_family": "country",
+      "technique": "double_stops",
+      "harmonic_context": "double_stop_thirds",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        80,
+        150
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/country_double_stop_thirds_G.ztprog",
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Ascending/descending 3rd intervals across G major. Every double-stop implies its parent chord.",
+      "zt_note": "Pairs of notes always straddle zone boundary (minor 3rd) or share zone (major 3rd). A useful ear-training map of zone membership."
+    },
+    {
+      "id": "double_stop_sixths_A",
+      "title": "Diatonic 6ths in A — Chet Atkins style",
+      "style_family": "country",
+      "technique": "double_stops",
+      "harmonic_context": "double_stop_thirds",
+      "key": "A",
+      "meter": "4/4",
+      "tempo_range": [
+        70,
+        130
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_double_stop_sixths_A.ztprog",
+      "archetype": "DOUBLESTOP_EXPRESSIVE",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Major/minor 6th pairs ascending through I–IV–V. Fingerpick with thumb-and-finger for Chet tone.",
+      "zt_note": "6th interval = major 3rd inverted. Zone mapping mirrors thirds but reversed. Both notes land on same zone in major 6ths."
+    },
+    {
+      "id": "travis_picking_C_basic",
+      "title": "Travis picking pattern in C — basic",
+      "style_family": "country",
+      "technique": "fingerstyle",
+      "harmonic_context": "travis_picking",
+      "key": "C",
+      "meter": "4/4",
+      "tempo_range": [
+        60,
+        110
+      ],
+      "difficulty": "beginner",
+      "program_ref": "programs/country_travis_basic_C.ztprog",
+      "archetype": "STATIC_RIFF",
+      "gravity": {
+        "primary": "static",
+        "secondary": null
+      },
+      "focus": "Alternating thumb (6-4 strings), melody on 1-2-3. Thumb sets steady pulse; fingers handle the melody.",
+      "zt_note": "Static harmony — no zone-crossing gravity. Practice ground for pure rhythmic subdivision."
+    },
+    {
+      "id": "travis_picking_G_melody",
+      "title": "Travis picking with moving melody in G",
+      "style_family": "country",
+      "technique": "fingerstyle",
+      "harmonic_context": "travis_picking",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        55,
+        100
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_travis_melody_G.ztprog",
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": null
+      },
+      "focus": "Melody moves over I–IV–V bass pattern. Target chord tones on downbeats; use chromatic passing on upbeats.",
+      "zt_note": "Chromatic passing tones on upbeats = zone-crossing motion. Chord tone landings = zone resolution. The ZT engine in a fingerpicking context."
+    },
+    {
+      "id": "country_blues_12bar_G",
+      "title": "Country blues — 12-bar in G",
+      "style_family": "country",
+      "technique": "hybrid_picking",
+      "harmonic_context": "country_blues_hybrid",
+      "key": "G",
+      "meter": "4/4",
+      "tempo_range": [
+        70,
+        130
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_blues_12bar_G.ztprog",
+      "archetype": "PENTATONIC_LEAD",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": "semitone"
+      },
+      "focus": "G major pentatonic with chromatic passing. Clean amp tone, Telecaster twang. Bends in G minor pentatonic position for blue notes.",
+      "zt_note": "Blue notes (b3, b5, b7) are zone-crossing tones played over same-zone chord tones — the tension is literal zone conflict."
+    },
+    {
+      "id": "country_blues_turnaround_lick",
+      "title": "Country blues turnaround lick in E",
+      "style_family": "country",
+      "technique": "hybrid_picking",
+      "harmonic_context": "country_blues_hybrid",
+      "key": "E",
+      "meter": "4/4",
+      "tempo_range": [
+        80,
+        140
+      ],
+      "difficulty": "intermediate",
+      "program_ref": "programs/country_blues_turnaround_E.ztprog",
+      "archetype": "DESC_LINE_TURNAROUND",
+      "gravity": {
+        "primary": "front_door",
+        "secondary": "semitone"
+      },
+      "focus": "Classic I7–VI7–ii7–V7 country turnaround with open-string pull-offs. Ends on V ready for verse 2.",
+      "zt_note": "bVII7 (D7) is the backdoor dominant to E — same gravity, different entrance. Tests dual-axis gravity in country context."
+    }
+  ],
+  "progressive_paths": {
+    "beginner_trail": {
+      "label": "Country starter trail",
+      "sequence": [
+        "chickin_pickin_root_enclosure",
+        "double_stop_thirds_G",
+        "travis_picking_C_basic"
+      ]
+    },
+    "zt_demonstration": {
+      "label": "Zone-Tritone in country context",
+      "description": "Four exercises that demonstrate ZT gravity in increasingly complex country settings",
+      "sequence": [
+        "chickin_pickin_root_enclosure",
+        "pedal_steel_bend_g_string",
+        "nashville_turnaround_G",
+        "iii_vi_ii_v_i_country"
+      ]
+    }
+  },
+  "stats": {
+    "total_exercises": 14,
+    "by_technique": {
+      "hybrid_picking": 5,
+      "string_bend": 2,
+      "melodic": 3,
+      "double_stops": 2,
+      "fingerstyle": 2
+    },
+    "by_difficulty": {
+      "beginner": 3,
+      "intermediate": 10,
+      "advanced": 1
+    }
+  },
+  "taxonomy_ref": "data/corpus/blues_canonical.json"
+}
