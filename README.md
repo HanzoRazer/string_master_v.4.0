@@ -63,6 +63,14 @@ The result is a system that simultaneously serves as a **musical worldview**, an
 
 The Zone-Tritone System is now available as a production-ready Python package:
 
+### Cloning (with submodules)
+
+```bash
+git clone --recurse-submodules https://github.com/HanzoRazer/string_master_v.4.0
+# or, if already cloned:
+git submodule update --init --recursive
+```
+
 ### Installation
 
 ```bash

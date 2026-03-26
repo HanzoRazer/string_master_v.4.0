@@ -55,8 +55,12 @@ src/
 │   ├── e2e/                # End-to-end replay gates
 │   └── ui/                 # Manual intent UI controls
 │
-├── sg_agentd/              # Embedded HTTP stubs (for monorepo dev — mostly empty)
-└── sg_coach/               # Embedded coach stubs (for monorepo dev — mostly empty)
+├── sg_agentd/              # Submodule → HanzoRazer/sg-agentd (FastAPI agent daemon)
+│                           # Clone with: git clone --recurse-submodules
+│                           # Update with: git submodule update --remote
+└── sg_coach/               # Submodule → HanzoRazer/sg-coach (Mode 1 practice coach)
+                            # Clone with: git clone --recurse-submodules
+                            # Update with: git submodule update --remote
 ```
 
 **Data flow**: `.ztprog` YAML/JSON → `engine.py` → contract validation → expressive layer → `midi_out.py` → `.mid`
