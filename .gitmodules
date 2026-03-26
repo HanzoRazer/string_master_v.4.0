@@ -1,0 +1,3 @@
+[submodule "src/sg_agentd"]
+	path = src/sg_agentd
+	url = https://github.com/HanzoRazer/sg-agentd
