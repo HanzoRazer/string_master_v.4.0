@@ -1,0 +1,151 @@
+name: CI / Corpus integrity gate
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+    paths:
+      - data/corpus/**
+      - scripts/corpus/**
+      - blues_40_motives_index.xlsx
+
+jobs:
+  # ── Phase A: conformance check on all corpus files ──────────────────────
+  schema-conformance:
+    name: Schema conformance (all corpus files)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check all corpus files for standard fields
+        run: |
+          python - << 'EOF'
+          import json, sys, pathlib
+
+          CORPUS = pathlib.Path("data/corpus")
+          REQUIRED = {"id", "title", "style_family", "technique",
+                      "harmonic_context", "key", "meter",
+                      "tempo_range", "difficulty", "program_ref"}
+
+          errors = []
+          for f in sorted(CORPUS.glob("*_canonical.json")):
+              doc = json.loads(f.read_text())
+              exercises = doc.get("exercises", doc.get("motives", []))
+              if not exercises:
+                  errors.append(f"{f.name}: no exercises or motives key found")
+                  continue
+              for ex in exercises:
+                  missing = REQUIRED - set(ex.keys())
+                  if missing:
+                      errors.append(f"{f.name} [{ex.get('id','?')}]: missing {sorted(missing)}")
+
+          if errors:
+              print("CORPUS CONFORMANCE FAILURES:")
+              for e in errors:
+                  print(f"  {e}")
+              sys.exit(1)
+          else:
+              print(f"OK: all {sum(1 for _ in CORPUS.glob('*_canonical.json'))} corpus files pass conformance check")
+          EOF
+
+  # ── Blues motives: JSON must match XLSX source ───────────────────────────
+  blues-motives-freshness:
+    name: Blues 40 motives freshness (XLSX → JSON)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: pip install openpyxl
+
+      - name: Rebuild blues_40_motives from XLSX
+        run: python build_canonical_motives.py
+
+      - name: Assert no diff
+        run: |
+          git diff --exit-code data/corpus/blues_40_motives_canonical.json \
+            || (echo "ERROR: blues_40_motives_canonical.json is stale. Run build_canonical_motives.py and commit." && exit 1)
+
+  # ── Country: JSON must match build script output ─────────────────────────
+  country-corpus-freshness:
+    name: Country corpus freshness (script → JSON)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Rebuild country corpus
+        run: python scripts/corpus/build_country_canonical.py
+
+      - name: Assert no diff
+        run: |
+          git diff --exit-code data/corpus/country_canonical.json \
+            || (echo "ERROR: country_canonical.json is stale. Run build_country_canonical.py and commit." && exit 1)
+
+  # ── Patch scripts idempotency check ─────────────────────────────────────
+  patch-idempotency:
+    name: Patch scripts are idempotent
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Phase A patch (first pass)
+        run: python scripts/corpus/patch_a_field_renames.py
+
+      - name: Run Phase A patch (second pass — should produce no diff)
+        run: |
+          python scripts/corpus/patch_a_field_renames.py
+          git diff --exit-code data/corpus/bluegrass_canonical.json data/corpus/got_rhythm_canonical.json \
+            || (echo "ERROR: patch_a is not idempotent" && exit 1)
+
+      - name: Run Phase B patches (idempotency)
+        run: |
+          python scripts/corpus/patch_b_flamenco_exercises.py
+          python scripts/corpus/patch_b_enclosures_exercises.py
+          python scripts/corpus/patch_b_flamenco_exercises.py
+          python scripts/corpus/patch_b_enclosures_exercises.py
+          git diff --exit-code data/corpus/flamenco_canonical.json data/corpus/enclosures_canonical.json \
+            || (echo "ERROR: patch_b scripts are not idempotent" && exit 1)
+
+  # ── Summary: all corpus exercise counts ─────────────────────────────────
+  corpus-summary:
+    name: Corpus exercise count summary
+    runs-on: ubuntu-latest
+    needs: [schema-conformance, blues-motives-freshness, country-corpus-freshness, patch-idempotency]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Print corpus inventory
+        run: |
+          python - << 'EOF'
+          import json, pathlib
+
+          CORPUS = pathlib.Path("data/corpus")
+          total = 0
+          print(f"{'File':<45} {'Exercises':>10}  Style families")
+          print("-" * 75)
+          for f in sorted(CORPUS.glob("*_canonical.json")):
+              doc = json.loads(f.read_text())
+              exs = doc.get("exercises", doc.get("motives", []))
+              styles = sorted(set(e.get("style_family","?") for e in exs if isinstance(e,dict)))
+              count = len(exs)
+              total += count
+              print(f"  {f.name:<43} {count:>10}  {', '.join(styles)}")
+          print("-" * 75)
+          print(f"  {'TOTAL':<43} {total:>10}")
+          EOF
