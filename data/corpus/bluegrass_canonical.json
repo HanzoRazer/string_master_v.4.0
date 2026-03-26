@@ -29,141 +29,239 @@
       "id": "g_lick_1",
       "title": "Bluegrass G Lick 1",
       "category": "licks",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "g_lick_1",
-      "focus": "G flatpicking phrasing, syncopated resolution, hammer-ons"
+      "program_ref": "programs/bluegrass_g_lick_1.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "G flatpicking phrasing, syncopated resolution, hammer-ons",
+      "harmonic_context": "I_IV_V_blues",
+      "difficulty": "beginner",
+      "tempo_range": [
+        80,
+        160
+      ]
     },
     {
       "id": "g_lick_2",
       "title": "Bluegrass G Lick 2",
       "category": "licks",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "g_lick_2",
-      "focus": "G flatpicking phrasing, alternate picking patterns"
+      "program_ref": "programs/bluegrass_g_lick_2.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "G flatpicking phrasing, alternate picking patterns",
+      "harmonic_context": "I_IV_V_blues",
+      "difficulty": "beginner",
+      "tempo_range": [
+        80,
+        160
+      ]
     },
     {
       "id": "g_lick_3",
       "title": "Bluegrass G Lick 3",
       "category": "licks",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "g_lick_3",
-      "focus": "G flatpicking phrasing, syncopated resolution"
+      "program_ref": "programs/bluegrass_g_lick_3.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "G flatpicking phrasing, syncopated resolution",
+      "harmonic_context": "I_IV_V_blues",
+      "difficulty": "beginner",
+      "tempo_range": [
+        80,
+        160
+      ]
     },
     {
       "id": "g_lick_4",
       "title": "Bluegrass G Lick 4",
       "category": "licks",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "g_lick_4",
-      "focus": "G flatpicking phrasing, hammer-ons and pull-offs"
+      "program_ref": "programs/bluegrass_g_lick_4.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "G flatpicking phrasing, hammer-ons and pull-offs",
+      "harmonic_context": "I_IV_V_blues",
+      "difficulty": "beginner",
+      "tempo_range": [
+        80,
+        160
+      ]
     },
     {
       "id": "amazing_grace_etude",
       "title": "Amazing Grace - 8-Bar Melody Etude",
       "category": "folk_melodies",
-      "style": "traditional",
       "key": "G",
       "meter": "3/4",
-      "backing_track": "amazing_grace_backing",
-      "focus": "Tone control on ballad lines, sustain, 3/4 phrasing"
+      "program_ref": "programs/bluegrass_amazing_grace_backing.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "traditional",
+      "technique": "Tone control on ballad lines, sustain, 3/4 phrasing",
+      "harmonic_context": "diatonic_folk",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        60,
+        110
+      ]
     },
     {
       "id": "on_top_of_old_smokey_etude",
       "title": "On Top of Old Smokey - 8-Bar Melody Etude",
       "category": "folk_melodies",
-      "style": "folk",
       "key": "G",
       "meter": "3/4",
-      "backing_track": "on_top_of_old_smokey_backing",
-      "focus": "Waltz time phrasing, tone control, vocal-style folk melody"
+      "program_ref": "programs/bluegrass_on_top_of_old_smokey_backing.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "folk",
+      "technique": "Waltz time phrasing, tone control, vocal-style folk melody",
+      "harmonic_context": "diatonic_folk",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        60,
+        110
+      ]
     },
     {
       "id": "red_river_valley_etude",
       "title": "Red River Valley - 16-Bar Melody Etude",
       "category": "folk_melodies",
-      "style": "traditional",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "red_river_valley_backing",
-      "focus": "Full melody over 16 bars, V-I phrase transitions, even eighths"
+      "program_ref": "programs/bluegrass_red_river_valley_backing.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "traditional",
+      "technique": "Full melody over 16 bars, V-I phrase transitions, even eighths",
+      "harmonic_context": "diatonic_folk",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        60,
+        110
+      ]
     },
     {
       "id": "shady_grove_etude",
       "title": "Shady Grove - 8-Bar Melody Etude",
       "category": "folk_melodies",
-      "style": "traditional",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "shady_grove_backing",
-      "focus": "G Dorian modal style, alternate picking, folk character"
+      "program_ref": "programs/bluegrass_shady_grove_backing.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "traditional",
+      "technique": "G Dorian modal style, alternate picking, folk character",
+      "harmonic_context": "diatonic_folk",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        60,
+        110
+      ]
     },
     {
       "id": "blackberry_blossom_a1",
       "title": "Blackberry Blossom - A Section Phrase (Bars 8-12)",
       "category": "fiddle_tunes",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "blackberry_blossom_study",
-      "focus": "Scalar and arpeggiated motion over G, downbeat clarity, alternate picking"
+      "program_ref": "programs/bluegrass_blackberry_blossom_study.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "Scalar and arpeggiated motion over G, downbeat clarity, alternate picking",
+      "harmonic_context": "diatonic_major",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        190
+      ]
     },
     {
       "id": "blackberry_blossom_b1",
       "title": "Blackberry Blossom - B Section Phrase (Bars 10-13)",
       "category": "fiddle_tunes",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "blackberry_blossom_study",
-      "focus": "Phrasing shift at bar 10, rhythmic transition, subdivision time feel"
+      "program_ref": "programs/bluegrass_blackberry_blossom_study.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "Phrasing shift at bar 10, rhythmic transition, subdivision time feel",
+      "harmonic_context": "diatonic_major",
+      "difficulty": "advanced",
+      "tempo_range": [
+        100,
+        190
+      ]
     },
     {
       "id": "blackberry_blossom_b1a",
       "title": "Blackberry Blossom - B Section Variation",
       "category": "fiddle_tunes",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "blackberry_blossom_study",
-      "focus": "Alternate melodic approach to B section, improvisational vocabulary"
+      "program_ref": "programs/bluegrass_blackberry_blossom_study.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "Alternate melodic approach to B section, improvisational vocabulary",
+      "harmonic_context": "diatonic_major",
+      "difficulty": "advanced",
+      "tempo_range": [
+        100,
+        190
+      ]
     },
     {
       "id": "olde_joe_clark_etude",
       "title": "Old Joe Clark - 8-Bar Etude",
       "category": "fiddle_tunes",
-      "style": "old_time",
       "key": "A",
       "meter": "4/4",
-      "backing_track": "olde_joe_clark_backing",
-      "focus": "Alternate picking in A major, string skipping, melodic phrasing"
+      "program_ref": "programs/bluegrass_olde_joe_clark_backing.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "old_time",
+      "technique": "Alternate picking in A major, string skipping, melodic phrasing",
+      "harmonic_context": "diatonic_major",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        190
+      ]
     },
     {
       "id": "muleskinner_intro_phrase",
       "title": "Muleskinner Blues - Intro Phrase",
       "category": "intro_phrases",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "muleskinner_intro_phrase",
-      "focus": "Classic bluegrass intro lick, downbeat accents, pick direction"
+      "program_ref": "programs/bluegrass_muleskinner_intro_phrase.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "Classic bluegrass intro lick, downbeat accents, pick direction",
+      "harmonic_context": "I_IV_V_blues",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        160
+      ]
     },
     {
       "id": "muleskinner_intro_phrase_4bar",
       "title": "Muleskinner Blues - Intro Phrase (4-Bar Extended)",
       "category": "intro_phrases",
-      "style": "bluegrass",
       "key": "G",
       "meter": "4/4",
-      "backing_track": "muleskinner_intro_phrase",
-      "focus": "Extended 4-bar intro phrase, stamina for longer melodic runs"
+      "program_ref": "programs/bluegrass_muleskinner_intro_phrase.ztprog",
+      "style_family": "bluegrass",
+      "_style_original": "bluegrass",
+      "technique": "Extended 4-bar intro phrase, stamina for longer melodic runs",
+      "harmonic_context": "I_IV_V_blues",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        160
+      ]
     }
   ],
   "backing_tracks": [

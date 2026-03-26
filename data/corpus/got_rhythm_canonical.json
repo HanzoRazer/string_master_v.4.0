@@ -4,7 +4,7 @@
   "description": "Barry Harris-inspired bebop studies over 'I Got Rhythm' chord changes. Four progressive studies covering dominant motion, triplet enclosures, ii-V movement, and backdoor harmony.",
   "harmonic_contexts": {
     "dominant_to_subdominant": {
-      "label": "I7 → IV7",
+      "label": "I7 â†’ IV7",
       "description": "Classic blues/rhythm changes dominant to subdominant motion",
       "roman": [
         "I7",
@@ -12,7 +12,7 @@
       ]
     },
     "rhythm_turnaround": {
-      "label": "I7 → VI7 → ii7 → V7",
+      "label": "I7 â†’ VI7 â†’ ii7 â†’ V7",
       "description": "Standard rhythm changes turnaround",
       "roman": [
         "I7",
@@ -22,7 +22,7 @@
       ]
     },
     "ii_v": {
-      "label": "ii7 → V7",
+      "label": "ii7 â†’ V7",
       "description": "Minor-to-dominant cadential motion",
       "roman": [
         "ii7",
@@ -30,7 +30,7 @@
       ]
     },
     "subdominant_backdoor": {
-      "label": "IVmaj7 → bVII7",
+      "label": "IVmaj7 â†’ bVII7",
       "description": "Subdominant major to flat-VII dominant (backdoor motion)",
       "roman": [
         "IVmaj7",
@@ -41,7 +41,7 @@
   "exercises": [
     {
       "id": "got_rhythm_bb7_eb7_study1",
-      "title": "Study 1 – Barry Harris Bb7 → Eb7 Phrase",
+      "title": "Study 1 â€“ Barry Harris Bb7 â†’ Eb7 Phrase",
       "exercise_type": "melodic_motion",
       "technique": "melodic",
       "harmonic_context": "dominant_to_subdominant",
@@ -51,11 +51,17 @@
       "study_number": 1,
       "focus": "Internalize Barry Harris-style dominant to IV movement, target 3rd of Eb7 (G)",
       "resolution_target": "G",
-      "backing_track": "got_rhythm_bb7_eb7_study1"
+      "program_ref": "programs/got_rhythm_bb7_eb7_study1.ztprog",
+      "style_family": "jazz",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        220
+      ]
     },
     {
       "id": "got_rhythm_enclosure_study2",
-      "title": "Study 2 – Triplet Enclosure Targeting 3rd of Bb7",
+      "title": "Study 2 â€“ Triplet Enclosure Targeting 3rd of Bb7",
       "exercise_type": "melodic_enclosure",
       "technique": "melodic",
       "harmonic_context": "rhythm_turnaround",
@@ -65,11 +71,17 @@
       "study_number": 2,
       "focus": "Practice Barry Harris triplet enclosures targeting chord tones, resolve to 3rd of Bb7 (D)",
       "resolution_target": "D",
-      "backing_track": "got_rhythm_enclosure_study2"
+      "program_ref": "programs/got_rhythm_enclosure_study2.ztprog",
+      "style_family": "jazz",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        220
+      ]
     },
     {
       "id": "got_rhythm_fm7_bb7_study3",
-      "title": "Study 3 – Chromatic Motion Fm7 → Bb7",
+      "title": "Study 3 â€“ Chromatic Motion Fm7 â†’ Bb7",
       "exercise_type": "melodic_motion",
       "technique": "melodic",
       "harmonic_context": "ii_v",
@@ -79,11 +91,17 @@
       "study_number": 3,
       "focus": "Connect Fm7 to Bb7 using chromatic and triplet motion, target 3rd of Bb7 (D)",
       "resolution_target": "D",
-      "backing_track": "got_rhythm_fm7_bb7_study3"
+      "program_ref": "programs/got_rhythm_fm7_bb7_study3.ztprog",
+      "style_family": "jazz",
+      "difficulty": "advanced",
+      "tempo_range": [
+        100,
+        220
+      ]
     },
     {
       "id": "got_rhythm_ebmaj7_ab7_study4",
-      "title": "Study 4 – Ebmaj7 to Ab7 with Chromatic Enclosure",
+      "title": "Study 4 â€“ Ebmaj7 to Ab7 with Chromatic Enclosure",
       "exercise_type": "melodic_enclosure",
       "technique": "melodic",
       "harmonic_context": "subdominant_backdoor",
@@ -93,13 +111,19 @@
       "study_number": 4,
       "focus": "Chromatic motion through Eb major to set up resolution, target 3rd of Ab7 (C)",
       "resolution_target": "C",
-      "backing_track": "got_rhythm_ebmaj7_ab7_study4"
+      "program_ref": "programs/got_rhythm_ebmaj7_ab7_study4.ztprog",
+      "style_family": "jazz",
+      "difficulty": "intermediate",
+      "tempo_range": [
+        100,
+        220
+      ]
     }
   ],
   "backing_tracks": [
     {
       "id": "got_rhythm_bb7_eb7_study1",
-      "title": "Got Rhythm Study 1 – I7 → IV7",
+      "title": "Got Rhythm Study 1 â€“ I7 â†’ IV7",
       "root": "Bb",
       "meter": "4/4",
       "groove": "swing",
@@ -119,7 +143,7 @@
     },
     {
       "id": "got_rhythm_enclosure_study2",
-      "title": "Got Rhythm Study 2 – Triplet Enclosures",
+      "title": "Got Rhythm Study 2 â€“ Triplet Enclosures",
       "root": "Bb",
       "meter": "4/4",
       "groove": "swing",
@@ -139,7 +163,7 @@
     },
     {
       "id": "got_rhythm_fm7_bb7_study3",
-      "title": "Got Rhythm Study 3 – ii7 → V7",
+      "title": "Got Rhythm Study 3 â€“ ii7 â†’ V7",
       "root": "Eb",
       "meter": "4/4",
       "groove": "swing",
@@ -159,7 +183,7 @@
     },
     {
       "id": "got_rhythm_ebmaj7_ab7_study4",
-      "title": "Got Rhythm Study 4 – IVmaj7 → bVII7",
+      "title": "Got Rhythm Study 4 â€“ IVmaj7 â†’ bVII7",
       "root": "Bb",
       "meter": "4/4",
       "groove": "swing",
@@ -190,7 +214,7 @@
       ]
     },
     "progressive_path": {
-      "description": "Curriculum order: dominant motion → enclosure technique → ii-V connection → advanced backdoor harmony",
+      "description": "Curriculum order: dominant motion â†’ enclosure technique â†’ ii-V connection â†’ advanced backdoor harmony",
       "order": [
         "got_rhythm_bb7_eb7_study1",
         "got_rhythm_enclosure_study2",
