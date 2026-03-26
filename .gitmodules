@@ -1,3 +1,6 @@
 [submodule "src/sg_agentd"]
 	path = src/sg_agentd
 	url = https://github.com/HanzoRazer/sg-agentd
+[submodule "src/sg_coach"]
+	path = src/sg_coach
+	url = https://github.com/HanzoRazer/sg-coach
