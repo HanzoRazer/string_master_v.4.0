@@ -4,7 +4,6 @@
   "title": "Gospel Harmony",
   "description": "Backdoor cadences, gospel turnarounds, and church harmony voicings.",
   "taxonomy_ref": "taxonomy.json",
-
   "harmonic_contexts": [
     {
       "id": "backdoor_cadence",
@@ -17,7 +16,6 @@
       "description": "Full gospel cycle combining backdoor and front-door resolutions"
     }
   ],
-
   "exercises": [
     {
       "id": "backdoor_cadence_C",
@@ -27,7 +25,10 @@
       "harmonic_context": "backdoor_cadence",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "beginner",
       "program_ref": "programs/gospel/backdoor_cadence_C.ztprog"
     },
@@ -37,11 +38,24 @@
       "style_family": "gospel",
       "technique": "harmonic",
       "harmonic_context": "backdoor_cadence",
-      "keys": ["C", "G", "D"],
+      "keys": [
+        "C",
+        "G",
+        "D"
+      ],
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "intermediate",
-      "program_ref": "programs/gospel/backdoor_cadence_C.ztprog"
+      "program_ref": "programs/gospel/backdoor_cadence_C.ztprog",
+      "key": "C",
+      "keys_all": [
+        "C",
+        "G",
+        "D"
+      ]
     },
     {
       "id": "gospel_turnaround_C",
@@ -51,7 +65,10 @@
       "harmonic_context": "gospel_turnaround",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "intermediate",
       "program_ref": "programs/gospel/gospel_turnaround_C.ztprog"
     },
@@ -63,7 +80,10 @@
       "harmonic_context": "backdoor_cadence",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "intermediate",
       "program_ref": "programs/gospel/gospel_color_upgrades_C.ztprog"
     },
@@ -75,7 +95,10 @@
       "harmonic_context": "backdoor_cadence",
       "key": "C",
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "beginner",
       "program_ref": "programs/gospel/gospel_turnaround_C.ztprog"
     },
@@ -85,33 +108,67 @@
       "style_family": "gospel",
       "technique": "harmonic",
       "harmonic_context": "gospel_turnaround",
-      "keys": ["C", "G", "D"],
+      "keys": [
+        "C",
+        "G",
+        "D"
+      ],
       "meter": "4/4",
-      "tempo_range": [60, 100],
+      "tempo_range": [
+        60,
+        100
+      ],
       "difficulty": "intermediate",
-      "program_ref": "programs/gospel/gospel_turnaround_C.ztprog"
+      "program_ref": "programs/gospel/gospel_turnaround_C.ztprog",
+      "key": "C",
+      "keys_all": [
+        "C",
+        "G",
+        "D"
+      ]
     }
   ],
-
   "playlists": [
     {
       "id": "gospel_backdoor_session",
       "title": "Backdoor Cadence Session",
-      "exercises": ["backdoor_cadence_C", "backdoor_cadence_movable"],
-      "tags": ["backdoor", "cadence", "gospel"]
+      "exercises": [
+        "backdoor_cadence_C",
+        "backdoor_cadence_movable"
+      ],
+      "tags": [
+        "backdoor",
+        "cadence",
+        "gospel"
+      ]
     },
     {
       "id": "gospel_turnaround_session",
       "title": "Gospel Turnaround Session",
-      "exercises": ["gospel_turnaround_C", "gospel_color_upgrades_C", "gospel_chromatic_lick_C", "gospel_turnaround_movable"],
-      "tags": ["gospel", "turnaround", "voicing"]
+      "exercises": [
+        "gospel_turnaround_C",
+        "gospel_color_upgrades_C",
+        "gospel_chromatic_lick_C",
+        "gospel_turnaround_movable"
+      ],
+      "tags": [
+        "gospel",
+        "turnaround",
+        "voicing"
+      ]
     }
   ],
-
   "stats": {
     "total_exercises": 6,
-    "by_difficulty": {"beginner": 2, "intermediate": 4},
-    "keys": ["C", "G", "D"],
+    "by_difficulty": {
+      "beginner": 2,
+      "intermediate": 4
+    },
+    "keys": [
+      "C",
+      "G",
+      "D"
+    ],
     "playlist_count": 2
   }
 }
